@@ -4,8 +4,6 @@ import java.text.DecimalFormat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 //Toolbox by Samkio
 // (C) 2010
 

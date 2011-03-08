@@ -12,12 +12,10 @@ import me.samkio.levelcraft.SamToolbox.DataMySql;
 import me.samkio.levelcraft.SamToolbox.DataSqlite;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

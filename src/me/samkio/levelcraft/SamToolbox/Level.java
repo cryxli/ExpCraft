@@ -5,8 +5,6 @@ import me.samkio.levelcraft.Settings;
 import me.samkio.levelcraft.Functions.LevelFunctions;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 public class Level {
 
 	public static double getExp(CommandSender sender, String s) {
