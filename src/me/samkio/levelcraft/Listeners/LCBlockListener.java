@@ -20,10 +20,13 @@ public class LCBlockListener extends BlockListener {
 			return;
 		}
 		
-		if ((!event.isCancelled()) && (event.getDamageLevel() == BlockDamageLevel.STOPPED)&&(Whitelist.isAvoid(event.getPlayer().getName()) == false)) {
-			
+		if (!event.isCancelled() && event.getDamageLevel() == BlockDamageLevel.STOPPED) {
+			if(!Whitelist.isAvoid(event.getPlayer(), "w")){
 			  Wood.Destroy(event);
+			}
+			if(!Whitelist.isAvoid(event.getPlayer(), "m")){
 			  Mine.Destroy(event);
+			}
 			
 		}
 

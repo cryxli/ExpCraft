@@ -90,6 +90,9 @@ public class Settings {
 	public static String MySqlDir;
 	public static String MySqlUser;
 	public static String MySqlPass;
+	
+	public static boolean UsePerms;
+	
 	public static void loadMain() {
 		
 		String propertiesFile = Levelcraft.maindirectory
@@ -113,6 +116,7 @@ public class Settings {
 		MySqlDir = properties.getString("MySqlDatabaseDirectory", "localhost:3306/LC");
 		MySqlUser = properties.getString("MySqlDatabaseUsername", "root");
 		MySqlPass = properties.getString("MySqlDatabasePassword", "");
+		UsePerms = properties.getBoolean("User-Permissions",true);
 		properties.save();
 
 	}

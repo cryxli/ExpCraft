@@ -71,8 +71,11 @@ public class LevelFunctions {
 			try {
 				FileInputStream in = new FileInputStream(file);
 				pro.load(in);				
-				if (pro.containsKey(player))
+				if (pro.containsKey(player)){
+					in.close();
 					return true;
+				}
+				in.close();
 			}
 			catch (IOException e)
 			{

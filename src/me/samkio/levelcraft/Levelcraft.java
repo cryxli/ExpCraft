@@ -16,10 +16,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class Levelcraft extends JavaPlugin {
 	@SuppressWarnings("unused")
@@ -43,6 +46,8 @@ public class Levelcraft extends JavaPlugin {
 			+ "Fisticuffs.exp");
 	public static File ArcherExpFile = new File(maindirectory + datadirectory
 			+ "Archer.exp");
+	  public static PermissionHandler Permissions;
+
 
 /*	public Levelcraft(PluginLoader pluginLoader, Server instance,
 			PluginDescriptionFile desc, File folder, File plugin,
@@ -64,16 +69,35 @@ public class Levelcraft extends JavaPlugin {
 	public void onEnable() {
 		load();
 		registerEvents();
-         //Enable
+		if(Settings.UsePerms){
+		setupPermissions();
+		}else{
+			 log.info("[LC] Using Whitelist.");
+		}
 		PluginDescriptionFile pdfFile = this.getDescription();
-		System.out.println(pdfFile.getName() + " version "
+		log.info("[LC] Levelcraft version "
 				+ pdfFile.getVersion() + " is enabled!");
 
 	}
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        PlayerFunctions.checkAccount(sender);
+	@SuppressWarnings("static-access")
+	private void setupPermissions() {
+	      Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
+
+	      if (this.Permissions == null) {
+	          if (test != null) {
+	              this.Permissions = ((Permissions)test).getHandler();
+	              log.info("[LC] Using Permissions.");
+	          } else {
+	              log.info("[LC] Permissions not found using whitelist.");
+	              Settings.UsePerms = false;
+	          }
+	      }
+	  }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {       
         if (commandLabel.equalsIgnoreCase("level") || commandLabel.equalsIgnoreCase("lvl")) {
         	if (args.length >= 1 && sender instanceof Player) {
+        		PlayerFunctions.checkAccount(sender);
         		PlayerFunctions.doThis(sender, args, this);
         		return true;
         	} else {

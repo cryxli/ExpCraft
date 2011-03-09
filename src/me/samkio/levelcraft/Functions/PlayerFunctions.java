@@ -53,7 +53,7 @@ public class PlayerFunctions {
 			} else if (split[0].equalsIgnoreCase("list")) {
 				Help.ListLevels(sender);
 			} else if (split[0].equalsIgnoreCase("admin")
-					&& Whitelist.isAdmin(player.getName()) == true
+					&& Whitelist.isAdmin(player) == true
 					&& split.length >= 3) {
 				Admin.dothis(sender, split);
 			} else if (split[0].equalsIgnoreCase("notify")) {

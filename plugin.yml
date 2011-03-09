@@ -1,7 +1,7 @@
 name: Levelcraft
 
 main: me.samkio.levelcraft.Levelcraft
-version: 2.3
+version: 2.4
 description: >
              Commands for use with the Levelcraft experience-based plugin for Minecraft.
 
