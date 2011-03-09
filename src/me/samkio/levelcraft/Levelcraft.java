@@ -14,6 +14,7 @@ import me.samkio.levelcraft.SamToolbox.DataSqlite;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -72,7 +73,7 @@ public class Levelcraft extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         PlayerFunctions.checkAccount(sender);
         if (commandLabel.equalsIgnoreCase("level") || commandLabel.equalsIgnoreCase("lvl")) {
-        	if (args.length >= 1) {
+        	if (args.length >= 1 && sender instanceof Player) {
         		PlayerFunctions.doThis(sender, args, this);
         		return true;
         	} else {
