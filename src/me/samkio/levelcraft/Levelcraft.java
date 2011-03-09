@@ -71,9 +71,9 @@ public class Levelcraft extends JavaPlugin {
 
 	}
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        PlayerFunctions.checkAccount(sender);
         if (commandLabel.equalsIgnoreCase("level") || commandLabel.equalsIgnoreCase("lvl")) {
         	if (args.length >= 1 && sender instanceof Player) {
+                        PlayerFunctions.checkAccount(sender);
         		PlayerFunctions.doThis(sender, args, this);
         		return true;
         	} else {
