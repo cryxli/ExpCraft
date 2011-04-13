@@ -1,23 +1,24 @@
 package me.samkio.levelcraft.Skills;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 
 public class Range {
-	public static Levelcraft plugin;
-	public static void attack(EntityDamageByProjectileEvent event) {
+	public  Levelcraft plugin;
+	public Range(Levelcraft instance) {
+		plugin = instance;
+	}
+	public  void attack(EntityDamageByProjectileEvent event) {
 		Player player = (Player) event.getDamager();
-		PlayerFunctions.checkAccount(player);
+		plugin.PlayerFunctions.checkAccount(player);
 		int level = 0;
 		double stat = 0;
 		if (plugin.Settings.enableRangeLevel == true) {			
-			level = Level.getLevel(player, "r");
-			stat = Level.getExp(player, "r");
+			level = plugin.Level.getLevel(player, "r");
+			stat = plugin.Level.getExp(player, "r");
 			if (level >= plugin.Settings.Rangep5 && level < plugin.Settings.Range1p0) {
 				event.setDamage(1);
 			}else if(level >= plugin.Settings.Range1p0 && level < plugin.Settings.Range1p5){
@@ -33,13 +34,13 @@ public class Range {
 			}
 			stat = stat + plugin.Settings.ExpPerDamage;
 			int aftlevel = 0;
-			Level.update(player, "r", stat);
-			aftlevel = Level.getLevel(player, "r");
+			plugin.Level.update(player, "r", stat);
+			aftlevel = plugin.Level.getLevel(player, "r");
 			if (aftlevel > level) {
 				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1)+ "[LC]"
 						+ ChatColor.valueOf(plugin.Settings.c3)
-						+ " Level up! Your Range level is now " + aftlevel);
-			} else if (PlayerFunctions.enabled(player) == true) {
+						+ "Level up! Your Range level is now " + aftlevel);
+			} else if (plugin.PlayerFunctions.enabled(player) == true) {
 				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 						+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+ plugin.Settings.ExpPerDamage+ " exp.");
 			}

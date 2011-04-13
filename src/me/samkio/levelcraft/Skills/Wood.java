@@ -1,9 +1,6 @@
 package me.samkio.levelcraft.Skills;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,8 +8,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 
 public class Wood {
-	public static Levelcraft plugin;
-	public static void Destroy(BlockBreakEvent event) {
+	public  Levelcraft plugin;
+	public Wood(Levelcraft instance) {
+		plugin = instance;
+	}
+	public  void Destroy(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		int iih = player.getItemInHand().getTypeId();
 
@@ -20,7 +20,8 @@ public class Wood {
 			int level = 0;
 			double woodstat = 0;
             double gained = 0;
-			level = Level.getLevel(player, "w");
+			level = plugin.Level.getLevel(player, "w");
+			woodstat = plugin.Level.getExp(player, "w");
 			if (level < plugin.Settings.WCIronAxe && iih == 258) {
 				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this tool. Required Level:"
@@ -70,14 +71,14 @@ public class Wood {
 					gained = plugin.Settings.ExpPerPlank;
 				}
 				int aftlevel = 0;
-				Level.update(player, "w",woodstat);
-				aftlevel = Level.getLevel(player, "w");
+				plugin.Level.update(player, "w", woodstat);
+				aftlevel = plugin.Level.getLevel(player, "w");
 				if (aftlevel > level) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3)
-							+ " Level up! Your Woodcut level is now "
+							+ "Level up! Your Woodcut level is now "
 							+ aftlevel);
-				} else if (PlayerFunctions.enabled(player)) {
+				} else if (plugin.PlayerFunctions.enabled(player)) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+gained+" exp.");
 				}

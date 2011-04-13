@@ -1,435 +1,440 @@
 package me.samkio.levelcraft.SamToolbox;
 
+
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.LevelFunctions;
+
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 public class Level {
-	public static Levelcraft plugin;
-	public static double getExp(CommandSender sender, String s) {
+	public  Levelcraft plugin;
+	public Level(Levelcraft instance) {
+		plugin = instance;
+	}
+
+	public  double getExp(CommandSender sender, String s) {
 		if (plugin.Settings.database.equalsIgnoreCase("flatfile")) {
 			if (s.equalsIgnoreCase("w")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.WCExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.WCExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.RangeExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.RangeExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.SlayExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.SlayExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.MiExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.MiExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.FisticuffsExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.FisticuffsExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.ForgeExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.ForgeExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.ArcherExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.ArcherExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				Double exp = LevelFunctions.getExp(sender, Levelcraft.DiggingExpFile);
+				Double exp = plugin.LevelFunctions.getExp(sender, plugin.DiggingExpFile);
 				return exp;
 			}
 		}
 
 		if (plugin.Settings.database.equalsIgnoreCase("mysql")) {
 			if (s.equalsIgnoreCase("w")) {
-				Double exp = DataMySql.getExp(sender, "WoodcuttingExp");
+				Double exp = plugin.DataMySql.getExp(sender, "WoodcuttingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				Double exp = DataMySql.getExp(sender, "RangingExp");
+				Double exp = plugin.DataMySql.getExp(sender, "RangingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				Double exp = DataMySql.getExp(sender, "SlayingExp");
+				Double exp = plugin.DataMySql.getExp(sender, "SlayingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				Double exp = DataMySql.getExp(sender, "MiningExp");
+				Double exp = plugin.DataMySql.getExp(sender, "MiningExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				Double exp = DataMySql.getExp(sender, "FisticuffsExp");
+				Double exp = plugin.DataMySql.getExp(sender, "FisticuffsExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				Double exp = DataMySql.getExp(sender, "ForgeExp");
+				Double exp = plugin.DataMySql.getExp(sender, "ForgeExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				Double exp = DataMySql.getExp(sender, "ArcheryExp");
+				Double exp = plugin.DataMySql.getExp(sender, "ArcheryExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				Double exp = DataMySql.getExp(sender, "DiggingExp");
+				Double exp = plugin.DataMySql.getExp(sender, "DiggingExp");
 				return exp;
 			}
 			return 0;
 		}
 		if (plugin.Settings.database.equalsIgnoreCase("sqlite")) {
 			if (s.equalsIgnoreCase("w")) {
-				Double exp = DataSqlite.getExp(sender, "WoodcuttingExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "WoodcuttingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				Double exp = DataSqlite.getExp(sender, "RangingExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "RangingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				Double exp = DataSqlite.getExp(sender, "SlayingExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "SlayingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				Double exp = DataSqlite.getExp(sender, "MiningExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "MiningExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				Double exp = DataSqlite.getExp(sender, "FisticuffsExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "FisticuffsExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				Double exp = DataSqlite.getExp(sender, "ForgeExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "ForgeExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				Double exp = DataSqlite.getExp(sender, "ArcheryExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "ArcheryExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				Double exp = DataSqlite.getExp(sender, "DiggingExp");
+				Double exp = plugin.DataSqlite.getExp(sender, "DiggingExp");
 				return exp;
 			}
 		}
 		return 0;
 	}
 
-	public static int getLevel(CommandSender sender, String s) {
+	public  int getLevel(CommandSender sender, String s) {
 		if (plugin.Settings.database.equalsIgnoreCase("flatfile")) {
 			if (s.equalsIgnoreCase("w")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.WCExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.WCExpFile);
 				return level;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.RangeExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.RangeExpFile);
 				return level;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.SlayExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.SlayExpFile);
 				return level;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.MiExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.MiExpFile);
 				return level;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.FisticuffsExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.FisticuffsExpFile);
 				return level;
 			}if (s.equalsIgnoreCase("f")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.ForgeExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.ForgeExpFile);
 				return level;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.ArcherExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.ArcherExpFile);
 				return level;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				int level = LevelFunctions.getLevel(sender, Levelcraft.DiggingExpFile);
+				int level = plugin.LevelFunctions.getLevel(sender, plugin.DiggingExpFile);
 				return level;
 			}
 		}
 
 		if (plugin.Settings.database.equalsIgnoreCase("mysql")) {
 			if (s.equalsIgnoreCase("w")) {
-				int level = DataMySql.getLevel(sender, "WoodcuttingExp");
+				int level = plugin.DataMySql.getLevel(sender, "WoodcuttingExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				int level = DataMySql.getLevel(sender, "RangingExp");
+				int level = plugin.DataMySql.getLevel(sender, "RangingExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				int level = DataMySql.getLevel(sender, "SlayingExp");
+				int level = plugin.DataMySql.getLevel(sender, "SlayingExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				int level = DataMySql.getLevel(sender, "MiningExp");
+				int level = plugin.DataMySql.getLevel(sender, "MiningExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				int level = DataMySql.getLevel(sender, "FisticuffsExp");
+				int level = plugin.DataMySql.getLevel(sender, "FisticuffsExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				int level = DataMySql.getLevel(sender, "ForgeExp");
+				int level = plugin.DataMySql.getLevel(sender, "ForgeExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				int level = DataMySql.getLevel(sender, "ArcheryExp");
+				int level = plugin.DataMySql.getLevel(sender, "ArcheryExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				int level = DataMySql.getLevel(sender, "DiggingExp");
+				int level = plugin.DataMySql.getLevel(sender, "DiggingExp");
 				return level;
 			}
 			return 0;
 		}
 		if (plugin.Settings.database.equalsIgnoreCase("sqlite")) {
 			if (s.equalsIgnoreCase("w")) {
-				int level = DataSqlite.getLevel(sender, "WoodcuttingExp");
+				int level = plugin.DataSqlite.getLevel(sender, "WoodcuttingExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				int level = DataSqlite.getLevel(sender, "RangingExp");
+				int level = plugin.DataSqlite.getLevel(sender, "RangingExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				int level = DataSqlite.getLevel(sender, "SlayingExp");
+				int level = plugin.DataSqlite.getLevel(sender, "SlayingExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				int level = DataSqlite.getLevel(sender, "MiningExp");
+				int level = plugin.DataSqlite.getLevel(sender, "MiningExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				int level = DataSqlite.getLevel(sender, "FisticuffsExp");
+				int level = plugin.DataSqlite.getLevel(sender, "FisticuffsExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				int level = DataSqlite.getLevel(sender, "ForgeExp");
+				int level = plugin.DataSqlite.getLevel(sender, "ForgeExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				int level = DataSqlite.getLevel(sender, "ArcheryExp");
+				int level = plugin.DataSqlite.getLevel(sender, "ArcheryExp");
 				return level;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				int level = DataSqlite.getLevel(sender, "DiggingExp");
+				int level = plugin.DataSqlite.getLevel(sender, "DiggingExp");
 				return level;
 			}
 		}
 		return 0;
 	}
 
-	public static double getExpLeft(CommandSender sender, String s) {
+	public  double getExpLeft(CommandSender sender, String s) {
 		if (plugin.Settings.database.equalsIgnoreCase("flatfile")) {
 			if (s.equalsIgnoreCase("w")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.WCExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.WCExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.RangeExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.RangeExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.SlayExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.SlayExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.MiExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.MiExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.FisticuffsExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.FisticuffsExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.ForgeExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.ForgeExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.ArcherExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.ArcherExpFile);
 				return exp;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				Double exp = LevelFunctions.getExpLeft(sender, Levelcraft.DiggingExpFile);
+				Double exp = plugin.LevelFunctions.getExpLeft(sender, plugin.DiggingExpFile);
 				return exp;
 			}
 		}
 		if (plugin.Settings.database.equalsIgnoreCase("mysql")) {
 			if (s.equalsIgnoreCase("w")) {
-				Double exp = DataMySql.getExpLeft(sender, "WoodcuttingExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "WoodcuttingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				Double exp = DataMySql.getExpLeft(sender, "RangingExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "RangingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				Double exp = DataMySql.getExpLeft(sender, "SlayingExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "SlayingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				Double exp = DataMySql.getExpLeft(sender, "MiningExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "MiningExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				Double exp = DataMySql.getExpLeft(sender, "FisticuffsExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "FisticuffsExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				Double exp = DataMySql.getExpLeft(sender, "ForgeExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "ForgeExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				Double exp = DataMySql.getExpLeft(sender, "ArcheryExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "ArcheryExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				Double exp = DataMySql.getExpLeft(sender, "DiggingExp");
+				Double exp = plugin.DataMySql.getExpLeft(sender, "DiggingExp");
 				return exp;
 			}
 			return 0;
 		}
 		if (plugin.Settings.database.equalsIgnoreCase("sqlite")) {
 			if (s.equalsIgnoreCase("w")) {
-				Double exp = DataSqlite.getExpLeft(sender, "WoodcuttingExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "WoodcuttingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				Double exp = DataSqlite.getExpLeft(sender, "RangingExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "RangingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				Double exp = DataSqlite.getExpLeft(sender, "SlayingExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "SlayingExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				Double exp = DataSqlite.getExpLeft(sender, "MiningExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "MiningExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				Double exp = DataSqlite.getExpLeft(sender, "FisticuffsExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "FisticuffsExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				Double exp = DataSqlite.getExpLeft(sender, "ForgeExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "ForgeExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				Double exp = DataSqlite.getExpLeft(sender, "ArcheryExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "ArcheryExp");
 				return exp;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				Double exp = DataSqlite.getExpLeft(sender, "DiggingExp");
+				Double exp = plugin.DataSqlite.getExpLeft(sender, "DiggingExp");
 				return exp;
 			}
 		}
 		return 0;
 	}
-	public static boolean update(Player sender, String s, Double exp) {
+	public  boolean update(Player sender, String s, Double exp) {
 		if (plugin.Settings.database.equalsIgnoreCase("flatfile")) {
 			if (s.equalsIgnoreCase("w")) {
-				LevelFunctions.write(sender, exp, Levelcraft.WCExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.WCExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				LevelFunctions.write(sender, exp, Levelcraft.RangeExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.RangeExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				LevelFunctions.write(sender, exp, Levelcraft.SlayExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.SlayExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				LevelFunctions.write(sender, exp, Levelcraft.MiExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.MiExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				LevelFunctions.write(sender, exp, Levelcraft.FisticuffsExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.FisticuffsExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				LevelFunctions.write(sender, exp, Levelcraft.ForgeExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.ForgeExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				LevelFunctions.write(sender, exp, Levelcraft.ArcherExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.ArcherExpFile);
 				return true;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				LevelFunctions.write(sender, exp, Levelcraft.DiggingExpFile);
+				plugin.LevelFunctions.write(sender, exp, plugin.DiggingExpFile);
 				return true;
 			}
 			
 		}
 		if (plugin.Settings.database.equalsIgnoreCase("mysql")) {
 			if (s.equalsIgnoreCase("w")) {
-				DataMySql.update(sender, "WoodcuttingExp", exp);
+				plugin.DataMySql.update(sender, "WoodcuttingExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				DataMySql.update(sender, "RangingExp", exp);
+				plugin.DataMySql.update(sender, "RangingExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				DataMySql.update(sender, "SlayingExp", exp);
+				plugin.DataMySql.update(sender, "SlayingExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				DataMySql.update(sender, "MiningExp", exp);
+				plugin.DataMySql.update(sender, "MiningExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				DataMySql.update(sender, "FisticuffsExp", exp);
+				plugin.DataMySql.update(sender, "FisticuffsExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				DataMySql.update(sender, "ForgeExp", exp);
+				plugin.DataMySql.update(sender, "ForgeExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				DataMySql.update(sender, "ArcheryExp", exp);
+				plugin.DataMySql.update(sender, "ArcheryExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				DataMySql.update(sender, "DiggingExp", exp);
+				plugin.DataMySql.update(sender, "DiggingExp", exp);
 				return true;
 			}
 			return false;
 		}
 		if (plugin.Settings.database.equalsIgnoreCase("sqlite")) {
 			if (s.equalsIgnoreCase("w")) {
-				DataSqlite.update(sender, "MiningExp", exp);
+				plugin.DataSqlite.update(sender, "MiningExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("r")) {
-				DataSqlite.update(sender, "RangingExp", exp);
+				plugin.DataSqlite.update(sender, "RangingExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("s")) {
-				DataSqlite.update(sender, "SlayingExp", exp);
+				plugin.DataSqlite.update(sender, "SlayingExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("m")) {
-				DataSqlite.update(sender, "MiningExp", exp);
+				plugin.DataSqlite.update(sender, "MiningExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("c")) {
-				DataSqlite.update(sender, "FisticuffsExp", exp);
+				plugin.DataSqlite.update(sender, "FisticuffsExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("f")) {
-				DataSqlite.update(sender, "ForgeExp", exp);
+				plugin.DataSqlite.update(sender, "ForgeExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("a")) {
-				DataSqlite.update(sender, "ArcheryExp", exp);
+				plugin.DataSqlite.update(sender, "ArcheryExp", exp);
 				return true;
 			}
 			if (s.equalsIgnoreCase("d")) {
-				DataSqlite.update(sender, "DiggingExp", exp);
+				plugin.DataSqlite.update(sender, "DiggingExp", exp);
 				return true;
 			}
 		}

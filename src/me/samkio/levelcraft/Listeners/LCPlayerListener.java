@@ -1,7 +1,6 @@
 package me.samkio.levelcraft.Listeners;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.PlayerFunctions;
 
 import me.samkio.levelcraft.Skills.Forge;
 
@@ -11,7 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 
 public class LCPlayerListener extends PlayerListener {
-	public static Levelcraft plugin;
+	public Levelcraft plugin;
 	public Forge smith;
 
 	public LCPlayerListener(Levelcraft instance) {
@@ -20,7 +19,7 @@ public class LCPlayerListener extends PlayerListener {
 
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		PlayerFunctions.checkAccount(player);
+		plugin.PlayerFunctions.checkAccount(player);
 	}
 
 /*	public void onPlayerInteract(PlayerInteractEvent e) {

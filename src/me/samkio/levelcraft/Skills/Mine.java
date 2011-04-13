@@ -1,8 +1,6 @@
 package me.samkio.levelcraft.Skills;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,36 +10,39 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class Mine {
-	public static Levelcraft plugin;
-	public static void Place(BlockPlaceEvent event) {
+	public  Levelcraft plugin;
+	public Mine(Levelcraft instance) {
+		plugin = instance;
+	}
+	public  void Place(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
 		if(block.getType() == Material.IRON_ORE || block.getType() == Material.GOLD_ORE){
-		double stat = Level.getExp(player, "m");
+		double stat = plugin.Level.getExp(player, "m");
 		if(block.getType() == Material.IRON_ORE){
 			stat = stat - plugin.Settings.ExpPerIronOre;
-			Level.update(player, "m", stat);
+			plugin.Level.update(player, "m", stat);
 			player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 					+ " Possible Attempt to boost. Lost "+plugin.Settings.ExpPerIronOre+" exp.");
 		}else if(block.getType() == Material.GOLD_ORE){
 			stat = stat - plugin.Settings.ExpPerGoldOre;
-			Level.update(player, "m", stat);
+			plugin.Level.update(player, "m", stat);
 			player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 					+ " Possible Attempt to boost. Lost "+plugin.Settings.ExpPerGoldOre+" exp.");
 		}
 		}
 		
 	}
-	public static void Destroy(BlockBreakEvent event) {
+	public  void Destroy(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		int iih = player.getItemInHand().getTypeId();
-		PlayerFunctions.checkAccount(player);
+		plugin.PlayerFunctions.checkAccount(player);
 		if (plugin.Settings.enableMineLevel == true) {
 			int level = 0;
 			double stat = 0;
             double gained = 0;
-			level = Level.getLevel(player, "m");
-			stat = Level.getExp(player, "m");
+			level = plugin.Level.getLevel(player, "m");
+			stat = plugin.Level.getExp(player, "m");
 
 			if (level < plugin.Settings.MIIronPick && iih == 257) {
 				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
@@ -221,13 +222,13 @@ public class Mine {
 					gained = plugin.Settings.ExpPerSandStone;
 				}
 				int aftlevel = 0;
-				Level.update(player, "m", stat);
-				aftlevel = Level.getLevel(player, "m");
+				plugin.Level.update(player, "m", stat);
+				aftlevel = plugin.Level.getLevel(player, "m");
 				if (aftlevel > level) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3)
-							+ " Level up! Your Mining level is now " + aftlevel);
-				} else if (PlayerFunctions.enabled(player) == true) {
+							+ "Level up! Your Mining level is now " + aftlevel);
+				} else if (plugin.PlayerFunctions.enabled(player) == true) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+gained+" exp.");
 				}

@@ -17,7 +17,7 @@ import java.util.Map;
 
 public final class PropertyFunctions {
 
-	private static final Logger log = Logger.getLogger("Minecraft");
+	private  final Logger log = Logger.getLogger("Minecraft");
 	private String fileName;
 	private List<String> lines = new ArrayList<String>();
 	private Map<String, String> props = new HashMap<String, String>();

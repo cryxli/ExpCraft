@@ -14,15 +14,19 @@ import com.mysql.jdbc.ResultSetMetaData;
 import com.mysql.jdbc.Statement;
 
 public class DataMySql {
-	private static final Logger log = Logger.getLogger("Minecraft");
-	public static Levelcraft plugin;
-	private static Connection createConnection() throws ClassNotFoundException,
+	private  final Logger log = Logger.getLogger("Minecraft");
+	public  Levelcraft plugin;
+	public DataMySql(Levelcraft instance) {
+		plugin = instance;
+	}
+
+	private  Connection createConnection() throws ClassNotFoundException,
 			SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		return DriverManager.getConnection("jdbc:mysql://"+plugin.Settings.MySqlDir+"",""+plugin.Settings.MySqlUser+"", ""+plugin.Settings.MySqlPass+"");
 	}
 
-	public static void PrepareDB() {
+	public  void PrepareDB() {
 		Connection conn = null;
 		Statement st = null;
 		int maxcolumns = 10;                //Always update this when added new experience tree
@@ -78,7 +82,7 @@ public class DataMySql {
 		}
 	}
 
-	public static void NewPlayer(CommandSender sender, double var) {
+	public  void NewPlayer(CommandSender sender, double var) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -113,7 +117,7 @@ public class DataMySql {
 		}
 	}
 
-	public static double getExp(CommandSender sender, String value) {
+	public  double getExp(CommandSender sender, String value) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -153,7 +157,7 @@ public class DataMySql {
 		}
 	}
 
-	public static int getLevel(CommandSender sender, String value) {
+	public  int getLevel(CommandSender sender, String value) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			int level = 0;
@@ -174,7 +178,7 @@ public class DataMySql {
 		}
 	}
 
-	public static double getExpLeft(CommandSender sender, String value) {
+	public  double getExpLeft(CommandSender sender, String value) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			double exp = getExp(player, value);
@@ -189,7 +193,7 @@ public class DataMySql {
 				}
 			}
 			double leftExp = (getExpUp - exp);
-			double leftExp2 = Toolbox.roundTwoDecimals(leftExp);
+			double leftExp2 = plugin.Toolbox.roundTwoDecimals(leftExp);
 			return leftExp2;
 		} else {
 			sender.sendMessage("Error: Could not retrieve experience value!");
@@ -197,7 +201,7 @@ public class DataMySql {
 		}
 	}
 
-	public static boolean PlayerExsists(CommandSender sender) {
+	public  boolean PlayerExsists(CommandSender sender) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -238,7 +242,7 @@ public class DataMySql {
 		}
 	}
 
-	public static void update(CommandSender sender, String value,double newvalue) {
+	public  void update(CommandSender sender, String value,double newvalue) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -271,7 +275,7 @@ public class DataMySql {
 			sender.sendMessage("Error: Could not update player!");
 		}
 	}
-	public static void UpdateRow() {
+	public  void UpdateRow() {
 		Connection conn = null;
 		Statement st = null;
 		try {
@@ -299,7 +303,7 @@ public class DataMySql {
 		}
 	}
 
-	public static String GetRow() {
+	public  String GetRow() {
 		Connection conn = null;
 		Statement st = null;
 		String name = "NULL";

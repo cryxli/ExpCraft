@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 public class FlatLands {
-	private static final Logger log = Logger.getLogger("Minecraft");
-	public static void writeDouble(String str, double var, File file) {
+	private  final Logger log = Logger.getLogger("Minecraft");
+	public  void writeDouble(String str, double var, File file) {
 		Properties pro = new Properties();
 		String stringvar = (new Double(var)).toString();
 		try {
@@ -22,7 +22,7 @@ public class FlatLands {
 		}
 	}
 
-	public static double getDouble(String str, File file) {
+	public  double getDouble(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
@@ -38,7 +38,7 @@ public class FlatLands {
 		return 0;
 	}
 
-	public static void writeBoolean(String str, boolean var, File file) {
+	public  void writeBoolean(String str, boolean var, File file) {
 		Properties pro = new Properties();
 		String stringvar = new Boolean(var).toString();
 		try {
@@ -52,7 +52,7 @@ public class FlatLands {
 		}
 	}
 
-	public static boolean getBoolean(String str, File file) {
+	public  boolean getBoolean(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
@@ -68,7 +68,7 @@ public class FlatLands {
 		return false;
 	}
 
-	public static void writeString(String str, String var, File file) {
+	public  void writeString(String str, String var, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
@@ -81,7 +81,7 @@ public class FlatLands {
 		}
 	}
 
-	public static String getString(String str, File file) {
+	public  String getString(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
@@ -96,7 +96,7 @@ public class FlatLands {
 		return "";
 	}
 
-	public static void writeInteger(String str, int var, File file) {
+	public  void writeInteger(String str, int var, File file) {
 		Properties pro = new Properties();
 		String stringvar = (new Integer(var)).toString();
 		try {
@@ -110,7 +110,7 @@ public class FlatLands {
 		}
 	}
 
-	public static int getInteger(String str, File file) {
+	public  int getInteger(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
@@ -126,7 +126,7 @@ public class FlatLands {
 		return 0;
 	}
 
-	public static void removeKey(String str, File file) {
+	public  void removeKey(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
@@ -139,7 +139,7 @@ public class FlatLands {
 		}
 	}
 
-	public static boolean containsKey(String str, File file) {
+	public  boolean containsKey(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);

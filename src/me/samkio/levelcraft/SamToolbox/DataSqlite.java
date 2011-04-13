@@ -16,23 +16,28 @@ import me.samkio.levelcraft.Levelcraft;
 
 
 public class DataSqlite {
-	private static Connection connection;
-	private static final Logger log = Logger.getLogger("Minecraft");
-	public static Levelcraft plugin;
-	public static synchronized Connection getConnection() {
+	private  Connection connection;
+	private  final Logger log = Logger.getLogger("Minecraft");
+	public  Levelcraft plugin;
+	public DataSqlite(Levelcraft instance) {
+		plugin = instance;
+	}
+
+
+	public  synchronized Connection getConnection() {
 		if (connection == null) {
 			connection = createConnection();
 		}
 		return connection;
 	}
 
-	private static Connection createConnection() {
+	private  Connection createConnection() {
 
 		try {
 
 			Class.forName("org.sqlite.JDBC");
 			Connection ret = DriverManager.getConnection("jdbc:sqlite:"
-					+ Levelcraft.maindirectory + Levelcraft.datadirectory
+					+ plugin.maindirectory + plugin.datadirectory
 					+ "Experience.sqlite");
 			ret.setAutoCommit(false);
 			return ret;
@@ -45,7 +50,7 @@ public class DataSqlite {
 		return null;
 	}
 
-	public static void PrepareDB() {
+	public  void PrepareDB() {
 		Connection conn = null;
 		Statement st = null;
 		int maxcolumns = 9;                //Always update this when added new experience tree
@@ -86,7 +91,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static void NewPlayer(CommandSender sender, double var) {
+	public  void NewPlayer(CommandSender sender, double var) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -106,7 +111,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static void DelRow(String databasetable, String value) {
+	public  void DelRow(String databasetable, String value) {
 		Connection conn = null;
 		Statement st = null;
 		try {
@@ -120,7 +125,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static void update(CommandSender sender, String value,double newvalue) {
+	public  void update(CommandSender sender, String value,double newvalue) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -139,7 +144,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static String GetRow(String databasetable, String value) {
+	public  String GetRow(String databasetable, String value) {
 		Connection conn = null;
 		Statement st = null;
 		String name = "NULL";
@@ -160,7 +165,7 @@ public class DataSqlite {
 		return name;
 	}
 
-	public static double getExp(CommandSender sender, String value) {
+	public  double getExp(CommandSender sender, String value) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;
@@ -187,7 +192,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static int getLevel(CommandSender sender, String value) {
+	public  int getLevel(CommandSender sender, String value) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			int level = 0;
@@ -208,7 +213,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static double getExpLeft(CommandSender sender, String value) {
+	public  double getExpLeft(CommandSender sender, String value) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			double exp = getExp(player, value);
@@ -223,7 +228,7 @@ public class DataSqlite {
 				}
 			}
 			double leftExp = (getExpUp - exp);
-			double leftExp2 = Toolbox.roundTwoDecimals(leftExp);
+			double leftExp2 = plugin.Toolbox.roundTwoDecimals(leftExp);
 			return leftExp2;
 		} else {
 			sender.sendMessage("Error: Could not retrieve experience value!");
@@ -231,7 +236,7 @@ public class DataSqlite {
 		}
 	}
 
-	public static boolean PlayerExsists(CommandSender sender) {
+	public  boolean PlayerExsists(CommandSender sender) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			Connection conn = null;

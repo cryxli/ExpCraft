@@ -1,26 +1,26 @@
 package me.samkio.levelcraft.Skills;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
 public class Dig {
-	public static Levelcraft plugin;
-	public static void Destroy(BlockBreakEvent event) {
+	public  Levelcraft plugin;
+	public Dig(Levelcraft instance) {
+		plugin = instance;
+	}
+	public  void Destroy(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		int iih = player.getItemInHand().getTypeId();
-		PlayerFunctions.checkAccount(player);
+		plugin.PlayerFunctions.checkAccount(player);
 		if (plugin.Settings.enableDigLevel == true) {
 			int level = 0;
 			double stat = 0;
             double gained = 0;
-			level = Level.getLevel(player, "d");
-			stat = Level.getExp(player, "d");
+			level = plugin.Level.getLevel(player, "d");
+			stat = plugin.Level.getExp(player, "d");
          
 			if (level < plugin.Settings.DIronShov && iih == 256) {
 				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
@@ -160,13 +160,13 @@ public class Dig {
 				}
 				
 				int aftlevel = 0;
-				Level.update(player, "d", stat);
-				aftlevel = Level.getLevel(player, "d");
+				plugin.Level.update(player, "d", stat);
+				aftlevel = plugin.Level.getLevel(player, "d");
 				if (aftlevel > level) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3)
-							+ " Level up! Your Digging level is now " + aftlevel);
-				} else if (PlayerFunctions.enabled(player) == true) {
+							+ "Level up! Your Digging level is now " + aftlevel);
+				} else if (plugin.PlayerFunctions.enabled(player) == true) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+gained+" exp.");
 				}

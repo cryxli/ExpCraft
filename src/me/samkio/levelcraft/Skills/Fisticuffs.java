@@ -1,21 +1,23 @@
 package me.samkio.levelcraft.Skills;
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.Level;
+
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Fisticuffs {
-	public static Levelcraft plugin;
-	public static void attack(EntityDamageByEntityEvent event) {
+	public  Levelcraft plugin;
+	public Fisticuffs(Levelcraft instance) {
+		plugin = instance;
+	}
+	public  void attack(EntityDamageByEntityEvent event) {
 		Player player = (Player) event.getDamager();
 		int iih = player.getItemInHand().getTypeId();
-		PlayerFunctions.checkAccount(player);
+		plugin.PlayerFunctions.checkAccount(player);
 		int level = 0;
 		double stat = 0;
 		if (plugin.Settings.enableFisticuffsLevel == true) {
-		level = Level.getLevel(player, "c");
+		level = plugin.Level.getLevel(player, "c");
 			if (level < plugin.Settings.FisticuffsIronSword && iih == 267) {
 				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this weapon. Required Level:"
@@ -45,13 +47,13 @@ public class Fisticuffs {
 
 				stat = stat + plugin.Settings.ExpPerDamage;
 				int aftlevel = 0;
-				Level.update(player, "c", stat);
-				aftlevel = Level.getLevel(player, "c");
+				plugin.Level.update(player, "c", stat);
+				aftlevel = plugin.Level.getLevel(player, "c");
 				if (aftlevel > level) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3)
-							+ " Level up! Your Fisticuffs level is now " + aftlevel);
-				} else if (PlayerFunctions.enabled(player) == true) {
+							+ "Level up! Your Fisticuffs level is now " + aftlevel);
+				} else if (plugin.PlayerFunctions.enabled(player) == true) {
 					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+plugin.Settings.ExpPerDamage+" exp.");
 				}

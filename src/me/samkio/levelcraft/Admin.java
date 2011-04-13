@@ -1,21 +1,18 @@
 package me.samkio.levelcraft;
 
 import java.util.List;
-
-import me.samkio.levelcraft.SamToolbox.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Admin {
-	public static Levelcraft plugin;
+	public  Levelcraft plugin;
 
 	public Admin(Levelcraft instance) {
 		plugin = instance;
 	}
 
-	public static void dothis(CommandSender sender, String[] split) {
+	public  void dothis(CommandSender sender, String[] split) {
 
 		if (split[1].equalsIgnoreCase("setexp") && split.length >= 5) {
 
@@ -37,56 +34,56 @@ public class Admin {
 				if ((stat.equalsIgnoreCase("mine")
 						|| stat.equalsIgnoreCase("m") || stat
 						.equalsIgnoreCase("mining"))) {
-					// LevelFunctions.write(editor, newexp,
-					// Levelcraft.MiExpFile);
-					Level.update(editor, "m", newexp);
+					// plugin.LevelFunctions.write(editor, newexp,
+					// plugin.Levelcraft.MiExpFile);
+					plugin.Level.update(editor, "m", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 				} else if ((stat.equalsIgnoreCase("w")
 						|| stat.equalsIgnoreCase("wc") || stat
 						.equalsIgnoreCase("woodcut"))) {
-					Level.update(editor, "w", newexp);
+					plugin.Level.update(editor, "w", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 
 				} else if ((stat.equalsIgnoreCase("s")
 						|| stat.equalsIgnoreCase("slay") || stat
 						.equalsIgnoreCase("slayer"))) {
-					Level.update(editor, "s", newexp);
+					plugin.Level.update(editor, "s", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 
 				} else if ((stat.equalsIgnoreCase("r")
 						|| stat.equalsIgnoreCase("range") || stat
 						.equalsIgnoreCase("ranging"))) {
-					Level.update(editor, "r", newexp);
+					plugin.Level.update(editor, "r", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 
 				} else if ((stat.equalsIgnoreCase("c")
 						|| stat.equalsIgnoreCase("fist") || stat
 						.equalsIgnoreCase("fisticuffs"))) {
-					Level.update(editor, "c", newexp);
+					plugin.Level.update(editor, "c", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 				} else if ((stat.equalsIgnoreCase("a")
 						|| stat.equalsIgnoreCase("archer") || stat
 						.equalsIgnoreCase("archery"))) {
-					Level.update(editor, "a", newexp);
+					plugin.Level.update(editor, "a", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 
 				}  else if ((stat.equalsIgnoreCase("d")
 						|| stat.equalsIgnoreCase("digging") || stat
 						.equalsIgnoreCase("digger"))) {
-					Level.update(editor, "d", newexp);
+					plugin.Level.update(editor, "d", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 
 				}  else if ((stat.equalsIgnoreCase("f")
 						|| stat.equalsIgnoreCase("forge") || stat
 						.equalsIgnoreCase("forgery"))) {
-					Level.update(editor, "f", newexp);
+					plugin.Level.update(editor, "f", newexp);
 					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 

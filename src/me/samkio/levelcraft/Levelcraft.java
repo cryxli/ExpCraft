@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import me.samkio.levelcraft.Functions.LevelFunctions;
 import me.samkio.levelcraft.Functions.PlayerFunctions;
 import me.samkio.levelcraft.Listeners.LCBlockListener;
 import me.samkio.levelcraft.Listeners.LCEntityListener;
@@ -12,9 +13,11 @@ import me.samkio.levelcraft.Listeners.LCPlayerListener;
 import me.samkio.levelcraft.SamToolbox.DataMySql;
 import me.samkio.levelcraft.SamToolbox.DataSqlite;
 import me.samkio.levelcraft.SamToolbox.FurnaceRecipe;
+import me.samkio.levelcraft.SamToolbox.Level;
+import me.samkio.levelcraft.SamToolbox.Toolbox;
 import net.minecraft.server.FurnaceRecipes;
 
-import me.samkio.levelcraft.Skills.Forge;
+import me.samkio.levelcraft.Skills.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,42 +28,59 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class Levelcraft extends JavaPlugin {
-	@SuppressWarnings("unused")
-	private final Admin Admin = new Admin(this);
-	@SuppressWarnings("unused")
-	private final Forge Smithing = new Forge(this);
-	public  Settings Settings = new Settings();
-	public static final Logger log = Logger.getLogger("Minecraft");
+	public
+	final Admin Admin = new Admin(this);
+    public final Settings Settings = new Settings(this);
+	public final Help Help = new Help(this);
+	public final PlayerFunctions PlayerFunctions = new PlayerFunctions(this);
+	public final LevelFunctions LevelFunctions = new LevelFunctions(this);
+	public final Level Level = new Level(this);
+	public final Whitelist Whitelist = new Whitelist(this);
+	public final DataMySql DataMySql = new DataMySql(this);
+	public final DataSqlite DataSqlite = new DataSqlite(this);
+	public  final Logger log = Logger.getLogger("Minecraft");
 	private final LCPlayerListener playerListener = new LCPlayerListener(this);
 	private final LCBlockListener blockListener = new LCBlockListener(this);
 	private final LCEntityListener entityListener = new LCEntityListener(this);
-	public static String maindirectory = "plugins/LevelCraft/";
-	public static String datadirectory = "Experience/";
-	public static String configdirectory = "Config/";
-	public static File WCExpFile = new File(maindirectory + datadirectory
+	public final Toolbox Toolbox  = new Toolbox (this);
+	
+	public final Archer Archer  = new Archer (this);
+	public final Dig Dig = new Dig(this);
+	public final Fisticuffs Fisticuffs = new Fisticuffs(this);
+	@SuppressWarnings("unused")
+	private final Forge Smithing = new Forge(this);
+	public final Mine Mine = new Mine(this);
+	public final Range Range = new Range(this);
+	public final Slayer Slayer = new Slayer(this);
+	public final Wood Wood = new Wood(this);
+	
+	
+	public  String maindirectory = "plugins/LevelCraft/";
+	public  String datadirectory = "Experience/";
+	public  String configdirectory = "Config/";
+	public  File WCExpFile = new File(maindirectory + datadirectory
 			+ "WoodCutting.exp");
-	public static File MiExpFile = new File(maindirectory + datadirectory
+	public  File MiExpFile = new File(maindirectory + datadirectory
 			+ "Mining.exp");
-	public static File SlayExpFile = new File(maindirectory + datadirectory
+	public  File SlayExpFile = new File(maindirectory + datadirectory
 			+ "Slaying.exp");
-	public static File RangeExpFile = new File(maindirectory + datadirectory
+	public  File RangeExpFile = new File(maindirectory + datadirectory
 			+ "Ranging.exp");
-	public static File FisticuffsExpFile = new File(maindirectory
+	public  File FisticuffsExpFile = new File(maindirectory
 			+ datadirectory + "Fisticuffs.exp");
-	public static File ArcherExpFile = new File(maindirectory + datadirectory
+	public  File ArcherExpFile = new File(maindirectory + datadirectory
 			+ "Archer.exp");
-	public static File DiggingExpFile = new File(maindirectory + datadirectory
+	public  File DiggingExpFile = new File(maindirectory + datadirectory
 			+ "Digging.exp");
-	public static File ForgeExpFile = new File(maindirectory + datadirectory
+	public  File ForgeExpFile = new File(maindirectory + datadirectory
 			+ "Forge.exp");
-	public static PermissionHandler Permissions;
+	public  PermissionHandler Permissions;
 	public boolean Citizens = false;
-	public static ArrayList<FurnaceRecipe> furnaceRecipeObjects = new ArrayList<FurnaceRecipe>();
+	public  ArrayList<FurnaceRecipe> furnaceRecipeObjects = new ArrayList<FurnaceRecipe>();
 	
    
 	/*
@@ -97,7 +117,6 @@ public class Levelcraft extends JavaPlugin {
 
 	}
 
-	@SuppressWarnings("static-access")
 	private void setupPermissions() {
 		Plugin test = this.getServer().getPluginManager()
 				.getPlugin("Permissions");
@@ -235,7 +254,7 @@ public class Levelcraft extends JavaPlugin {
 
 	}
 
-	public static void addFurnaceRecipe(ArrayList<FurnaceRecipe> recipes) {
+	public  void addFurnaceRecipe(ArrayList<FurnaceRecipe> recipes) {
 		int count = 0;
 		for (FurnaceRecipe fr : recipes) {
 			net.minecraft.server.ItemStack result = null;

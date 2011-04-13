@@ -1,14 +1,17 @@
 package me.samkio.levelcraft;
 
-import me.samkio.levelcraft.SamToolbox.Level;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Help {
-	public static Levelcraft plugin;
-	public static void IncorrectExp(CommandSender sender) {
+	public  Levelcraft plugin;
+	public Help(Levelcraft instance) {
+		plugin = instance;
+	}
+
+
+	public  void IncorrectExp(CommandSender sender) {
 		sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 				+ ChatColor.valueOf(plugin.Settings.c2) + " Stat not found.");
 		sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
@@ -16,49 +19,49 @@ public class Help {
 				+ "'/level list' to show all stats.");
 	}
 
-	public static void ListLevels(CommandSender sender) {
+	public  void ListLevels(CommandSender sender) {
 		String list = ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
 				+ ChatColor.valueOf(plugin.Settings.c2) + " Stats:";
 		if (plugin.Settings.enableWCLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "w")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "w")) {
 			list = list + "WoodCutting(W),";
 		}
 		if (plugin.Settings.enableMineLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "m")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "m")) {
 			list = list + "Mining(M),";
 		}
 		if (plugin.Settings.enableSlayerLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "s")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "s")) {
 			list = list + "Slaying(S),";
 		}
 		if (plugin.Settings.enableRangeLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "r")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "r")) {
 			list = list + "Ranging(R),";
 		}
 		if (plugin.Settings.enableFisticuffsLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "c")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "c")) {
 			list = list + "Fisticuffs(C),";
 		}
 		if (plugin.Settings.enableArcherLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "a")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "a")) {
 			list = list + "Archery(A),";
 		}
 		if (plugin.Settings.enableDigLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "d")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "d")) {
 			list = list + "Digging(D),";
 		}
 		if (plugin.Settings.enableForgeLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "f")) {
+				&& !plugin.Whitelist.isAvoid((Player) sender, "f")) {
 			list = list + "Forge(F),";
 		}
 		sender.sendMessage(list);
 	}
 
-	public static void shout(CommandSender sender, String string,
+	public  void shout(CommandSender sender, String string,
 			Levelcraft plugin) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			if (!Whitelist.isShouter(player)){
+			if (!plugin.Whitelist.isShouter(player)){
 				sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1)+"[LC]"+ChatColor.valueOf(plugin.Settings.c4)+" You do not have the permission to shout!");
 				return;
 			}
@@ -67,7 +70,7 @@ public class Help {
 					|| string.equalsIgnoreCase("wood")
 					|| string.equalsIgnoreCase("woodcut") || string
 					.equalsIgnoreCase("w")) && plugin.Settings.enableWCLevel == true) {
-				level = Level.getLevel(sender, "w");
+				level = plugin.Level.getLevel(sender, "w");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -78,7 +81,7 @@ public class Help {
 					|| string.equalsIgnoreCase("m") || string
 					.equalsIgnoreCase("mining"))
 					&& plugin.Settings.enableMineLevel == true) {
-				level = Level.getLevel(sender, "m");
+				level = plugin.Level.getLevel(sender, "m");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -89,7 +92,7 @@ public class Help {
 					|| string.equalsIgnoreCase("s") || string
 					.equalsIgnoreCase("slaying"))
 					&& plugin.Settings.enableSlayerLevel == true) {
-				level = Level.getLevel(sender, "s");
+				level = plugin.Level.getLevel(sender, "s");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -100,7 +103,7 @@ public class Help {
 					|| string.equalsIgnoreCase("r") || string
 					.equalsIgnoreCase("ranging"))
 					&& plugin.Settings.enableRangeLevel == true) {
-				level = Level.getLevel(sender, "r");
+				level = plugin.Level.getLevel(sender, "r");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -111,7 +114,7 @@ public class Help {
 					|| string.equalsIgnoreCase("c") || string
 					.equalsIgnoreCase("Fisticuffs"))
 					&& plugin.Settings.enableFisticuffsLevel == true) {
-				level = Level.getLevel(sender, "c");
+				level = plugin.Level.getLevel(sender, "c");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -122,7 +125,7 @@ public class Help {
 					|| string.equalsIgnoreCase("a") || string
 					.equalsIgnoreCase("archery"))
 					&& plugin.Settings.enableFisticuffsLevel == true) {
-				level = Level.getLevel(sender, "a");
+				level = plugin.Level.getLevel(sender, "a");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -133,7 +136,7 @@ public class Help {
 					|| string.equalsIgnoreCase("d") || string
 					.equalsIgnoreCase("digging"))
 					&& plugin.Settings.enableDigLevel == true) {
-				level = Level.getLevel(sender, "d");
+				level = plugin.Level.getLevel(sender, "d");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -144,7 +147,7 @@ public class Help {
 					|| string.equalsIgnoreCase("f") || string
 					.equalsIgnoreCase("forger"))
 					&& plugin.Settings.enableDigLevel == true) {
-				level = Level.getLevel(sender, "f");
+				level = plugin.Level.getLevel(sender, "f");
 				plugin.getServer().broadcastMessage(
 						ChatColor.valueOf(plugin.Settings.c1) + "[LC] "
 								+ ChatColor.valueOf(plugin.Settings.c2)
@@ -164,7 +167,7 @@ public class Help {
 	}
 
 
-	public static void unlocks(CommandSender sender, String[] split) {
+	public  void unlocks(CommandSender sender, String[] split) {
 		if ((split[1].equalsIgnoreCase("wc")
 				|| split[1].equalsIgnoreCase("wood")
 				|| split[1].equalsIgnoreCase("woodcut") || split[1]
@@ -327,66 +330,82 @@ public class Help {
 		}
 	}
 
-	public static void Total(CommandSender sender) {
+	public  void Total(CommandSender sender) {
 		int totalLevel = 0;
 		double totalExp = 0;
 		String highestLevel = "None";
 		int level = 0;
 		if (plugin.Settings.enableWCLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "w")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "w");
-			totalExp = totalExp + Level.getExp(sender, "w");
-			if (Level.getLevel(sender, "w") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "w")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "w");
+			totalExp = totalExp + plugin.Level.getExp(sender, "w");
+			if (plugin.Level.getLevel(sender, "w") > level){
 				highestLevel = "WoodCutting";
+				level = plugin.Level.getLevel(sender, "w");
+			}
 		}
 		if (plugin.Settings.enableMineLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "m")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "m");
-			totalExp = totalExp + Level.getExp(sender, "m");
-			if (Level.getLevel(sender, "n") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "m")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "m");
+			totalExp = totalExp + plugin.Level.getExp(sender, "m");
+			if (plugin.Level.getLevel(sender, "n") > level){
 				highestLevel = "Mining";
+			level = plugin.Level.getLevel(sender, "m");
+		}
 		}
 		if (plugin.Settings.enableSlayerLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "s")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "s");
-			totalExp = totalExp + Level.getExp(sender, "s");
-			if (Level.getLevel(sender, "s") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "s")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "s");
+			totalExp = totalExp + plugin.Level.getExp(sender, "s");
+			if (plugin.Level.getLevel(sender, "s") > level){
 				highestLevel = "Slayer";
+			level = plugin.Level.getLevel(sender, "s");
+		}
 		}
 		if (plugin.Settings.enableRangeLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "r")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "r");
-			totalExp = totalExp + Level.getExp(sender, "r");
-			if (Level.getLevel(sender, "r") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "r")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "r");
+			totalExp = totalExp + plugin.Level.getExp(sender, "r");
+			if (plugin.Level.getLevel(sender, "r") > level){
 				highestLevel = "Range";
+			level = plugin.Level.getLevel(sender, "r");
+		}
 		}
 		if (plugin.Settings.enableFisticuffsLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "c")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "c");
-			totalExp = totalExp + Level.getExp(sender, "c");
-			if (Level.getLevel(sender, "c") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "c")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "c");
+			totalExp = totalExp + plugin.Level.getExp(sender, "c");
+			if (plugin.Level.getLevel(sender, "c") > level){
 				highestLevel = "Fisticuffs";
+			level = plugin.Level.getLevel(sender, "c");
+		}
 		}
 		if (plugin.Settings.enableArcherLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "a")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "a");
-			totalExp = totalExp + Level.getExp(sender, "a");
-			if (Level.getLevel(sender, "a") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "a")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "a");
+			totalExp = totalExp + plugin.Level.getExp(sender, "a");
+			if (plugin.Level.getLevel(sender, "a") > level){
 				highestLevel = "Archer";
+			level = plugin.Level.getLevel(sender, "a");
+		}
 		}
 		if (plugin.Settings.enableDigLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "d")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "d");
-			totalExp = totalExp + Level.getExp(sender, "d");
-			if (Level.getLevel(sender, "d") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "d")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "d");
+			totalExp = totalExp + plugin.Level.getExp(sender, "d");
+			if (plugin.Level.getLevel(sender, "d") > level){
 				highestLevel = "Digging";
+			level = plugin.Level.getLevel(sender, "d");
+		}
 		}
 		if (plugin.Settings.enableForgeLevel == true
-				&& !Whitelist.isAvoid((Player) sender, "f")) {
-			totalLevel = totalLevel + Level.getLevel(sender, "f");
-			totalExp = totalExp + Level.getExp(sender, "f");
-			if (Level.getLevel(sender, "f") > level)
+				&& !plugin.Whitelist.isAvoid((Player) sender, "f")) {
+			totalLevel = totalLevel + plugin.Level.getLevel(sender, "f");
+			totalExp = totalExp + plugin.Level.getExp(sender, "f");
+			if (plugin.Level.getLevel(sender, "f") > level){
 				highestLevel = "Forge";
+			level = plugin.Level.getLevel(sender, "f");
+		}
 		}
 		sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1)
 				+ "[LC] ---LevelCraftPlugin By Samkio--- ");

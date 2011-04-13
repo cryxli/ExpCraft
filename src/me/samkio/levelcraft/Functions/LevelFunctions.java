@@ -15,8 +15,13 @@ import org.bukkit.entity.Player;
 
 
 public class LevelFunctions {
-	public static Levelcraft plugin;
-	public static void write(CommandSender sender, double levelstat, File file) {
+	public  Levelcraft plugin;
+	public LevelFunctions(Levelcraft instance) {
+		plugin = instance;
+	}
+
+
+	public  void write(CommandSender sender, double levelstat, File file) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			Properties pro = new Properties();
@@ -36,12 +41,12 @@ public class LevelFunctions {
 		}
 	}
 	
-	public static double roundTwoDecimals(double d) {
+	public  double roundTwoDecimals(double d) {
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
 		return Double.valueOf(twoDForm.format(d));
 	}
 	
-	public static double getExp(CommandSender sender, File file) {
+	public  double getExp(CommandSender sender, File file) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			String player = p.getName();
@@ -65,7 +70,7 @@ public class LevelFunctions {
 		}
 	}
 
-	public static boolean containskey(CommandSender sender, File file) {
+	public  boolean containskey(CommandSender sender, File file) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			Properties pro = new Properties();
@@ -89,7 +94,7 @@ public class LevelFunctions {
 		}
 	}
 	
-	public static int getLevel(CommandSender sender,File file) {
+	public  int getLevel(CommandSender sender,File file) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			int level = 0;
@@ -109,7 +114,7 @@ public class LevelFunctions {
 		}
 	}
 	
-	public static double getExpLeft(CommandSender sender, File file) {
+	public  double getExpLeft(CommandSender sender, File file) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			double exp = getExp(p,file);

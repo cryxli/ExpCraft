@@ -1,15 +1,11 @@
 package me.samkio.levelcraft.Listeners;
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Whitelist;
-import me.samkio.levelcraft.Skills.Dig;
-import me.samkio.levelcraft.Skills.Mine;
-import me.samkio.levelcraft.Skills.Wood;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class LCBlockListener extends BlockListener {
-	public static Levelcraft plugin;
+	public Levelcraft plugin;
 
 	public LCBlockListener(Levelcraft instance) {
 		plugin = instance;
@@ -21,14 +17,14 @@ public class LCBlockListener extends BlockListener {
 		}
 		
 		if (!event.isCancelled()) {
-			if(!Whitelist.isAvoid(event.getPlayer(), "w")){
-			  Wood.Destroy(event);
+			if(!plugin.Whitelist.isAvoid(event.getPlayer(), "w")){
+			  plugin.Wood.Destroy(event);
 			}
-			if(!Whitelist.isAvoid(event.getPlayer(), "d")){
-				  Dig.Destroy(event);
+			if(!plugin.Whitelist.isAvoid(event.getPlayer(), "d")){
+				 plugin.Dig.Destroy(event);
 				}
-			if(!Whitelist.isAvoid(event.getPlayer(), "m")){
-			  Mine.Destroy(event);
+			if(!plugin.Whitelist.isAvoid(event.getPlayer(), "m")){
+				 plugin.Mine.Destroy(event);
 			}
 			
 		}
@@ -39,8 +35,8 @@ public class LCBlockListener extends BlockListener {
 			return;
 		}
 		if(plugin.Settings.AntiBoost){
-			if(!Whitelist.isAvoid(event.getPlayer(), "m")){
-				  Mine.Place(event);
+			if(!plugin.Whitelist.isAvoid(event.getPlayer(), "m")){
+				 plugin.Mine.Place(event);
 		    }
 		}
 	}
