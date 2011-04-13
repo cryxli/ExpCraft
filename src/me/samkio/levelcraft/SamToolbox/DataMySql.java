@@ -8,46 +8,53 @@ import java.util.logging.Logger;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import me.samkio.levelcraft.Settings;
+
+import me.samkio.levelcraft.Levelcraft;
 import com.mysql.jdbc.ResultSetMetaData;
 import com.mysql.jdbc.Statement;
 
 public class DataMySql {
 	private static final Logger log = Logger.getLogger("Minecraft");
-
+	public static Levelcraft plugin;
 	private static Connection createConnection() throws ClassNotFoundException,
 			SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://"+Settings.MySqlDir+"",""+Settings.MySqlUser+"", ""+Settings.MySqlPass+"");
+		return DriverManager.getConnection("jdbc:mysql://"+plugin.Settings.MySqlDir+"",""+plugin.Settings.MySqlUser+"", ""+plugin.Settings.MySqlPass+"");
 	}
 
 	public static void PrepareDB() {
 		Connection conn = null;
 		Statement st = null;
-		int maxcolumns = 8;                //Always update this when added new experience tree
+		int maxcolumns = 10;                //Always update this when added new experience tree
 		try {
 			conn = createConnection();
 			st = (Statement) conn.createStatement();
 			st.executeUpdate("CREATE TABLE IF NOT EXISTS `ExperienceTable` ( `id` INT( 255 ) NOT NULL AUTO_INCREMENT," +
-					" `PlayerName` TEXT NOT NULL ,`WoodcuttingExp` DOUBLE(10,2) NOT NULL," +
-					"`SlayingExp` DOUBLE(10,2) NOT NULL,`MiningExp` DOUBLE(10,2) NOT NULL," +
-					"`RangingExp` DOUBLE(10,2) NOT NULL,`FisticuffsExp` DOUBLE(10,2) NOT NULL," +
-					"`ArcheryExp` DOUBLE(10,2) NOT NULL,PRIMARY KEY ( `id` )) ENGINE = MYISAM;");
+					" `PlayerName` TEXT NOT NULL ,`WoodcuttingExp` DOUBLE(10,2) NOT NULL DEFAULT 0," +
+					"`SlayingExp` DOUBLE(10,2) NOT NULL DEFAULT 0,`MiningExp` DOUBLE(10,2) NOT NULL DEFAULT 0," +
+					"`RangingExp` DOUBLE(10,2) NOT NULL DEFAULT 0,`FisticuffsExp` DOUBLE(10,2) NOT NULL v," +
+					"`ArcheryExp` DOUBLE(10,2) NOT NULL DEFAULT 0,`DiggingExp` DOUBLE(10,2) NOT NULL DEFAULT 0,`ForgeExp` DOUBLE(10,2) NOT NULL DEFAULT 0,PRIMARY KEY ( `id` )) ENGINE = MYISAM;");
 			ResultSet rs = st.executeQuery("SELECT * FROM `ExperienceTable`;");
 			ResultSetMetaData rsMetaData = (ResultSetMetaData) rs.getMetaData();
 			int numcolumns = rsMetaData.getColumnCount();
 			if(!(numcolumns==maxcolumns)){
 				if(numcolumns==5){
-					st.executeUpdate("ALTER TABLE ExperienceTable ADD RangingExp DOUBLE(10,2) NOT NULL;");
-					st.executeUpdate("ALTER TABLE ExperienceTable ADD FisticuffsExp DOUBLE(10,2) NOT NULL;");
-					st.executeUpdate("ALTER TABLE ExperienceTable ADD ArcheryExp DOUBLE(10,2) NOT NULL;");
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD RangingExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD FisticuffsExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD ArcheryExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
 				}
 				if(numcolumns==6){
-					st.executeUpdate("ALTER TABLE ExperienceTable ADD FisticuffsExp DOUBLE(10,2) NOT NULL;");
-					st.executeUpdate("ALTER TABLE ExperienceTable ADD ArcheryExp DOUBLE(10,2) NOT NULL;");
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD FisticuffsExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD ArcheryExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
 				}
 				if(numcolumns==7){
-					st.executeUpdate("ALTER TABLE ExperienceTable ADD ArcheryExp DOUBLE(10,2) NOT NULL;");
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD ArcheryExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
+				}
+				if(numcolumns==8){
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD DiggingExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
+				}
+				if(numcolumns==9){
+					st.executeUpdate("ALTER TABLE ExperienceTable ADD ForgeExp DOUBLE(10,2) NOT NULL DEFAULT 0;");
 				}
 			}
 		} catch (SQLException ex) {
@@ -80,8 +87,8 @@ public class DataMySql {
 			try {
 				conn = createConnection();
 				st = (Statement) conn.createStatement();
-				st.executeUpdate("INSERT INTO ExperienceTable (PlayerName,WoodcuttingExp,MiningExp,SlayingExp,RangingExp,FisticuffsExp,ArcheryExp) VALUES ('"
-						+ p + "'," + var + "," + var + "," + var + "," + var + "," + var + "," + var + ")");
+				st.executeUpdate("INSERT INTO ExperienceTable (PlayerName,WoodcuttingExp,MiningExp,SlayingExp,RangingExp,FisticuffsExp,ArcheryExp,DiggingExp,ForgeExp) VALUES ('"
+						+ p + "'," + var + "," + var + "," + var + "," + var + "," + var + "," + var + "," + var + "," + var + ")");
 			} catch (SQLException ex) {
 				log.severe("[Levelcraft]: Could not insert row for mysql" + ": "
 						+ ex);
@@ -151,7 +158,7 @@ public class DataMySql {
 			Player player = (Player) sender;
 			int level = 0;
 			double exp = getExp(player, value);
-			double constant = Settings.Constant;
+			double constant = plugin.Settings.Constant;
 			constant = constant / 100;
 			for (int i = 1; i <= 1000; i++) {
 				double levelAti = (100 * (i * (i * constant)));
@@ -172,7 +179,7 @@ public class DataMySql {
 			Player player = (Player) sender;
 			double exp = getExp(player, value);
 			double getExpUp = 0;
-			double constant = Settings.Constant;
+			double constant = plugin.Settings.Constant;
 			constant = constant / 100;
 			for (int i = 1; i <= 1000; i++) {
 				double levelAti = (100 * (i * (i * constant)));

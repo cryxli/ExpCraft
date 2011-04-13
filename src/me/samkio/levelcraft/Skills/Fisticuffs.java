@@ -1,80 +1,59 @@
 package me.samkio.levelcraft.Skills;
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Settings;
-import me.samkio.levelcraft.Functions.LevelFunctions;
 import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.DataMySql;
-import me.samkio.levelcraft.SamToolbox.DataSqlite;
+import me.samkio.levelcraft.SamToolbox.Level;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class Fisticuffs {
+	public static Levelcraft plugin;
 	public static void attack(EntityDamageByEntityEvent event) {
 		Player player = (Player) event.getDamager();
 		int iih = player.getItemInHand().getTypeId();
 		PlayerFunctions.checkAccount(player);
 		int level = 0;
 		double stat = 0;
-		if (Settings.enableFisticuffsLevel == true) {
-			if (Settings.database.equalsIgnoreCase("flatfile")) {
-				level = LevelFunctions.getLevel(player, Levelcraft.FisticuffsExpFile);
-				stat = LevelFunctions.getExp(player, Levelcraft.FisticuffsExpFile);
-			} else if (Settings.database.equalsIgnoreCase("sqlite")) {
-				stat = DataSqlite.getExp(player, "FisticuffsExp");
-				level = DataSqlite.getLevel(player, "FisticuffsExp");
-			}
-			else if (Settings.database.equalsIgnoreCase("mysql")) {
-				stat = DataMySql.getExp(player, "FisticuffsExp");
-				level = DataMySql.getLevel(player, "FisticuffsExp");
-			}
-			if (level < Settings.FisticuffsIronSword && iih == 267) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+		if (plugin.Settings.enableFisticuffsLevel == true) {
+		level = Level.getLevel(player, "c");
+			if (level < plugin.Settings.FisticuffsIronSword && iih == 267) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this weapon. Required Level:"
-						+ Settings.FisticuffsIronSword);
+						+ plugin.Settings.FisticuffsIronSword);
 				event.setCancelled(true);
-			} else if (level < Settings.FisticuffsGoldSword && iih == 283) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.FisticuffsGoldSword && iih == 283) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this weapon. Required Level:"
-						+ Settings.FisticuffsGoldSword);
+						+ plugin.Settings.FisticuffsGoldSword);
 				event.setCancelled(true);
-			} else if (level < Settings.FisticuffsDiamondSword && iih == 276) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.FisticuffsDiamondSword && iih == 276) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this weapon. Required Level:"
-						+ Settings.FisticuffsDiamondSword);
+						+ plugin.Settings.FisticuffsDiamondSword);
 				event.setCancelled(true);
-			} else if (level < Settings.FisticuffsStoneSword && iih == 272) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.FisticuffsStoneSword && iih == 272) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this weapon. Required Level:"
-						+ Settings.FisticuffsStoneSword);
+						+ plugin.Settings.FisticuffsStoneSword);
 				event.setCancelled(true);
-			} else if (level < Settings.FisticuffsWoodSword && iih == 268) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.FisticuffsWoodSword && iih == 268) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this weapon. Required Level:"
-						+ Settings.FisticuffsWoodSword);
+						+ plugin.Settings.FisticuffsWoodSword);
 				event.setCancelled(true);
 			} else {
 
-				stat = stat + Settings.ExpPerDamage;
+				stat = stat + plugin.Settings.ExpPerDamage;
 				int aftlevel = 0;
-				if (Settings.database.equalsIgnoreCase("flatfile")) {
-					LevelFunctions.write(player, stat, Levelcraft.FisticuffsExpFile);
-					aftlevel = LevelFunctions.getLevel(player,
-							Levelcraft.FisticuffsExpFile);
-				} else if (Settings.database.equalsIgnoreCase("sqlite")) {
-					DataSqlite.update(player, "FisticuffsExp", stat);
-					aftlevel = DataSqlite.getLevel(player, "FisticuffsExp");
-				}
-				else if (Settings.database.equalsIgnoreCase("mysql")) {
-					DataMySql.update(player, "FisticuffsExp", stat);
-					aftlevel = DataMySql.getLevel(player, "FisticuffsExp");
-				}
+				Level.update(player, "c", stat);
+				aftlevel = Level.getLevel(player, "c");
 				if (aftlevel > level) {
-					player.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN
+					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3)
 							+ " Level up! Your Fisticuffs level is now " + aftlevel);
 				} else if (PlayerFunctions.enabled(player) == true) {
-					player.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " You gained exp.");
+					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+plugin.Settings.ExpPerDamage+" exp.");
 				}
 			}
 		}

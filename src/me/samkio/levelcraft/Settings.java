@@ -2,99 +2,136 @@ package me.samkio.levelcraft;
 
 import java.io.IOException;
 
+
 import me.samkio.levelcraft.SamToolbox.PropertyFunctions;
 
-
 public class Settings {
-	public static boolean enableWCLevel;
-	public static boolean enableMineLevel;
-	public static boolean enableRangeLevel;
-	public static boolean enableSlayerLevel;
-	public static boolean enableFisticuffsLevel;
-	public static boolean enableArcherLevel;
-	public static int WCWoodAxe;
-	public static int WCStoneAxe;
-	public static int WCIronAxe;
-	public static int WCGoldAxe;
-	public static int WCDiamondAxe;
-
-	public static int SlayWoodSword;
-	public static int SlayStoneSword;
-	public static int SlayIronSword;
-	public static int SlayGoldSword;
-	public static int SlayDiamondSword;
 	
-	public static int FisticuffsWoodSword;
-	public static int FisticuffsStoneSword;
-	public static int FisticuffsIronSword;
-	public static int FisticuffsGoldSword;
-	public static int FisticuffsDiamondSword;
+	public  String c1;
+	public  String c2;
+	public  String c3;
+	public  String c4;
+	public  boolean repairTools;
+	public  boolean enableWCLevel;
+	public  boolean enableMineLevel;
+	public  boolean enableRangeLevel;
+	public  boolean enableSlayerLevel;
+	public  boolean enableFisticuffsLevel;
+	public  boolean enableArcherLevel;
+	public  boolean enableDigLevel;
+	public  boolean enableForgeLevel;
 
-	public static int MIWoodPick;
-	public static int MIStonePick;
-	public static int MIIronPick;
-	public static int MIGoldPick;
-	public static int MIDiamondPick;
+	public  int WCWoodAxe;
+	public  int WCStoneAxe;
+	public  int WCIronAxe;
+	public  int WCGoldAxe;
+	public  int WCDiamondAxe;
 
-	public static double ExpPerLog;
-	public static double ExpPerPlank;
-	public static int LogLevel;
-	public static int PlankLevel;
+	public  int DWoodShov;
+	public  int DStoneShov;
+	public  int DIronShov;
+	public  int DGoldShov;
+	public  int DDiamondShov;
 
-	public static double ExpPerStone;
-	public static double ExpPerCobble;
-	public static double ExpPerRedstone;
-	public static double ExpPerGoldOre;
-	public static double ExpPerIronOre;
-	public static double ExpPerCoalOre;
-	public static double ExpPerLapisOre;
-	public static double ExpPerMossstone;
-	public static double ExpPerObsidian;
-	public static double ExpPerDiamondOre;
-	public static double ExpPerNetherrack;
+	public  int SlayWoodSword;
+	public  int SlayStoneSword;
+	public  int SlayIronSword;
+	public  int SlayGoldSword;
+	public  int SlayDiamondSword;
 
-	public static double ExpPerDamage;
-	
-	public static int Rangep5;
-	public static int Range1p0;
-	public static int Range1p5;	
-	public static int Range2p0;
-	public static int Range2p5;	
-	public static int Range3p0;
+	public  int FisticuffsWoodSword;
+	public  int FisticuffsStoneSword;
+	public  int FisticuffsIronSword;
+	public  int FisticuffsGoldSword;
+	public  int FisticuffsDiamondSword;
 
-	public static int Archerp5;
-	public static int Archer1p0;
-	public static int Archer1p5;	
-	public static int Archer2p0;
-	public static int Archer2p5;	
-	public static int Archer3p0;
+	public  int MIWoodPick;
+	public  int MIStonePick;
+	public  int MIIronPick;
+	public  int MIGoldPick;
+	public  int MIDiamondPick;
 
-	public static int StoneLevel;
-	public static int CobbleLevel;
-	public static int IronLevel;
-	public static int RedLevel;
-	public static int GoldLevel;
-	public static int CoalLevel;
-	public static int LapisLevel;
-	public static int MossLevel;
-	public static int ObsidianLevel;
-	public static int DiamondLevel;
-	public static int NetherLevel;
-	public static String rawAdmins;
-	public static String rawAvoid;
-	public static String[] LCAdmins;
-	public static String[] LCAvoiders;
+	public  double ExpPerLog;
+	public  double ExpPerPlank;
+	public  int LogLevel;
+	public  int PlankLevel;
 
-	public static int Constant;
-	public static String database;
-	public static String MySqlDir;
-	public static String MySqlUser;
-	public static String MySqlPass;
-	
-	public static boolean UsePerms;
-	
-	public static void loadMain() {
-		
+	public  double ExpPerStone;
+	public  double ExpPerCobble;
+	public  double ExpPerRedstone;
+	public  double ExpPerGoldOre;
+	public  double ExpPerIronOre;
+	public  double ExpPerCoalOre;
+	public  double ExpPerLapisOre;
+	public  double ExpPerMossstone;
+	public  double ExpPerObsidian;
+	public  double ExpPerDiamondOre;
+	public  double ExpPerNetherrack;
+	public  double ExpPerSandStone;
+	public  double ExpPerDamage;
+
+	public  double ExpPerSand;
+	public  double ExpPerClay;
+	public  double ExpPerGravel;
+	public  double ExpPerDirt;
+	public  double ExpPerGrass;
+	public  double ExpPerSoulSand;
+	public  double ExpPerSnow;
+
+	public  int SandLevel;
+	public  int GravelLevel;
+	public  int DirtLevel;
+	public  int GrassLevel;
+	public  int SoulSandLevel;
+	public  int SnowLevel;
+	public  int ClayLevel;
+
+	public  int ironBarLevel;
+	public  int goldBarLevel;
+	public  double ExpPerIronbar;
+	public  double ExpPerGoldbar;
+
+	public  int Rangep5;
+	public  int Range1p0;
+	public  int Range1p5;
+	public  int Range2p0;
+	public  int Range2p5;
+	public  int Range3p0;
+
+	public  int Archerp5;
+	public  int Archer1p0;
+	public  int Archer1p5;
+	public  int Archer2p0;
+	public  int Archer2p5;
+	public  int Archer3p0;
+
+	public  int StoneLevel;
+	public  int CobbleLevel;
+	public  int IronLevel;
+	public  int RedLevel;
+	public  int GoldLevel;
+	public  int CoalLevel;
+	public  int LapisLevel;
+	public  int MossLevel;
+	public  int ObsidianLevel;
+	public  int DiamondLevel;
+	public  int NetherLevel;
+	public  int SandStoneLevel;
+	public  String rawAdmins;
+	public  String rawAvoid;
+	public  String[] LCAdmins;
+	public  String[] LCAvoiders;
+
+	public  int Constant;
+	public  String database;
+	public  String MySqlDir;
+	public  String MySqlUser;
+	public  String MySqlPass;
+	public  boolean AntiBoost;
+	public  boolean UsePerms;
+
+	public  void loadMain() {
+
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "MainConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -104,24 +141,34 @@ public class Settings {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		Levelcraft.log.info("LOL");
+        c4 = properties.getString("Colour-One","GOLD");
+        c2 = properties.getString("Colour-Two","YELLOW");
+        c3 = properties.getString("Colour-Good","GREEN");
+        c4 = properties.getString("Colour-Bad","RED");
+        repairTools = properties.getBoolean("Enable-Repair-Tools",true);
 		enableWCLevel = properties.getBoolean("Enable-Woodcuting-Level", true);
+		enableForgeLevel = properties.getBoolean("Enable-Forge-Level", true);
 		enableMineLevel = properties.getBoolean("Enable-Mining-Level", true);
 		enableSlayerLevel = properties.getBoolean("Enable-Slayer-Level", true);
 		enableRangeLevel = properties.getBoolean("Enable-Range-Level", true);
-		enableFisticuffsLevel = properties.getBoolean("Enable-Fisticuffs-Level", true);
+		enableFisticuffsLevel = properties.getBoolean(
+				"Enable-Fisticuffs-Level", true);
 		enableArcherLevel = properties.getBoolean("Enable-Archer-Level", true);
+		enableDigLevel = properties.getBoolean("Enable-Digging-Level", true);
 		Constant = properties.getInteger("Level-Constant", 20);
 		database = properties.getString("Database", "flatfile");
-		MySqlDir = properties.getString("MySqlDatabaseDirectory", "localhost:3306/LC");
+		MySqlDir = properties.getString("MySqlDatabaseDirectory",
+				"localhost:3306/LC");
 		MySqlUser = properties.getString("MySqlDatabaseUsername", "root");
 		MySqlPass = properties.getString("MySqlDatabasePassword", "");
-		UsePerms = properties.getBoolean("User-Permissions",true);
+		UsePerms = properties.getBoolean("User-Permissions", true);
+		AntiBoost = properties.getBoolean("AntiBoost", true);
 		properties.save();
 
 	}
 
-	public static void loadWhitelist() {
+	public  void loadWhitelist() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "Whitelist.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -146,7 +193,7 @@ public class Settings {
 
 	}
 
-	public static void loadWoodcut() {
+	public  void loadWoodcut() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "WoodCuttingConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -170,7 +217,7 @@ public class Settings {
 		properties.save();
 	}
 
-	public static void loadSlayer() {
+	public  void loadSlayer() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "SlayerConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -191,7 +238,7 @@ public class Settings {
 		properties.save();
 	}
 
-	public static void loadRange() {
+	public  void loadRange() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "RangeConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -211,7 +258,7 @@ public class Settings {
 		properties.save();
 	}
 
-	public static void loadArcher() {
+	public  void loadArcher() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "ArcherConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -231,7 +278,7 @@ public class Settings {
 		properties.save();
 	}
 
-	public static void loadFisticuffs() {
+	public  void loadFisticuffs() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "FisticuffsConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -241,15 +288,21 @@ public class Settings {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		FisticuffsWoodSword = properties.getInteger("Fisticuffs-Wooden-Sword-Level", 0);
-		FisticuffsStoneSword = properties.getInteger("Fisticuffs-Stone-Sword-Level", 5);
-		FisticuffsIronSword = properties.getInteger("Fisticuffs-Iron-Sword-Level", 10);
-		FisticuffsGoldSword = properties.getInteger("Fisticuffs-Gold-Sword-Level", 20);
-		FisticuffsDiamondSword = properties.getInteger("Fisticuffs-Diamond-Sword-Level", 30);
+		FisticuffsWoodSword = properties.getInteger(
+				"Fisticuffs-Wooden-Sword-Level", 0);
+		FisticuffsStoneSword = properties.getInteger(
+				"Fisticuffs-Stone-Sword-Level", 5);
+		FisticuffsIronSword = properties.getInteger(
+				"Fisticuffs-Iron-Sword-Level", 10);
+		FisticuffsGoldSword = properties.getInteger(
+				"Fisticuffs-Gold-Sword-Level", 20);
+		FisticuffsDiamondSword = properties.getInteger(
+				"Fisticuffs-Diamond-Sword-Level", 30);
 
 		properties.save();
 	}
-	public static void loadMine() {
+
+	public  void loadMine() {
 		String propertiesFile = Levelcraft.maindirectory
 				+ Levelcraft.configdirectory + "MiningConfig.properties";
 		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
@@ -275,9 +328,13 @@ public class Settings {
 		ExpPerLapisOre = properties.getDouble("Experience-Per-LapisOre", 100);
 		ExpPerMossstone = properties.getDouble("Experience-Per-MossStone", 10);
 		ExpPerObsidian = properties.getDouble("Experience-Per-Obsidian", 200);
-		ExpPerDiamondOre = properties.getDouble("Experience-Per-DiamondOre",100);
-		ExpPerNetherrack = properties.getInteger("Experience-Per-Netherrack", 3);
+		ExpPerDiamondOre = properties.getDouble("Experience-Per-DiamondOre",
+				100);
+		ExpPerNetherrack = properties
+				.getInteger("Experience-Per-Netherrack", 3);
+		ExpPerSandStone = properties.getInteger("Experience-Per-SandStone", 3);
 		StoneLevel = properties.getInteger("Level-for-Stone", 0);
+		SandStoneLevel = properties.getInteger("Level-for-SandStone", 0);
 		CobbleLevel = properties.getInteger("Level-for-Cobble", 0);
 		RedLevel = properties.getInteger("Level-for-Redstone", 10);
 		GoldLevel = properties.getInteger("Level-for-GoldOre", 20);
@@ -291,4 +348,58 @@ public class Settings {
 
 		properties.save();
 	}
+
+	public  void loadForge() {
+		String propertiesFile = Levelcraft.maindirectory
+				+ Levelcraft.configdirectory + "ForgeConfig.properties";
+		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
+		try {
+			properties.load();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ExpPerIronbar = properties.getDouble("Experience-Per-IronBar",10);
+		ExpPerGoldbar = properties.getDouble("Experience-Per-GoldBar",20);
+		ironBarLevel = properties.getInteger("Level-for-IronBar",0);
+		goldBarLevel = properties.getInteger("Level-for-GoldBar",5);
+		properties.save();
+	}
+
+	public  void loadDigging() {
+		String propertiesFile = Levelcraft.maindirectory
+				+ Levelcraft.configdirectory + "DiggingConfig.properties";
+		PropertyFunctions properties = new PropertyFunctions(propertiesFile);
+		try {
+			properties.load();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DWoodShov = properties.getInteger("Wooden-Shovel-Level", 0);
+		DStoneShov = properties.getInteger("Stone-Shovel-Level", 5);
+		DIronShov = properties.getInteger("Iron-Shovel-Level", 10);
+		DGoldShov = properties.getInteger("Gold-Shovel-Level", 20);
+		DDiamondShov = properties.getInteger("Diamond-Shovel-Level", 30);
+
+		ExpPerSand = properties.getDouble("Experience-Per-Sand", 3);
+		ExpPerGravel = properties.getDouble("Experience-Per-Gravel", 3);
+		ExpPerDirt = properties.getDouble("Experience-Per-Dirt", 2);
+		ExpPerGrass = properties.getDouble("Experience-Per-Grass", 3);
+		ExpPerSoulSand = properties.getDouble("Experience-Per-SoulSand", 5);
+		ExpPerSnow = properties.getDouble("Experience-Per-Snow", 10);
+		ExpPerClay = properties.getDouble("Experience-Per-Clay", 10);
+		SandLevel = properties.getInteger("Level-for-Sand", 0);
+		GravelLevel = properties.getInteger("Level-for-Gravel", 0);
+		DirtLevel = properties.getInteger("Level-for-Dirt", 0);
+		GrassLevel = properties.getInteger("Level-for-Grass", 0);
+		SoulSandLevel = properties.getInteger("Level-for-SoulSand", 0);
+		SnowLevel = properties.getInteger("Level-for-Snow", 0);
+		ClayLevel = properties.getInteger("Level-for-Clay", 0);
+
+		properties.save();
+
+	}
+
+	
 }

@@ -7,13 +7,15 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Properties;
 
-import me.samkio.levelcraft.Settings;
+
+import me.samkio.levelcraft.Levelcraft;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 
 public class LevelFunctions {
+	public static Levelcraft plugin;
 	public static void write(CommandSender sender, double levelstat, File file) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
@@ -91,7 +93,7 @@ public class LevelFunctions {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			int level = 0;
-			double constant = Settings.Constant;
+			double constant = plugin.Settings.Constant;
 			constant = constant/100;
 			for(int i=1;i<=1000;i++){
 				double levelAti = (100*(i*(i*constant)));
@@ -112,7 +114,7 @@ public class LevelFunctions {
 			Player p = (Player) sender;
 			double exp = getExp(p,file);
 			double getExpUp = 0;
-			double constant = Settings.Constant;
+			double constant = plugin.Settings.Constant;
 			constant = constant/100;
 			for(int i=1;i<=1000;i++){
 				double levelAti = (100*(i*(i*constant)));

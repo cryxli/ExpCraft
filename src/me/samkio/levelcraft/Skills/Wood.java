@@ -1,105 +1,85 @@
 package me.samkio.levelcraft.Skills;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Settings;
-import me.samkio.levelcraft.Functions.LevelFunctions;
 import me.samkio.levelcraft.Functions.PlayerFunctions;
-import me.samkio.levelcraft.SamToolbox.DataMySql;
-import me.samkio.levelcraft.SamToolbox.DataSqlite;
+import me.samkio.levelcraft.SamToolbox.Level;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockBreakEvent;
+
 
 public class Wood {
-
-	public static void Destroy(BlockDamageEvent event) {
+	public static Levelcraft plugin;
+	public static void Destroy(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		int iih = player.getItemInHand().getTypeId();
 
-		if (Settings.enableWCLevel == true) {
+		if (plugin.Settings.enableWCLevel == true) {
 			int level = 0;
 			double woodstat = 0;
-
-			if (Settings.database.equalsIgnoreCase("flatfile")) {
-				level = LevelFunctions.getLevel(player, Levelcraft.WCExpFile);
-				woodstat = LevelFunctions.getExp(player, Levelcraft.WCExpFile);
-			} else if (Settings.database.equalsIgnoreCase("sqlite")) {
-				woodstat = DataSqlite.getExp(player, "WoodcuttingExp");
-				level = DataSqlite.getLevel(player, "WoodcuttingExp");
-			}
-			else if (Settings.database.equalsIgnoreCase("mysql")) {
-				woodstat = DataMySql.getExp(player, "WoodcuttingExp");
-				level = DataMySql.getLevel(player, "WoodcuttingExp");
-			}
-			if (level < Settings.WCIronAxe && iih == 258) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+            double gained = 0;
+			level = Level.getLevel(player, "w");
+			if (level < plugin.Settings.WCIronAxe && iih == 258) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this tool. Required Level:"
-						+ Settings.WCIronAxe);
+						+ plugin.Settings.WCIronAxe);
 				event.setCancelled(true);
-			} else if (level < Settings.WCGoldAxe && iih == 286) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.WCGoldAxe && iih == 286) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this tool. Required Level:"
-						+ Settings.WCGoldAxe);
+						+ plugin.Settings.WCGoldAxe);
 				event.setCancelled(true);
-			} else if (level < Settings.WCDiamondAxe && iih == 279) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.WCDiamondAxe && iih == 279) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this tool. Required Level:"
-						+ Settings.WCDiamondAxe);
+						+ plugin.Settings.WCDiamondAxe);
 				event.setCancelled(true);
-			} else if (level < Settings.WCStoneAxe && iih == 275) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.WCStoneAxe && iih == 275) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this tool. Required Level:"
-						+ Settings.WCStoneAxe);
+						+ plugin.Settings.WCStoneAxe);
 				event.setCancelled(true);
-			} else if (level < Settings.WCWoodAxe && iih == 271) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+			} else if (level < plugin.Settings.WCWoodAxe && iih == 271) {
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot use this tool. Required Level:"
-						+ Settings.WCWoodAxe);
+						+ plugin.Settings.WCWoodAxe);
 				event.setCancelled(true);
-			} else if (level < Settings.LogLevel
+			} else if (level < plugin.Settings.LogLevel
 					&& event.getBlock().getType() == Material.LOG) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot mine this block. Required Level:"
-						+ Settings.LogLevel);
+						+ plugin.Settings.LogLevel);
 				event.setCancelled(true);
-			} else if (level < Settings.PlankLevel
+			} else if (level < plugin.Settings.PlankLevel
 					&& event.getBlock().getType() == Material.WOOD) {
-				player.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+				player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Cannot mine this block. Required Level:"
-						+ Settings.PlankLevel);
+						+ plugin.Settings.PlankLevel);
 				event.setCancelled(true);
 			} else if (event.getBlock().getType() == Material.LOG
 					|| event.getBlock().getType() == Material.WOOD) {
 
 				if (event.getBlock().getType() == Material.LOG) {
-					woodstat = woodstat + Settings.ExpPerLog;
+					woodstat = woodstat + plugin.Settings.ExpPerLog;
+					gained = plugin.Settings.ExpPerLog;
 				}
 				if (event.getBlock().getType() == Material.WOOD) {
-					woodstat = woodstat + Settings.ExpPerPlank;
+					woodstat = woodstat + plugin.Settings.ExpPerPlank;
+					gained = plugin.Settings.ExpPerPlank;
 				}
 				int aftlevel = 0;
-				if (Settings.database.equalsIgnoreCase("flatfile")) {
-					LevelFunctions
-							.write(player, woodstat, Levelcraft.WCExpFile);
-					aftlevel = LevelFunctions.getLevel(player,
-							Levelcraft.WCExpFile);
-				} else if (Settings.database.equalsIgnoreCase("sqlite")) {
-					DataSqlite.update(player, "WoodcuttingExp", woodstat);
-					aftlevel = DataSqlite.getLevel(player, "WoodcuttingExp");
-				}
-				else if (Settings.database.equalsIgnoreCase("mysql")) {
-					DataMySql.update(player, "WoodcuttingExp", woodstat);
-					aftlevel = DataMySql.getLevel(player, "WoodcuttingExp");
-				}
+				Level.update(player, "w",woodstat);
+				aftlevel = Level.getLevel(player, "w");
 				if (aftlevel > level) {
-					player.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN
+					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3)
 							+ " Level up! Your Woodcut level is now "
 							+ aftlevel);
 				} else if (PlayerFunctions.enabled(player)) {
-					player.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " You gained exp.");
+					player.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " You gained "+gained+" exp.");
 				}
 			}
 

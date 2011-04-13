@@ -13,13 +13,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.samkio.levelcraft.Levelcraft;
-import me.samkio.levelcraft.Settings;
 
 
 public class DataSqlite {
 	private static Connection connection;
 	private static final Logger log = Logger.getLogger("Minecraft");
-
+	public static Levelcraft plugin;
 	public static synchronized Connection getConnection() {
 		if (connection == null) {
 			connection = createConnection();
@@ -49,31 +48,37 @@ public class DataSqlite {
 	public static void PrepareDB() {
 		Connection conn = null;
 		Statement st = null;
-		int maxcolumns = 7;                //Always update this when added new experience tree
+		int maxcolumns = 9;                //Always update this when added new experience tree
 		try {
 			conn = getConnection();
 			st = conn.createStatement();
-			st.executeUpdate("CREATE TABLE IF NOT EXISTS 'ExperienceTable' ('PlayerName' VARCHAR, 'WoodcuttingExp' INT ( 255 ) NOT NULL," +
-					"'MiningExp' INT ( 255 ) NOT NULL,'SlayingExp' INT ( 255 ) NOT NULL," +
-					"'RangingExp' INT ( 255 ) NOT NULL,'FisticuffsExp' INT ( 255 ) NOT NULL," +
-					"'ArcheryExp' INT ( 255 ) NOT NULL ); CREATE INDEX playerIndex on ExperienceTable (PlayerName);");
+			st.executeUpdate("CREATE TABLE IF NOT EXISTS 'ExperienceTable' ('PlayerName' VARCHAR, 'WoodcuttingExp' INT ( 255 ) NOT NULL DEFAULT 0," +
+					"'MiningExp' INT ( 255 ) NOT NULL DEFAULT 0,'SlayingExp' INT ( 255 ) NOT NULL DEFAULT 0," +
+					"'RangingExp' INT ( 255 ) NOT NULL DEFAULT 0,'FisticuffsExp' INT ( 255 ) NOT NULL DEFAULT 0," +
+					"'ArcheryExp' INT ( 255 ) NOT NULL DEFAULT 0,'DiggingExp' INT ( 255 ) NOT NULL DEFAULT 0,'ForgeExp' INT ( 255 ) NOT NULL DEFAULT 0 ); CREATE INDEX playerIndex on ExperienceTable (PlayerName);");
 			ResultSet rs = st.executeQuery("SELECT * FROM 'ExperienceTable';");
 		    ResultSetMetaData rsmd = rs.getMetaData();
 		    int numColumns = rsmd.getColumnCount();
 		    if (!(numColumns == maxcolumns)){
 		    	//database is old we need to add the new columns
 		    	if(numColumns==4){
-		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'RangingExp' INT ( 255 )  NOT NULL;");
-		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'FisticuffsExp' INT ( 255 )  NOT NULL;");
-		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ArcheryExp' INT ( 255 )  NOT NULL;");
+		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'RangingExp' INT ( 255 )  NOT NULL DEFAULT 0;");
+		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'FisticuffsExp' INT ( 255 )  NOT NULL DEFAULT 0;");
+		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ArcheryExp' INT ( 255 )  NOT NULL DEFAULT 0;");
 		    	}
 		    	if(numColumns==5){
-		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'FisticuffsExp' INT ( 255 )  NOT NULL;");
-		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ArcheryExp' INT ( 255 )  NOT NULL;");
+		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'FisticuffsExp' INT ( 255 )  NOT NULL DEFAULT 0;");
+		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ArcheryExp' INT ( 255 )  NOT NULL DEFAULT 0;");
 		    	}
 		    	if(numColumns==6){
-		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ArcheryExp' INT ( 255 )  NOT NULL;");
+		    		st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ArcheryExp' INT ( 255 )  NOT NULL DEFAULT 0;");
 		    	}
+		    	if(numColumns==7){
+					st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'DiggingExp' INT ( 255 ) NOT NULL DEFAULT 0;");
+				}
+		    	if(numColumns==8){
+					st.executeUpdate("ALTER TABLE 'ExperienceTable' ADD COLUMN 'ForgeExp' INT ( 255 ) NOT NULL DEFAULT 0;");
+				}
 		    }
 		    conn.commit();
 		} catch (SQLException e) {
@@ -90,8 +95,8 @@ public class DataSqlite {
 			try {
 				conn = getConnection();
 				st = conn.createStatement();
-				st.executeUpdate("INSERT INTO ExperienceTable (PlayerName,WoodcuttingExp,MiningExp,SlayingExp,RangingExp,FisticuffsExp,ArcheryExp) VALUES ('"
-						+ p + "'," + var + "," + var + "," + var +"," + var +"," + var +"," + var +")");
+				st.executeUpdate("INSERT INTO ExperienceTable (PlayerName,WoodcuttingExp,MiningExp,SlayingExp,RangingExp,FisticuffsExp,ArcheryExp,DiggingExp,ForgeExp) VALUES ('"
+						+ p + "'," + var + "," + var + "," + var +"," + var +"," + var +"," + var +"," + var + "," + var + ")");
 				conn.commit();
 			} catch (SQLException e) {
 				log.severe("[Levelcraft] Unable to add row database" + e);
@@ -187,7 +192,7 @@ public class DataSqlite {
 			Player player = (Player) sender;
 			int level = 0;
 			double exp = getExp(player, value);
-			double constant = Settings.Constant;
+			double constant = plugin.Settings.Constant;
 			constant = constant / 100;
 			for (int i = 1; i <= 1000; i++) {
 				double levelAti = (100 * (i * (i * constant)));
@@ -208,7 +213,7 @@ public class DataSqlite {
 			Player player = (Player) sender;
 			double exp = getExp(player, value);
 			double getExpUp = 0;
-			double constant = Settings.Constant;
+			double constant = plugin.Settings.Constant;
 			constant = constant / 100;
 			for (int i = 1; i <= 1000; i++) {
 				double levelAti = (100 * (i * (i * constant)));

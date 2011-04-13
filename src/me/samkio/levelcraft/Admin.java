@@ -2,12 +2,11 @@ package me.samkio.levelcraft;
 
 import java.util.List;
 
-import me.samkio.levelcraft.Functions.LevelFunctions;
+import me.samkio.levelcraft.SamToolbox.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 
 public class Admin {
 	public static Levelcraft plugin;
@@ -21,14 +20,14 @@ public class Admin {
 		if (split[1].equalsIgnoreCase("setexp") && split.length >= 5) {
 
 			String editplayer = split[3];
-			int newexp = Integer.parseInt(split[4]);
+			double newexp = Double.parseDouble(split[4]);
 
 			List<Player> players = plugin.getServer().matchPlayer(editplayer);
 			if (players.size() == 0) {
-				sender.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+				sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " No matching player!");
 			} else if (players.size() != 1) {
-				sender.sendMessage(ChatColor.GOLD + "[LC]" + ChatColor.RED
+				sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]" + ChatColor.valueOf(plugin.Settings.c4)
 						+ " Matched more than one player! Be more specific!");
 
 			} else {
@@ -38,43 +37,63 @@ public class Admin {
 				if ((stat.equalsIgnoreCase("mine")
 						|| stat.equalsIgnoreCase("m") || stat
 						.equalsIgnoreCase("mining"))) {
-					LevelFunctions.write(editor, newexp, Levelcraft.MiExpFile);
-					sender.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " Set Experience successful!");
+					// LevelFunctions.write(editor, newexp,
+					// Levelcraft.MiExpFile);
+					Level.update(editor, "m", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 				} else if ((stat.equalsIgnoreCase("w")
 						|| stat.equalsIgnoreCase("wc") || stat
 						.equalsIgnoreCase("woodcut"))) {
-					sender.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " Set Experience successful!");
-					LevelFunctions.write(editor, newexp, Levelcraft.WCExpFile);
+					Level.update(editor, "w", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
+
 				} else if ((stat.equalsIgnoreCase("s")
 						|| stat.equalsIgnoreCase("slay") || stat
 						.equalsIgnoreCase("slayer"))) {
-					sender.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " Set Experience successful!");
-					LevelFunctions.write(editor, newexp, Levelcraft.SlayExpFile);
+					Level.update(editor, "s", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
+
 				} else if ((stat.equalsIgnoreCase("r")
 						|| stat.equalsIgnoreCase("range") || stat
 						.equalsIgnoreCase("ranging"))) {
-					sender.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " Set Experience successful!");
-					LevelFunctions.write(editor, newexp, Levelcraft.RangeExpFile);
-				} else if ((stat.equalsIgnoreCase("f")
+					Level.update(editor, "r", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
+
+				} else if ((stat.equalsIgnoreCase("c")
 						|| stat.equalsIgnoreCase("fist") || stat
 						.equalsIgnoreCase("fisticuffs"))) {
-					sender.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " Set Experience successful!");
-					LevelFunctions.write(editor, newexp, Levelcraft.FisticuffsExpFile);
+					Level.update(editor, "c", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
 				} else if ((stat.equalsIgnoreCase("a")
 						|| stat.equalsIgnoreCase("archer") || stat
 						.equalsIgnoreCase("archery"))) {
-					sender.sendMessage(ChatColor.GOLD + "[LC]"
-							+ ChatColor.GREEN + " Set Experience successful!");
-					LevelFunctions.write(editor, newexp, Levelcraft.ArcherExpFile);
+					Level.update(editor, "a", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
+
+				}  else if ((stat.equalsIgnoreCase("d")
+						|| stat.equalsIgnoreCase("digging") || stat
+						.equalsIgnoreCase("digger"))) {
+					Level.update(editor, "d", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
+
+				}  else if ((stat.equalsIgnoreCase("f")
+						|| stat.equalsIgnoreCase("forge") || stat
+						.equalsIgnoreCase("forgery"))) {
+					Level.update(editor, "f", newexp);
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1) + "[LC]"
+							+ ChatColor.valueOf(plugin.Settings.c3) + " Set Experience successful!");
+
 				} else {
-					sender.sendMessage(ChatColor.GOLD
+					sender.sendMessage(ChatColor.valueOf(plugin.Settings.c1)
 							+ "[LC]"
-							+ ChatColor.YELLOW
+							+ ChatColor.valueOf(plugin.Settings.c2)
 							+ " Stat not found type '/level list' to list all stats. ");
 				}
 			}
