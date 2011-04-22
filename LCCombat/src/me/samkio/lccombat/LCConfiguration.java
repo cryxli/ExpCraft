@@ -20,7 +20,8 @@ public class LCConfiguration {
 	//EXP PER
 	public double ExpPerDamage;
 
-	
+	public boolean pvpRangeEnable;
+	public int pvpRange;
 	public LCConfiguration(LCCombat instance) {
 		plugin = instance;
 	}
@@ -43,6 +44,10 @@ public class LCConfiguration {
 		
 		//Set variables for EXP PER
 		this.ExpPerDamage = properties.getDouble("ExpPerDamage", 5);
+		
+		//
+		this.pvpRangeEnable = properties.getBoolean("EnablePvpOnlyRange",false);
+		this.pvpRange = properties.getInteger("PvpRange", 5);
 
 
 	}
