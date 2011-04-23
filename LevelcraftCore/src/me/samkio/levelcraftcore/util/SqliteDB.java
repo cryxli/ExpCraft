@@ -59,12 +59,14 @@ public class SqliteDB {
 			conn = plugin.SqliteDB.getConnection();
 			st = conn.createStatement();
 			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (id INTEGER PRIMARY KEY, name VARCHAR(80) NOT NULL);");
-			ResultSet rs = st.executeQuery("SELECT * FROM ExperienceTable;");
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int ColumnCount = rsmd.getColumnCount();
+			
 			for (Plugin p : plugin.LevelNames.keySet()) {
+				ResultSet rs = st.executeQuery("SELECT * FROM ExperienceTable;");
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int ColumnCount = rsmd.getColumnCount();
 				for (int i = 1; i <= ColumnCount; i++) {
 					String s = rsmd.getColumnName(i);
+					//plugin.logger.info(s);
 					if (s.equals(plugin.LevelNames.get(p) + "Exp"))
 						break;
 					if (i == ColumnCount) {
@@ -154,5 +156,46 @@ public class SqliteDB {
 			plugin.logger.severe("[LC] Unable to add row to database " + e);
 		}
 
+	}
+	public int getPos(String name, String string) {
+		Connection conn = null;
+		Statement st = null;
+		int rank = 0;
+		try {
+			conn = getConnection();
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			while (rs.next()) {
+				rank++;
+				if(rs.getString("name").equalsIgnoreCase(name)) break;;
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			plugin.logger.severe("[LC] Unable to get row database" + e);
+		}
+		return rank;
+
+	}
+
+	public String getPlayerAtPos(String string, int i) {
+		Connection conn = null;
+		Statement st = null;
+		int rank = 0;
+		String p = "None";
+		try {
+			conn = getConnection();
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			while (rs.next()) {
+				rank++;
+				if(rank==i){
+					p=rs.getString("name");
+				}
+			}
+			conn.commit();
+		} catch (SQLException e) {
+			plugin.logger.severe("[LC] Unable to get row database" + e);
+		}
+		return p;
 	}
 }

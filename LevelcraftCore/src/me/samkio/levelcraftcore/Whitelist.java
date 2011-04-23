@@ -32,7 +32,14 @@ public class Whitelist {
 	}
 	public static  boolean hasLevel(Player s, Plugin p){
 		if(!plugin.PermissionUse) return true;
+		if(plugin.PermissionH.has(s, "lc.level.all")) return true;
 		if(plugin.PermissionH.has( s, "lc.level."+plugin.LevelNames.get(p).toLowerCase())) return true;
+		return false;
+		
+	}
+	public static boolean hasLevelNoExp(Player s, Plugin p){
+		if(!plugin.PermissionUse) return false;
+		if(plugin.PermissionH.has( s, "lc.level."+plugin.LevelNames.get(p).toLowerCase()+".noexp")) return true;
 		return false;
 		
 	}

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import me.samkio.levelcraftcore.Listeners.LCPlayerListener;
 import me.samkio.levelcraftcore.util.FlatFile;
 import me.samkio.levelcraftcore.util.SqliteDB;
@@ -33,6 +32,7 @@ public class LevelCraftCore extends JavaPlugin {
 	public final SqliteDB SqliteDB = new SqliteDB(this);
 	public final Tools Tools = new Tools(this);
 	public final LCAdminCommands LCAdminCommands = new LCAdminCommands(this);
+//	public final UpdateLevel UpdateLevel = new UpdateLevel(this);
 	public final Whitelist Permissions = new Whitelist(this);
 	public final LevelFunctions LevelFunctions = new LevelFunctions(this);
 	private final LCPlayerListener playerListener = new LCPlayerListener(this);
@@ -59,6 +59,7 @@ public class LevelCraftCore extends JavaPlugin {
 	public boolean EnableLevelCap;
 	public boolean EnableSkillMastery;
 	public boolean PermissionUse;
+	public boolean NotifyAll;
 	public PermissionHandler PermissionH;
 
 	@Override
@@ -106,7 +107,7 @@ public class LevelCraftCore extends JavaPlugin {
 
 		}
 		this.createData();
-		this.logger.log(Level.INFO, "[LC] LevelCraftCore Loaded");
+		this.logger.log(Level.INFO, "[LC] LevelCraftCore "+this.getDescription().getVersion()+" Loaded");
 		this.logger
 				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
 	}
@@ -127,6 +128,7 @@ public class LevelCraftCore extends JavaPlugin {
 		this.c2 = gC.getString("ColourTwo", "YELLOW");
 		this.c3 = gC.getString("ColourGood", "GREEN");
 		this.c4 = gC.getString("ColourBad", "RED");
+		this.NotifyAll = gC.getBoolean("NotifyAll", true);
 		List<World> worldRun = this.getServer().getWorlds();
 		String str = "";
 		for(World w: worldRun){

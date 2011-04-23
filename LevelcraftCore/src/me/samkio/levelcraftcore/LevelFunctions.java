@@ -31,6 +31,11 @@ public class LevelFunctions {
 		return level;
 
 	}
+	@SuppressWarnings("static-access")
+	public static boolean isMaster(Player player,Plugin p){
+		if(plugin.LevelFunctions.getLevel(player,p)>=plugin.LevelCap) return true;
+		return false;
+	}
 
 	public  static double getExp(Player player, Plugin p) {
 		if (plugin.database.equalsIgnoreCase("FlatFile")) {
@@ -105,15 +110,44 @@ public class LevelFunctions {
 	}
 	@SuppressWarnings("static-access")
 	public static  void addExp(Player player, Plugin p, double i){
+		//if(plugin.Permissions.hasLevelNoExp(player, p)) return;
 		int beforeLevel = plugin.LevelFunctions.getLevel(player, p);
 		plugin.LevelFunctions.updateExp(player, p, (plugin.LevelFunctions.getExp(player, p)+i));
 		if(isNotified(player))plugin.LCChat.good(player, "You gained: "+i+"exp");
-		if(beforeLevel<plugin.LevelFunctions.getLevel(player, p)){
-			plugin.LCChat.good(player, "LEVEL UP. You are now level "+plugin.LevelFunctions.getLevel(player, p)+" in " + plugin.LevelNames.get(p));
+		int newLevel = plugin.LevelFunctions.getLevel(player, p);
+		if(beforeLevel<newLevel){
+			plugin.LCChat.good(player, "LEVEL UP. You are now level "+newLevel+" in " + plugin.LevelNames.get(p));
 			plugin.LCChat.good(player, "See /level unlocks "+plugin.LevelIndexes.get(p)+" - To see what you have unlocked.");
+		
+		if(plugin.NotifyAll){
+			plugin.LCChat.broadcast(player.getName()+" is now level "+newLevel+" in "+plugin.LevelNames.get(p)+".");
+		}
 		}
 	}
 	public static  boolean isNotified(Player p){
 		return plugin.Tools.enabled(p);
 	}
+	@SuppressWarnings("static-access")
+	public static int getPos(Player sender,String string){
+			for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
+				String[] reference = plugin.LevelReferenceKeys.get(p);
+				if(plugin.Tools.containsValue(reference,string) && plugin.Permissions.hasLevel(sender, p)){
+					if(plugin.database.equalsIgnoreCase("mysql")) return plugin.MySqlDB.getPos(sender.getName(), plugin.LevelNames.get(p));
+					if(plugin.database.equalsIgnoreCase("sqlite")) return plugin.SqliteDB.getPos(sender.getName(), plugin.LevelNames.get(p));
+					if(plugin.database.equalsIgnoreCase("flatfile")) return plugin.FlatFile.getPos(sender.getName(), plugin.LevelFiles.get(p));
+				}
+			}
+			return 0;
+	}
+	public static String getPlayerAtPos(String string,int i){
+		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
+			String[] reference = plugin.LevelReferenceKeys.get(p);
+			if(plugin.Tools.containsValue(reference,string)){
+				if(plugin.database.equalsIgnoreCase("mysql")) return plugin.MySqlDB.getPlayerAtPos(plugin.LevelNames.get(p),i);
+				if(plugin.database.equalsIgnoreCase("sqlite")) return plugin.SqliteDB.getPlayerAtPos(plugin.LevelNames.get(p),i);
+				if(plugin.database.equalsIgnoreCase("flatfile")) return plugin.FlatFile.getPlayerAtPos(plugin.LevelNames.get(p),i, plugin.LevelFiles.get(p));
+			}
+		}
+		return "None";
+}
 }
