@@ -49,15 +49,14 @@ public class LCExplosives extends JavaPlugin {
 		String[] Args = { "Ex", "Explode", "Tnt" };
 		getConfiguration().setProperty("ReferenceKeys", Args);
 		// Set Unlocks Data
-		/*String[] Unlocks = { "Wooden Hatchet = "+LCConfiguration.WoodAxe, "Stone Hatchet = "+LCConfiguration.StoneAxe,
-				"Iron Hatchet = "+LCConfiguration.IronAxe, "Gold Hatchet = "+LCConfiguration.GoldAxe, "Diamond Hatchet = "+LCConfiguration.DiamondAxe  };
+		String[] Unlocks = { "TNTLevel "+LCConfiguration.tntLevel,"DynamiteLvl "+LCConfiguration.dynamiteLevel ,"GrenadeLevel "+LCConfiguration.grenadeLevel };
 		getConfiguration().setProperty("LevelUnlocks", Unlocks);
-		String[] Exp = { "Exp Per Plank "+LCConfiguration.ExpPerPlank,"Exp Per Log "+LCConfiguration.ExpPerLog};
-		int[] UnlocksLevel = { LCConfiguration.WoodAxe, LCConfiguration.StoneAxe,
-				LCConfiguration.IronAxe, LCConfiguration.GoldAxe , LCConfiguration.DiamondAxe}; 
+		String[] Exp = { "Exp Per TNT "+LCConfiguration.expPerExplosion,"Exp Per Dynamite "+LCConfiguration.expPerDynamite,"Exp Per Grenade "+LCConfiguration.expPerGrenade};
+		int[] UnlocksLevel = { LCConfiguration.tntLevel, LCConfiguration.grenadeLevel,
+				LCConfiguration.grenadeLevel };
 		
 		getConfiguration().setProperty("LevelExpPer", Exp);
-		getConfiguration().setProperty("LevelUnlocksLevel", UnlocksLevel);*/
+		getConfiguration().setProperty("LevelUnlocksLevel", UnlocksLevel);
 		// Set Level Name.
 		getConfiguration().setProperty("LevelName", "Explosives");
 		// Set Reference Index (1-2 Characters).
