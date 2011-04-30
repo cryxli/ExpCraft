@@ -18,30 +18,30 @@ public class LCCommands {
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(s, p)) {
 				plugin.LCChat.topBar(s);
-				plugin.LCChat.info(s, plugin.LevelNames.get(p) + " Level: "
+				plugin.LCChat.info(s, plugin.LevelNames.get(p) + plugin.lang.LevelS
 						+ plugin.LevelFunctions.getLevel(s, p));
 				plugin.LCChat.info(
 						s,
 						plugin.LevelNames.get(p)
-								+ " Experience: "
+								+ plugin.lang.Experience
 								+ plugin.Tools
 										.roundTwoDecimals(plugin.LevelFunctions
 												.getExp(s, p)));
 				plugin.LCChat.info(
 						s,
-						"Experience to next level: "
+						plugin.lang.ExperienceToNextLevel
 								+ plugin.Tools
 										.roundTwoDecimals(plugin.LevelFunctions
 												.getExpLeft(s, p)));
 				return;
 			}
 		}
-		plugin.LCChat.info(s, "No Level Found.");
+		plugin.LCChat.info(s, plugin.lang.None);
 	}
 
 	@SuppressWarnings("static-access")
 	public void listLevels(Player player) {
-		String s = "Your Active Levels are: ";
+		String s = plugin.lang.YourActiveLevels;
 		boolean one = false;
 		for (Plugin p : plugin.LevelNames.keySet()) {
 			if (one && plugin.Permissions.hasLevel(player, p))
@@ -58,24 +58,25 @@ public class LCCommands {
 	@SuppressWarnings("static-access")
 	public void about(CommandSender sender) {
 		plugin.LCChat.topBar(sender);
-		plugin.LCChat.info(sender, "/lvl list - Shows active stats.");
-		plugin.LCChat.info(sender, "/lvl notify - Toggles notifications.");
+		plugin.LCChat.info(sender, "/lvl list - "+plugin.lang.ShowsActive);
+		plugin.LCChat.info(sender, "/lvl notify - "+plugin.lang.ToggleNote);
 		plugin.LCChat.info(sender,
 				"/lvl " + plugin.Tools.getIndexBar((Player) sender)
-						+ " - Shows Level Statistics.");
+						+ " - "+plugin.lang.ShowsLevelStats);
 		plugin.LCChat.info(sender,
-				"/lvl unlocks [REF] - Shows Tool and Block unlocks.");
+				"/lvl unlocks [REF] - "+plugin.lang.ShowsToolBlock);
 		plugin.LCChat.info(sender,
-				"/lvl exp [REF] - Shows Experience For Actions.");
+				"/lvl exp [REF] - "+plugin.lang.ShowsExp);
 		plugin.LCChat.info(sender,
-				"/lvl shout [REF] - Shouts Level Statistics.");
-		plugin.LCChat.info(sender, "/lvl total - Shows total Level.");
-		plugin.LCChat.info(sender, "/lvl all - Shows all Levels.");
-		plugin.LCChat.info(sender, "/lvl rank [REF] - Shows your rank.");
-		plugin.LCChat.info(sender, "/lvl top [REF] - Shows top players in that level.");
-		plugin.LCChat.info(sender, "/lvl  - Shows this.");
+				"/lvl shout [REF] - "+plugin.lang.Shout);
+		plugin.LCChat.info(sender, "/lvl total - "+plugin.lang.ShowsTotal);
+		plugin.LCChat.info(sender, "/lvl all - "+plugin.lang.ShowsAll);
+		plugin.LCChat.info(sender, "/lvl rank [REF] - "+plugin.lang.ShowsRank);
+		plugin.LCChat.info(sender, "/lvl top [REF] - "+plugin.lang.ShowsTop);
+		plugin.LCChat.info(sender, "/lvl help [REF] - "+plugin.lang.ShowsHelp);
+		plugin.LCChat.info(sender, "/lvl  - "+plugin.lang.ShowsThis);
 		if (plugin.Permissions.isAdmin(sender)) {
-			plugin.LCChat.good(sender, "/lvl admin - Admin Commands.");
+			plugin.LCChat.good(sender, "/lvl admin - "+plugin.lang.AdminCommands);
 		}
 		return;
 
@@ -131,6 +132,9 @@ public class LCCommands {
 			} else if (args[0].equalsIgnoreCase("rank")) {
 				plugin.LCCommands.Rank(sender, args[1]);
 				return;
+			} else if (args[0].equalsIgnoreCase("help")) {
+				plugin.LCCommands.LevelHelp(sender, args[1]);
+				return;
 			} else if (args[0].equalsIgnoreCase("top")) {
 				plugin.LCCommands.top(sender, args[1]);
 				return;
@@ -149,9 +153,29 @@ public class LCCommands {
 			return;
 		} else {
 			plugin.LCChat.info(sender,
-					"Wrong Syntax. Please use '/level' for more infomation.");
+					plugin.lang.SyntaxP);
 		}
 
+	}
+
+	@SuppressWarnings("static-access")
+	private void LevelHelp(Player sender, String string) {
+		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
+			String[] reference = plugin.LevelReferenceKeys.get(p);
+			if (plugin.Tools.containsValue(reference, string)
+					&& plugin.Permissions.hasLevel(sender, p)) {
+				plugin.LCChat.topBar(sender);
+				if(plugin.LevelHelp.get(p)==null){
+					plugin.LCChat.info(sender, plugin.lang.NoHelpFileYet);
+					return;
+				}
+				for (String s : plugin.LevelHelp.get(p)) {
+					plugin.LCChat.info(sender, s);
+				}
+				break;
+			}
+		}
+		
 	}
 
 	@SuppressWarnings("static-access")
@@ -159,7 +183,7 @@ public class LCCommands {
 		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
 			if (plugin.Tools.containsValue(reference, string)) {
-				plugin.LCChat.info(sender, "==Top Players In "
+				plugin.LCChat.info(sender, "=="+plugin.lang.TopPlayersIn+" "
 						+ plugin.LevelNames.get(p) + "==");
 				plugin.LCChat
 						.info(sender,
@@ -199,7 +223,7 @@ public class LCCommands {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(sender, p)) {
-				plugin.LCChat.info(sender, "You are number "
+				plugin.LCChat.info(sender, plugin.lang.YouAreNumber
 						+ plugin.LevelFunctions.getPos(sender, string) + " in "
 						+ plugin.LevelNames.get(p));
 				return;
@@ -227,7 +251,7 @@ public class LCCommands {
 	private void Admin(Player sender, String[] args) {
 		if (!plugin.Permissions.isAdmin(sender)) {
 			plugin.LCChat.warn(sender,
-					"You do not have permission to use this command.");
+					plugin.lang.YouDoNotHavePermission);
 			return;
 		}
 		if (args.length <= 1) {
@@ -269,7 +293,7 @@ public class LCCommands {
 	private void Shout(Player sender, String string) {
 
 		if (!plugin.Permissions.canShout(sender)) {
-			plugin.LCChat.warn(sender, "You do not have permission to shout.");
+			plugin.LCChat.warn(sender, plugin.lang.YouDoNotHavePermission);
 			return;
 		}
 		if (string.equalsIgnoreCase("total")) {
@@ -283,11 +307,11 @@ public class LCCommands {
 				}
 			}
 			if (oneStat) {
-				plugin.LCChat.broadcast(sender.getName() + "'s total level is "
+				plugin.LCChat.broadcast(sender.getName() + "'s total "+plugin.lang.LevelIs+
 						+ TotalLevel + ".");
 
 			} else {
-				plugin.LCChat.warn(sender, "No levels found.");
+				plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 			}
 			return;
 		}
@@ -296,7 +320,7 @@ public class LCCommands {
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(sender, p)) {
 				plugin.LCChat.broadcast(sender.getName() + "'s "
-						+ plugin.LevelNames.get(p) + " level is "
+						+ plugin.LevelNames.get(p) + plugin.lang.LevelIs
 						+ plugin.LevelFunctions.getLevel(sender, p) + ".");
 				break;
 			}
@@ -315,7 +339,7 @@ public class LCCommands {
 		boolean oneStat = false;
 		int TotalLevel = 0;
 		double TotalExp = 0;
-		String HighestLevel = "None";
+		String HighestLevel = plugin.lang.None;
 		int HighestLevelInt = 0;
 		for (Plugin p : plugin.LevelNames.keySet()) {
 			if (plugin.Permissions.hasLevel(sender, p)) {
@@ -331,12 +355,12 @@ public class LCCommands {
 		}
 		if (oneStat) {
 			plugin.LCChat.topBar(sender);
-			plugin.LCChat.info(sender, "Total Level: " + TotalLevel);
-			plugin.LCChat.info(sender, "Total Experience: " + TotalExp);
-			plugin.LCChat.info(sender, "Highest Level: " + HighestLevel);
+			plugin.LCChat.info(sender, plugin.lang.TotalLevel + TotalLevel);
+			plugin.LCChat.info(sender, plugin.lang.TotalExp + TotalExp);
+			plugin.LCChat.info(sender, plugin.lang.HighestLevel + HighestLevel);
 
 		} else {
-			plugin.LCChat.warn(sender, "No levels found.");
+			plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 		}
 	}
 
@@ -361,7 +385,7 @@ public class LCCommands {
 			}
 			return;
 		} else {
-			plugin.LCChat.warn(sender, "No levels found.");
+			plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 		}
 
 	}

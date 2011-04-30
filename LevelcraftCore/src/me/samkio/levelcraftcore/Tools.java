@@ -54,10 +54,10 @@ public class Tools {
 	public void toggleNotify(CommandSender sender) {
 		if (enabled(sender)) {
 			plugin.NotifyUsers.remove(sender);
-			plugin.LCChat.good(sender, "Experience notify disabled.");
+			plugin.LCChat.good(sender, plugin.lang.NotifyOff);
 		} else {
 			plugin.NotifyUsers.put((Player) sender, "");
-			plugin.LCChat.good(sender, "Experience notify enabled.");
+			plugin.LCChat.good(sender,  plugin.lang.NotifyOn);
 			}
 	}
 	@SuppressWarnings("static-access")

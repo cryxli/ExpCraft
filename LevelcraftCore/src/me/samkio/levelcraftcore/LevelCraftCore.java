@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.samkio.levelcraftcore.Listeners.LCPlayerListener;
 import me.samkio.levelcraftcore.util.FlatFile;
+import me.samkio.levelcraftcore.util.Language;
 import me.samkio.levelcraftcore.util.SqliteDB;
 import me.samkio.levelcraftcore.util.MySqlDB;
 
@@ -28,11 +29,11 @@ public class LevelCraftCore extends JavaPlugin {
 	public final FlatFile FlatFile = new FlatFile(this);
 	public final MySqlDB MySqlDB = new MySqlDB(this);
 	public final LCCommands LCCommands = new LCCommands(this);
+	public final Language lang = new Language(this);
 	public final LCChat LCChat = new LCChat(this);
 	public final SqliteDB SqliteDB = new SqliteDB(this);
 	public final Tools Tools = new Tools(this);
 	public final LCAdminCommands LCAdminCommands = new LCAdminCommands(this);
-//	public final UpdateLevel UpdateLevel = new UpdateLevel(this);
 	public final Whitelist Permissions = new Whitelist(this);
 	public final LevelFunctions LevelFunctions = new LevelFunctions(this);
 	private final LCPlayerListener playerListener = new LCPlayerListener(this);
@@ -45,6 +46,7 @@ public class LevelCraftCore extends JavaPlugin {
 	public HashMap<Plugin, String> LevelAuthors = new HashMap<Plugin, String>();
 	public HashMap<Plugin, String[]> LevelExp = new HashMap<Plugin, String[]>();
 	public HashMap<Plugin, int[]> LevelUnlocksLevel = new HashMap<Plugin, int[]>();
+	public HashMap<Plugin, String[]> LevelHelp = new HashMap<Plugin, String[]>();
 	public String database;
 	public String MySqlDir;
 	public String MySqlPass;
@@ -76,6 +78,7 @@ public class LevelCraftCore extends JavaPlugin {
 		this.loadConfig();
 		this.registerEvents();
 		this.Permissions.LoadPerms();
+		this.lang.LoadLang();
 		PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins()) {
 			if (plugin.getDescription().getName().startsWith("LC")) {
@@ -88,6 +91,8 @@ public class LevelCraftCore extends JavaPlugin {
 						.getProperty("LevelExpPer");
 				String[] unlocks = (String[]) plugin.getConfiguration()
 						.getProperty("LevelUnlocks");
+				String[] help = (String[]) plugin.getConfiguration()
+				.getProperty("LevelHelp");
 				int[] unlockslevel = (int[]) plugin.getConfiguration()
 						.getProperty("LevelUnlocksLevel");
 				String index = (String) plugin.getConfiguration().getProperty(
@@ -103,6 +108,7 @@ public class LevelCraftCore extends JavaPlugin {
 				this.LevelAuthors.put(plugin, author);
 				this.LevelExp.put(plugin, exp);
 				this.LevelUnlocksLevel.put(plugin, unlockslevel);
+				this.LevelHelp.put(plugin, help);
 			}
 
 		}
@@ -187,7 +193,7 @@ public class LevelCraftCore extends JavaPlugin {
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener,
-				Event.Priority.Normal, this);
+				Event.Priority.Lowest, this);
 		if(EnableSkillMastery){
 		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener,
 				Event.Priority.High, this);

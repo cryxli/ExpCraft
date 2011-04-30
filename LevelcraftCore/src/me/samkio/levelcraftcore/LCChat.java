@@ -2,6 +2,7 @@ package me.samkio.levelcraftcore;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 
 public class LCChat {
@@ -21,7 +22,16 @@ public class LCChat {
 	public static void good(CommandSender p,String s){
 		p.sendMessage(ChatColor.valueOf(plugin.c1)+"[LC] "+ChatColor.valueOf(plugin.c3)+s);
 	}
+	@SuppressWarnings("static-access")
 	public static void broadcast(String s){
-		plugin.getServer().broadcastMessage(ChatColor.valueOf(plugin.c1) + "[LC] "+ ChatColor.valueOf(plugin.c2)+ s);
+		plugin.LCChat.broadcastWorld(s);
+	}
+	@SuppressWarnings("static-access")
+	public static void broadcastWorld(String s){
+		for(Player p:plugin.getServer().getOnlinePlayers()){
+			if(plugin.Permissions.worldCheck(p.getWorld())){
+				p.sendMessage(ChatColor.valueOf(plugin.c1) + "[LC] "+ ChatColor.valueOf(plugin.c2)+ s);
+			}
+		}
 	}
 }

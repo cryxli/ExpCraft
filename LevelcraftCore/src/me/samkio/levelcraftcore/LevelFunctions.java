@@ -18,9 +18,10 @@ public class LevelFunctions {
 		if (plugin.EnableLevelCap) {
 			max = plugin.LevelCap;
 		}
+		double exp = plugin.LevelFunctions.getExp(player, p);
 		for (int i = 1; i <= max; i++) {
 			double levelAti = constant * (i * i);
-			if (levelAti > plugin.LevelFunctions.getExp(player, p)) {
+			if (levelAti > exp) {
 				level = i;
 				break;
 			} else if (i == max && plugin.EnableLevelCap) {
@@ -112,15 +113,16 @@ public class LevelFunctions {
 	public static  void addExp(Player player, Plugin p, double i){
 		//if(plugin.Permissions.hasLevelNoExp(player, p)) return;
 		int beforeLevel = plugin.LevelFunctions.getLevel(player, p);
+		if(!plugin.Permissions.hasLevelExp(player, p)) return;
 		plugin.LevelFunctions.updateExp(player, p, (plugin.LevelFunctions.getExp(player, p)+i));
-		if(isNotified(player))plugin.LCChat.good(player, "You gained: "+i+"exp");
+		if(isNotified(player))plugin.LCChat.good(player, "["+plugin.LevelIndexes.get(p)+"] "+plugin.lang.YouGained+i+"exp");
 		int newLevel = plugin.LevelFunctions.getLevel(player, p);
 		if(beforeLevel<newLevel){
-			plugin.LCChat.good(player, "LEVEL UP. You are now level "+newLevel+" in " + plugin.LevelNames.get(p));
-			plugin.LCChat.good(player, "See /level unlocks "+plugin.LevelIndexes.get(p)+" - To see what you have unlocked.");
+			plugin.LCChat.good(player, plugin.lang.LevelUp+newLevel+" in " + plugin.LevelNames.get(p));
+			plugin.LCChat.good(player, plugin.lang.SeeLevelUnlocks+plugin.LevelIndexes.get(p)+" - To see what you have unlocked.");
 		
 		if(plugin.NotifyAll){
-			plugin.LCChat.broadcast(player.getName()+" is now level "+newLevel+" in "+plugin.LevelNames.get(p)+".");
+			plugin.LCChat.broadcast(player.getName()+plugin.lang.IsNowLevel+newLevel+" in "+plugin.LevelNames.get(p)+".");
 		}
 		}
 	}

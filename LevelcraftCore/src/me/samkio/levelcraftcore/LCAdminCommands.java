@@ -12,30 +12,30 @@ public class LCAdminCommands {
 	@SuppressWarnings("static-access")
 	public void Help(Player sender) {
 		plugin.LCChat.topBar(sender);
-		plugin.LCChat.info(sender, "/lvl admin setlvl <LevelRef> <PlayerName> <Level> - Sets level for player.");
-		plugin.LCChat.info(sender, "/lvl admin setexp <LevelRef> <PlayerName> <Exp> - Sets experience for player.");
-		plugin.LCChat.info(sender, "/lvl admin getexp <LevelRef> <PlayerName> - Gets experience for player.");
-		plugin.LCChat.info(sender, "/lvl admin getlvl <LevelRef> <PlayerName> - Gets level for player.");
-		plugin.LCChat.info(sender, "/lvl admin reset <LevelRef> <PlayerName>  - Resets experience for player.");
+		plugin.LCChat.info(sender, "/lvl admin setlvl <Ref> <Player> <Level> - "+plugin.lang.SetLevelForPlayers);
+		plugin.LCChat.info(sender, "/lvl admin setexp <Ref> <Player> <Exp> - "+plugin.lang.SetExperienceForPlayers);
+		plugin.LCChat.info(sender, "/lvl admin getexp <Ref> <Player> - "+plugin.lang.GetExperienceOfPlayer);
+		plugin.LCChat.info(sender, "/lvl admin getlvl <Ref> <Player> - "+plugin.lang.GetLevelOfPlayer);
+		plugin.LCChat.info(sender, "/lvl admin reset <Ref> <Player>  - "+plugin.lang.ResetExperience);
 		//plugin.LCChat.info(sender, "/lvl admin reload - Shows this.");	
-		plugin.LCChat.info(sender, "/lvl admin - Shows this.");	
+		plugin.LCChat.info(sender, "/lvl admin - "+plugin.lang.ShowsThis);	
 	}
 	@SuppressWarnings("static-access")
 	public void determineMethid(Player sender, String[] args) {
 		if(args[1].equalsIgnoreCase("setlvl") && args.length==5){
 			if(plugin.LCAdminCommands.setLevel(args[2],args[3],args[4],sender)){
-				plugin.LCChat.good(sender, "Level set successfully");
+				plugin.LCChat.good(sender, plugin.lang.LevelSetSuccess);
 				return;
 			}else{
-				plugin.LCChat.warn(sender, "Could not set level please check log.");
+				plugin.LCChat.warn(sender, plugin.lang.LevelSetFalse);
 				return;
 			}
 		}else if(args[1].equalsIgnoreCase("setexp") && args.length==5){
 			if(plugin.LCAdminCommands.setExp(args[2],args[3],args[4],sender)){
-				plugin.LCChat.good(sender, "Experience set successfully");
+				plugin.LCChat.good(sender, plugin.lang.ExperienceSetSuccess);
 				return;
 			}else{
-				plugin.LCChat.warn(sender, "Could not set experience please check log.");
+				plugin.LCChat.warn(sender, plugin.lang.ExperienceSetFalse);
 				return;
 			}
 		}else if(args[1].equalsIgnoreCase("getlvl") && args.length==4){
@@ -44,10 +44,10 @@ public class LCAdminCommands {
 			plugin.LCChat.good(sender, plugin.LCAdminCommands.getExp(args[2],args[3],sender));
 		}else if(args[1].equalsIgnoreCase("reset") && args.length==4){
 			if(plugin.LCAdminCommands.reset(args[2],args[3],sender)){
-				plugin.LCChat.good(sender, "Experience reset successfully");
+				plugin.LCChat.good(sender, plugin.lang.ExperienceResetSuccess);
 				return;
 			}else{
-				plugin.LCChat.warn(sender, "Could not reset experience please check log.");
+				plugin.LCChat.warn(sender, plugin.lang.ExperienceResetFalse);
 				return;
 			}
 		}
@@ -82,17 +82,17 @@ public class LCAdminCommands {
 	private String getExp(String ref, String p, Player pl) {
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl,"No matching player.");
+			plugin.LCChat.warn(pl,plugin.lang.NoMatch);
 			return "Error.";
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl,"Matched more than one player.");
+			plugin.LCChat.warn(pl,plugin.lang.TooMany);
 			return "Error.";
 		} else {
 			Player leveler = players.get(0);
 			for (Plugin plug : plugin.LevelReferenceKeys.keySet()) {
 				String[] reference = plugin.LevelReferenceKeys.get(plug);
 				if(plugin.Tools.containsValue(reference,ref) && plugin.Permissions.hasLevel(leveler, plug)){
-				return leveler.getName()+"'s "+plugin.LevelNames.get(plug)+" experience is: " + plugin.LevelFunctions.getExp(leveler, plug);
+				return leveler.getName()+"'s "+plugin.LevelNames.get(plug)+plugin.lang.ExperienceIs + plugin.LevelFunctions.getExp(leveler, plug);
 				}
 			}
 			
@@ -103,17 +103,17 @@ public class LCAdminCommands {
 	private String getLevel(String ref, String p, Player pl) {
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl,"No matching player.");
+			plugin.LCChat.warn(pl,plugin.lang.NoMatch);
 			return "Error.";
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl,"Matched more than one player.");
+			plugin.LCChat.warn(pl,plugin.lang.TooMany);
 			return "Error.";
 		} else {
 			Player leveler = players.get(0);
 			for (Plugin plug : plugin.LevelReferenceKeys.keySet()) {
 				String[] reference = plugin.LevelReferenceKeys.get(plug);
 				if(plugin.Tools.containsValue(reference,ref) && plugin.Permissions.hasLevel(leveler, plug)){
-				return leveler.getName()+"'s "+plugin.LevelNames.get(plug)+" level is: " + plugin.LevelFunctions.getLevel(leveler, plug);
+				return leveler.getName()+"'s "+plugin.LevelNames.get(plug)+plugin.lang.LevelIs + plugin.LevelFunctions.getLevel(leveler, plug);
 				}
 			}
 			
@@ -125,10 +125,10 @@ public class LCAdminCommands {
 		double newexp = Double.parseDouble(exp);
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl,"No matching player.");
+			plugin.LCChat.warn(pl,plugin.lang.NoMatch);
 			return false;
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl,"Matched more than one player.");
+			plugin.LCChat.warn(pl,plugin.lang.TooMany);
 			return false;
 		} else {
 			Player leveler = players.get(0);
@@ -148,10 +148,10 @@ public class LCAdminCommands {
 		int newlvl = Integer.parseInt(lvl);
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl,"No matching player.");
+			plugin.LCChat.warn(pl,plugin.lang.NoMatch);
 			return false;
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl,"Matched more than one player.");
+			plugin.LCChat.warn(pl,plugin.lang.TooMany);
 			return false;
 		} else {
 			Player leveler = players.get(0);
@@ -168,7 +168,7 @@ public class LCAdminCommands {
 	}
 	@SuppressWarnings("static-access")
 	public void Syntax(Player sender) {
-		plugin.LCChat.warn(sender, "Syntax Error. See /level admin. For help.");
+		plugin.LCChat.warn(sender, plugin.lang.SyntaxA);
 		return;
 	}
 }
