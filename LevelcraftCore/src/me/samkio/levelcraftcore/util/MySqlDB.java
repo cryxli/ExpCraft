@@ -198,13 +198,13 @@ public class MySqlDB {
 			conn = createConnection();
 
 			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC LIMIT 10");
 			
-			while (rs.next()) {
-				rank++;
-				if(rs.getString("name").equalsIgnoreCase(name)) break;
-				
+			ResultSet rs = st.executeQuery("SELECT COUNT(`id`) AS `count` FROM `ExperienceTable` WHERE `"+string+"Exp`>=(SELECT `"+string+"Exp` FROM `ExperienceTable` WHERE `name`=('"+name+"') LIMIT 1);");
+
+			if (rs.next()) {
+				rank = rs.getInt("count");
 			}
+
 		} catch (SQLException e) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		} finally {
@@ -231,7 +231,7 @@ public class MySqlDB {
 			conn = createConnection();
 
 			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC LIMIT 10");
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
 			
 			while (rs.next()) {
 				rank++;
