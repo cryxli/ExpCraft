@@ -144,7 +144,7 @@ public class MySqlDB {
 
 				st = (Statement) conn.createStatement();
 				ResultSet rs = st.executeQuery("SELECT " + string
-						+ "Exp FROM ExperienceTable WHERE name=('" + name + "')");
+						+ "Exp FROM ExperienceTable WHERE name=('" + name + "') LIMIT 1");
 				while (rs.next()) {
 					exp = rs.getDouble(string+"Exp");
 				}
