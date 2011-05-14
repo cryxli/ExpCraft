@@ -110,9 +110,11 @@ public class LCEntityListener extends EntityListener {
 					+ plugin.LCConfiguration.WoodSword);
 			event.setCancelled(true);
 		} else {
-
-			LevelFunctions.addExp(player, plugin.thisPlug,
-					plugin.LCConfiguration.ExpPerDamage * event.getDamage());
+			if(event.getEntity() instanceof Player)
+				LevelFunctions.addExp(player, plugin.thisPlug,plugin.LCConfiguration.ExpPerDamagePVP * event.getDamage());
+			else
+				LevelFunctions.addExp(player, plugin.thisPlug,plugin.LCConfiguration.ExpPerDamageMob * event.getDamage());
+				
 
 		}
 

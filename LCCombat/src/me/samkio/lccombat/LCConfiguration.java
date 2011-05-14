@@ -18,7 +18,8 @@ public class LCConfiguration {
 	public int GoldSword;
 	public int DiamondSword;
 	//EXP PER
-	public double ExpPerDamage;
+	public double ExpPerDamageMob;
+	public double ExpPerDamagePVP;
 
 	public boolean pvpRangeEnable;
 	public int pvpRange;
@@ -43,7 +44,8 @@ public class LCConfiguration {
 		this.DiamondSword = properties.getInteger("DiamondSwordLevel", 30);
 		
 		//Set variables for EXP PER
-		this.ExpPerDamage = properties.getDouble("ExpPerDamage", 5);
+		this.ExpPerDamageMob = properties.getDouble("ExpPerDamageMob", 5);
+		this.ExpPerDamagePVP = properties.getDouble("ExpPerDamagePVP", 5);
 		
 		//
 		this.pvpRangeEnable = properties.getBoolean("EnablePvpOnlyRange",false);
