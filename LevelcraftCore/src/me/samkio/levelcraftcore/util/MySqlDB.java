@@ -173,7 +173,7 @@ public class MySqlDB {
 				conn = createConnection();
 				st = (Statement) conn.createStatement();
 
-				st.executeUpdate("UPDATE LOW_PRIORITY ExperienceTable set "+string+"Exp = '"+i+"' WHERE name='"+name+"'");
+				st.executeUpdate("UPDATE LOW_PRIORITY ExperienceTable set "+string+"Exp = '"+i+"' WHERE name='"+name+"' LIMIT 1");
 			} catch (SQLException ex) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
 				return;
