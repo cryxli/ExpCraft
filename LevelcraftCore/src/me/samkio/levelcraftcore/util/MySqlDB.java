@@ -224,22 +224,16 @@ public class MySqlDB {
 	public String getPlayerAtPos(String string, int i) {
 		Connection conn = null;
 		Statement st = null;
-		int rank = 0;
 		String p = "None";
 		try {
 
 			conn = createConnection();
 
 			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC LIMIT "+i+", 1");
 			
-			while (rs.next()) {
-				rank++;
-				if(rank==i){
-					p = rs.getString("name");
-					break;
-				}
-				
+			if (rs.next()) {
+				p = rs.getString("name");
 			}
 		} catch (SQLException e) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
