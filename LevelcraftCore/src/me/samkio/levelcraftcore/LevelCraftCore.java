@@ -64,10 +64,32 @@ public class LevelCraftCore extends JavaPlugin {
 	public boolean NotifyAll;
 	public PermissionHandler PermissionH;
 
+	//ADD CACHE BY L5D
+	public HashMap<Plugin, HashMap<Player,Double>> ExpCache = new HashMap<Plugin, HashMap<Player,Double>>();
+
+
 	@Override
 	public void onDisable() {
 		if (database.equalsIgnoreCase("sqlite"))
 			SqliteDB.closeConnection();
+		
+
+		//ADD CACHE BY L5D
+		//Clear ExpCache
+		for(Plugin key:ExpCache.keySet()){
+			ExpCache.get(key).clear();
+		}
+		ExpCache.clear();
+		
+		//clean for read in the enable
+		this.LevelReferenceKeys.clear();
+		this.LevelIndexes.clear();
+		this.LevelNames.clear();
+		this.LevelUnlocks.clear();
+		this.LevelAuthors.clear();
+		this.LevelExp.clear();
+		this.LevelUnlocksLevel.clear();
+		this.LevelHelp.clear();
 	}
 
 	@Override
@@ -109,13 +131,15 @@ public class LevelCraftCore extends JavaPlugin {
 				this.LevelExp.put(plugin, exp);
 				this.LevelUnlocksLevel.put(plugin, unlockslevel);
 				this.LevelHelp.put(plugin, help);
+				
+				//Create hashmap on the cache list
+				ExpCache.put(plugin, new HashMap<Player,Double>());
 			}
 
 		}
 		this.createData();
 		this.logger.log(Level.INFO, "[LC] LevelCraftCore "+this.getDescription().getVersion()+" Loaded");
-		this.logger
-				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
+		this.logger.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
 	}
 
 	public void loadConfig() {
@@ -193,6 +217,9 @@ public class LevelCraftCore extends JavaPlugin {
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener,
+				Event.Priority.Lowest, this);
+		//ADD CACHE BY L5D
+		pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener,
 				Event.Priority.Lowest, this);
 		if(EnableSkillMastery){
 		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener,

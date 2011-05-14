@@ -31,9 +31,15 @@ public class Whitelist {
 		}
 	}
 	public static  boolean hasLevel(Player s, Plugin p){
+		//Because LvlDefense crash in this 
+		try{
 		if(!plugin.PermissionUse) return true;
-		if(plugin.PermissionH.has( s, "lc.level."+plugin.LevelNames.get(p).toLowerCase())) return true;
+		if(plugin.PermissionH.has( s, "lc.level."+plugin.LevelNames.get(p).toLowerCase())) return true; // Line !
 		return false;
+		}
+		catch(Exception e){
+			return false;
+		}
 		
 	}
 	public static boolean hasLevelExp(Player s, Plugin p){

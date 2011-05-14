@@ -1,5 +1,8 @@
 package me.samkio.levelcraftcore;
 
+import java.util.HashMap;
+import java.util.Set;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -10,6 +13,10 @@ public class LevelFunctions {
 		plugin = instance;
 	}
 
+	public  static Set<Plugin> getPluginsList() {
+		return plugin.LevelNames.keySet();
+	}	
+	
 	@SuppressWarnings("static-access")
 	public  static int getLevel(Player player, Plugin p) {
 		int level = 0;
@@ -39,6 +46,9 @@ public class LevelFunctions {
 	}
 
 	public  static double getExp(Player player, Plugin p) {
+		
+	
+		
 		if (plugin.database.equalsIgnoreCase("FlatFile")) {
 			for (Plugin p1 : plugin.LevelFiles.keySet()) {
 				if (p1 != p)
@@ -53,10 +63,23 @@ public class LevelFunctions {
 				return plugin.SqliteDB.getDouble(player.getName(),plugin.LevelNames.get(p1));
 			}
 		}else if (plugin.database.equalsIgnoreCase("mysql")) {
-			for (Plugin p1 : plugin.LevelNames.keySet()) {
-				if (p1 != p)
-					continue;
-				return plugin.MySqlDB.getDouble(player.getName(),plugin.LevelNames.get(p1));
+			/*for (Plugin p1 : plugin.LevelNames.keySet()) {
+			if (p1 != p)
+				continue;
+			return plugin.MySqlDB.getDouble(player.getName(),plugin.LevelNames.get(p1));
+			}*/
+			//ADD CACHE BY L5D
+			if(plugin.LevelNames.containsKey(p) && plugin.ExpCache.containsKey(p)){
+				double exp=0;
+				HashMap<Player, Double> expPlayers = plugin.ExpCache.get(p);
+				if (expPlayers.containsKey(player)){//In cache, use it !
+					exp = expPlayers.get(player);
+				}
+				else{//Not in cache, add it !
+					exp = plugin.MySqlDB.getDouble(player.getName(),plugin.LevelNames.get(p));
+					expPlayers.put(player, exp);
+				}
+				return exp;
 			}
 		}
 		return 0;
@@ -101,11 +124,26 @@ public class LevelFunctions {
 				return;
 			}
 		}else if (plugin.database.equalsIgnoreCase("mysql")) {
-			for (Plugin p1 : plugin.LevelNames.keySet()) {
+			/*for (Plugin p1 : plugin.LevelNames.keySet()) {
 				if (p1 != p)
 					continue;
 				plugin.MySqlDB.update(player.getName(),plugin.LevelNames.get(p1), i);
 				return;
+			}*/
+			//ADD CACHE BY L5D
+			Double exp;
+			if (plugin.LevelNames.containsKey(p) && plugin.ExpCache.containsKey(p)){
+				HashMap<Player, Double> expPlayers = plugin.ExpCache.get(p);
+				if (expPlayers.containsKey(p)){//In cache, use it !
+					exp = expPlayers.get(p);
+					exp = exp + i;
+					plugin.MySqlDB.update(player.getName(),plugin.LevelNames.get(p), i);
+				}
+				else{//Not in cache, add it !
+					plugin.MySqlDB.update(player.getName(),plugin.LevelNames.get(p), i);
+					exp = plugin.MySqlDB.getDouble(player.getName(),plugin.LevelNames.get(p));
+					expPlayers.put(player, exp);
+				}
 			}
 		}
 	}
@@ -115,7 +153,9 @@ public class LevelFunctions {
 		int beforeLevel = plugin.LevelFunctions.getLevel(player, p);
 		if(!plugin.Permissions.hasLevelExp(player, p)) return;
 		plugin.LevelFunctions.updateExp(player, p, (plugin.LevelFunctions.getExp(player, p)+i));
-		if(isNotified(player))plugin.LCChat.good(player, "["+plugin.LevelIndexes.get(p)+"] "+plugin.lang.YouGained+i+"exp");
+		if(isNotified(player))
+			if(i>0) plugin.LCChat.good(player, "["+plugin.LevelIndexes.get(p)+"] "+plugin.lang.YouGained+" "+i+" exp");
+			else if(i<0) plugin.LCChat.bad(player, "["+plugin.LevelIndexes.get(p)+"] "+plugin.lang.YouLost+" "+i+" exp");
 		int newLevel = plugin.LevelFunctions.getLevel(player, p);
 		if(beforeLevel<newLevel){
 			plugin.LCChat.good(player, plugin.lang.LevelUp+newLevel+" in " + plugin.LevelNames.get(p));
