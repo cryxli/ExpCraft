@@ -43,7 +43,7 @@ public class MySqlDB {
 		try {
 			conn = createConnection();
 			st = (Statement) conn.createStatement();
-			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (`id` INT( 255 ) NOT NULL AUTO_INCREMENT, `name` TEXT NOT NULL,PRIMARY KEY ( `id` )) ENGINE = MYISAM;");	
+			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (`id` INT( 11 ) NOT NULL AUTO_INCREMENT, `name` VARCHAR(30) NOT NULL,PRIMARY KEY ( `id` ),UNIQUE KEY(`name`)) ENGINE = MYISAM;");	
 			
 			for (Plugin p : plugin.LevelNames.keySet()) {
 			ResultSet rs = st.executeQuery("SELECT * FROM `ExperienceTable`;");
@@ -88,8 +88,7 @@ public class MySqlDB {
 				conn = createConnection();
 
 				st = (Statement) conn.createStatement();
-				ResultSet rs = st
-				.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"+ name + "')");
+				ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"+ name + "') LIMIT 1");
 				while (rs.next()) {
 					isTrue = true;
 				}
@@ -116,7 +115,7 @@ public class MySqlDB {
 			try {
 				conn = createConnection();
 				st = (Statement) conn.createStatement();
-				st.executeUpdate("INSERT INTO ExperienceTable (name) VALUES ('"+namer+"')");
+				st.executeUpdate("INSERT IGNORE INTO ExperienceTable (name) VALUES ('"+namer+"')");
 			} catch (SQLException ex) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
 				return;
@@ -172,7 +171,7 @@ public class MySqlDB {
 				conn = createConnection();
 				st = (Statement) conn.createStatement();
 
-				st.executeUpdate("UPDATE ExperienceTable set "+string+"Exp = '"+i+"' WHERE name='"+name+"'");
+				st.executeUpdate("UPDATE LOW_PRIORITY ExperienceTable set "+string+"Exp = '"+i+"' WHERE name='"+name+"'");
 			} catch (SQLException ex) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
 				return;
@@ -197,7 +196,7 @@ public class MySqlDB {
 			conn = createConnection();
 
 			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC LIMIT 10");
 			
 			while (rs.next()) {
 				rank++;
@@ -230,7 +229,7 @@ public class MySqlDB {
 			conn = createConnection();
 
 			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC LIMIT 10");
 			
 			while (rs.next()) {
 				rank++;
