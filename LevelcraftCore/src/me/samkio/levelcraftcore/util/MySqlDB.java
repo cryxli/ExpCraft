@@ -44,10 +44,12 @@ public class MySqlDB {
 			conn = createConnection();
 			st = (Statement) conn.createStatement();
 			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (`id` INT( 11 ) NOT NULL AUTO_INCREMENT, `name` VARCHAR(30) NOT NULL,PRIMARY KEY ( `id` ),UNIQUE KEY(`name`)) ENGINE = MYISAM;");	
-			
-			for (Plugin p : plugin.LevelNames.keySet()) {
+
+			//One time is sufisant
 			ResultSet rs = st.executeQuery("SELECT * FROM `ExperienceTable`;");
 			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+			
+			for (Plugin p : plugin.LevelNames.keySet()) {
 			int ColumnCount = rsmd.getColumnCount();
 				for (int i = 1; i <= ColumnCount; i++) {
 					String s = rsmd.getColumnName(i);
