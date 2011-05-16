@@ -90,6 +90,8 @@ public class LevelCraftCore extends JavaPlugin {
 		this.LevelExp.clear();
 		this.LevelUnlocksLevel.clear();
 		this.LevelHelp.clear();
+		
+		MySqlDB.closeConnection();
 	}
 
 	@Override
