@@ -26,6 +26,7 @@ public class LCEntityListener extends EntityListener {
 		if (event.isCancelled()) {
 			return;
 		}
+		
 		if (event.getEntity() instanceof Player) {
 			if (plugin.entListener.doneBefore != null) {
 				if (plugin.entListener.doneBefore
@@ -61,11 +62,15 @@ public class LCEntityListener extends EntityListener {
 	public void onEDamageByE(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player))
 			return;
+		
+		
 		if (event.getEntity() instanceof Player) {
 			Player Damager = (Player) ((EntityDamageByEntityEvent) event)
 					.getDamager();
 			Player Damagee = (Player) event.getEntity();
 			if (Damager == Damagee)
+				return;
+			if( Damagee.getNoDamageTicks()!=0 )
 				return;
 		}
 		if (event.getEntity() instanceof Player
