@@ -64,13 +64,13 @@ public class LCBlockListener extends BlockListener {
 					+ plugin.LCConfiguration.PlankLevel);
 			event.setCancelled(true);
 			return;
-		} else if (level < plugin.LCConfiguration.BirchLevel
+		} else if (level < plugin.LCConfiguration.LogLevel
 				&& m == Material.LOG && ((Tree)event.getBlock().getState().getData()).getSpecies() == TreeSpecies.GENERIC) {
 			LCChat.warn(player,"Cannot cut this block. Required Level:"
 					+ plugin.LCConfiguration.LogLevel);
 			event.setCancelled(true);
 			return;
-		} else if (level < plugin.LCConfiguration.BirchLevel
+		} else if (level < plugin.LCConfiguration.RedwoodLevel
 				&& m == Material.LOG && ((Tree)event.getBlock().getState().getData()).getSpecies() == TreeSpecies.REDWOOD) {
 			LCChat.warn(player,"Cannot cut this block. Required Level:"
 					+ plugin.LCConfiguration.RedwoodLevel);
