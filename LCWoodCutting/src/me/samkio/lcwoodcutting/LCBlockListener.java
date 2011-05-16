@@ -7,10 +7,12 @@ import me.samkio.levelcraftcore.LevelFunctions;
 import me.samkio.levelcraftcore.Whitelist;
 
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.material.Tree;
 
 public class LCBlockListener extends BlockListener {
 	public LCWoodCutting plugin;
@@ -62,13 +64,25 @@ public class LCBlockListener extends BlockListener {
 					+ plugin.LCConfiguration.PlankLevel);
 			event.setCancelled(true);
 			return;
-		} else if (level < plugin.LCConfiguration.LogLevel
-				&& m == Material.LOG) {
+		} else if (level < plugin.LCConfiguration.BirchLevel
+				&& m == Material.LOG && ((Tree)event.getBlock().getState().getData()).getSpecies() == TreeSpecies.GENERIC) {
 			LCChat.warn(player,"Cannot cut this block. Required Level:"
 					+ plugin.LCConfiguration.LogLevel);
 			event.setCancelled(true);
 			return;
-		} 
+		} else if (level < plugin.LCConfiguration.BirchLevel
+				&& m == Material.LOG && ((Tree)event.getBlock().getState().getData()).getSpecies() == TreeSpecies.REDWOOD) {
+			LCChat.warn(player,"Cannot cut this block. Required Level:"
+					+ plugin.LCConfiguration.RedwoodLevel);
+			event.setCancelled(true);
+			return;
+		}  else if (level < plugin.LCConfiguration.BirchLevel
+				&& m == Material.LOG && ((Tree)event.getBlock().getState().getData()).getSpecies() == TreeSpecies.BIRCH) {
+			LCChat.warn(player,"Cannot cut this block. Required Level:"
+					+ plugin.LCConfiguration.BirchLevel);
+			event.setCancelled(true);
+			return;
+		}
 		double gained = 0;
 		if (m == Material.LOG) {
 

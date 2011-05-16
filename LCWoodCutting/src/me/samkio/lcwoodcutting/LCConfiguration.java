@@ -19,6 +19,8 @@ public class LCConfiguration {
 	public double ExpPerLog;
 	public double ExpPerPlank;
 	//LEVEL BLOCK
+	public  int RedwoodLevel;
+	public  int BirchLevel;
 	public  int LogLevel;
 	public  int PlankLevel;
 
@@ -48,6 +50,8 @@ public class LCConfiguration {
 
 		
 		//LEVEL BLOCK
+		this.RedwoodLevel = properties.getInteger("LevelForRedwood", 0);
+		this.BirchLevel = properties.getInteger("LevelForBirch", 0);
 		this.LogLevel = properties.getInteger("LevelForLog", 0);
 		this.PlankLevel = properties.getInteger("LevelForPlank", 0);
 

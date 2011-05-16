@@ -61,7 +61,7 @@ public class LCCombat extends JavaPlugin {
 				LCConfiguration.StoneSword, LCConfiguration.IronSword,
 				LCConfiguration.GoldSword, LCConfiguration.DiamondSword };
 		//Sets the data for /lvl exp <ref>
-		String[] Exp = { "Exp Per Damage " + LCConfiguration.ExpPerDamage};
+		String[] Exp = { "Exp Per PvP Damage " + LCConfiguration.ExpPerDamagePVP, "Exp Per Mob Damage " + LCConfiguration.ExpPerDamageMob};
 		//Set the LevelExpPer to the Exp Array.
 		getConfiguration().setProperty("LevelExpPer", Exp);
 		//Set the LevelUnlocksLevel to the UnlocksLevel int array.

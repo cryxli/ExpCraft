@@ -22,6 +22,9 @@ public class LCChat {
 	public static void good(CommandSender p,String s){
 		p.sendMessage(ChatColor.valueOf(plugin.c1)+"[LC] "+ChatColor.valueOf(plugin.c3)+s);
 	}
+	public void bad(CommandSender p, String s) {
+		p.sendMessage(ChatColor.valueOf(plugin.c1)+"[LC] "+ChatColor.valueOf(plugin.c4)+s);
+	}
 	@SuppressWarnings("static-access")
 	public static void broadcast(String s){
 		plugin.LCChat.broadcastWorld(s);
@@ -34,4 +37,5 @@ public class LCChat {
 			}
 		}
 	}
+
 }

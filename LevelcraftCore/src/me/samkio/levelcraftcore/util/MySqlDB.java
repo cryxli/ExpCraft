@@ -17,37 +17,68 @@ import me.samkio.levelcraftcore.LevelCraftCore;
 
 public class MySqlDB {
 	public LevelCraftCore plugin;
+	public static Connection conn = null;
+	public static Statement st = null;
 
 	public MySqlDB(LevelCraftCore instance) {
 		plugin = instance;
+		createConnection();
 	}
 
-	public Connection createConnection() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+	public boolean createConnection() {
+		if(conn==null){
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+				return false;
+			}
+			try {
+				conn = DriverManager.getConnection("jdbc:mysql://" + plugin.MySqlDir
+						+ "", "" + plugin.MySqlUser + "", "" + plugin.MySqlPass + "");
+			} catch (SQLException e) {
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+				return false;
+			}
 		}
-		try {
-			return DriverManager.getConnection("jdbc:mysql://" + plugin.MySqlDir
-					+ "", "" + plugin.MySqlUser + "", "" + plugin.MySqlPass + "");
-		} catch (SQLException e) {
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+		if(st==null){
+			try {
+				st = (Statement) conn.createStatement();
+			} catch (SQLException e) {
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+				return false;
+			}
 		}
-		return null;
+		return true;
+	}
+	
+	public void closeConnection(){
+		if(st==null)
+			try {
+				st.close();
+				st = null;
+			} catch (SQLException e) {
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			}		
+		if(conn==null)
+			try {
+				conn.close();
+				conn = null;
+			} catch (SQLException e) {
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			}
 	}
 	
 	public void prepare() {
-		Connection conn = null;
-		Statement st = null;
+		if(!createConnection()) return;
 		try {
-			conn = createConnection();
-			st = (Statement) conn.createStatement();
-			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (`id` INT( 255 ) NOT NULL AUTO_INCREMENT, `name` TEXT NOT NULL,PRIMARY KEY ( `id` )) ENGINE = MYISAM;");	
-			
-			for (Plugin p : plugin.LevelNames.keySet()) {
+			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (`id` INT( 11 ) NOT NULL AUTO_INCREMENT, `name` VARCHAR(30) NOT NULL,PRIMARY KEY ( `id` ),UNIQUE KEY(`name`)) ENGINE = MYISAM;");	
+
+			//One time is sufisant
 			ResultSet rs = st.executeQuery("SELECT * FROM `ExperienceTable`;");
 			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+			
+			for (Plugin p : plugin.LevelNames.keySet()) {
 			int ColumnCount = rsmd.getColumnCount();
 				for (int i = 1; i <= ColumnCount; i++) {
 					String s = rsmd.getColumnName(i);
@@ -66,192 +97,90 @@ public class MySqlDB {
 		} catch (SQLException ex) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + ex);
 			return;
-		} finally {
-			try {
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-			}
 		}
 	}
 
 	public boolean contains(String name) {
-			Connection conn = null;
-			Statement st = null;
+		if(!createConnection()) return false;
 			boolean isTrue = false;
 			try {
 
-				conn = createConnection();
-
-				st = (Statement) conn.createStatement();
-				ResultSet rs = st
-				.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"+ name + "')");
+				ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"+ name + "') LIMIT 1");
 				while (rs.next()) {
 					isTrue = true;
 				}
 			} catch (SQLException e) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			} finally {
-				try {
-					if (st != null) {
-						st.close();
-					}
-					if (conn != null)
-						conn.close();
-				} catch (SQLException ex) {
-					plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-				}
 			}
 			return isTrue;
 		
 	}
 
 	public void newP(String namer) {
-			Connection conn = null;
-			Statement st = null;
+		if(!createConnection()) return;
 			try {
-				conn = createConnection();
-				st = (Statement) conn.createStatement();
-				st.executeUpdate("INSERT INTO ExperienceTable (name) VALUES ('"+namer+"')");
+				st.executeUpdate("INSERT IGNORE INTO ExperienceTable (name) VALUES ('"+namer+"')");
 			} catch (SQLException ex) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
 				return;
-			} finally {
-				try {
-					if (st != null) {
-						st.close();
-					}
-					if (conn != null)
-						conn.close();
-				} catch (SQLException ex) {
-					plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-				}
 			}
 	}
 
 	public double getDouble(String name, String string) {
-			Connection conn = null;
-			Statement st = null;
+		if(!createConnection()) return 0 ;
 			double exp = 0;
 			try {
-
-				conn = createConnection();
-
-				st = (Statement) conn.createStatement();
 				ResultSet rs = st.executeQuery("SELECT " + string
-						+ "Exp FROM ExperienceTable WHERE name=('" + name + "')");
+						+ "Exp FROM ExperienceTable WHERE name=('" + name + "') LIMIT 1");
 				while (rs.next()) {
 					exp = rs.getDouble(string+"Exp");
 				}
 			} catch (SQLException e) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			} finally {
-				try {
-					if (st != null) {
-						st.close();
-					}
-					if (conn != null)
-						conn.close();
-				} catch (SQLException ex) {
-					plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-				}
 			}
 			return exp;
 
 	}
 
 	public void update(String name, String string, double i) {
-			Connection conn = null;
-			Statement st = null;
+		if(!createConnection()) return;
 
 			try {
-				conn = createConnection();
-				st = (Statement) conn.createStatement();
 
-				st.executeUpdate("UPDATE ExperienceTable set "+string+"Exp = '"+i+"' WHERE name='"+name+"'");
+				st.executeUpdate("UPDATE LOW_PRIORITY ExperienceTable set "+string+"Exp = '"+i+"' WHERE name='"+name+"' LIMIT 1");
 			} catch (SQLException ex) {
 				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
 				return;
-			} finally {
-				try {
-					if (st != null) {
-						st.close();
-					}
-					if (conn != null)
-						conn.close();
-				} catch (SQLException ex) {
-					plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-				}
 			}
 	}
 	public int getPos(String name,String string){
-		Connection conn = null;
-		Statement st = null;
+		if(!createConnection()) return 0;
 		int rank = 0;
 		try {
-
-			conn = createConnection();
-
-			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
 			
-			while (rs.next()) {
-				rank++;
-				if(rs.getString("name").equalsIgnoreCase(name)) break;
-				
+			ResultSet rs = st.executeQuery("SELECT COUNT(`id`) AS `count` FROM `ExperienceTable` WHERE `"+string+"Exp`>=(SELECT `"+string+"Exp` FROM `ExperienceTable` WHERE `name`=('"+name+"') LIMIT 1);");
+
+			if (rs.next()) {
+				rank = rs.getInt("count");
 			}
+
 		} catch (SQLException e) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-		} finally {
-			try {
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-			}
 		}
 		return rank;
 	}
 
 	public String getPlayerAtPos(String string, int i) {
-		Connection conn = null;
-		Statement st = null;
-		int rank = 0;
+		if(!createConnection()) return "0";
 		String p = "None";
 		try {
-
-			conn = createConnection();
-
-			st = (Statement) conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC LIMIT "+i+", 1");
 			
-			while (rs.next()) {
-				rank++;
-				if(rank==i){
-					p = rs.getString("name");
-					break;
-				}
-				
+			if (rs.next()) {
+				p = rs.getString("name");
 			}
 		} catch (SQLException e) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-		} finally {
-			try {
-				if (st != null) {
-					st.close();
-				}
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
-			}
 		}
 		return p;
 	}

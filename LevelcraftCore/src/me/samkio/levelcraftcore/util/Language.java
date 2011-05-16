@@ -46,6 +46,7 @@ public class Language {
     public String TotalExp;
     public String HighestLevel;
     public String YouGained;
+	public String YouLost;
     public String LevelUp;
     public String IsNowLevel;
     public String SeeLevelUnlocks;
@@ -97,6 +98,7 @@ public class Language {
 		this.SetExperienceForPlayers = properties.getString("SetExperienceOfPlayer", "Sets experience for player.");	
 		this.IsNowLevel = properties.getString("IsNowLevel", " is now level ");
 		this.YouGained = properties.getString("YouGained", "You gained: ");
+		this.YouLost = properties.getString("YouLost", "You lost: ");
 		this.SeeLevelUnlocks = properties.getString("SeeLevelUnlocks", "See /level unlocks ");
 		this.LevelUp = properties.getString("LevelUp", "LEVEL UP. You are now level ");	
 		this.NotifyOn = properties.getString("NotifyOn", "Experience notify enabled.");
