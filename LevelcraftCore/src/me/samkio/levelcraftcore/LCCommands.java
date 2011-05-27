@@ -64,9 +64,9 @@ public class LCCommands {
 				"/lvl " + plugin.Tools.getIndexBar((Player) sender)
 						+ " - "+plugin.lang.ShowsLevelStats);
 		plugin.LCChat.info(sender,
-				"/lvl unlocks [REF] - "+plugin.lang.ShowsToolBlock);
+				"/lvl unlocks [REF] <Page> - "+plugin.lang.ShowsToolBlock);
 		plugin.LCChat.info(sender,
-				"/lvl exp [REF] - "+plugin.lang.ShowsExp);
+				"/lvl exp [REF] <Page> - "+plugin.lang.ShowsExp);
 		plugin.LCChat.info(sender,
 				"/lvl shout [REF] - "+plugin.lang.Shout);
 		plugin.LCChat.info(sender, "/lvl total - "+plugin.lang.ShowsTotal);
@@ -124,10 +124,10 @@ public class LCCommands {
 				plugin.LCCommands.Shout(sender, args[1]);
 				return;
 			} else if (args[0].equalsIgnoreCase("unlocks")) {
-				plugin.LCCommands.Unlocks(sender, args[1]);
+				plugin.LCCommands.Unlocks(sender, args[1],1);
 				return;
 			} else if (args[0].equalsIgnoreCase("exp")) {
-				plugin.LCCommands.Exp(sender, args[1]);
+				plugin.LCCommands.Exp(sender, args[1],1);
 				return;
 			} else if (args[0].equalsIgnoreCase("rank")) {
 				plugin.LCCommands.Rank(sender, args[1]);
@@ -148,7 +148,16 @@ public class LCCommands {
 				 * "LevelCraft Could not be Reloaded"); }
 				 */
 			}
-		} else if (args[0].equalsIgnoreCase("admin")) {
+		
+		} else if (args.length == 3) {
+			if (args[0].equalsIgnoreCase("unlocks")) {
+				plugin.LCCommands.Unlocks(sender, args[1], Integer.parseInt(args[2])); //Better Check.
+				return;
+			} else if (args[0].equalsIgnoreCase("exp")) {
+				plugin.LCCommands.Exp(sender, args[1],Integer.parseInt(args[2])); //Better Check. 
+				return;
+			}
+		}  else if (args[0].equalsIgnoreCase("admin")) {
 			plugin.LCCommands.Admin(sender, args);
 			return;
 		} else {
@@ -157,6 +166,8 @@ public class LCCommands {
 		}
 
 	}
+
+	
 
 	@SuppressWarnings("static-access")
 	private void LevelHelp(Player sender, String string) {
@@ -233,15 +244,33 @@ public class LCCommands {
 	}
 
 	@SuppressWarnings("static-access")
-	private void Exp(Player sender, String string) {
+	private void Exp(Player sender, String string, Integer page) {
 		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
+			
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(sender, p)) {
 				plugin.LCChat.topBar(sender);
-				for (String s : plugin.LevelExp.get(p)) {
-					plugin.LCChat.info(sender, s);
+				String[] Exp = plugin.LevelExp.get(p);
+				int maxPages = (Exp.length/plugin.ExpLines);
+				if(maxPages <= 0) maxPages = 1;
+				if(page>maxPages){
+					plugin.LCChat.warn(sender, "No Page.");
+					return;
 				}
+				plugin.LCChat.info(sender, "Showing Experience Table for "+plugin.LevelNames.get(p)+". Page "+page+" of "+maxPages);
+				int startingPoint = page * plugin.ExpLines - plugin.ExpLines;
+				int endingPoint = startingPoint + plugin.ExpLines;
+				if(endingPoint>Exp.length) endingPoint = Exp.length;
+				for (int i = startingPoint; i < endingPoint; i++) {
+				
+						plugin.LCChat.info(sender, Exp[i]);
+					
+				}
+				
+				/*for (String s : plugin.LevelExp.get(p)) {
+					plugin.LCChat.info(sender, s);
+				}*/
 				break;
 			}
 		}
@@ -268,16 +297,26 @@ public class LCCommands {
 	}
 
 	@SuppressWarnings("static-access")
-	private void Unlocks(Player sender, String string) {
+	private void Unlocks(Player sender, String string, Integer page) {
 		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(sender, p)) {
 				plugin.LCChat.topBar(sender);
 				String[] Unlocks = plugin.LevelUnlocks.get(p);
+				int maxPages = (Unlocks.length/plugin.UnlockLines);
+				if(maxPages <= 0) maxPages = 1;
+				if(page>maxPages){
+					plugin.LCChat.warn(sender, "No Page.");
+					return;
+				}
 				int[] UnlockLevel = plugin.LevelUnlocksLevel.get(p);
 				int level = plugin.LevelFunctions.getLevel(sender, p);
-				for (int i = 0; i < Unlocks.length; i++) {
+				plugin.LCChat.info(sender, "Showing Unlocks for "+plugin.LevelNames.get(p)+". Page "+page+" of "+maxPages);
+				int startingPoint = page * plugin.UnlockLines - plugin.UnlockLines;
+				int endingPoint = startingPoint + plugin.UnlockLines;
+				if(endingPoint>Unlocks.length) endingPoint = Unlocks.length;
+				for (int i = startingPoint; i < endingPoint; i++) {
 					if (UnlockLevel[i] > level) {
 						plugin.LCChat.warn(sender, Unlocks[i]);
 					} else {

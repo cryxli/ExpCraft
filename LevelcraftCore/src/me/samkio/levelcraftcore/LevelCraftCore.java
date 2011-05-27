@@ -58,6 +58,8 @@ public class LevelCraftCore extends JavaPlugin {
 	public String[] Worlds;
 	public int LevelCap;
 	public int Constant;
+	public int UnlockLines;
+	public int ExpLines;
 	public boolean EnableLevelCap;
 	public boolean EnableSkillMastery;
 	public boolean PermissionUse;
@@ -72,8 +74,9 @@ public class LevelCraftCore extends JavaPlugin {
 	public void onDisable() {
 		if (database.equalsIgnoreCase("sqlite"))
 			SqliteDB.closeConnection();
-		
-
+		/*if (database.equalsIgnoreCase("mysql"))
+		MySqlDB.closeConnection();
+*/
 		//ADD CACHE BY L5D
 		//Clear ExpCache
 		for(Plugin key:ExpCache.keySet()){
@@ -91,7 +94,6 @@ public class LevelCraftCore extends JavaPlugin {
 		this.LevelUnlocksLevel.clear();
 		this.LevelHelp.clear();
 		
-		MySqlDB.closeConnection();
 	}
 
 	@Override
@@ -160,6 +162,8 @@ public class LevelCraftCore extends JavaPlugin {
 		this.c2 = gC.getString("ColourTwo", "YELLOW");
 		this.c3 = gC.getString("ColourGood", "GREEN");
 		this.c4 = gC.getString("ColourBad", "RED");
+		this.UnlockLines = gC.getInt("UnlockLines", 7);
+		this.ExpLines = gC.getInt("ExpLines", 7);
 		this.NotifyAll = gC.getBoolean("NotifyAll", true);
 		List<World> worldRun = this.getServer().getWorlds();
 		String str = "";
@@ -219,9 +223,6 @@ public class LevelCraftCore extends JavaPlugin {
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener,
-				Event.Priority.Lowest, this);
-		//ADD CACHE BY L5D
-		pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener,
 				Event.Priority.Lowest, this);
 		if(EnableSkillMastery){
 		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener,

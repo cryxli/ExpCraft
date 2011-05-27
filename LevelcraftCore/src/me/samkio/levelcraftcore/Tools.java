@@ -92,5 +92,8 @@ public class Tools {
 		str = str.replace("WHITE", "\u00A7F"); // White
 		return str;
 		}
+	public int convertToInt(String s) {
+	    return Integer.parseInt(s);  
+	  }
 }
 
