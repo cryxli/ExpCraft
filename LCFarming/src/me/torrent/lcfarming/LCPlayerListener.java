@@ -1,22 +1,26 @@
 package me.torrent.lcfarming;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import me.samkio.levelcraftcore.LCChat;
 import me.samkio.levelcraftcore.LevelFunctions;
 import me.samkio.levelcraftcore.Whitelist;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.inventory.ItemStack;
 
 public class LCPlayerListener extends PlayerListener
 {
   public LCFarming plugin;
-
+  private static HashSet<Byte> transparentBlockList = null;
   public LCPlayerListener(LCFarming instance)
   {
     this.plugin = instance;
@@ -24,22 +28,13 @@ public class LCPlayerListener extends PlayerListener
 
   public void onPlayerInteract(PlayerInteractEvent event) {
     if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-    	//PlayerInteractEvent, called upon when a player interects with the block. In this case, its when the block is Right Clicked.
       return;
-    if (!Whitelist.worldCheck(event.getClickedBlock().getWorld()))   
-    	return;
-    //Checking if the plugin is enabled in the specific world.
-    {
     if (!Whitelist.hasLevel(event.getPlayer(), this.plugin.thisPlug)) {
       return;
     }
-    
     Player player = event.getPlayer();
-    //Gets the player.
     int iih = player.getItemInHand().getTypeId();
-    //Gets the Item in hand.
     Material m = event.getClickedBlock().getType();
-    //Gets the clicked block.
 
     if (!Whitelist.hasLevel(player, this.plugin.thisPlug))
       return;
@@ -50,132 +45,147 @@ public class LCPlayerListener extends PlayerListener
         this.plugin.LCConfiguration.IronHoe);
       event.setCancelled(true);
       return;
-  //If a player is using a Iron Hoe and are under the configuration level, they get denied access to the tool.
     }
     if ((level < this.plugin.LCConfiguration.GoldHoe) && (iih == 294)) {
       LCChat.warn(player, "Cannot use this tool. Required Level:" + 
         this.plugin.LCConfiguration.GoldHoe);
       event.setCancelled(true);
       return;
-    //If a player is using a Gold Hoe and are under the configuration level, they get denied access to the tool.
     }if ((level < this.plugin.LCConfiguration.WoodHoe) && (iih == 290)) {
       LCChat.warn(player, "Cannot use this tool. Required Level:" + 
         this.plugin.LCConfiguration.WoodHoe);
       event.setCancelled(true);
       return;
-    //If a player is using a Wood Hoe and are under the configuration level, they get denied access to the tool.
     }if ((level < this.plugin.LCConfiguration.DiamondHoe) && (iih == 293)) {
       LCChat.warn(player, "Cannot use this tool. Required Level:" + 
         this.plugin.LCConfiguration.DiamondHoe);
       event.setCancelled(true);
       return;
-    //If a player is using a Diamond Hoe and are under the configuration level, they get denied access to the tool.
     }if ((level < this.plugin.LCConfiguration.StoneHoe) && (iih == 291)) {
       LCChat.warn(player, "Cannot use this tool. Required Level:" + 
         this.plugin.LCConfiguration.StoneHoe);
       event.setCancelled(true);
       return;
-    //If a player is using a Stone Hoe and are under the configuration level, they get denied access to the tool.
-    }
-    
-    if ((level < this.plugin.LCConfiguration.TillLevel) && 
-    		//Checks if the players level is less than the level set of Tilling.
-      ((m == Material.GRASS) || (m == Material.DIRT)) && (isHoe(iih)))
-    	//Checks if the material clicked with the hoe is either Grass or Dirt
-    {
-    	LCChat.warn(player, "Cannot till this block. Required Level:" + 
+    }if ((level < this.plugin.LCConfiguration.TillLevel) && 
+      ((m == Material.GRASS) || (m == Material.DIRT)) && (isHoe(iih))) {
+      LCChat.warn(player, "Cannot cut this block. Required Level:" + 
         this.plugin.LCConfiguration.TillLevel);
-    	//Wars the user is they aren't a high enough level.
-     
-    	event.setCancelled(true);
+      event.setCancelled(true);
       return;
-      //If the player is the correct level, return.
     }
-    
-    if ((level < this.plugin.LCConfiguration.BonemealLevel) && 
-    		//Checks if the players level is less than the set level of Bonemeal.
-    		((iih == 351) && (player.getItemInHand().getDurability() == 15)))
-    	//Checks if the Item in hand is Bonemeal.
-  	  	    {
-  	  	      LCChat.warn(player, "Cannot fertilize this plant. Required Level:" + 
-  	  	        this.plugin.LCConfiguration.BonemealLevel);
-      //Warns the players if they aren't the required level.
-  	  	      event.setCancelled(true);
-  	  	      return;
-  	  	      //If the player is the correct level, return.
-  	  	    }   
-    //I wont annotate the rest of these restrictions, as its basically the same.
-    if ((level < this.plugin.LCConfiguration.BonemealLevel) && 
-    		((iih == 351) && (player.getItemInHand().getDurability() == 15) && (m == Material.SAPLING)))
-  	  	    {
-  	  	      LCChat.warn(player, "Cannot fertilize this plant. Required Level:" + 
-  	  	        this.plugin.LCConfiguration.BonemealLevel);
+    if (event.getAction() == Action.RIGHT_CLICK_AIR
+    	    || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+    	List<Block> list = event.getPlayer().getLineOfSight(
+				getTransparentBlockIdList(), 6);
+    	   ArrayList<Entity> entityList = new ArrayList<Entity>();
+    	   for (Block block : list) {
+    	    for (Entity e : block.getWorld().getEntities()) {
+    	     if (e.getEntityId() != event.getPlayer().getEntityId()) {
+    	      if (e.getLocation()
+    	        .toVector()
+    	        .distanceSquared(block.getLocation().toVector()) < 1) {
+    	       entityList.add(e);
 
-  	  	      event.setCancelled(true);
-  	  	      return;
-  	  	    }   
-    
-    if ((iih == 351) && (player.getItemInHand().getDurability() == 15) && (m == Material.SAPLING)) {
-      if (level < this.plugin.LCConfiguration.BonemealLevel)
-      {
-        LCChat.warn(player, "Cannot use this tool. Required Level:" + 
-          this.plugin.LCConfiguration.BonemealLevel);
+    	      }
+    	     }
+    	    }
+    	   }
+    	   Entity best = null;
 
-        event.setCancelled(true);
-        return;
-      }
-      LevelFunctions.addExp(event.getPlayer(), this.plugin.thisPlug, 10.0D);
+    	  double distance = Double.MAX_VALUE;
+    	   for (Entity e : entityList) {
+    	    if (e.getLocation()
+    	      .toVector()
+    	      .distanceSquared(
+    	        event.getPlayer().getLocation().toVector()) < distance) {
+    	     distance = e
+    	       .getLocation()
+    	       .toVector()
+    	       .distanceSquared(
+    	         event.getPlayer().getLocation().toVector());
+    	     best = e;
+    	    }
+    	   }
+    	   if (best != null) {
+    	    //FEED ME PL0X
+    	   }	   
     }
-    //This is where the player earns EXP.
-    
-    if ((iih == 351) && (player.getItemInHand().getDurability() == 15) && (m.getId() == 59)) {
-    	//Checks if the item in hand is Bonemeal.
-        if (level < this.plugin.LCConfiguration.BonemealLevel)
-        {
-          LCChat.warn(player, "Cannot use this Bonemeal. Required Level:" + 
-            this.plugin.LCConfiguration.BonemealLevel);
-          //If the players level is less than the Bonemeal level, it will warn the player and wont let them use it.
-
-          event.setCancelled(true);
-          return;
-        }
-        LevelFunctions.addExp(event.getPlayer(), this.plugin.thisPlug, 10.0D);
-        //Adds 10 EXP to the players level.
-      }
+  
 
     double gained = 0.0D;
     if (((m == Material.GRASS) || (m == Material.DIRT)) && (isHoe(iih))) {
       gained = this.plugin.LCConfiguration.ExpPerTill;
-    }
+    }  	
 
     if (gained == 0.0D)
       return;
     LevelFunctions.addExp(player, this.plugin.thisPlug, gained);
   }
+
+  public void onBlockPlace(BlockPlaceEvent event) {
+    if (event.isCancelled())
+      return; 
   }
-  
+
   public boolean isHoe(int i) {
     return (i == 290) || (i == 291) || (i == 292) || (i == 293) || (i == 294);
   }
-  //New method, PlayerEggThrowEvent. This is called upon the player throwing an egg.
   
-  public void onPlayerEggThrow(PlayerEggThrowEvent event) { boolean notEgg = event.isHatching();
-    if ((!event.isHatching()))
-    	//Checks if the egg is hatching
-    		return;
-    //If the egg doesnt hatch, return.
-       if (!Whitelist.worldCheck(event.getPlayer().getWorld()))
-    	   return;
-       //Checking if the level is enabled in the world.
-       
-       
-     {
-      if (!Whitelist.hasLevel(event.getPlayer(), this.plugin.thisPlug))
-        return;
-      if (!(event.getPlayer() instanceof Player)) return;
-      //Checks if the cause of the egg throw is from a player.
-    }
-    LevelFunctions.addExp(event.getPlayer(), this.plugin.thisPlug, 50.0D);
-    //Finally, if the egg is thrown by a player and if it hatches, it awards the player EXP.
-  }
+  public void onPlayerEggThrow(PlayerEggThrowEvent event) {
+	   if (!(event.isHatching()))
+	   return;
+	    if (!Whitelist.worldCheck(event.getPlayer().getWorld())) return;
+	   if (!Whitelist.hasLevel(event.getPlayer(), this.plugin.thisPlug)) return;
+	        if (!(event.getPlayer() instanceof Player)) 
+	        	return; 
+
+	        LevelFunctions.addExp((Player) event.getPlayer(),plugin.thisPlug,50);
+	   }
+  public static HashSet<Byte> getTransparentBlockIdList() {
+	   if (transparentBlockList == null) {
+	    HashSet<Byte> list = new HashSet<Byte>();
+	    for (Material m : Material.values()) {
+	     if (m.isBlock() && !isSolidMaterial((m))) {
+	      list.add((byte) m.getId());
+	     }
+	    }
+	    transparentBlockList = list;
+	    return list;
+	   }
+	   return transparentBlockList;
+	  }
+
+	  public static boolean isSolidMaterial(Material m) {
+	   return m == Material.STONE || m == Material.GRASS || m == Material.DIRT
+	     || m == Material.COBBLESTONE || m == Material.WOOD
+	     || m == Material.BEDROCK || m == Material.SAND
+	     || m == Material.GRAVEL || m == Material.GOLD_ORE
+	     || m == Material.IRON_ORE || m == Material.COAL_ORE
+	     || m == Material.LOG || m == Material.LEAVES
+	     || m == Material.SPONGE || m == Material.LAPIS_ORE
+	     || m == Material.LAPIS_BLOCK || m == Material.DISPENSER
+	     || m == Material.SANDSTONE || m == Material.NOTE_BLOCK
+	     || m == Material.WOOL || m == Material.GOLD_BLOCK
+	     || m == Material.IRON_BLOCK || m == Material.DOUBLE_STEP
+	     || m == Material.STEP || m == Material.BRICK
+	     || m == Material.TNT || m == Material.BOOKSHELF
+	     || m == Material.MOSSY_COBBLESTONE || m == Material.OBSIDIAN
+	     || m == Material.MOB_SPAWNER || m == Material.WOOD_STAIRS
+	     || m == Material.CHEST || m == Material.DIAMOND_ORE
+	     || m == Material.DIAMOND_BLOCK || m == Material.WORKBENCH
+	     || m == Material.SOIL || m == Material.FURNACE
+	     || m == Material.BURNING_FURNACE
+	     || m == Material.COBBLESTONE_STAIRS
+	     || m == Material.REDSTONE_ORE
+	     || m == Material.GLOWING_REDSTONE_ORE || m == Material.ICE
+	     || m == Material.SNOW_BLOCK || m == Material.CACTUS
+	     || m == Material.CLAY || m == Material.JUKEBOX
+	     || m == Material.FENCE || m == Material.PUMPKIN
+	     || m == Material.NETHERRACK || m == Material.SOUL_SAND
+	     || m == Material.GLOWSTONE || m == Material.JACK_O_LANTERN
+	     || m == Material.CAKE_BLOCK
+
+	   ;
+	  }
+
 }

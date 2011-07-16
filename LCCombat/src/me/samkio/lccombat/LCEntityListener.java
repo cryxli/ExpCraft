@@ -13,6 +13,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
+import net.minecraft.server.EntityLiving;
+
+import org.bukkit.craftbukkit.entity.CraftEntity;
 
 public class LCEntityListener extends EntityListener {
 	public LCCombat plugin;
@@ -26,22 +29,15 @@ public class LCEntityListener extends EntityListener {
 		if (event.isCancelled()) {
 			return;
 		}
-		
-		if (event.getEntity() instanceof Player) {
-			if (plugin.entListener.doneBefore != null) {
-				if (plugin.entListener.doneBefore
-						.containsKey(event.getEntity())) {
-					plugin.entListener.doneBefore.remove(event.getEntity());
-					return;
-				} else {
-					plugin.entListener.doneBefore.put(event.getEntity(), null);
-				}
-			} else {
-
-				plugin.entListener.doneBefore.put(event.getEntity(), null);
-			}
-		}
-
+		if(event.getEntity() instanceof CraftEntity)
+	     {
+	     CraftEntity CEntity = (CraftEntity)event.getEntity();
+	     
+	if(CEntity.getHandle() instanceof EntityLiving)
+	{
+		EntityLiving LEntity = (EntityLiving)CEntity.getHandle();
+		if(LEntity.noDamageTicks < LEntity.maxNoDamageTicks/2.0F)
+		{
 		if (event instanceof EntityDamageByEntityEvent) {
 			if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player
 					&& Whitelist.worldCheck(event.getEntity().getWorld())
@@ -57,20 +53,22 @@ public class LCEntityListener extends EntityListener {
 				}
 			}
 		}
+		}
+	}
+	
+	}
+
+		
 	}
 
 	public void onEDamageByE(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player))
 			return;
-		
-		
 		if (event.getEntity() instanceof Player) {
 			Player Damager = (Player) ((EntityDamageByEntityEvent) event)
 					.getDamager();
 			Player Damagee = (Player) event.getEntity();
 			if (Damager == Damagee)
-				return;
-			if( Damagee.getNoDamageTicks()!=0 )
 				return;
 		}
 		if (event.getEntity() instanceof Player
@@ -94,33 +92,18 @@ public class LCEntityListener extends EntityListener {
 		Player player = (Player) event.getDamager();
 		int iih = player.getItemInHand().getTypeId();
 		int level = LevelFunctions.getLevel(player, plugin.thisPlug);
-		if (level < plugin.LCConfiguration.IronSword && iih == 267) {
-			LCChat.warn(player, "Cannot use this tool. Required Level:"
-					+ plugin.LCConfiguration.IronSword);
-			event.setCancelled(true);
-		} else if (level < plugin.LCConfiguration.GoldSword && iih == 283) {
-			LCChat.warn(player, "Cannot use this tool. Required Level:"
-					+ plugin.LCConfiguration.GoldSword);
-			event.setCancelled(true);
-		} else if (level < plugin.LCConfiguration.DiamondSword && iih == 276) {
-			LCChat.warn(player, "Cannot use this tool. Required Level:"
-					+ plugin.LCConfiguration.DiamondSword);
-			event.setCancelled(true);
-		} else if (level < plugin.LCConfiguration.StoneSword && iih == 272) {
-			LCChat.warn(player, "Cannot use this tool. Required Level:"
-					+ plugin.LCConfiguration.StoneSword);
-			event.setCancelled(true);
-		} else if (level < plugin.LCConfiguration.WoodSword && iih == 268) {
-			LCChat.warn(player, "Cannot use this tool. Required Level:"
-					+ plugin.LCConfiguration.WoodSword);
-			event.setCancelled(true);
-		} else {
-			if(event.getEntity() instanceof Player)
-				LevelFunctions.addExp(player, plugin.thisPlug,plugin.LCConfiguration.ExpPerDamagePVP * event.getDamage());
-			else
-				LevelFunctions.addExp(player, plugin.thisPlug,plugin.LCConfiguration.ExpPerDamageMob * event.getDamage());
-				
+		if (plugin.LCConfiguration.ToolLevels.containsKey(iih)) {
+			if (level < plugin.LCConfiguration.ToolLevels.get(iih)) {
+				LCChat.warn(player, "Cannot use this tool. Required Level:"
+						+ plugin.LCConfiguration.ToolLevels.get(iih));
+				event.setCancelled(true);
+				return;
+			
+		}else{
 
+			LevelFunctions.addExp(player, plugin.thisPlug,
+					plugin.LCConfiguration.ExpPerDamage * event.getDamage());
+		}
 		}
 
 	}

@@ -5,6 +5,7 @@ package me.samkio.lcforgery;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import me.samkio.levelcraftcore.LevelFunctions;
 import me.samkio.levelcraftcore.Whitelist;
 
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class LCPlayerListener extends PlayerListener {
 		if ((e.getClickedBlock().getTypeId() == 61 || e.getClickedBlock()
 				.getTypeId() == 62)) {
 			FurnaceWorkThread task = new FurnaceWorkThread(e.getPlayer(),
-					plugin);
+					plugin,LevelFunctions.getLevel(e.getPlayer(), plugin.thisPlug));
 			int id = plugin.getServer().getScheduler()
 					.scheduleSyncRepeatingTask(plugin, task, 0, 2);
 			tasks.add(Integer.valueOf(id));

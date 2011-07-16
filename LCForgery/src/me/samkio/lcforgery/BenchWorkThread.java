@@ -308,9 +308,9 @@ public class BenchWorkThread implements Runnable {
 		ItemStack is = new ItemStack(0,0,0);
         if (is.id == 0)
           is = null;
-        c.b.setItem(0, is);
+        c.resultInventory.setItem(0, is);
         Packet103SetSlot packet = new Packet103SetSlot(
-          this.entityPlayer.activeContainer.f, 0, is);
+        this.entityPlayer.activeContainer.windowId, 0, is);
         this.entityPlayer.netServerHandler.sendPacket(packet);
 		
 	}

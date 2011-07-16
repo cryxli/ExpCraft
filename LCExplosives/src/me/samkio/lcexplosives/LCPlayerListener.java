@@ -148,6 +148,7 @@ public class LCPlayerListener extends PlayerListener {
 	}
 	  public void onPlayerEggThrow(PlayerEggThrowEvent event) {
          Egg egg = event.getEgg();
+         event.isHatching();
 	     Location loc = egg.getLocation();
 	     World world = ((CraftWorld)loc.getWorld()).getHandle();
 	     Player player = event.getPlayer();

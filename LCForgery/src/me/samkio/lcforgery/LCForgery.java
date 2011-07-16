@@ -352,15 +352,13 @@ public class LCForgery extends JavaPlugin {
 	}
 
 	public  void addFurnaceRecipe(ArrayList<FurnaceRecipe> recipes) {
-		int count = 0;
 		for (FurnaceRecipe fr : recipes) {
 			net.minecraft.server.ItemStack result = null;
 			if (fr.getResult().getTypeId() != 0) {
 				result = new net.minecraft.server.ItemStack(fr.getResult()
 						.getTypeId(), fr.getResult().getAmount(), fr.getData());
 			}
-			FurnaceRecipes.a().a(fr.getIngredient(), result);
-			count++;
+			FurnaceRecipes.getInstance().registerRecipe(fr.getIngredient(), result);	
 		}
 	}
 

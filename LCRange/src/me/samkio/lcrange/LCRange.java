@@ -2,6 +2,7 @@ package me.samkio.lcrange;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,11 +12,13 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class LCRange extends JavaPlugin{
-    public final Logger logger = Logger.getLogger("Minecraft");
+    public final  Logger logger = Logger.getLogger("Minecraft");
     final LCEntityListener  entityListener = new LCEntityListener(this);
+    final LCPlayerListener playerListener = new LCPlayerListener(this);
     public final LCConfiguration LCConfiguration = new LCConfiguration(this);
     public String ConfigurationFileString = "plugins/LevelCraftCore/Configs/Range.cfg";
     public File ConfigurationFile = new File(ConfigurationFileString);
+    public HashMap<String,Integer> Rangers = new HashMap<String,Integer>();
     public Plugin thisPlug;
 	@Override
 	public void onDisable() {
@@ -24,6 +27,7 @@ public class LCRange extends JavaPlugin{
 
 	@Override
 	public void onEnable() {
+		  Arrow.getPlugin(this);
 		new File("plugins/LevelCraftCore/Configs/").mkdirs();
 		try{
 			ConfigurationFile.createNewFile();
@@ -45,12 +49,25 @@ public class LCRange extends JavaPlugin{
 		
 		this.thisPlug = this.getServer().getPluginManager().getPlugin("LCRange");
 		Plugin LevelCraftCore = this.getServer().getPluginManager().getPlugin("LevelCraftCore");
+		
+		if(!this.LCConfiguration.EnableElemental){
+			this.LCConfiguration.EnableExplosion = false;
+			this.LCConfiguration.EnableFire = false;
+			this.LCConfiguration.EnableIce = false;
+			this.LCConfiguration.EnableWater = false;
+			this.LCConfiguration.EnableTorch = false;
+			this.LCConfiguration.EnableLight = false;
+			this.LCConfiguration.EnableTrice = false;
+		}
+		
+		
+		
 		if(LevelCraftCore == null){
 			logger.log(Level.SEVERE,"[LC] Could not find LevelCraftCore. Disabling");
 			this.getServer().getPluginManager().disablePlugin(this);
 		}else{
 			registerEvents();
-			logger.log(Level.INFO,"[LC] Level Range Loaded.");
+			logger.log(Level.INFO,"[LC] Level Range "+getDescription().getVersion()+"Loaded.");
 		}
 		
 	}
@@ -58,7 +75,11 @@ public class LCRange extends JavaPlugin{
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Highest,this);
-		
+		if(this.LCConfiguration.EnableElemental){
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Highest,this);
+		}
 	}
+
+	
 
 }

@@ -5,6 +5,7 @@ import me.samkio.levelcraftcore.Whitelist;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityListener;
 
 public class LCEntityListener extends EntityListener{
@@ -21,6 +22,7 @@ public class LCEntityListener extends EntityListener{
 			return;
 		if(!(event.getEntity() instanceof Player)) return;
 		if(!Whitelist.hasLevel((Player) event.getEntity(), plugin.thisPlug)) return;
+		if(event.getCause() != DamageCause.FALL) return;
 		Player p = (Player) event.getEntity();
 		int lvl = LevelFunctions.getLevel(p, plugin.thisPlug);
 		int damageReduction = (int) ((lvl / 10) * plugin.LCConfiguration.fdMultiplier);

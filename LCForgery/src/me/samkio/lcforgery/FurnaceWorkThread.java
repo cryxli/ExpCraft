@@ -17,14 +17,15 @@ public class FurnaceWorkThread implements Runnable {
 	private EntityPlayer entityPlayer;
 	private LCForgery plugin;
 	private int id;
+	private int level;
 	private InventoryPlayer inventory;
 
-	public FurnaceWorkThread(Player p, LCForgery plugin) {
+	public FurnaceWorkThread(Player p, LCForgery plugin,int level) {
 		this.craftPlayer = (CraftPlayer) p;
 		this.entityPlayer = craftPlayer.getHandle();
 		this.plugin = plugin;
 		this.inventory = entityPlayer.inventory; // get its inventory.
-
+        this.level = level;
 	}
 
 	public void addID(int id) {
@@ -70,7 +71,7 @@ public class FurnaceWorkThread implements Runnable {
         ItemStack[] Prev = plugin.playerListener.previousResult.get(id);
         if(Furnace[2]!=Prev[2] && Furnace[2]==null){ 
         	int result = Prev[2].id;
-        	int level = LevelFunctions.getLevel(craftPlayer, plugin.thisPlug);
+        	//int level = LevelFunctions.getLevel(craftPlayer, plugin.thisPlug);
         	if(result==336 && level >= plugin.LCConfiguration.ClayLevel){
 				LevelFunctions.addExp(craftPlayer, plugin.thisPlug, (plugin.LCConfiguration.ExpPerClay * Prev[2].count));
 			}else if(result==265&& level >= plugin.LCConfiguration.IronBarLevel){
@@ -196,9 +197,10 @@ public class FurnaceWorkThread implements Runnable {
 			}
         }
         
-        if(Furnace[0]!=Prev[0] && Prev[0]==null){
+       // if((Furnace[0]!=Prev[0] && Prev[0]==null) || (Furnace[0]!=Prev[0] && Prev[0]==null )){
+        	if(Furnace[0] != null){
         	int ingredient = Furnace[0].id;
-			int level = LevelFunctions.getLevel(craftPlayer, plugin.thisPlug);
+			//int level = LevelFunctions.getLevel(craftPlayer, plugin.thisPlug);
 			if(ingredient==337 && level < plugin.LCConfiguration.ClayLevel){
 				LCChat.warn(craftPlayer, "Cannot Forge Clay - Required level: "+plugin.LCConfiguration.ClayLevel);
 				resetIngredient(craftPlayer,tileEntity,Furnace[0]);
@@ -345,7 +347,11 @@ public class FurnaceWorkThread implements Runnable {
 		
 	}
 	public void resetIngredient(CraftPlayer p,TileEntityFurnace t,ItemStack F){
+		if(p.getInventory().firstEmpty()==-1){
+	        p.getWorld().dropItem(p.getLocation(),new org.bukkit.inventory.ItemStack(F.id, F.count, (short) F.damage));
+		}else{
 		p.getInventory().setItem(p.getInventory().firstEmpty(),(org.bukkit.inventory.ItemStack) new org.bukkit.inventory.ItemStack(F.id,F.count,(short) F.damage));
+		}
 		t.setItem(0, null);
 		return;
 	}
