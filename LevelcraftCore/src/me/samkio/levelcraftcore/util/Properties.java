@@ -17,7 +17,7 @@ import java.util.Map;
 
 public final class Properties {
 
-	private  final Logger log = Logger.getLogger("Minecraft");
+	private final Logger log = Logger.getLogger("Minecraft");
 	private String fileName;
 	private List<String> lines = new ArrayList<String>();
 	private Map<String, String> props = new HashMap<String, String>();
@@ -197,8 +197,7 @@ public final class Properties {
 		try {
 			os = new FileOutputStream(this.fileName);
 		} catch (FileNotFoundException ex) {
-			log.severe("[Properties]: FAIL SAVE" + ": "
-					+ ex);
+			log.severe("[Properties]: FAIL SAVE" + ": " + ex);
 		}
 
 		PrintStream ps = new PrintStream(os);
@@ -306,28 +305,27 @@ public final class Properties {
 	public String getProperty(String var) {
 		for (String line : this.lines) {
 			if (line.trim().length() == 0) {
-				
+
 				continue;
 			}
 			if (line.charAt(0) == '#') {
-				
-						
+
 				continue;
 			}
 
 			if (line.contains("=")) {
 				int delimPosition = line.indexOf('=');
-				
+
 				String key = line.substring(0, delimPosition).trim();
 				String value = line.substring(delimPosition + 1);
 
 				if (key.equals(var)) {
-					
+
 					return value;
 				}
 			} else {
 				continue;
-				
+
 			}
 		}
 
@@ -389,7 +387,7 @@ public final class Properties {
 
 	public String getString(String key, String value) {
 		if (this.containsKey(key)) {
-			
+
 			return this.getProperty(key);
 		}
 

@@ -26,13 +26,16 @@ public class LCEntityListener extends EntityListener{
 			return;
 		if (((EntityDamageByProjectileEvent) event).getProjectile() instanceof Arrow
 				&& ((EntityDamageByEntityEvent) event).getDamager() instanceof Player
-				&& Whitelist.hasLevel(
+				) 
+		
+		{
+			if(Whitelist.hasLevel(
 						(Player) ((EntityDamageByEntityEvent) event)
-								.getDamager(), plugin.thisPlug)) {
+								.getDamager(), plugin.thisPlug)){
 			plugin.entityListener.EntityDamageByProj((EntityDamageByProjectileEvent) event);
 			return;
 		}
-
+		}
 	}
 
 	private void EntityDamageByProj(EntityDamageByProjectileEvent event) {

@@ -16,9 +16,13 @@ public class LevelFunctions {
 	public static Set<Plugin> getPluginsList() {
 		return plugin.LevelNames.keySet();
 	}
+	public static boolean antiCheat() {
+		return plugin.anticheat;
+	}
 
 	@SuppressWarnings("static-access")
 	public static int getLevel(Player player, Plugin p) {
+		plugin.Tools.checkAccount(player);
 		int level = 0;
 		int max = 1000;
 		double constant = plugin.Constant;
@@ -48,14 +52,13 @@ public class LevelFunctions {
 	}
 
 	public static double getExp(Player player, Plugin p) {
-
+		plugin.Tools.checkAccount(player);
 		if (plugin.database.equalsIgnoreCase("FlatFile")) {
-			/*for (Plugin p1 : plugin.LevelFiles.keySet()) {
-				if (p1 != p)
-					continue;
-				return plugin.FlatFile.getDouble(player.getName(),
-						plugin.LevelFiles.get(p1));
-			}*/
+			/*
+			 * for (Plugin p1 : plugin.LevelFiles.keySet()) { if (p1 != p)
+			 * continue; return plugin.FlatFile.getDouble(player.getName(),
+			 * plugin.LevelFiles.get(p1)); }
+			 */
 
 			if (plugin.LevelFiles.containsKey(p)
 					&& plugin.ExpCache.containsKey(p)) {
@@ -147,13 +150,11 @@ public class LevelFunctions {
 
 	public static void updateExp(Player player, Plugin p, double i) {
 		if (plugin.database.equalsIgnoreCase("flatfile")) {
-			/*for (Plugin p1 : plugin.LevelFiles.keySet()) {
-				if (p1 != p)
-					continue;
-				plugin.FlatFile.write(player.getName(),
-						plugin.LevelFiles.get(p1), i);
-				return;
-			}*/if (plugin.LevelFiles.containsKey(p)
+			/*
+			 * for (Plugin p1 : plugin.LevelFiles.keySet()) { if (p1 != p)
+			 * continue; plugin.FlatFile.write(player.getName(),
+			 * plugin.LevelFiles.get(p1), i); return; }
+			 */if (plugin.LevelFiles.containsKey(p)
 					&& plugin.ExpCache.containsKey(p)) {
 				HashMap<Player, Double> expPlayers = plugin.ExpCache.get(p);
 				if (expPlayers.containsKey(player)) {// In cache, use it !
@@ -168,13 +169,11 @@ public class LevelFunctions {
 				}
 			}
 		} else if (plugin.database.equalsIgnoreCase("sqlite")) {
-			/*for (Plugin p1 : plugin.LevelNames.keySet()) {
-				if (p1 != p)
-					continue;
-				plugin.SqliteDB.update(player.getName(),
-						plugin.LevelNames.get(p1), i);
-				return;
-			}*/
+			/*
+			 * for (Plugin p1 : plugin.LevelNames.keySet()) { if (p1 != p)
+			 * continue; plugin.SqliteDB.update(player.getName(),
+			 * plugin.LevelNames.get(p1), i); return; }
+			 */
 			if (plugin.LevelNames.containsKey(p)
 					&& plugin.ExpCache.containsKey(p)) {
 				HashMap<Player, Double> expPlayers = plugin.ExpCache.get(p);
@@ -217,9 +216,11 @@ public class LevelFunctions {
 	@SuppressWarnings("static-access")
 	public static void addExp(Player player, Plugin p, double i) {
 		// if(plugin.Permissions.hasLevelNoExp(player, p)) return;
-		int beforeLevel = plugin.LevelFunctions.getLevel(player, p);
+		if (i == 0)
+			return;
 		if (!plugin.Permissions.hasLevelExp(player, p))
 			return;
+		int beforeLevel = plugin.LevelFunctions.getLevel(player, p);
 		plugin.LevelFunctions.updateExp(player, p,
 				(plugin.LevelFunctions.getExp(player, p) + i));
 		if (isNotified(player))

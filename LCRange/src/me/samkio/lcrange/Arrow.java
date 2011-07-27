@@ -7,8 +7,6 @@ import net.minecraft.server.EntityHuman;
 import net.minecraft.server.EntityLiving;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EntityTNTPrimed;
-import net.minecraft.server.Item;
-import net.minecraft.server.ItemStack;
 import net.minecraft.server.MathHelper;
 
 import org.bukkit.Location;
@@ -59,7 +57,7 @@ public class Arrow extends EntityArrow {
 		if (thrice == 1)
 			int0 = 10;
 		setPositionRotation(entityliving.locX,
-				entityliving.locY + entityliving.s(), entityliving.locZ,
+				entityliving.locY + entityliving.t(), entityliving.locZ,
 				entityliving.yaw + int0, entityliving.pitch);
 		this.locX -= MathHelper.cos(this.yaw / 180.0F * 3.141593F) * 0.16F;
 		this.locY -= 0.1000000014901161D;
@@ -74,8 +72,8 @@ public class Arrow extends EntityArrow {
 		a(this.motX, this.motY, this.motZ, 1.5F, 1.0F);
 	}
 
-	public void o_() {
-		super.o_();
+	public void m_() {
+		super.m_();
 
 		if (this.firstY == 123.0D)
 			this.firstY = this.motY;
@@ -222,18 +220,6 @@ public class Arrow extends EntityArrow {
 	}
 
 	public void b(EntityHuman entityhuman) {
-		if ((!this.world.isStatic)
-				&& (this.shooter == entityhuman)
-				&& (this.moving == 2)
-				&& (entityhuman.inventory.canHold(new ItemStack(Item.ARROW, 1)))) {
-			this.world
-					.makeSound(
-							this,
-							"random.pop",
-							0.2F,
-							((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-			entityhuman.receive(this, 1);
-			die();
-		}
+		super.b(entityhuman);
 	}
 }

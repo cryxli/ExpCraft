@@ -65,26 +65,29 @@ public class LevelCraftCore extends JavaPlugin {
 	public boolean PermissionUse;
 	public boolean NotifyAll;
 	public PermissionHandler PermissionH;
-
-	//ADD CACHE BY L5D
-	public HashMap<Plugin, HashMap<Player,Double>> ExpCache = new HashMap<Plugin, HashMap<Player,Double>>();
-
+	public String[] Bypassers;
+	public boolean anticheat;
+	//public boolean Specialisation;
+	//public File Special;
+	////public double SpecialMultpilier;
+	// ADD CACHE BY L5D
+	public HashMap<Plugin, HashMap<Player, Double>> ExpCache = new HashMap<Plugin, HashMap<Player, Double>>();
 
 	@Override
 	public void onDisable() {
 		if (database.equalsIgnoreCase("sqlite"))
 			SqliteDB.closeConnection();
-		/*if (database.equalsIgnoreCase("mysql"))
-		MySqlDB.closeConnection();
-*/
-		//ADD CACHE BY L5D
-		//Clear ExpCache
-		for(Plugin key:ExpCache.keySet()){
+		/*
+		 * if (database.equalsIgnoreCase("mysql")) MySqlDB.closeConnection();
+		 */
+		// ADD CACHE BY L5D
+		// Clear ExpCache
+		for (Plugin key : ExpCache.keySet()) {
 			ExpCache.get(key).clear();
 		}
 		ExpCache.clear();
-		
-		//clean for read in the enable
+
+		// clean for read in the enable
 		this.LevelReferenceKeys.clear();
 		this.LevelIndexes.clear();
 		this.LevelNames.clear();
@@ -93,7 +96,59 @@ public class LevelCraftCore extends JavaPlugin {
 		this.LevelExp.clear();
 		this.LevelUnlocksLevel.clear();
 		this.LevelHelp.clear();
-		
+		this.logger.log(Level.INFO, "[LC] LevelCraftCore Unloaded");
+	}
+
+	public boolean Reload() {
+		onDisable();
+		this.getDataFolder().mkdir();
+		new File(this.getDataFolder() + "/Data/").mkdirs();
+		new File(this.getDataFolder() + "/Configs/").mkdirs();
+		this.loadConfig();
+		this.Permissions.LoadPerms();
+		this.lang.LoadLang();
+		PluginManager pm = getServer().getPluginManager();
+		for (Plugin plugin : pm.getPlugins()) {
+			if (plugin.getDescription().getName().startsWith("LC")) {
+				if (!getServer().getPluginManager().isPluginEnabled(plugin)) {
+					pm.enablePlugin(plugin);
+				}
+				String[] str = (String[]) plugin.getConfiguration()
+						.getProperty("ReferenceKeys");
+				String[] exp = (String[]) plugin.getConfiguration()
+						.getProperty("LevelExpPer");
+				String[] unlocks = (String[]) plugin.getConfiguration()
+						.getProperty("LevelUnlocks");
+				String[] help = (String[]) plugin.getConfiguration()
+						.getProperty("LevelHelp");
+				int[] unlockslevel = (int[]) plugin.getConfiguration()
+						.getProperty("LevelUnlocksLevel");
+				String index = (String) plugin.getConfiguration().getProperty(
+						"ReferenceIndex");
+				String name = (String) plugin.getConfiguration().getProperty(
+						"LevelName");
+				String author = (String) plugin.getConfiguration().getProperty(
+						"Author");
+				this.LevelReferenceKeys.put(plugin, str);
+				this.LevelIndexes.put(plugin, index);
+				this.LevelNames.put(plugin, name);
+				this.LevelUnlocks.put(plugin, unlocks);
+				this.LevelAuthors.put(plugin, author);
+				this.LevelExp.put(plugin, exp);
+				this.LevelUnlocksLevel.put(plugin, unlockslevel);
+				this.LevelHelp.put(plugin, help);
+
+				// Create hashmap on the cache list
+				ExpCache.put(plugin, new HashMap<Player, Double>());
+			}
+
+		}
+		this.createData();
+		this.logger.log(Level.INFO, "[LC] LevelCraftCore "
+				+ this.getDescription().getVersion() + " Loaded");
+		this.logger
+				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
+		return true;
 	}
 
 	@Override
@@ -118,7 +173,7 @@ public class LevelCraftCore extends JavaPlugin {
 				String[] unlocks = (String[]) plugin.getConfiguration()
 						.getProperty("LevelUnlocks");
 				String[] help = (String[]) plugin.getConfiguration()
-				.getProperty("LevelHelp");
+						.getProperty("LevelHelp");
 				int[] unlockslevel = (int[]) plugin.getConfiguration()
 						.getProperty("LevelUnlocksLevel");
 				String index = (String) plugin.getConfiguration().getProperty(
@@ -135,15 +190,17 @@ public class LevelCraftCore extends JavaPlugin {
 				this.LevelExp.put(plugin, exp);
 				this.LevelUnlocksLevel.put(plugin, unlockslevel);
 				this.LevelHelp.put(plugin, help);
-				
-				//Create hashmap on the cache list
-				ExpCache.put(plugin, new HashMap<Player,Double>());
+
+				// Create hashmap on the cache list
+				ExpCache.put(plugin, new HashMap<Player, Double>());
 			}
 
 		}
 		this.createData();
-		this.logger.log(Level.INFO, "[LC] LevelCraftCore "+this.getDescription().getVersion()+" Loaded");
-		this.logger.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
+		this.logger.log(Level.INFO, "[LC] LevelCraftCore "
+				+ this.getDescription().getVersion() + " Loaded");
+		this.logger
+				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
 	}
 
 	public void loadConfig() {
@@ -165,19 +222,35 @@ public class LevelCraftCore extends JavaPlugin {
 		this.UnlockLines = gC.getInt("UnlockLines", 7);
 		this.ExpLines = gC.getInt("ExpLines", 7);
 		this.NotifyAll = gC.getBoolean("NotifyAll", true);
+		String byRaw = gC.getString("LevelBypassers",
+		"Dave,Rick,Player1337");
+		this.Bypassers = byRaw.split(",");
+		this.anticheat = gC.getBoolean("AntiBoost", true);
+		//this.Specialisation = gC.getBoolean("Specialisation", false);
+		//this.SpecialMultpilier = gC.getDouble("SpecialMultiplier", 2);
 		List<World> worldRun = this.getServer().getWorlds();
 		String str = "";
-		for(World w: worldRun){
+		for (World w : worldRun) {
 			str = str + w.getName() + ",";
 		}
-		String worldsraw = gC.getString("Worlds",str);
+		String worldsraw = gC.getString("Worlds", str);
 		Worlds = worldsraw.split(",");
 		gC.save();
 	}
 
 	public boolean createData() {
 		if (this.database.equalsIgnoreCase("FlatFile")) {
-
+           /*if(Specialisation){
+        	   File SFile = new File(getDataFolder() + "/Data/Specialisation.players");   
+        	   this.Special = SFile;
+        	   try {
+				SFile.createNewFile();
+			} catch (IOException e) {
+				this.logger.log(Level.SEVERE, "[LC] Could not write file: Specialisation.players");
+				this.logger.log(Level.SEVERE, "[LC] " + e);
+				return false;
+			}
+           } */
 			for (Plugin p : LevelNames.keySet()) {
 				String S = LevelNames.get(p);
 				File ExpFile = new File(getDataFolder() + "/Data/" + S + ".exp");
@@ -223,10 +296,10 @@ public class LevelCraftCore extends JavaPlugin {
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener,
-				Event.Priority.Lowest, this);
-		if(EnableSkillMastery){
-		pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener,
-				Event.Priority.High, this);
+				Event.Priority.Monitor, this);
+		if (EnableSkillMastery) {
+			pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener,
+					Event.Priority.High, this);
 		}
 	}
 

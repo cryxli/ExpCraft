@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -36,6 +37,50 @@ public class FlatFile {
 
 	}
 
+	@SuppressWarnings("deprecation")
+	public boolean purge() {
+		for (File file : plugin.LevelFiles.values()) {
+			Properties pro = new Properties();
+			try {
+				// plugin.logger.info(file.getName());
+				FileInputStream in = new FileInputStream(file);
+				pro.load(in);
+				ArrayList<String> Removers = new ArrayList<String>();
+				for (Object s : pro.keySet()) {
+					String str = pro.getProperty((String) s);
+					// plugin.logger.info(str);
+					double var = Double.parseDouble(str);
+					if (var == 0) {
+						Removers.add((String) s);
+						// plugin.logger.info("Removed Added:"+s);
+					}
+				}
+				for (String s : Removers) {
+					pro.remove(s);
+				}
+				// pro.store(arg0, arg1)
+				FileOutputStream d = new FileOutputStream(file);
+				pro.save(d, "Purged: [TIME]");
+				Removers.clear();
+				in.close();
+				d.close();
+				// String string = pro.getProperty(s);
+				// double var = Double.parseDouble(string);
+				// in.close();
+				// return var;
+				continue;
+			} catch (IOException e) {
+				plugin.logger.log(Level.SEVERE,
+						"[LC] Error purging.");
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+
 	public double getDouble(String s, File file) {
 		Properties pro = new Properties();
 		try {
@@ -53,28 +98,45 @@ public class FlatFile {
 		}
 
 	}
-	
+	public String getString(String s, File file) {
+		Properties pro = new Properties();
+		try {
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+			String string = pro.getProperty(s);
+			in.close();
+			return string;
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting experience from file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			return null;
+		}
+
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public int getPos(String s, File file) {
 		Properties pro = new Properties();
 		try {
-			HashMap<String,Double> map = new HashMap<String,Double>();
-			ValueComparator bvc =  new ValueComparator(map);
-		    TreeMap<String,Double> sorted_map = new TreeMap(bvc);
+			HashMap<String, Double> map = new HashMap<String, Double>();
+			ValueComparator bvc = new ValueComparator(map);
+			TreeMap<String, Double> sorted_map = new TreeMap(bvc);
 
 			FileInputStream in = new FileInputStream(file);
 			pro.load(in);
-			for(Object  o:pro.keySet()){
+			for (Object o : pro.keySet()) {
 				String player = (String) o;
-				map.put(player,Double.parseDouble(pro.getProperty(player)));
+				map.put(player, Double.parseDouble(pro.getProperty(player)));
 			}
 			sorted_map.putAll(map);
 			int rank = 0;
 			for (String key : sorted_map.keySet()) {
 				rank++;
-				if(key.equalsIgnoreCase(s)) break;
-	           // plugin.logger.info("key/value: " + key + "/"+sorted_map.get(key));
-	        }
+				if (key.equalsIgnoreCase(s))
+					break;
+				// plugin.logger.info("key/value: " + key +
+				// "/"+sorted_map.get(key));
+			}
 
 			in.close();
 			return rank;
@@ -86,15 +148,18 @@ public class FlatFile {
 		}
 
 	}
+
 	public boolean contains(String str, File file) {
 		Properties pro = new Properties();
 		try {
 			FileInputStream in = new FileInputStream(file);
 			pro.load(in);
 
-			if (pro.containsKey(str))
-
+			if (pro.containsKey(str)){
+in.close();
 				return true;
+			}
+			in.close();
 		} catch (IOException e) {
 			plugin.logger.log(Level.SEVERE,
 					"[LC] Error getting value from file.");
@@ -118,30 +183,42 @@ public class FlatFile {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		}
 	}
-
+	public void writeS(String str, File file, String var) {
+		Properties pro = new Properties();
+		try {
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+			pro.setProperty(str, var);
+			pro.store(new FileOutputStream(file), null);
+			in.close();
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE, "[LC] Error writing to file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+		}
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getPlayerAtPos(String string, int i, File file) {
 		Properties pro = new Properties();
 		String p = "None";
 		try {
-			HashMap<String,Double> map = new HashMap<String,Double>();
-			ValueComparator bvc =  new ValueComparator(map);
-		    TreeMap<String,Double> sorted_map = new TreeMap(bvc);
+			HashMap<String, Double> map = new HashMap<String, Double>();
+			ValueComparator bvc = new ValueComparator(map);
+			TreeMap<String, Double> sorted_map = new TreeMap(bvc);
 
 			FileInputStream in = new FileInputStream(file);
 			pro.load(in);
-			for(Object  o:pro.keySet()){
+			for (Object o : pro.keySet()) {
 				String player = (String) o;
-				map.put(player,Double.parseDouble(pro.getProperty(player)));
+				map.put(player, Double.parseDouble(pro.getProperty(player)));
 			}
 			sorted_map.putAll(map);
 			int rank = 0;
 			for (String key : sorted_map.keySet()) {
 				rank++;
-				if(rank==i){
-					p=key;
+				if (rank == i) {
+					p = key;
 				}
-	        }
+			}
 
 			in.close();
 			return p;

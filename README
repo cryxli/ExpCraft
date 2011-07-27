@@ -3,12 +3,17 @@ BySamkio
 
 Contains:
 LevelCraftCore
-LCMining
-LCWoodCutting
-LCRange
 LCCombat
 LCDexterity
 LCExplosives
-LCTheiving
+-LCFarming(Torrent)
+-LCForager(Torrent)
 LCForgery
-LCFarming
+-LCHealth(Torrent)
+LCMedicine
+LCMining
+-LCPrayer(L5D)
+LCRange
+LCTemplate
+LCTheiving
+LCWoodCutting

@@ -34,6 +34,10 @@ public class SqliteDB {
 		}
 	}
 
+	public boolean purge() {
+		return false;
+	}
+
 	private Connection createConnection() {
 
 		try {
@@ -59,14 +63,15 @@ public class SqliteDB {
 			conn = plugin.SqliteDB.getConnection();
 			st = conn.createStatement();
 			st.executeUpdate("CREATE TABLE IF NOT EXISTS ExperienceTable (id INTEGER PRIMARY KEY, name VARCHAR(80) NOT NULL);");
-			
+
 			for (Plugin p : plugin.LevelNames.keySet()) {
-				ResultSet rs = st.executeQuery("SELECT * FROM ExperienceTable;");
+				ResultSet rs = st
+						.executeQuery("SELECT * FROM ExperienceTable;");
 				ResultSetMetaData rsmd = rs.getMetaData();
 				int ColumnCount = rsmd.getColumnCount();
 				for (int i = 1; i <= ColumnCount; i++) {
 					String s = rsmd.getColumnName(i);
-					//plugin.logger.info(s);
+					// plugin.logger.info(s);
 					if (s.equals(plugin.LevelNames.get(p) + "Exp"))
 						break;
 					if (i == ColumnCount) {
@@ -157,6 +162,7 @@ public class SqliteDB {
 		}
 
 	}
+
 	public int getPos(String name, String string) {
 		Connection conn = null;
 		Statement st = null;
@@ -164,10 +170,14 @@ public class SqliteDB {
 		try {
 			conn = getConnection();
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			ResultSet rs = st
+					.executeQuery("SELECT name FROM ExperienceTable ORDER BY "
+							+ string + "Exp DESC");
 			while (rs.next()) {
 				rank++;
-				if(rs.getString("name").equalsIgnoreCase(name)) break;;
+				if (rs.getString("name").equalsIgnoreCase(name))
+					break;
+				;
 			}
 			conn.commit();
 		} catch (SQLException e) {
@@ -185,11 +195,13 @@ public class SqliteDB {
 		try {
 			conn = getConnection();
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT name FROM ExperienceTable ORDER BY "+string+"Exp DESC");
+			ResultSet rs = st
+					.executeQuery("SELECT name FROM ExperienceTable ORDER BY "
+							+ string + "Exp DESC");
 			while (rs.next()) {
 				rank++;
-				if(rank==i){
-					p=rs.getString("name");
+				if (rank == i) {
+					p = rs.getString("name");
 				}
 			}
 			conn.commit();

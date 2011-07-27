@@ -18,8 +18,9 @@ public class LCCommands {
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(s, p)) {
 				plugin.LCChat.topBar(s);
-				plugin.LCChat.info(s, plugin.LevelNames.get(p) + plugin.lang.LevelS
-						+ plugin.LevelFunctions.getLevel(s, p));
+				plugin.LCChat.info(s,
+						plugin.LevelNames.get(p) + plugin.lang.LevelS
+								+ plugin.LevelFunctions.getLevel(s, p));
 				plugin.LCChat.info(
 						s,
 						plugin.LevelNames.get(p)
@@ -44,9 +45,9 @@ public class LCCommands {
 		String s = plugin.lang.YourActiveLevels;
 		boolean one = false;
 		for (Plugin p : plugin.LevelNames.keySet()) {
-			if (one && plugin.Permissions.hasLevel(player, p))
+			if (one && plugin.Permissions.hasLevelExp(player, p))
 				s = s + ",";
-			if (plugin.Permissions.hasLevel(player, p)) {
+			if (plugin.Permissions.hasLevelExp(player, p)) {
 				s = s + plugin.LevelNames.get(p) + "("
 						+ plugin.LevelIndexes.get(p) + ")";
 				one = true;
@@ -58,25 +59,27 @@ public class LCCommands {
 	@SuppressWarnings("static-access")
 	public void about(CommandSender sender) {
 		plugin.LCChat.topBar(sender);
-		plugin.LCChat.info(sender, "/lvl list - "+plugin.lang.ShowsActive);
-		plugin.LCChat.info(sender, "/lvl notify - "+plugin.lang.ToggleNote);
+		plugin.LCChat.info(sender, "/lvl list - " + plugin.lang.ShowsActive);
+		plugin.LCChat.info(sender, "/lvl notify - " + plugin.lang.ToggleNote);
 		plugin.LCChat.info(sender,
-				"/lvl " + plugin.Tools.getIndexBar((Player) sender)
-						+ " - "+plugin.lang.ShowsLevelStats);
-		plugin.LCChat.info(sender,
-				"/lvl unlocks [REF] <Page> - "+plugin.lang.ShowsToolBlock);
-		plugin.LCChat.info(sender,
-				"/lvl exp [REF] <Page> - "+plugin.lang.ShowsExp);
-		plugin.LCChat.info(sender,
-				"/lvl shout [REF] - "+plugin.lang.Shout);
-		plugin.LCChat.info(sender, "/lvl total - "+plugin.lang.ShowsTotal);
-		plugin.LCChat.info(sender, "/lvl all - "+plugin.lang.ShowsAll);
-		plugin.LCChat.info(sender, "/lvl rank [REF] - "+plugin.lang.ShowsRank);
-		plugin.LCChat.info(sender, "/lvl top [REF] - "+plugin.lang.ShowsTop);
-		plugin.LCChat.info(sender, "/lvl help [REF] - "+plugin.lang.ShowsHelp);
-		plugin.LCChat.info(sender, "/lvl  - "+plugin.lang.ShowsThis);
+				"/lvl " + plugin.Tools.getIndexBar((Player) sender) + " - "
+						+ plugin.lang.ShowsLevelStats);
+		plugin.LCChat.info(sender, "/lvl unlocks [REF] <Page> - "
+				+ plugin.lang.ShowsToolBlock);
+		plugin.LCChat.info(sender, "/lvl exp [REF] <Page> - "
+				+ plugin.lang.ShowsExp);
+		plugin.LCChat.info(sender, "/lvl shout [REF] - " + plugin.lang.Shout);
+		plugin.LCChat.info(sender, "/lvl total - " + plugin.lang.ShowsTotal);
+		plugin.LCChat.info(sender, "/lvl all - " + plugin.lang.ShowsAll);
+		plugin.LCChat
+				.info(sender, "/lvl rank [REF] - " + plugin.lang.ShowsRank);
+		plugin.LCChat.info(sender, "/lvl top [REF] - " + plugin.lang.ShowsTop);
+		plugin.LCChat
+				.info(sender, "/lvl help [REF] - " + plugin.lang.ShowsHelp);
+		plugin.LCChat.info(sender, "/lvl  - " + plugin.lang.ShowsThis);
 		if (plugin.Permissions.isAdmin(sender)) {
-			plugin.LCChat.good(sender, "/lvl admin - "+plugin.lang.AdminCommands);
+			plugin.LCChat.good(sender, "/lvl admin - "
+					+ plugin.lang.AdminCommands);
 		}
 		return;
 
@@ -96,78 +99,94 @@ public class LCCommands {
 
 	@SuppressWarnings("static-access")
 	public void determineMethod(Player sender, String[] args) {
-		if (args.length == 1) {
-			if (args[0].equalsIgnoreCase("list")) {
-				plugin.LCCommands.listLevels(sender);
-				return;
-			} else if (args[0].equalsIgnoreCase("total")) {
-				plugin.LCCommands.Total(sender);
-				return;
-			} else if (args[0].equalsIgnoreCase("all")) {
-				plugin.LCCommands.All(sender);
-				return;
-			} else if (args[0].equalsIgnoreCase("credits")) {
-				plugin.LCCommands.credits(sender);
-				return;
-			} else if (args[0].equalsIgnoreCase("notify")) {
-				plugin.LCCommands.Notify(sender);
-				return;
-			} else if (args[0].equalsIgnoreCase("admin")) {
-				plugin.LCCommands.Admin(sender, args);
-				return;
-			} else if (!args[0].equalsIgnoreCase("admin")) {
-				plugin.LCCommands.showStat(sender, args[0]);
-				return;
-			}
-		} else if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("shout")) {
-				plugin.LCCommands.Shout(sender, args[1]);
-				return;
-			} else if (args[0].equalsIgnoreCase("unlocks")) {
-				plugin.LCCommands.Unlocks(sender, args[1],1);
-				return;
-			} else if (args[0].equalsIgnoreCase("exp")) {
-				plugin.LCCommands.Exp(sender, args[1],1);
-				return;
-			} else if (args[0].equalsIgnoreCase("rank")) {
-				plugin.LCCommands.Rank(sender, args[1]);
-				return;
-			} else if (args[0].equalsIgnoreCase("help")) {
-				plugin.LCCommands.LevelHelp(sender, args[1]);
-				return;
-			} else if (args[0].equalsIgnoreCase("top")) {
-				plugin.LCCommands.top(sender, args[1]);
-				return;
-				/*
-				 * }else if(args[0].equalsIgnoreCase("admin") &&
-				 * args[1].equalsIgnoreCase("reload")){
-				 * if(plugin.LCAdminCommands.reload()){
-				 * plugin.LCChat.good(sender,
-				 * "LevelCraft Sucessfully Reloaded"); }else{
-				 * plugin.LCChat.warn(sender,
-				 * "LevelCraft Could not be Reloaded"); }
-				 */
-			}
-		
-		} else if (args.length == 3) {
-			if (args[0].equalsIgnoreCase("unlocks")) {
-				plugin.LCCommands.Unlocks(sender, args[1], Integer.parseInt(args[2])); //Better Check.
-				return;
-			} else if (args[0].equalsIgnoreCase("exp")) {
-				plugin.LCCommands.Exp(sender, args[1],Integer.parseInt(args[2])); //Better Check. 
-				return;
-			}
-		}  else if (args[0].equalsIgnoreCase("admin")) {
+
+		if (args[0].equalsIgnoreCase("list")) {
+			plugin.LCCommands.listLevels(sender);
+			return;
+		} else if (args[0].equalsIgnoreCase("total")) {
+			plugin.LCCommands.Total(sender);
+			return;
+		} else if (args[0].equalsIgnoreCase("all")) {
+			plugin.LCCommands.All(sender);
+			return;
+		} else if (args[0].equalsIgnoreCase("credits")) {
+			plugin.LCCommands.credits(sender);
+			return;
+		} else if (args[0].equalsIgnoreCase("notify")) {
+			plugin.LCCommands.Notify(sender);
+			return;
+		} else if (args[0].equalsIgnoreCase("admin")) {
 			plugin.LCCommands.Admin(sender, args);
 			return;
+		} else if (args[0].equalsIgnoreCase("shout")) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender, "Syntax: /level shout [REF]");
+			} else {
+				plugin.LCCommands.Shout(sender, args[1]);
+			}
+			return;
+		} else if (args[0].equalsIgnoreCase("unlocks")) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender,
+						"Syntax: /level unlocks [REF] <PageNo>");
+			} else if (args.length < 3) {
+				plugin.LCCommands.Unlocks(sender, args[1], 1);
+			} else {
+				plugin.LCCommands.Unlocks(sender, args[1],
+						plugin.Tools.convertToInt(args[2]));
+			}
+			return;
+		} else if (args[0].equalsIgnoreCase("exp")) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender, "Syntax: /level exp [REF] <PageNo>");
+			} else if (args.length < 3) {
+				plugin.LCCommands.Exp(sender, args[1], 1);
+			} else {
+				plugin.LCCommands.Exp(sender, args[1],
+						plugin.Tools.convertToInt(args[2]));
+			}
+			return;
+		} else if (args[0].equalsIgnoreCase("rank")) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender, "Syntax: /level rank [REF]");
+			} else {
+				plugin.LCCommands.Rank(sender, args[1]);
+			}
+			return;
+		} else if (args[0].equalsIgnoreCase("help")) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender, "Syntax: /level help [REF]");
+			} else {
+				plugin.LCCommands.LevelHelp(sender, args[1]);
+			}
+			return;
+		} else if (args[0].equalsIgnoreCase("top")) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender, "Syntax: /level top [REF]");
+			} else {
+				plugin.LCCommands.top(sender, args[1]);
+			}
+			return;
 		} else {
-			plugin.LCChat.info(sender,
-					plugin.lang.SyntaxP);
+			if (args.length == 1) {
+				plugin.LCCommands.showStat(sender, args[0]);
+			} else {
+				plugin.LCChat.info(sender,
+						"No command found. /level - for all commands.");
+			}
+
+			return;
+
+			/*
+			 * }else if(args[0].equalsIgnoreCase("admin") &&
+			 * args[1].equalsIgnoreCase("reload")){
+			 * if(plugin.LCAdminCommands.reload()){ plugin.LCChat.good(sender,
+			 * "LevelCraft Sucessfully Reloaded"); }else{
+			 * plugin.LCChat.warn(sender, "LevelCraft Could not be Reloaded"); }
+			 */
 		}
 
 	}
-
-	
 
 	@SuppressWarnings("static-access")
 	private void LevelHelp(Player sender, String string) {
@@ -176,7 +195,7 @@ public class LCCommands {
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(sender, p)) {
 				plugin.LCChat.topBar(sender);
-				if(plugin.LevelHelp.get(p)==null){
+				if (plugin.LevelHelp.get(p) == null) {
 					plugin.LCChat.info(sender, plugin.lang.NoHelpFileYet);
 					return;
 				}
@@ -186,7 +205,7 @@ public class LCCommands {
 				break;
 			}
 		}
-		
+
 	}
 
 	@SuppressWarnings("static-access")
@@ -194,8 +213,8 @@ public class LCCommands {
 		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
 			if (plugin.Tools.containsValue(reference, string)) {
-				plugin.LCChat.info(sender, "=="+plugin.lang.TopPlayersIn+" "
-						+ plugin.LevelNames.get(p) + "==");
+				plugin.LCChat.info(sender, "==" + plugin.lang.TopPlayersIn
+						+ " " + plugin.LevelNames.get(p) + "==");
 				plugin.LCChat
 						.info(sender,
 								"1. "
@@ -224,6 +243,7 @@ public class LCCommands {
 				return;
 			}
 		}
+		plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 
 	}
 
@@ -240,6 +260,7 @@ public class LCCommands {
 				return;
 			}
 		}
+		plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 
 	}
 
@@ -247,50 +268,52 @@ public class LCCommands {
 	private void Exp(Player sender, String string, Integer page) {
 		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
-			
+
 			if (plugin.Tools.containsValue(reference, string)
 					&& plugin.Permissions.hasLevel(sender, p)) {
 				plugin.LCChat.topBar(sender);
 				String[] Exp = plugin.LevelExp.get(p);
-				int maxPages = (Exp.length/plugin.ExpLines);
-				if(maxPages <= 0) maxPages = 1;
-				if(page>maxPages){
+				int maxPages = (Exp.length / plugin.ExpLines);
+				if (maxPages <= 0)
+					maxPages = 1;
+				if (page > maxPages) {
 					plugin.LCChat.warn(sender, "No Page.");
 					return;
 				}
-				plugin.LCChat.info(sender, "Showing Experience Table for "+plugin.LevelNames.get(p)+". Page "+page+" of "+maxPages);
+				plugin.LCChat.info(sender, "Showing Experience Table for "
+						+ plugin.LevelNames.get(p) + ". Page " + page + " of "
+						+ maxPages);
 				int startingPoint = page * plugin.ExpLines - plugin.ExpLines;
 				int endingPoint = startingPoint + plugin.ExpLines;
-				if(endingPoint>Exp.length) endingPoint = Exp.length;
+				if (endingPoint > Exp.length)
+					endingPoint = Exp.length;
 				for (int i = startingPoint; i < endingPoint; i++) {
-				
-						plugin.LCChat.info(sender, Exp[i]);
-					
+
+					plugin.LCChat.info(sender, Exp[i]);
+
 				}
-				
-				/*for (String s : plugin.LevelExp.get(p)) {
-					plugin.LCChat.info(sender, s);
-				}*/
-				break;
+
+				/*
+				 * for (String s : plugin.LevelExp.get(p)) {
+				 * plugin.LCChat.info(sender, s); }
+				 */
+				return;
 			}
 		}
+		plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 	}
 
 	@SuppressWarnings("static-access")
 	private void Admin(Player sender, String[] args) {
 		if (!plugin.Permissions.isAdmin(sender)) {
-			plugin.LCChat.warn(sender,
-					plugin.lang.YouDoNotHavePermission);
+			plugin.LCChat.warn(sender, plugin.lang.YouDoNotHavePermission);
 			return;
 		}
 		if (args.length <= 1) {
 			plugin.LCAdminCommands.Help(sender);
 			return;
-		} else if (args.length >= 4) {
-			plugin.LCAdminCommands.determineMethid(sender, args);
-			return;
 		} else {
-			plugin.LCAdminCommands.Syntax(sender);
+			plugin.LCAdminCommands.determineMethid(sender, args);
 			return;
 		}
 
@@ -304,18 +327,23 @@ public class LCCommands {
 					&& plugin.Permissions.hasLevel(sender, p)) {
 				plugin.LCChat.topBar(sender);
 				String[] Unlocks = plugin.LevelUnlocks.get(p);
-				int maxPages = (Unlocks.length/plugin.UnlockLines);
-				if(maxPages <= 0) maxPages = 1;
-				if(page>maxPages){
+				int maxPages = (Unlocks.length / plugin.UnlockLines);
+				if (maxPages <= 0)
+					maxPages = 1;
+				if (page > maxPages) {
 					plugin.LCChat.warn(sender, "No Page.");
 					return;
 				}
 				int[] UnlockLevel = plugin.LevelUnlocksLevel.get(p);
 				int level = plugin.LevelFunctions.getLevel(sender, p);
-				plugin.LCChat.info(sender, "Showing Unlocks for "+plugin.LevelNames.get(p)+". Page "+page+" of "+maxPages);
-				int startingPoint = page * plugin.UnlockLines - plugin.UnlockLines;
+				plugin.LCChat.info(sender, "Showing Unlocks for "
+						+ plugin.LevelNames.get(p) + ". Page " + page + " of "
+						+ maxPages);
+				int startingPoint = page * plugin.UnlockLines
+						- plugin.UnlockLines;
 				int endingPoint = startingPoint + plugin.UnlockLines;
-				if(endingPoint>Unlocks.length) endingPoint = Unlocks.length;
+				if (endingPoint > Unlocks.length)
+					endingPoint = Unlocks.length;
 				for (int i = startingPoint; i < endingPoint; i++) {
 					if (UnlockLevel[i] > level) {
 						plugin.LCChat.warn(sender, Unlocks[i]);
@@ -323,9 +351,11 @@ public class LCCommands {
 						plugin.LCChat.good(sender, Unlocks[i]);
 					}
 				}
-				break;
+				return;
 			}
+
 		}
+		plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
 	}
 
 	@SuppressWarnings("static-access")
@@ -346,8 +376,8 @@ public class LCCommands {
 				}
 			}
 			if (oneStat) {
-				plugin.LCChat.broadcast(sender.getName() + "'s total "+plugin.lang.LevelIs+
-						+ TotalLevel + ".");
+				plugin.LCChat.broadcast(sender.getName() + "'s total "
+						+ plugin.lang.LevelIs + +TotalLevel + ".");
 
 			} else {
 				plugin.LCChat.warn(sender, plugin.lang.NoLevelFound);
@@ -361,9 +391,10 @@ public class LCCommands {
 				plugin.LCChat.broadcast(sender.getName() + "'s "
 						+ plugin.LevelNames.get(p) + plugin.lang.LevelIs
 						+ plugin.LevelFunctions.getLevel(sender, p) + ".");
-				break;
+				return;
 			}
 		}
+		plugin.LCChat.info(sender, "You do not have that level to shout.");
 
 	}
 
