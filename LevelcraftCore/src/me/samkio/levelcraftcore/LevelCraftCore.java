@@ -76,7 +76,16 @@ public class LevelCraftCore extends JavaPlugin {
 	// public File Special;
 	// //public double SpecialMultpilier;
 	// ADD CACHE BY L5D
+	/**
+	 * this will be changed (by Kratharin) to
+	 * public HashMap<Plugin, HashMap<Player, ExpCacheData>> ExpCache = Collections.synchronizedMap(new HashMap<Plugin, HashMap<Player, ExpCacheData>>());
+	 * 
+	 * 1. ExpCacheData have a changed field <- we need save only changed exp
+	 * 2. Collections.synchronizedMap for synchronized access for multiple threads (updateExp and saving data)
+	 */
 	public HashMap<Plugin, HashMap<Player, Double>> ExpCache = new HashMap<Plugin, HashMap<Player, Double>>();
+    private boolean PeriodicSave;
+    private int SaveInterval;
 
 	@Override
 	public void onDisable() {
@@ -257,6 +266,8 @@ public class LevelCraftCore extends JavaPlugin {
 		this.LevelUpSound = gC.getString("LevelUpSound","http://cloud.github.com/downloads/samkio/Levelcraft/FFLevelUp.wav");
 		this.EnableSound = gC.getBoolean("EnableSound", true);
 		this.EnableCapes = gC.getBoolean("EnableCape", true);
+		this.PeriodicSave = gC.getBoolean("PeriodicSave", false);
+		this.SaveInterval = gC.getInt("SaveInterval", 300);
 		// this.Specialisation = gC.getBoolean("Specialisation", false);
 		// this.SpecialMultpilier = gC.getDouble("SpecialMultiplier", 2);
 		List<World> worldRun = this.getServer().getWorlds();
