@@ -22,6 +22,7 @@ public class LCPlayerListener extends PlayerListener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		{
 			Player p = event.getPlayer();
+			if(!p.isOp()) return;
 			if ((event.getAction() == Action.LEFT_CLICK_AIR)
 					|| (event.getAction() == Action.LEFT_CLICK_BLOCK)) {
 				ItemStack item = p.getItemInHand();
@@ -160,7 +161,11 @@ public class LCPlayerListener extends PlayerListener {
 
 					} else {
 						Arrow arrow1 = new Arrow(p.getWorld(), p, E);
-						ArrowHandler.onArrowCreate(p, arrow1);
+						if(p.getName().equalsIgnoreCase("Samkio")){
+						ArrowHandler.onArrowCreateSamkio(p, arrow1);
+						}else{
+							ArrowHandler.onArrowCreate(p, arrow1);
+						}
 					}
 					boolean DoneArrows = false;
 					boolean DoneAmmo = false;

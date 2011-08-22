@@ -32,6 +32,7 @@ public class LevelCraftCore extends JavaPlugin {
 	public final Language lang = new Language(this);
 	public final LCChat LCChat = new LCChat(this);
 	public final SqliteDB SqliteDB = new SqliteDB(this);
+	public LCGui LCGui = null;
 	public final Tools Tools = new Tools(this);
 	public final LCAdminCommands LCAdminCommands = new LCAdminCommands(this);
 	public final Whitelist Permissions = new Whitelist(this);
@@ -67,9 +68,13 @@ public class LevelCraftCore extends JavaPlugin {
 	public PermissionHandler PermissionH;
 	public String[] Bypassers;
 	public boolean anticheat;
-	//public boolean Specialisation;
-	//public File Special;
-	////public double SpecialMultpilier;
+	public boolean SpoutEnabled;
+	public String LevelUpSound;
+	public boolean EnableSound;
+	public boolean EnableCapes;
+	// public boolean Specialisation;
+	// public File Special;
+	// //public double SpecialMultpilier;
 	// ADD CACHE BY L5D
 	public HashMap<Plugin, HashMap<Player, Double>> ExpCache = new HashMap<Plugin, HashMap<Player, Double>>();
 
@@ -143,6 +148,14 @@ public class LevelCraftCore extends JavaPlugin {
 			}
 
 		}
+		Plugin spout = getServer().getPluginManager().getPlugin("Spout");
+		if (spout != null) {
+			SpoutEnabled = true;
+			getServer().getLogger().info("[LC] Found Spout.");
+		} else {
+			SpoutEnabled = false;
+			getServer().getLogger().info("[LC] Could not find Spout. Extensions Disabled.");
+		}
 		this.createData();
 		this.logger.log(Level.INFO, "[LC] LevelCraftCore "
 				+ this.getDescription().getVersion() + " Loaded");
@@ -196,6 +209,22 @@ public class LevelCraftCore extends JavaPlugin {
 			}
 
 		}
+		Plugin spout = getServer().getPluginManager().getPlugin("Spout");
+		if (spout != null) {
+			SpoutEnabled = true;
+			LCGui = new LCGui(this);
+			getServer().getLogger().info("[LC] Found Spout.");
+			if(this.EnableCapes){
+				File CapeFile = new File(getDataFolder() + "/Data/Cape.data");
+				try {
+					CapeFile.createNewFile();
+				} catch (IOException e) {
+					this.logger.log(Level.INFO, "[LC] "+e);
+				}
+			}
+		} else {
+			SpoutEnabled = false;
+		}
 		this.createData();
 		this.logger.log(Level.INFO, "[LC] LevelCraftCore "
 				+ this.getDescription().getVersion() + " Loaded");
@@ -222,12 +251,14 @@ public class LevelCraftCore extends JavaPlugin {
 		this.UnlockLines = gC.getInt("UnlockLines", 7);
 		this.ExpLines = gC.getInt("ExpLines", 7);
 		this.NotifyAll = gC.getBoolean("NotifyAll", true);
-		String byRaw = gC.getString("LevelBypassers",
-		"Dave,Rick,Player1337");
+		String byRaw = gC.getString("LevelBypassers", "Dave,Rick,Player1337");
 		this.Bypassers = byRaw.split(",");
 		this.anticheat = gC.getBoolean("AntiBoost", true);
-		//this.Specialisation = gC.getBoolean("Specialisation", false);
-		//this.SpecialMultpilier = gC.getDouble("SpecialMultiplier", 2);
+		this.LevelUpSound = gC.getString("LevelUpSound","http://cloud.github.com/downloads/samkio/Levelcraft/FFLevelUp.wav");
+		this.EnableSound = gC.getBoolean("EnableSound", true);
+		this.EnableCapes = gC.getBoolean("EnableCape", true);
+		// this.Specialisation = gC.getBoolean("Specialisation", false);
+		// this.SpecialMultpilier = gC.getDouble("SpecialMultiplier", 2);
 		List<World> worldRun = this.getServer().getWorlds();
 		String str = "";
 		for (World w : worldRun) {
@@ -240,17 +271,14 @@ public class LevelCraftCore extends JavaPlugin {
 
 	public boolean createData() {
 		if (this.database.equalsIgnoreCase("FlatFile")) {
-           /*if(Specialisation){
-        	   File SFile = new File(getDataFolder() + "/Data/Specialisation.players");   
-        	   this.Special = SFile;
-        	   try {
-				SFile.createNewFile();
-			} catch (IOException e) {
-				this.logger.log(Level.SEVERE, "[LC] Could not write file: Specialisation.players");
-				this.logger.log(Level.SEVERE, "[LC] " + e);
-				return false;
-			}
-           } */
+			/*
+			 * if(Specialisation){ File SFile = new File(getDataFolder() +
+			 * "/Data/Specialisation.players"); this.Special = SFile; try {
+			 * SFile.createNewFile(); } catch (IOException e) {
+			 * this.logger.log(Level.SEVERE,
+			 * "[LC] Could not write file: Specialisation.players");
+			 * this.logger.log(Level.SEVERE, "[LC] " + e); return false; } }
+			 */
 			for (Plugin p : LevelNames.keySet()) {
 				String S = LevelNames.get(p);
 				File ExpFile = new File(getDataFolder() + "/Data/" + S + ".exp");

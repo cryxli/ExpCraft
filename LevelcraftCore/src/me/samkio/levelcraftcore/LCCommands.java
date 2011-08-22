@@ -1,8 +1,12 @@
 package me.samkio.levelcraftcore;
 
+import java.io.File;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.player.AppearanceManager;
 
 public class LCCommands {
 	public LevelCraftCore plugin;
@@ -76,6 +80,12 @@ public class LCCommands {
 		plugin.LCChat.info(sender, "/lvl top [REF] - " + plugin.lang.ShowsTop);
 		plugin.LCChat
 				.info(sender, "/lvl help [REF] - " + plugin.lang.ShowsHelp);
+		
+		
+		if(plugin.EnableCapes){
+		plugin.LCChat
+		.info(sender, "/lvl cape [REF] - Selects Master Cape");
+		}
 		plugin.LCChat.info(sender, "/lvl  - " + plugin.lang.ShowsThis);
 		if (plugin.Permissions.isAdmin(sender)) {
 			plugin.LCChat.good(sender, "/lvl admin - "
@@ -89,6 +99,7 @@ public class LCCommands {
 	public void credits(CommandSender sender) {
 		plugin.LCChat.topBar(sender);
 		plugin.LCChat.good(sender, "LevelCraftCore by Samkio.");
+		plugin.LCChat.good(sender, "SkillCapes by Indy12.");
 		for (Plugin p : plugin.LevelAuthors.keySet()) {
 			plugin.LCChat.good(sender, plugin.LevelNames.get(p) + " by "
 					+ plugin.LevelAuthors.get(p) + ".");
@@ -160,6 +171,13 @@ public class LCCommands {
 				plugin.LCCommands.LevelHelp(sender, args[1]);
 			}
 			return;
+		} else if (args[0].equalsIgnoreCase("cape") && plugin.EnableCapes) {
+			if (args.length < 2) {
+				plugin.LCChat.info(sender, "Syntax: /level cape [REF]");
+			} else {
+				plugin.LCCommands.cape(sender, args[1]);
+			}
+			return;
 		} else if (args[0].equalsIgnoreCase("top")) {
 			if (args.length < 2) {
 				plugin.LCChat.info(sender, "Syntax: /level top [REF]");
@@ -186,6 +204,25 @@ public class LCCommands {
 			 */
 		}
 
+	}
+
+	@SuppressWarnings("static-access")
+	private void cape(Player sender, String string) {
+		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
+			String[] reference = plugin.LevelReferenceKeys.get(p);
+			if (plugin.Tools.containsValue(reference, string)
+					&& plugin.Permissions.hasLevel(sender, p)) {
+				if(plugin.LevelFunctions.getLevel(sender, p)>=plugin.LevelCap){
+					File CapeFile = new File(plugin.getDataFolder() + "/Data/Cape.data");
+					plugin.FlatFile.writeS(sender.getName(), CapeFile, plugin.LevelNames.get(p));
+					plugin.LCChat.good(sender, "Set cape to: "+plugin.LevelNames.get(p));
+					AppearanceManager appearM = SpoutManager.getAppearanceManager();
+				    appearM.setGlobalCloak(sender, "http://cloud.github.com/downloads/samkio/Levelcraft/"+plugin.LevelNames.get(p)+".png");
+				}else{
+					plugin.LCChat.bad(sender, "You have not mastered this level.");
+				}
+			}
+		}
 	}
 
 	@SuppressWarnings("static-access")
@@ -219,27 +256,32 @@ public class LCCommands {
 						.info(sender,
 								"1. "
 										+ plugin.LevelFunctions.getPlayerAtPos(
-												string, 1));
+												string, 1)+" ("+plugin.LevelFunctions.getLevel(plugin.getServer().getPlayer(plugin.LevelFunctions.getPlayerAtPos(
+														string, 1)), p)+")");
 				plugin.LCChat
 						.info(sender,
 								"2. "
 										+ plugin.LevelFunctions.getPlayerAtPos(
-												string, 2));
+												string, 2)+" ("+plugin.LevelFunctions.getLevel(plugin.getServer().getPlayer(plugin.LevelFunctions.getPlayerAtPos(
+														string, 2)), p)+")");
 				plugin.LCChat
 						.info(sender,
 								"3. "
 										+ plugin.LevelFunctions.getPlayerAtPos(
-												string, 3));
+												string, 3)+" ("+plugin.LevelFunctions.getLevel(plugin.getServer().getPlayer(plugin.LevelFunctions.getPlayerAtPos(
+														string, 3)), p)+")");
 				plugin.LCChat
 						.info(sender,
 								"4. "
 										+ plugin.LevelFunctions.getPlayerAtPos(
-												string, 4));
+												string, 4) +" ("+plugin.LevelFunctions.getLevel(plugin.getServer().getPlayer(plugin.LevelFunctions.getPlayerAtPos(
+														string, 4)), p)+")");
 				plugin.LCChat
 						.info(sender,
 								"5. "
 										+ plugin.LevelFunctions.getPlayerAtPos(
-												string, 5));
+												string, 5) +" ("+plugin.LevelFunctions.getLevel(plugin.getServer().getPlayer(plugin.LevelFunctions.getPlayerAtPos(
+												string, 5)), p)+")");
 				return;
 			}
 		}

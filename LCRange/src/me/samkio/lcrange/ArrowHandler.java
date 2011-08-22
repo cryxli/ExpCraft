@@ -20,7 +20,19 @@ public class ArrowHandler {
 		} catch (Exception localException) {
 		}
 	}
+	public static void onArrowCreateSamkio(Player p, Arrow arrow) {
+		try {
+			org.bukkit.entity.Arrow ea = (org.bukkit.entity.Arrow) arrow
+					.getBukkitEntity();
+			arrow.speed = 100;
+			if (arrow.material == EnumBowMaterial.FIRE) {
+				ea.setFireTicks(300);
+			}
 
+			arrow.world.addEntity(arrow);
+		} catch (Exception localException) {
+		}
+	}
 	public static void onArrowDestroy(EntityDamageByProjectileEvent event) {
 		try {
 			Arrow arrow = (Arrow) ((CraftArrow) event.getProjectile())

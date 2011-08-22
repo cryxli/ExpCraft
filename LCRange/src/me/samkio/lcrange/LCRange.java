@@ -76,7 +76,7 @@ public class LCRange extends JavaPlugin{
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Event.Priority.Highest,this);
 		if(this.LCConfiguration.EnableElemental){
-		//pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Highest,this);
+		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Highest,this);
 		}
 	}
 
