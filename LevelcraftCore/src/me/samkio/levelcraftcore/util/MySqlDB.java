@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 import org.bukkit.plugin.Plugin;
@@ -15,6 +17,7 @@ import me.samkio.levelcraftcore.LevelCraftCore;
 
 public class MySqlDB {
 	public LevelCraftCore plugin;
+	private Set<String> accountCache = new HashSet<String>();
 
 	public MySqlDB(LevelCraftCore instance) {
 		plugin = instance;
@@ -79,34 +82,35 @@ public class MySqlDB {
 	}
 
 	public boolean contains(String name) {
-		Connection conn = null;
-		Statement st = null;
-		boolean isTrue = false;
-		try {
-
-			conn = createConnection();
-
-			st = (Statement) conn.createStatement();
-			ResultSet rs = st
-					.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"
-							+ name + "')");
-			while (rs.next()) {
-				isTrue = true;
-			}
-		} catch (SQLException e) {
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-		} finally {
+		if (!accountCache.contains(name)) {
+			Connection conn = null;
+			Statement st = null;
 			try {
-				if (st != null) {
-					st.close();
+
+				conn = createConnection();
+
+				st = (Statement) conn.createStatement();
+				ResultSet rs = st
+						.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"
+								+ name + "')");
+				while (rs.next()) {
+					accountCache.add(name);
 				}
-				if (conn != null)
-					conn.close();
-			} catch (SQLException ex) {
-				plugin.logger.log(Level.SEVERE, "[LC]" + ex);
+			} catch (SQLException e) {
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			} finally {
+				try {
+					if (st != null) {
+						st.close();
+					}
+					if (conn != null)
+						conn.close();
+				} catch (SQLException ex) {
+					plugin.logger.log(Level.SEVERE, "[LC]" + ex);
+				}
 			}
 		}
-		return isTrue;
+		return accountCache.contains(name);
 
 	}
 

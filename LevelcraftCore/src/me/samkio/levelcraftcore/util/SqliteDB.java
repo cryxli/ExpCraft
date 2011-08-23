@@ -8,12 +8,15 @@ import me.samkio.levelcraftcore.LevelCraftCore;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import org.bukkit.plugin.Plugin;
 
 public class SqliteDB {
 	public LevelCraftCore plugin;
 	private Connection connection;
+	private Set<String> accountCache = new HashSet<String>();
 
 	public SqliteDB(LevelCraftCore instance) {
 		plugin = instance;
@@ -128,24 +131,25 @@ public class SqliteDB {
 	}
 
 	public boolean contains(String name) {
-		Connection conn = null;
-		Statement st = null;
-		boolean isTrue = false;
-		try {
-			conn = getConnection();
-			st = conn.createStatement();
-			ResultSet rs = st
-					.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"
-							+ name + "')");
-			while (rs.next()) {
-				isTrue = true;
+		if (!accountCache.contains(name)) {
+
+			Connection conn = null;
+			Statement st = null;
+			try {
+				conn = getConnection();
+				st = conn.createStatement();
+				ResultSet rs = st
+						.executeQuery("SELECT name FROM ExperienceTable WHERE name=('"
+								+ name + "')");
+				while (rs.next()) {
+					accountCache.add(name);
+				}
+				conn.commit();
+			} catch (SQLException e) {
+				plugin.logger.severe("[LC] Unable to get row database" + e);
 			}
-			conn.commit();
-			return isTrue;
-		} catch (SQLException e) {
-			plugin.logger.severe("[LC] Unable to get row database" + e);
 		}
-		return isTrue;
+		return accountCache.contains(name);
 	}
 
 	public void newP(String namer) {

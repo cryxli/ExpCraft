@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
@@ -14,6 +16,8 @@ import me.samkio.levelcraftcore.LevelCraftCore;
 
 public class FlatFile {
 	public LevelCraftCore plugin;
+
+	public Set<String> accountCache = new HashSet<String>();
 
 	public FlatFile(LevelCraftCore instance) {
 		plugin = instance;
@@ -70,8 +74,7 @@ public class FlatFile {
 				// return var;
 				continue;
 			} catch (IOException e) {
-				plugin.logger.log(Level.SEVERE,
-						"[LC] Error purging.");
+				plugin.logger.log(Level.SEVERE, "[LC] Error purging.");
 				plugin.logger.log(Level.SEVERE, "[LC]" + e);
 				return false;
 			}
@@ -98,6 +101,7 @@ public class FlatFile {
 		}
 
 	}
+
 	public String getString(String s, File file) {
 		Properties pro = new Properties();
 		try {
@@ -114,6 +118,7 @@ public class FlatFile {
 		}
 
 	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public int getPos(String s, File file) {
 		Properties pro = new Properties();
@@ -150,23 +155,24 @@ public class FlatFile {
 	}
 
 	public boolean contains(String str, File file) {
-		Properties pro = new Properties();
-		try {
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
+		if (!accountCache.contains(str)) {
+			Properties pro = new Properties();
+			try {
+				FileInputStream in = new FileInputStream(file);
+				pro.load(in);
 
-			if (pro.containsKey(str)){
-in.close();
-				return true;
+				if (pro.containsKey(str)) {
+					in.close();
+					accountCache.add(str);
+				}
+				in.close();
+			} catch (IOException e) {
+				plugin.logger.log(Level.SEVERE,
+						"[LC] Error getting value from file.");
+				plugin.logger.log(Level.SEVERE, "[LC]" + e);
 			}
-			in.close();
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE,
-					"[LC] Error getting value from file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		}
-
-		return false;
+		return accountCache.contains(str);
 	}
 
 	public void write(String str, File file, double var) {
@@ -183,6 +189,7 @@ in.close();
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		}
 	}
+
 	public void writeS(String str, File file, String var) {
 		Properties pro = new Properties();
 		try {
@@ -196,6 +203,7 @@ in.close();
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		}
 	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getPlayerAtPos(String string, int i, File file) {
 		Properties pro = new Properties();
