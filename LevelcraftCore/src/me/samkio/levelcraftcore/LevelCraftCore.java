@@ -83,9 +83,10 @@ public class LevelCraftCore extends JavaPlugin {
 	 * 1. ExpCacheData have a changed field <- we need save only changed exp
 	 * 2. Collections.synchronizedMap for synchronized access for multiple threads (updateExp and saving data)
 	 */
-	public HashMap<Plugin, HashMap<Player, Double>> ExpCache = new HashMap<Plugin, HashMap<Player, Double>>();
-    private boolean PeriodicSave;
-    private int SaveInterval;
+	//public HashMap<Plugin, HashMap<Player, Double>> ExpCache = new HashMap<Plugin, HashMap<Player, Double>>();
+	public ExpCache ExpCache = new ExpCache();
+    public boolean PeriodicSave;
+    public int SaveInterval;
 
 	@Override
 	public void onDisable() {
@@ -96,9 +97,7 @@ public class LevelCraftCore extends JavaPlugin {
 		 */
 		// ADD CACHE BY L5D
 		// Clear ExpCache
-		for (Plugin key : ExpCache.keySet()) {
-			ExpCache.get(key).clear();
-		}
+		
 		ExpCache.clear();
 
 		// clean for read in the enable
@@ -153,7 +152,8 @@ public class LevelCraftCore extends JavaPlugin {
 				this.LevelHelp.put(plugin, help);
 
 				// Create hashmap on the cache list
-				ExpCache.put(plugin, new HashMap<Player, Double>());
+				ExpCache.init(plugin);
+				
 			}
 
 		}
@@ -214,7 +214,8 @@ public class LevelCraftCore extends JavaPlugin {
 				this.LevelHelp.put(plugin, help);
 
 				// Create hashmap on the cache list
-				ExpCache.put(plugin, new HashMap<Player, Double>());
+				ExpCache.init(plugin);
+//				ExpCache.put(plugin, new HashMap<Player, Double>());
 			}
 
 		}
