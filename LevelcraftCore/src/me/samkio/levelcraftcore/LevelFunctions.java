@@ -58,7 +58,7 @@ public class LevelFunctions {
 	}
 
 	public static double getExp(Player player, Plugin p) {
-	
+
 		plugin.Tools.checkAccount(player);
 		if (plugin.database.equalsIgnoreCase("FlatFile")) {
 			/*
@@ -80,11 +80,14 @@ public class LevelFunctions {
 				// HashMap<Player, Double> expPlayers = ;
 				if (plugin.ExpCache.containsPlayer(p, player)) {// In cache, use
 																// it !
+
 					exp = plugin.ExpCache.getExp(p, player);
 				} else {// Not in cache, add it !
 					exp = plugin.FlatFile.getDouble(player.getName(),
 							plugin.LevelFiles.get(p));
-					plugin.ExpCache.putExp(p, player, exp);
+					synchronized (plugin.ExpCache) {
+						plugin.ExpCache.putExp(p, player, exp);
+					}
 				}
 				return exp;
 			}
@@ -102,12 +105,14 @@ public class LevelFunctions {
 				// HashMap<Player, Double> expPlayers = plugin.ExpCache.get(p);
 				if (plugin.ExpCache.containsPlayer(p, player)) {// In cache, use
 																// it !
-					
+
 					exp = plugin.ExpCache.getExp(p, player);
 				} else {// Not in cache, add it !
 					exp = plugin.SqliteDB.getDouble(player.getName(),
 							plugin.LevelNames.get(p));
-					plugin.ExpCache.putExp(p, player, exp);
+					synchronized (plugin.ExpCache) {
+						plugin.ExpCache.putExp(p, player, exp);
+					}
 				}
 				return exp;
 			}
@@ -119,20 +124,20 @@ public class LevelFunctions {
 			 * LevelNames.get(p1)); }
 			 */
 			// ADD CACHE BY L5D
-			
+
 			if (plugin.LevelNames.containsKey(p)
 					&& plugin.ExpCache.containsPlugin(p)) {
 				double exp = 0;
 				// HashMap<Player, Double> expPlayers = plugin.ExpCache.get(p);
 				if (plugin.ExpCache.containsPlayer(p, player)) {// In cache, use
 																// it !
-					System.out.println("Posiadamy gracza w cache: "+player.getName());
 					exp = plugin.ExpCache.getExp(p, player);
 				} else {// Not in cache, add it !
-					System.out.println("BRAK gracza w cache: "+player.getName());
 					exp = plugin.MySqlDB.getDouble(player.getName(),
 							plugin.LevelNames.get(p));
-					plugin.ExpCache.putExp(p, player, exp);
+					synchronized (plugin.ExpCache) {
+						plugin.ExpCache.putExp(p, player, exp);
+					}
 				}
 				return exp;
 			}
@@ -174,7 +179,10 @@ public class LevelFunctions {
 					plugin.FlatFile.write(player.getName(),
 							plugin.LevelFiles.get(p), i);
 				}
-				plugin.ExpCache.putExp(p, player, i);
+				synchronized(plugin.ExpCache)
+				{
+					plugin.ExpCache.putExp(p, player, i);
+				}
 
 			}
 		} else if (plugin.database.equalsIgnoreCase("sqlite")) {
@@ -186,11 +194,14 @@ public class LevelFunctions {
 			if (plugin.LevelNames.containsKey(p)
 					&& plugin.ExpCache.containsPlugin(p)) {
 				if (!plugin.PeriodicSave) {
-					
+
 					plugin.SqliteDB.update(player.getName(),
 							plugin.LevelNames.get(p), i);
 				}
-				plugin.ExpCache.putExp(p, player, i);
+				synchronized(plugin.ExpCache)
+				{
+					plugin.ExpCache.putExp(p, player, i);
+				}
 
 			}
 		} else if (plugin.database.equalsIgnoreCase("mysql")) {
@@ -207,7 +218,10 @@ public class LevelFunctions {
 					plugin.MySqlDB.update(player.getName(),
 							plugin.LevelNames.get(p), i);
 				}
-				plugin.ExpCache.putExp(p, player, i);
+				synchronized(plugin.ExpCache)
+				{
+					plugin.ExpCache.putExp(p, player, i);
+				}
 			}
 		}
 	}
@@ -219,7 +233,7 @@ public class LevelFunctions {
 			return;
 		if (!plugin.Permissions.hasLevelExp(player, p))
 			return;
-		
+
 		int beforeLevel = plugin.LevelFunctions.getLevel(player, p);
 		plugin.LevelFunctions.updateExp(player, p,
 				(plugin.LevelFunctions.getExp(player, p) + i));

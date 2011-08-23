@@ -1,6 +1,7 @@
 package me.samkio.levelcraftcore;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -20,6 +21,13 @@ public class ExpCache {
 		cache.clear();
 
 	}
+	
+	public Set<Plugin> getPlugins()
+	{
+		return cache.keySet();
+	}
+	
+	
 
 	public void init(Plugin plugin) {
 		cache.put(plugin, new HashMap<Player, ExpCacheData>());
@@ -55,5 +63,16 @@ public class ExpCache {
 		}
 		
 	}
+
+	public Set<Player> getPlayers(Plugin p) {
+		return cache.get(p).keySet();
+	}
+
+	public void markSaved(Plugin p, Player player) {
+		getExpData(p, player).setChanged(false);
+	}
+
+
+	
 
 }
