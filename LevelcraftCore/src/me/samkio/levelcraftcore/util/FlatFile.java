@@ -17,7 +17,9 @@ import me.samkio.levelcraftcore.LevelCraftCore;
 public class FlatFile {
 	public LevelCraftCore plugin;
 
-	public Set<String> accountCache = new HashSet<String>();
+	public HashMap<String, Set<String>> accountCache = new HashMap<String, Set<String>>();
+
+	// public Set<String> accountCache = new HashSet<String>();
 
 	public FlatFile(LevelCraftCore instance) {
 		plugin = instance;
@@ -155,24 +157,34 @@ public class FlatFile {
 	}
 
 	public boolean contains(String str, File file) {
-		if (!accountCache.contains(str)) {
-			Properties pro = new Properties();
-			try {
-				FileInputStream in = new FileInputStream(file);
-				pro.load(in);
-
-				if (pro.containsKey(str)) {
-					in.close();
-					accountCache.add(str);
-				}
-				in.close();
-			} catch (IOException e) {
-				plugin.logger.log(Level.SEVERE,
-						"[LC] Error getting value from file.");
-				plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			}
+		String fileName = file.getPath() + file.getName();
+		if (accountCache.containsKey(fileName)
+				&& accountCache.get(fileName).contains(str)) {
+			return true;
 		}
-		return accountCache.contains(str);
+		Properties pro = new Properties();
+		try {
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+
+			if (pro.containsKey(str)) {
+				in.close();
+				if (!accountCache.containsKey(fileName))
+				{
+					accountCache.put(fileName, new HashSet<String>());
+				}
+				Set<String> set = accountCache.get(fileName);
+				set.add(str);
+				return true;
+			}
+			in.close();
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting value from file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+		}
+
+		return false;
 	}
 
 	public void write(String str, File file, double var) {
