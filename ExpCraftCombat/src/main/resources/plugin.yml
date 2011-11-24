@@ -1,6 +1,6 @@
-name: LCCombat
+name: ${project.name}
 main: me.samkio.lccombat.LCCombat
-version: 0.1
+version: ${project.version}
 description: >
              LCCombat. The Combat Level for LevelCraftCore.
 commands:
