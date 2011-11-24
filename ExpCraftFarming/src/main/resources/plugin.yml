@@ -1,0 +1,7 @@
+name: ${project.name}
+main: me.torrent.lcfarming.LCFarming
+version: ${project.version}
+description: >
+             LCFarming. The Farming Level for LevelCraftCore.
+commands:
+
