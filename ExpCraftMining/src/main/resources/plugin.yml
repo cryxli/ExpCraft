@@ -1,6 +1,6 @@
-name: LCMining
+name: ${project.name}
 main: me.samkio.lcmining.LCMining
-version: 0.1
+version: ${project.version}
 description: >
              LCMining. The mining Level for LevelCraftCore.
 commands:
