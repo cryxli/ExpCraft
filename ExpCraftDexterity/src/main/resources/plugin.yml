@@ -1,0 +1,7 @@
+name: ${project.name}
+main: me.samkio.lcdexterity.LCDexterity
+version: ${project.version}
+description: >
+             LCDexterity. The Dexterity Level for LevelCraftCore.
+commands:
+

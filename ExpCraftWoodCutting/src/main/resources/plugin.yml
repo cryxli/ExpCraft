@@ -1,0 +1,6 @@
+name: ${project.name}
+main: me.samkio.lcwoodcutting.LCWoodCutting
+version: ${project.version}
+description: >
+             LCWoodCutting. The WoodCutting Level for LevelCraftCore.
+commands:
