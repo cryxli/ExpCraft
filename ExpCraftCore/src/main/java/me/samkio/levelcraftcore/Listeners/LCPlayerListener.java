@@ -1,4 +1,4 @@
-package me.samkio.levelcraftcore.Listeners;
+package me.samkio.levelcraftcore.listeners;
 
 import java.io.File;
 

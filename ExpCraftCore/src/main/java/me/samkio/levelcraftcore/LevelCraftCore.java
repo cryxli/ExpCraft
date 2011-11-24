@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.samkio.levelcraftcore.Listeners.LCPlayerListener;
+import me.samkio.levelcraftcore.listeners.LCPlayerListener;
 import me.samkio.levelcraftcore.util.FlatFile;
 import me.samkio.levelcraftcore.util.Language;
 import me.samkio.levelcraftcore.util.MySqlDB;
