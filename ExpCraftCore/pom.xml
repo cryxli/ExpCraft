@@ -23,6 +23,14 @@
 			<version>2.7.4</version>
 		</dependency>
 	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>expcraft-repo</id>
+			<name>local repository for versioned bukkit dependencies</name>
+			<url>file://${basedir}/../repository</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<finalName>${project.name}</finalName>
