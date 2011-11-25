@@ -123,15 +123,15 @@ public class LevelCraftCore extends JavaPlugin {
 	
 	}
 
-	public boolean Reload() {
+	public boolean reload() {
 		onDisable();
 		
 		this.getDataFolder().mkdir();
 		new File(this.getDataFolder() + "/Data/").mkdirs();
 		new File(this.getDataFolder() + "/Configs/").mkdirs();
 		this.loadConfig();
-		this.Permissions.LoadPerms();
-		this.lang.LoadLang();
+		this.Permissions.loadPerms();
+		this.lang.loadLang();
 		PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins()) {
 			if (plugin.getDescription().getName().startsWith("LC")) {
@@ -199,8 +199,8 @@ public class LevelCraftCore extends JavaPlugin {
 		new File(this.getDataFolder() + "/Configs/").mkdirs();
 		this.loadConfig();
 		this.registerEvents();
-		this.Permissions.LoadPerms();
-		this.lang.LoadLang();
+		this.Permissions.loadPerms();
+		this.lang.loadLang();
 		PluginManager pm = getServer().getPluginManager();
 		for (Plugin plugin : pm.getPlugins()) {
 			if (plugin.getDescription().getName().startsWith("LC")) {

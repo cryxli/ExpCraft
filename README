@@ -1,19 +1,21 @@
-LevelCraft.
-BySamkio
+=== ExpCraft ===
+A fork of the great LevelCraft plugin for Bukkit to add some experiance
+gathering to the game.
 
-Contains:
-LevelCraftCore
-LCCombat
-LCDexterity
-LCExplosives
--LCFarming(Torrent)
--LCForager(Torrent)
-LCForgery
--LCHealth(Torrent)
-LCMedicine
-LCMining
--LCPrayer(L5D)
-LCRange
-LCTemplate
-LCTheiving
-LCWoodCutting
+==== DEV Setup ====
+Tools
+- eclipse
+- maven (plugin)
+- git (console)
+
+Setup
+ 1) Get Java JDK 1.6
+ 2) Get eclipse indigo from eclipse.org
+ 3) Get "Maven Integration for Eclipse" through the Eclipse Marketplace
+ 4) Create a UTF-8 workspace
+ 5) Branch ExpCraft into your workspace
+ 6) Open the workspace in eclipse
+ 7) Import the projects into eclipse workspace
+
+Tips
+- Use the preconfigured Launchers to build the projects

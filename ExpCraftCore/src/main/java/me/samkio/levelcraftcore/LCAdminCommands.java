@@ -1,40 +1,19 @@
 package me.samkio.levelcraftcore;
 
 import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class LCAdminCommands {
 	public LevelCraftCore plugin;
 
-	public LCAdminCommands(LevelCraftCore instance) {
+	public LCAdminCommands(final LevelCraftCore instance) {
 		plugin = instance;
 	}
 
 	@SuppressWarnings("static-access")
-	public void Help(Player sender) {
-		plugin.LCChat.topBar(sender);
-		if(plugin.Permissions.hasAdminCommand(sender, "setlvl")) plugin.LCChat.info(sender,
-				"/lvl admin setlvl <Ref> <Player> <Level> - "
-						+ plugin.lang.SetLevelForPlayers);
-		if(plugin.Permissions.hasAdminCommand(sender, "setexp")) 	plugin.LCChat.info(sender, "/lvl admin setexp <Ref> <Player> <Exp> - "
-				+ plugin.lang.SetExperienceForPlayers);
-		if(plugin.Permissions.hasAdminCommand(sender, "getexp"))	plugin.LCChat.info(sender, "/lvl admin getexp <Ref> <Player> - "
-				+ plugin.lang.GetExperienceOfPlayer);
-		if(plugin.Permissions.hasAdminCommand(sender, "getlvl"))plugin.LCChat.info(sender, "/lvl admin getlvl <Ref> <Player> - "
-				+ plugin.lang.GetLevelOfPlayer);
-		if(plugin.Permissions.hasAdminCommand(sender, "reset"))plugin.LCChat.info(sender, "/lvl admin reset <Ref> <Player>  - "
-				+ plugin.lang.ResetExperience);
-		if(plugin.Permissions.hasAdminCommand(sender, "reload"))plugin.LCChat.info(sender,
-				"/lvl admin reload  - Reloads LevelCraftCore");
-		if(plugin.Permissions.hasAdminCommand(sender, "purge"))plugin.LCChat.info(sender,
-		"/lvl admin purge  - Removes old Players.");
-		// plugin.LCChat.info(sender, "/lvl admin reload - Shows this.");
-		plugin.LCChat.info(sender, "/lvl admin - " + plugin.lang.ShowsThis);
-	}
-
-	@SuppressWarnings("static-access")
-	public void determineMethid(Player sender, String[] args) {
+	public void determineMethid(final Player sender, final String[] args) {
 		if (args.length >= 4) {
 			if (args[1].equalsIgnoreCase("setlvl") && args.length == 5) {
 				if (plugin.LCAdminCommands.setLevel(args[2], args[3], args[4],
@@ -73,12 +52,12 @@ public class LCAdminCommands {
 					return;
 				}
 			} else {
-				plugin.LCAdminCommands.Syntax(sender);
+				plugin.LCAdminCommands.syntax(sender);
 				return;
 			}
 
 		} else if (args[1].equalsIgnoreCase("reload")) {
-			if (plugin.Reload()) {
+			if (plugin.reload()) {
 				plugin.LCChat.good(sender, "Reload Successful");
 				return;
 			} else {
@@ -86,33 +65,16 @@ public class LCAdminCommands {
 				return;
 			}
 		} else if (args[1].equalsIgnoreCase("purge")) {
-			plugin.LCAdminCommands.Purge(sender);
+			plugin.LCAdminCommands.purge(sender);
 		}
 
 	}
 
-	/*
-	 * boolean reload() { for(Plugin p: plugin.LevelNames.keySet()){
-	 * plugin.getPluginLoader().disablePlugin(p); } plugin.LevelAuthors.clear();
-	 * plugin.LevelFiles.clear(); plugin.LevelUnlocks.clear();
-	 * plugin.LevelReferenceKeys.clear(); plugin.LevelIndexes.clear();
-	 * for(Plugin p: plugin.LevelNames.keySet()){ //
-	 * plugin.getPluginLoader().enablePlugin(p); } plugin.LevelNames.clear();
-	 * plugin.onEnable(); return true;
-	 * 
-	 * }
-	 */
 	@SuppressWarnings("static-access")
-	private boolean reset(String ref, String p, Player pl) {
-		if(!plugin.Permissions.hasAdminCommand(pl, "reset")) return false;
-		if (plugin.LCAdminCommands.setExp(ref, p, "0", pl))
-			return true;
-		return false;
-	}
-
-	@SuppressWarnings("static-access")
-	private String getExp(String ref, String p, Player pl) {
-		if(!plugin.Permissions.hasAdminCommand(pl, "getexp")) return "You do not have Permission";
+	private String getExp(final String ref, final String p, final Player pl) {
+		if (!plugin.Permissions.hasAdminCommand(pl, "getexp")) {
+			return "You do not have Permission";
+		}
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
 			plugin.LCChat.warn(pl, plugin.lang.NoMatch);
@@ -138,8 +100,10 @@ public class LCAdminCommands {
 	}
 
 	@SuppressWarnings("static-access")
-	private String getLevel(String ref, String p, Player pl) {
-		if(!plugin.Permissions.hasAdminCommand(pl, "getlvl")) return "You do not have Permission";
+	private String getLevel(final String ref, final String p, final Player pl) {
+		if (!plugin.Permissions.hasAdminCommand(pl, "getlvl")) {
+			return "You do not have Permission";
+		}
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
 			plugin.LCChat.warn(pl, plugin.lang.NoMatch);
@@ -163,24 +127,86 @@ public class LCAdminCommands {
 		return "Error";
 	}
 
-	@SuppressWarnings("static-access")
-	private boolean setExp(String ref, String p, String exp, Player pl) {
-		if(!plugin.Permissions.hasAdminCommand(pl, "setexp")) return false;
+	public void help(final Player sender) {
+		LCChat.topBar(sender);
+		if (Whitelist.hasAdminCommand(sender, "setlvl")) {
+			LCChat.info(sender, "/lvl admin setlvl <Ref> <Player> <Level> - "
+					+ plugin.lang.SetLevelForPlayers);
+		}
+		if (Whitelist.hasAdminCommand(sender, "setexp")) {
+			LCChat.info(sender, "/lvl admin setexp <Ref> <Player> <Exp> - "
+					+ plugin.lang.SetExperienceForPlayers);
+		}
+		if (Whitelist.hasAdminCommand(sender, "getexp")) {
+			LCChat.info(sender, "/lvl admin getexp <Ref> <Player> - "
+					+ plugin.lang.GetExperienceOfPlayer);
+		}
+		if (Whitelist.hasAdminCommand(sender, "getlvl")) {
+			LCChat.info(sender, "/lvl admin getlvl <Ref> <Player> - "
+					+ plugin.lang.GetLevelOfPlayer);
+		}
+		if (Whitelist.hasAdminCommand(sender, "reset")) {
+			LCChat.info(sender, "/lvl admin reset <Ref> <Player>  - "
+					+ plugin.lang.ResetExperience);
+		}
+		if (Whitelist.hasAdminCommand(sender, "reload")) {
+			LCChat.info(sender, "/lvl admin reload  - Reloads LevelCraftCore");
+		}
+		if (Whitelist.hasAdminCommand(sender, "purge")) {
+			LCChat.info(sender, "/lvl admin purge  - Removes old Players.");
+		}
+		// plugin.LCChat.info(sender, "/lvl admin reload - Shows this.");
+		LCChat.info(sender, "/lvl admin - " + plugin.lang.ShowsThis);
+	}
+
+	public void purge(final Player sender) {
+		if (!Whitelist.hasAdminCommand(sender, "purge")) {
+			plugin.LCChat.bad(sender, "You do not have permission..");
+			return;
+		}
+		if (plugin.database.equalsIgnoreCase("FlatFile")) {
+			if (plugin.FlatFile.purge()) {
+				LCChat.good(sender, "FlatFiles Purged.");
+			} else {
+				plugin.LCChat.bad(sender, "Failed to Purge FlatFiles.");
+			}
+			return;
+		} else {
+			plugin.LCChat.bad(sender,
+					"Purge only avaible for FlatFiles at the moment.");
+		}
+	}
+
+	private boolean reset(final String ref, final String p, final Player pl) {
+		if (!Whitelist.hasAdminCommand(pl, "reset")) {
+			return false;
+		}
+		if (plugin.LCAdminCommands.setExp(ref, p, "0", pl)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean setExp(final String ref, final String p, final String exp,
+			final Player pl) {
+		if (!Whitelist.hasAdminCommand(pl, "setexp")) {
+			return false;
+		}
 		double newexp = Double.parseDouble(exp);
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl, plugin.lang.NoMatch);
+			LCChat.warn(pl, plugin.lang.NoMatch);
 			return false;
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl, plugin.lang.TooMany);
+			LCChat.warn(pl, plugin.lang.TooMany);
 			return false;
 		} else {
 			Player leveler = players.get(0);
 			for (Plugin plug : plugin.LevelReferenceKeys.keySet()) {
 				String[] reference = plugin.LevelReferenceKeys.get(plug);
 				if (plugin.Tools.containsValue(reference, ref)
-						&& plugin.Permissions.hasLevel(leveler, plug)) {
-					plugin.LevelFunctions.updateExp(leveler, plug, newexp);
+						&& Whitelist.hasLevel(leveler, plug)) {
+					LevelFunctions.updateExp(leveler, plug, newexp);
 					return true;
 				}
 			}
@@ -190,8 +216,11 @@ public class LCAdminCommands {
 	}
 
 	@SuppressWarnings("static-access")
-	private boolean setLevel(String ref, String p, String lvl, Player pl) {
-		if(!plugin.Permissions.hasAdminCommand(pl, "setlvl")) return false;
+	private boolean setLevel(final String ref, final String p,
+			final String lvl, final Player pl) {
+		if (!plugin.Permissions.hasAdminCommand(pl, "setlvl")) {
+			return false;
+		}
 		int newlvl = Integer.parseInt(lvl);
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
@@ -215,28 +244,8 @@ public class LCAdminCommands {
 		return false;
 	}
 
-	@SuppressWarnings("static-access")
-	public void Syntax(Player sender) {
-		plugin.LCChat.warn(sender, plugin.lang.SyntaxA);
+	public void syntax(final Player sender) {
+		LCChat.warn(sender, plugin.lang.SyntaxA);
 		return;
-	}
-
-	@SuppressWarnings("static-access")
-	public void Purge(Player sender) {
-		if(!plugin.Permissions.hasAdminCommand(sender, "purge")) {
-			plugin.LCChat.bad(sender, "You do not have permission..");
-			return;
-		}
-		if (plugin.database.equalsIgnoreCase("FlatFile")) {
-			if (plugin.FlatFile.purge()) {
-				plugin.LCChat.good(sender, "FlatFiles Purged.");
-			} else {
-				plugin.LCChat.bad(sender, "Failed to Purge FlatFiles.");
-			}
-			return;
-		} else {
-			plugin.LCChat.bad(sender,
-					"Purge only avaible for FlatFiles at the moment.");
-		}
 	}
 }

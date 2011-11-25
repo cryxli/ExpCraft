@@ -15,60 +15,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class Tools {
-	public LevelCraftCore plugin;
-
-	public Tools(LevelCraftCore instance) {
-		plugin = instance;
-	}
-
-	public boolean containsValue(String[] Array, String s) {
-		for (int i = 0; i < Array.length; i++) {
-			if (Array[i].equalsIgnoreCase(s))
-				return true;
-
-		}
-		return false;
-	}
-
-	public void checkAccount(Player p) {
-
-		if (plugin.database.equalsIgnoreCase("flatfile")) {
-			/*if(plugin.Specialisation){
-				if(!plugin.FlatFile.contains(p.getName(), plugin.Special)) {
-				plugin.FlatFile.writeS(p.getName(), plugin.Special, "NULL");
-				}
-			}*/
-			for (File f : plugin.LevelFiles.values()) {
-				if (plugin.FlatFile.contains(p.getName(), f))
-					continue;
-				if (!plugin.FlatFile.write(p.getName(), 0, f))
-					;
-			}
-		} else if (plugin.database.equalsIgnoreCase("sqlite")) {
-			if (plugin.SqliteDB.contains(p.getName()))
-				return;
-			plugin.SqliteDB.newP(p.getName());
-		} else if (plugin.database.equalsIgnoreCase("mysql")) {
-			if (plugin.MySqlDB.contains(p.getName()))
-				return;
-			plugin.MySqlDB.newP(p.getName());
-		}
-	}
-
-	public double roundTwoDecimals(double d) {
-		DecimalFormat twoDForm = new DecimalFormat("#.##");
-		return Double.valueOf(twoDForm.format(d));
-	}
-
-	public boolean enabled(CommandSender sender) {
-		return plugin.NotifyUsers.containsKey(sender);
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Map sortByValue(Map map) {
+	public static Map sortByValue(final Map map) {
 		List list = new LinkedList(map.entrySet());
 		Collections.sort(list, new Comparator() {
-			public int compare(Object o1, Object o2) {
+			@Override
+			public int compare(final Object o1, final Object o2) {
 				return ((Comparable) ((Map.Entry) (o1)).getValue())
 						.compareTo(((Map.Entry) (o2)).getValue());
 			}
@@ -82,31 +34,57 @@ public class Tools {
 		return result;
 	}
 
-	@SuppressWarnings("static-access")
-	public void toggleNotify(CommandSender sender) {
-		if (enabled(sender)) {
-			plugin.NotifyUsers.remove(sender);
-			plugin.LCChat.good(sender, plugin.lang.NotifyOff);
-		} else {
-			plugin.NotifyUsers.put((Player) sender, "");
-			plugin.LCChat.good(sender, plugin.lang.NotifyOn);
+	public LevelCraftCore plugin;
+
+	public Tools(final LevelCraftCore instance) {
+		plugin = instance;
+	}
+
+	public void checkAccount(final Player p) {
+
+		if (plugin.database.equalsIgnoreCase("flatfile")) {
+			/*
+			 * if(plugin.Specialisation){
+			 * if(!plugin.FlatFile.contains(p.getName(), plugin.Special)) {
+			 * plugin.FlatFile.writeS(p.getName(), plugin.Special, "NULL"); } }
+			 */
+			for (File f : plugin.LevelFiles.values()) {
+				if (plugin.FlatFile.contains(p.getName(), f)) {
+					continue;
+				}
+				if (!plugin.FlatFile.write(p.getName(), 0, f)) {
+					;
+				}
+			}
+		} else if (plugin.database.equalsIgnoreCase("sqlite")) {
+			if (plugin.SqliteDB.contains(p.getName())) {
+				return;
+			}
+			plugin.SqliteDB.newP(p.getName());
+		} else if (plugin.database.equalsIgnoreCase("mysql")) {
+			if (plugin.MySqlDB.contains(p.getName())) {
+				return;
+			}
+			plugin.MySqlDB.newP(p.getName());
 		}
 	}
 
-	@SuppressWarnings("static-access")
-	public String getIndexBar(Player p) {
-		String str = "[";
-		boolean one = false;
-		for (Plugin p1 : plugin.LevelIndexes.keySet()) {
-			if (one && plugin.Permissions.hasLevelExp(p, p1))
-				str = str + "/";
-			if (plugin.Permissions.hasLevelExp(p, p1)) {
-				str = str + plugin.LevelIndexes.get(p1);
-				one = true;
+	public boolean containsValue(final String[] Array, final String s) {
+		for (int i = 0; i < Array.length; i++) {
+			if (Array[i].equalsIgnoreCase(s)) {
+				return true;
 			}
+
 		}
-		str = str + "]";
-		return str;
+		return false;
+	}
+
+	public int convertToInt(final String s) {
+		return Integer.parseInt(s);
+	}
+
+	public boolean enabled(final CommandSender sender) {
+		return plugin.NotifyUsers.containsKey(sender);
 	}
 
 	public String format(String str) {
@@ -129,15 +107,44 @@ public class Tools {
 		return str;
 	}
 
-	public int convertToInt(String s) {
-		return Integer.parseInt(s);
+	@SuppressWarnings("static-access")
+	public String getIndexBar(final Player player) {
+		StringBuffer buf = new StringBuffer("[");
+		boolean one = false;
+		for (Plugin p1 : plugin.LevelIndexes.keySet()) {
+			if (one && plugin.Permissions.hasLevelExp(player, p1)) {
+				buf.append("/");
+			}
+			if (plugin.Permissions.hasLevelExp(player, p1)) {
+				buf.append(plugin.LevelIndexes.get(p1));
+				one = true;
+			}
+		}
+		return buf.append("]").toString();
 	}
 
-	public Plugin getPluginFromName(String s) {
+	public Plugin getPluginFromName(final String s) {
 		for (Plugin p : plugin.LevelNames.keySet()) {
-			if (plugin.LevelNames.get(p).equalsIgnoreCase(s))
+			if (plugin.LevelNames.get(p).equalsIgnoreCase(s)) {
 				return p;
+			}
 		}
 		return null;
+	}
+
+	public double roundTwoDecimals(final double d) {
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		return Double.valueOf(twoDForm.format(d));
+	}
+
+	@SuppressWarnings("static-access")
+	public void toggleNotify(final CommandSender sender) {
+		if (enabled(sender)) {
+			plugin.NotifyUsers.remove(sender);
+			plugin.LCChat.good(sender, plugin.lang.NotifyOff);
+		} else {
+			plugin.NotifyUsers.put((Player) sender, "");
+			plugin.LCChat.good(sender, plugin.lang.NotifyOn);
+		}
 	}
 }

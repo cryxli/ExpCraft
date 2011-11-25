@@ -3,20 +3,21 @@ package me.samkio.levelcraftcore.util;
 import java.util.Comparator;
 import java.util.Map;
 
-@SuppressWarnings("rawtypes")
-class ValueComparator implements Comparator {
+class ValueComparator implements Comparator<String> {
 
-	Map base;
+	private final Map<String, Double> base;
 
-	public ValueComparator(Map base) {
+	public ValueComparator(final Map<String, Double> base) {
 		this.base = base;
 	}
 
-	public int compare(Object a, Object b) {
-
-		if ((Double) base.get(a) < (Double) base.get(b)) {
-			return 1;
-		} else if ((Double) base.get(a) == (Double) base.get(b)) {
+	@Override
+	public int compare(final String a, final String b) {
+		Double aDouble = base.get(a);
+		Double bDouble = base.get(b);
+		if (aDouble != null) {
+			return aDouble.compareTo(bDouble);
+		} else if (bDouble == null) {
 			return 0;
 		} else {
 			return -1;

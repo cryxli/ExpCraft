@@ -21,24 +21,142 @@ public class FlatFile {
 
 	// public Set<String> accountCache = new HashSet<String>();
 
-	public FlatFile(LevelCraftCore instance) {
+	public FlatFile(final LevelCraftCore instance) {
 		plugin = instance;
 	}
 
-	public boolean write(String s, double v, File file) {
+	public boolean contains(final String str, final File file) {
+		String fileName = file.getPath() + file.getName();
+		if (accountCache.containsKey(fileName)
+				&& accountCache.get(fileName).contains(str)) {
+			return true;
+		}
 		Properties pro = new Properties();
-		String value = (new Double(v)).toString();
 		try {
 			FileInputStream in = new FileInputStream(file);
 			pro.load(in);
-			pro.setProperty(s, value);
-			pro.store(new FileOutputStream(file), null);
+
+			if (pro.containsKey(str)) {
+				in.close();
+				if (!accountCache.containsKey(fileName)) {
+					accountCache.put(fileName, new HashSet<String>());
+				}
+				Set<String> set = accountCache.get(fileName);
+				set.add(str);
+				return true;
+			}
 			in.close();
-			return true;
 		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE, "[LC] Error writing user to file.");
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting value from file.");
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			return false;
+		}
+
+		return false;
+	}
+
+	public double getDouble(final String s, final File file) {
+		Properties pro = new Properties();
+		try {
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+			String string = pro.getProperty(s);
+			double var = Double.parseDouble(string);
+			in.close();
+			return var;
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting experience from file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			return 0;
+		}
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String getPlayerAtPos(final String string, final int i,
+			final File file) {
+		Properties pro = new Properties();
+		String p = "None";
+		try {
+			HashMap<String, Double> map = new HashMap<String, Double>();
+			ValueComparator bvc = new ValueComparator(map);
+			TreeMap<String, Double> sorted_map = new TreeMap(bvc);
+
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+			for (Object o : pro.keySet()) {
+				String player = (String) o;
+				map.put(player, Double.parseDouble(pro.getProperty(player)));
+			}
+			sorted_map.putAll(map);
+			int rank = 0;
+			for (String key : sorted_map.keySet()) {
+				rank++;
+				if (rank == i) {
+					p = key;
+				}
+			}
+
+			in.close();
+			return p;
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting experience from file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			return "None";
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public int getPos(final String s, final File file) {
+		Properties pro = new Properties();
+		try {
+			HashMap<String, Double> map = new HashMap<String, Double>();
+			ValueComparator bvc = new ValueComparator(map);
+			TreeMap<String, Double> sorted_map = new TreeMap(bvc);
+
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+			for (Object o : pro.keySet()) {
+				String player = (String) o;
+				map.put(player, Double.parseDouble(pro.getProperty(player)));
+			}
+			sorted_map.putAll(map);
+			int rank = 0;
+			for (String key : sorted_map.keySet()) {
+				rank++;
+				if (key.equalsIgnoreCase(s)) {
+					break;
+					// plugin.logger.info("key/value: " + key +
+					// "/"+sorted_map.get(key));
+				}
+			}
+
+			in.close();
+			return rank;
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting experience from file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			return 0;
+		}
+
+	}
+
+	public String getString(final String s, final File file) {
+		Properties pro = new Properties();
+		try {
+			FileInputStream in = new FileInputStream(file);
+			pro.load(in);
+			String string = pro.getProperty(s);
+			in.close();
+			return string;
+		} catch (IOException e) {
+			plugin.logger.log(Level.SEVERE,
+					"[LC] Error getting experience from file.");
+			plugin.logger.log(Level.SEVERE, "[LC]" + e);
+			return null;
 		}
 
 	}
@@ -86,168 +204,43 @@ public class FlatFile {
 
 	}
 
-	public double getDouble(String s, File file) {
-		Properties pro = new Properties();
-		try {
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
-			String string = pro.getProperty(s);
-			double var = Double.parseDouble(string);
-			in.close();
-			return var;
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE,
-					"[LC] Error getting experience from file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			return 0;
-		}
-
+	public boolean write(final String str, final double value, final File file) {
+		return writeS(str, file, String.valueOf(value));
 	}
 
-	public String getString(String s, File file) {
-		Properties pro = new Properties();
-		try {
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
-			String string = pro.getProperty(s);
-			in.close();
-			return string;
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE,
-					"[LC] Error getting experience from file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			return null;
-		}
-
+	public void write(final String str, final File file, final double var) {
+		writeS(str, file, String.valueOf(var));
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public int getPos(String s, File file) {
+	public boolean writeS(final String str, final File file, final String var) {
 		Properties pro = new Properties();
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
 		try {
-			HashMap<String, Double> map = new HashMap<String, Double>();
-			ValueComparator bvc = new ValueComparator(map);
-			TreeMap<String, Double> sorted_map = new TreeMap(bvc);
-
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
-			for (Object o : pro.keySet()) {
-				String player = (String) o;
-				map.put(player, Double.parseDouble(pro.getProperty(player)));
-			}
-			sorted_map.putAll(map);
-			int rank = 0;
-			for (String key : sorted_map.keySet()) {
-				rank++;
-				if (key.equalsIgnoreCase(s))
-					break;
-				// plugin.logger.info("key/value: " + key +
-				// "/"+sorted_map.get(key));
-			}
-
-			in.close();
-			return rank;
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE,
-					"[LC] Error getting experience from file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			return 0;
-		}
-
-	}
-
-	public boolean contains(String str, File file) {
-		String fileName = file.getPath() + file.getName();
-		if (accountCache.containsKey(fileName)
-				&& accountCache.get(fileName).contains(str)) {
-			return true;
-		}
-		Properties pro = new Properties();
-		try {
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
-
-			if (pro.containsKey(str)) {
-				in.close();
-				if (!accountCache.containsKey(fileName))
-				{
-					accountCache.put(fileName, new HashSet<String>());
-				}
-				Set<String> set = accountCache.get(fileName);
-				set.add(str);
-				return true;
-			}
-			in.close();
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE,
-					"[LC] Error getting value from file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-		}
-
-		return false;
-	}
-
-	public void write(String str, File file, double var) {
-		Properties pro = new Properties();
-		String stringvar = (new Double(var)).toString();
-		try {
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
-			pro.setProperty(str, stringvar);
-			pro.store(new FileOutputStream(file), null);
-			in.close();
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE, "[LC] Error writing to file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-		}
-	}
-
-	public void writeS(String str, File file, String var) {
-		Properties pro = new Properties();
-		try {
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
+			fis = new FileInputStream(file);
+			pro.load(fis);
 			pro.setProperty(str, var);
-			pro.store(new FileOutputStream(file), null);
-			in.close();
+			fos = new FileOutputStream(file);
+			pro.store(fos, null);
+			return true;
 		} catch (IOException e) {
 			plugin.logger.log(Level.SEVERE, "[LC] Error writing to file.");
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-		}
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public String getPlayerAtPos(String string, int i, File file) {
-		Properties pro = new Properties();
-		String p = "None";
-		try {
-			HashMap<String, Double> map = new HashMap<String, Double>();
-			ValueComparator bvc = new ValueComparator(map);
-			TreeMap<String, Double> sorted_map = new TreeMap(bvc);
-
-			FileInputStream in = new FileInputStream(file);
-			pro.load(in);
-			for (Object o : pro.keySet()) {
-				String player = (String) o;
-				map.put(player, Double.parseDouble(pro.getProperty(player)));
-			}
-			sorted_map.putAll(map);
-			int rank = 0;
-			for (String key : sorted_map.keySet()) {
-				rank++;
-				if (rank == i) {
-					p = key;
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException e) {
 				}
 			}
-
-			in.close();
-			return p;
-		} catch (IOException e) {
-			plugin.logger.log(Level.SEVERE,
-					"[LC] Error getting experience from file.");
-			plugin.logger.log(Level.SEVERE, "[LC]" + e);
-			return "None";
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+				}
+			}
 		}
+		return false;
 	}
 
 }

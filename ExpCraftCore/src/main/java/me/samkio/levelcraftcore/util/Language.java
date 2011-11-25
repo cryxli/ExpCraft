@@ -67,7 +67,7 @@ public class Language {
 		plugin = instance;
 	}
 
-	public void LoadLang() {
+	public void loadLang() {
 		Properties properties = new Properties(this.LanguageFile);
 		try {
 			properties.load();
