@@ -107,15 +107,14 @@ public class Tools {
 		return str;
 	}
 
-	@SuppressWarnings("static-access")
 	public String getIndexBar(final Player player) {
 		StringBuffer buf = new StringBuffer("[");
 		boolean one = false;
 		for (Plugin p1 : plugin.LevelIndexes.keySet()) {
-			if (one && plugin.Permissions.hasLevelExp(player, p1)) {
+			if (one && Whitelist.hasLevelExp(player, p1)) {
 				buf.append("/");
 			}
-			if (plugin.Permissions.hasLevelExp(player, p1)) {
+			if (Whitelist.hasLevelExp(player, p1)) {
 				buf.append(plugin.LevelIndexes.get(p1));
 				one = true;
 			}
@@ -137,14 +136,13 @@ public class Tools {
 		return Double.valueOf(twoDForm.format(d));
 	}
 
-	@SuppressWarnings("static-access")
 	public void toggleNotify(final CommandSender sender) {
 		if (enabled(sender)) {
 			plugin.NotifyUsers.remove(sender);
-			plugin.LCChat.good(sender, plugin.lang.NotifyOff);
+			LCChat.good(sender, plugin.lang.NotifyOff);
 		} else {
 			plugin.NotifyUsers.put((Player) sender, "");
-			plugin.LCChat.good(sender, plugin.lang.NotifyOn);
+			LCChat.good(sender, plugin.lang.NotifyOn);
 		}
 	}
 }

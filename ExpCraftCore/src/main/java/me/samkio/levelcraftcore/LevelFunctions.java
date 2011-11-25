@@ -2,12 +2,8 @@ package me.samkio.levelcraftcore;
 
 import java.util.Set;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.player.SpoutPlayer;
-import org.getspout.spoutapi.sound.SoundManager;
 
 public class LevelFunctions {
 	private static LevelCraftCore plugin;
@@ -36,66 +32,66 @@ public class LevelFunctions {
 		}
 		int newLevel = LevelFunctions.getLevel(player, p);
 		if (beforeLevel < newLevel) {
-			if (plugin.SpoutEnabled) {
-				if (((SpoutPlayer) player).isSpoutCraftEnabled()) {
-					SpoutPlayer sp = (SpoutPlayer) player;
-					Material m = Material.SIGN_POST;
-					String s = plugin.LevelNames.get(p);
-					if (s.equalsIgnoreCase("mining")) {
-						m = Material.DIAMOND_PICKAXE;
-					} else if (s.equalsIgnoreCase("woodcutting")) {
-						m = Material.DIAMOND_AXE;
-					} else if (s.equalsIgnoreCase("combat")) {
-						m = Material.DIAMOND_SWORD;
-					} else if (s.equalsIgnoreCase("range")) {
-						m = Material.BOW;
-					} else if (s.equalsIgnoreCase("dexterity")) {
-						m = Material.DIAMOND_BOOTS;
-					} else if (s.equalsIgnoreCase("farming")) {
-						m = Material.DIAMOND_HOE;
-					} else if (s.equalsIgnoreCase("digging")
-							|| s.equalsIgnoreCase("excavation")) {
-						m = Material.DIAMOND_SPADE;
-					} else if (s.equalsIgnoreCase("swimming")) {
-						m = Material.PUMPKIN;
-					} else if (s.equalsIgnoreCase("explosives")) {
-						m = Material.TNT;
-					} else if (s.equalsIgnoreCase("health")) {
-						m = Material.APPLE;
-					} else if (s.equalsIgnoreCase("defence")) {
-						m = Material.DIAMOND_CHESTPLATE;
-					} else if (s.equalsIgnoreCase("forgery")) {
-						m = Material.BURNING_FURNACE;
-					} else if (s.equalsIgnoreCase("scavenger")) {
-						m = Material.SADDLE;
-					} else if (s.equalsIgnoreCase("prayer")) {
-						m = Material.WATCH;
-					} else if (s.equalsIgnoreCase("construction")) {
-						m = Material.BRICK;
-					}
-					sp.sendNotification("LevelUp", s + " is now " + newLevel, m);
-					if (!plugin.EnableSound) {
-						return;
-					}
-					SoundManager soundM = SpoutManager.getSoundManager();
-					soundM.playCustomSoundEffect(plugin, (SpoutPlayer) player,
-							plugin.LevelUpSound, false);
-				} else {
-					LCChat.good(player, plugin.lang.LevelUp + newLevel + " in "
-							+ plugin.LevelNames.get(p));
-					LCChat.good(player, plugin.lang.SeeLevelUnlocks
-							+ plugin.LevelIndexes.get(p)
-							+ " - To see what you have unlocked.");
-				}
-			} else {
+			// if (plugin.SpoutEnabled) {
+			// if (((SpoutPlayer) player).isSpoutCraftEnabled()) {
+			// SpoutPlayer sp = (SpoutPlayer) player;
+			// Material m = Material.SIGN_POST;
+			// String s = plugin.LevelNames.get(p);
+			// if (s.equalsIgnoreCase("mining")) {
+			// m = Material.DIAMOND_PICKAXE;
+			// } else if (s.equalsIgnoreCase("woodcutting")) {
+			// m = Material.DIAMOND_AXE;
+			// } else if (s.equalsIgnoreCase("combat")) {
+			// m = Material.DIAMOND_SWORD;
+			// } else if (s.equalsIgnoreCase("range")) {
+			// m = Material.BOW;
+			// } else if (s.equalsIgnoreCase("dexterity")) {
+			// m = Material.DIAMOND_BOOTS;
+			// } else if (s.equalsIgnoreCase("farming")) {
+			// m = Material.DIAMOND_HOE;
+			// } else if (s.equalsIgnoreCase("digging")
+			// || s.equalsIgnoreCase("excavation")) {
+			// m = Material.DIAMOND_SPADE;
+			// } else if (s.equalsIgnoreCase("swimming")) {
+			// m = Material.PUMPKIN;
+			// } else if (s.equalsIgnoreCase("explosives")) {
+			// m = Material.TNT;
+			// } else if (s.equalsIgnoreCase("health")) {
+			// m = Material.APPLE;
+			// } else if (s.equalsIgnoreCase("defence")) {
+			// m = Material.DIAMOND_CHESTPLATE;
+			// } else if (s.equalsIgnoreCase("forgery")) {
+			// m = Material.BURNING_FURNACE;
+			// } else if (s.equalsIgnoreCase("scavenger")) {
+			// m = Material.SADDLE;
+			// } else if (s.equalsIgnoreCase("prayer")) {
+			// m = Material.WATCH;
+			// } else if (s.equalsIgnoreCase("construction")) {
+			// m = Material.BRICK;
+			// }
+			// sp.sendNotification("LevelUp", s + " is now " + newLevel, m);
+			// if (!plugin.EnableSound) {
+			// return;
+			// }
+			// SoundManager soundM = SpoutManager.getSoundManager();
+			// soundM.playCustomSoundEffect(plugin, (SpoutPlayer) player,
+			// plugin.LevelUpSound, false);
+			// } else {
+			// LCChat.good(player, plugin.lang.LevelUp + newLevel + " in "
+			// + plugin.LevelNames.get(p));
+			// LCChat.good(player, plugin.lang.SeeLevelUnlocks
+			// + plugin.LevelIndexes.get(p)
+			// + " - To see what you have unlocked.");
+			// }
+			// } else {
 
-				LCChat.good(player, plugin.lang.LevelUp + newLevel + " in "
-						+ plugin.LevelNames.get(p));
-				LCChat.good(player, plugin.lang.SeeLevelUnlocks
-						+ plugin.LevelIndexes.get(p)
-						+ " - To see what you have unlocked.");
+			LCChat.good(player, plugin.lang.LevelUp + newLevel + " in "
+					+ plugin.LevelNames.get(p));
+			LCChat.good(player, plugin.lang.SeeLevelUnlocks
+					+ plugin.LevelIndexes.get(p)
+					+ " - To see what you have unlocked.");
 
-			}
+			// }
 
 			if (plugin.NotifyAll) {
 				LCChat.broadcast(player.getName() + plugin.lang.IsNowLevel
@@ -197,10 +193,9 @@ public class LevelFunctions {
 
 	}
 
-	@SuppressWarnings("static-access")
 	public static double getExpLeft(final Player player, final Plugin p) {
-		double exp = plugin.LevelFunctions.getExp(player, p);
-		int level = plugin.LevelFunctions.getLevel(player, p);
+		double exp = LevelFunctions.getExp(player, p);
+		int level = LevelFunctions.getLevel(player, p);
 		if (level >= plugin.LevelCap && plugin.EnableLevelCap) {
 			return 0;
 		}
@@ -210,7 +205,6 @@ public class LevelFunctions {
 
 	}
 
-	@SuppressWarnings("static-access")
 	public static int getLevel(final Player player, final Plugin p) {
 		if (player == null) {
 			return 0;
@@ -222,7 +216,7 @@ public class LevelFunctions {
 		if (plugin.EnableLevelCap) {
 			max = plugin.LevelCap;
 		}
-		double exp = plugin.LevelFunctions.getExp(player, p);
+		double exp = LevelFunctions.getExp(player, p);
 		for (int i = 1; i <= max; i++) {
 			double levelAti = constant * (i * i);
 			if (levelAti > exp) {
@@ -263,12 +257,11 @@ public class LevelFunctions {
 		return plugin.LevelNames.keySet();
 	}
 
-	@SuppressWarnings("static-access")
 	public static int getPos(final Player sender, final String string) {
 		for (Plugin p : plugin.LevelReferenceKeys.keySet()) {
 			String[] reference = plugin.LevelReferenceKeys.get(p);
 			if (plugin.Tools.containsValue(reference, string)
-					&& plugin.Permissions.hasLevel(sender, p)) {
+					&& Whitelist.hasLevel(sender, p)) {
 				if (plugin.database.equalsIgnoreCase("mysql")) {
 					return plugin.MySqlDB.getPos(sender.getName(),
 							plugin.LevelNames.get(p));
@@ -286,9 +279,8 @@ public class LevelFunctions {
 		return 0;
 	}
 
-	@SuppressWarnings("static-access")
 	public static boolean isMaster(final Player player, final Plugin p) {
-		if (plugin.LevelFunctions.getLevel(player, p) >= plugin.LevelCap) {
+		if (LevelFunctions.getLevel(player, p) >= plugin.LevelCap) {
 			return true;
 		}
 		return false;
@@ -355,13 +347,12 @@ public class LevelFunctions {
 		}
 	}
 
-	@SuppressWarnings("static-access")
 	public static void updateLevel(final Player player, final Plugin p, int i) {
 		if (i >= plugin.LevelCap && plugin.EnableLevelCap) {
 			i = plugin.LevelCap;
 		}
 		double exp = plugin.Constant * ((i - 1) * (i - 1));
-		plugin.LevelFunctions.updateExp(player, p, exp);
+		LevelFunctions.updateExp(player, p, exp);
 
 	}
 

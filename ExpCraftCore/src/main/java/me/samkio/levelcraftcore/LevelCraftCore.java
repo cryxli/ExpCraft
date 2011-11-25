@@ -33,7 +33,6 @@ public class LevelCraftCore extends JavaPlugin {
 	public final Language lang = new Language(this);
 	public final LCChat LCChat = new LCChat(this);
 	public final SqliteDB SqliteDB = new SqliteDB(this);
-	public LCGui LCGui = null;
 	public final Tools Tools = new Tools(this);
 	public final LCAdminCommands LCAdminCommands = new LCAdminCommands(this);
 	public final Whitelist Permissions = new Whitelist(this);
@@ -69,7 +68,6 @@ public class LevelCraftCore extends JavaPlugin {
 	public PermissionHandler PermissionH;
 	public String[] Bypassers;
 	public boolean anticheat;
-	public boolean SpoutEnabled;
 	public String LevelUpSound;
 	public boolean EnableSound;
 	public boolean EnableCapes;
@@ -94,12 +92,107 @@ public class LevelCraftCore extends JavaPlugin {
 	private boolean saving = false;
 	private int savingTask;
 
+	public boolean createData() {
+		if (this.database.equalsIgnoreCase("FlatFile")) {
+			/*
+			 * if(Specialisation){ File SFile = new File(getDataFolder() +
+			 * "/Data/Specialisation.players"); this.Special = SFile; try {
+			 * SFile.createNewFile(); } catch (IOException e) {
+			 * this.logger.log(Level.SEVERE,
+			 * "[LC] Could not write file: Specialisation.players");
+			 * this.logger.log(Level.SEVERE, "[LC] " + e); return false; } }
+			 */
+			for (Plugin p : LevelNames.keySet()) {
+				String S = LevelNames.get(p);
+				File ExpFile = new File(getDataFolder() + "/Data/" + S + ".exp");
+				try {
+					ExpFile.createNewFile();
+					this.LevelFiles.put(p, ExpFile);
+				} catch (IOException e) {
+					this.logger.log(Level.SEVERE, "[LC] Could not write file: "
+							+ S + ".exp");
+					this.logger.log(Level.SEVERE, "[LC] " + e);
+					return false;
+				}
+			}
+			this.logger.log(Level.INFO, "[LC] Using FlatFile To Store Data.");
+			return true;
+		} else if (this.database.equalsIgnoreCase("MySql")) {
+			this.MySqlDB.prepare();
+			this.logger.log(Level.INFO, "[LC] Using MySql To Store Data.");
+		} else if (this.database.equalsIgnoreCase("Sqlite")) {
+			this.SqliteDB.prepare();
+			this.logger.log(Level.INFO, "[LC] Using Sqlite To Store Data.");
+		}
+		return false;
+	}
+
+	public void loadConfig() {
+		Configuration gC = getConfiguration();
+		gC.load();
+		this.database = gC.getString("Database", "FlatFile");
+		this.MySqlDir = gC.getString("MySqlDatabaseDirectory",
+				"localhost:3306/minecraft");
+		this.MySqlUser = gC.getString("MySqlDatabaseUsername", "root");
+		this.MySqlPass = gC.getString("MySqlDatabasePassword", "");
+		this.EnableLevelCap = gC.getBoolean("EnableLevelCap", true);
+		this.LevelCap = gC.getInt("LevelCap", 100);
+		this.Constant = gC.getInt("LevelConstant", 20);
+		this.EnableSkillMastery = gC.getBoolean("EnableSkillMastery", true);
+		this.c1 = gC.getString("ColourOne", "GOLD");
+		this.c2 = gC.getString("ColourTwo", "YELLOW");
+		this.c3 = gC.getString("ColourGood", "GREEN");
+		this.c4 = gC.getString("ColourBad", "RED");
+		this.UnlockLines = gC.getInt("UnlockLines", 7);
+		this.ExpLines = gC.getInt("ExpLines", 7);
+		this.NotifyAll = gC.getBoolean("NotifyAll", true);
+		String byRaw = gC.getString("LevelBypassers", "Dave,Rick,Player1337");
+		this.Bypassers = byRaw.split(",");
+		this.anticheat = gC.getBoolean("AntiBoost", true);
+		this.LevelUpSound = gC
+				.getString("LevelUpSound",
+						"http://cloud.github.com/downloads/samkio/Levelcraft/FFLevelUp.wav");
+		this.EnableSound = gC.getBoolean("EnableSound", true);
+		this.EnableCapes = gC.getBoolean("EnableCape", true);
+		this.PeriodicSave = gC.getBoolean("PeriodicSave", false);
+		this.SaveInterval = gC.getInt("SaveInterval", 300);
+		// this.Specialisation = gC.getBoolean("Specialisation", false);
+		// this.SpecialMultpilier = gC.getDouble("SpecialMultiplier", 2);
+		List<World> worldRun = this.getServer().getWorlds();
+		String str = "";
+		for (World w : worldRun) {
+			str = str + w.getName() + ",";
+		}
+		String worldsraw = gC.getString("Worlds", str);
+		Worlds = worldsraw.split(",");
+		gC.save();
+	}
+
+	@Override
+	public boolean onCommand(final CommandSender sender, final Command cmd,
+			final String commandLabel, final String[] args) {
+		if (commandLabel.equalsIgnoreCase("level")
+				|| commandLabel.equalsIgnoreCase("lvl")) {
+			if (args.length >= 1 && sender instanceof Player) {
+				this.LCCommands.determineMethod((Player) sender, args);
+			} else if (sender instanceof Player) {
+				this.LCCommands.about(sender);
+			} else {
+				this.LCCommands.credits(sender);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
 	public void onDisable() {
-		if (database.equalsIgnoreCase("sqlite"))
+		if (database.equalsIgnoreCase("sqlite")) {
 			SqliteDB.closeConnection();
+		}
 		sheduleSave(false);
-		//Optional saving exp
+		// Optional saving exp
 		saveExp();
 		/*
 		 * if (database.equalsIgnoreCase("mysql")) MySqlDB.closeConnection();
@@ -120,75 +213,7 @@ public class LevelCraftCore extends JavaPlugin {
 		this.LevelUnlocksLevel.clear();
 		this.LevelHelp.clear();
 		this.logger.log(Level.INFO, "[LC] LevelCraftCore Unloaded");
-	
-	}
 
-	public boolean reload() {
-		onDisable();
-		
-		this.getDataFolder().mkdir();
-		new File(this.getDataFolder() + "/Data/").mkdirs();
-		new File(this.getDataFolder() + "/Configs/").mkdirs();
-		this.loadConfig();
-		this.Permissions.loadPerms();
-		this.lang.loadLang();
-		PluginManager pm = getServer().getPluginManager();
-		for (Plugin plugin : pm.getPlugins()) {
-			if (plugin.getDescription().getName().startsWith("LC")) {
-				if (!getServer().getPluginManager().isPluginEnabled(plugin)) {
-					pm.enablePlugin(plugin);
-				}
-				String[] str = (String[]) plugin.getConfiguration()
-						.getProperty("ReferenceKeys");
-				String[] exp = (String[]) plugin.getConfiguration()
-						.getProperty("LevelExpPer");
-				String[] unlocks = (String[]) plugin.getConfiguration()
-						.getProperty("LevelUnlocks");
-				String[] help = (String[]) plugin.getConfiguration()
-						.getProperty("LevelHelp");
-				int[] unlockslevel = (int[]) plugin.getConfiguration()
-						.getProperty("LevelUnlocksLevel");
-				String index = (String) plugin.getConfiguration().getProperty(
-						"ReferenceIndex");
-				String name = (String) plugin.getConfiguration().getProperty(
-						"LevelName");
-				String author = (String) plugin.getConfiguration().getProperty(
-						"Author");
-				this.LevelReferenceKeys.put(plugin, str);
-				this.LevelIndexes.put(plugin, index);
-				this.LevelNames.put(plugin, name);
-				this.LevelUnlocks.put(plugin, unlocks);
-				this.LevelAuthors.put(plugin, author);
-				this.LevelExp.put(plugin, exp);
-				this.LevelUnlocksLevel.put(plugin, unlockslevel);
-				this.LevelHelp.put(plugin, help);
-
-				// Create hashmap on the cache list
-				synchronized (ExpCache) {
-					ExpCache.init(plugin);
-				}
-
-			}
-
-		}
-		Plugin spout = getServer().getPluginManager().getPlugin("Spout");
-		if (spout != null) {
-			SpoutEnabled = true;
-			getServer().getLogger().info("[LC] Found Spout.");
-		} else {
-			SpoutEnabled = false;
-			getServer().getLogger().info(
-					"[LC] Could not find Spout. Extensions Disabled.");
-		}
-		if (PeriodicSave) {
-			sheduleSave(true);
-		}
-		this.createData();
-		this.logger.log(Level.INFO, "[LC] LevelCraftCore "
-				+ this.getDescription().getVersion() + " Loaded");
-		this.logger
-				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
-		return true;
 	}
 
 	@Override
@@ -238,23 +263,7 @@ public class LevelCraftCore extends JavaPlugin {
 				}
 			}
 		}
-		Plugin spout = getServer().getPluginManager().getPlugin("Spout");
-		if (spout != null) {
-			SpoutEnabled = true;
-			LCGui = new LCGui(this);
-			getServer().getLogger().info("[LC] Found Spout.");
-			if (this.EnableCapes) {
-				File CapeFile = new File(getDataFolder() + "/Data/Cape.data");
-				try {
-					CapeFile.createNewFile();
-				} catch (IOException e) {
-					this.logger.log(Level.INFO, "[LC] " + e);
-				}
-			}
-		} else {
-			SpoutEnabled = false;
-		}
-		
+
 		if (PeriodicSave) {
 			sheduleSave(true);
 		}
@@ -265,118 +274,6 @@ public class LevelCraftCore extends JavaPlugin {
 				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
 	}
 
-	private void sheduleSave(boolean on) {
-		if (on && savingTask == -1) {
-			savingTask = this
-					.getServer()
-					.getScheduler()
-					.scheduleAsyncRepeatingTask(this, new SaveTask(this), 1,
-							SaveInterval * 20);
-			if (savingTask == -1) {
-				this.logger.log(Level.WARNING,
-						"[LC] Could not schedule new saving loop.");
-			}
-		}
-		else if (!on && savingTask!=1) {
-			getServer().getScheduler().cancelTask(savingTask);
-			savingTask = -1;
-		}
-
-	}
-
-	public void loadConfig() {
-		Configuration gC = getConfiguration();
-		gC.load();
-		this.database = gC.getString("Database", "FlatFile");
-		this.MySqlDir = gC.getString("MySqlDatabaseDirectory",
-				"localhost:3306/minecraft");
-		this.MySqlUser = gC.getString("MySqlDatabaseUsername", "root");
-		this.MySqlPass = gC.getString("MySqlDatabasePassword", "");
-		this.EnableLevelCap = gC.getBoolean("EnableLevelCap", true);
-		this.LevelCap = gC.getInt("LevelCap", 100);
-		this.Constant = gC.getInt("LevelConstant", 20);
-		this.EnableSkillMastery = gC.getBoolean("EnableSkillMastery", true);
-		this.c1 = gC.getString("ColourOne", "GOLD");
-		this.c2 = gC.getString("ColourTwo", "YELLOW");
-		this.c3 = gC.getString("ColourGood", "GREEN");
-		this.c4 = gC.getString("ColourBad", "RED");
-		this.UnlockLines = gC.getInt("UnlockLines", 7);
-		this.ExpLines = gC.getInt("ExpLines", 7);
-		this.NotifyAll = gC.getBoolean("NotifyAll", true);
-		String byRaw = gC.getString("LevelBypassers", "Dave,Rick,Player1337");
-		this.Bypassers = byRaw.split(",");
-		this.anticheat = gC.getBoolean("AntiBoost", true);
-		this.LevelUpSound = gC
-				.getString("LevelUpSound",
-						"http://cloud.github.com/downloads/samkio/Levelcraft/FFLevelUp.wav");
-		this.EnableSound = gC.getBoolean("EnableSound", true);
-		this.EnableCapes = gC.getBoolean("EnableCape", true);
-		this.PeriodicSave = gC.getBoolean("PeriodicSave", false);
-		this.SaveInterval = gC.getInt("SaveInterval", 300);
-		// this.Specialisation = gC.getBoolean("Specialisation", false);
-		// this.SpecialMultpilier = gC.getDouble("SpecialMultiplier", 2);
-		List<World> worldRun = this.getServer().getWorlds();
-		String str = "";
-		for (World w : worldRun) {
-			str = str + w.getName() + ",";
-		}
-		String worldsraw = gC.getString("Worlds", str);
-		Worlds = worldsraw.split(",");
-		gC.save();
-	}
-
-	public boolean createData() {
-		if (this.database.equalsIgnoreCase("FlatFile")) {
-			/*
-			 * if(Specialisation){ File SFile = new File(getDataFolder() +
-			 * "/Data/Specialisation.players"); this.Special = SFile; try {
-			 * SFile.createNewFile(); } catch (IOException e) {
-			 * this.logger.log(Level.SEVERE,
-			 * "[LC] Could not write file: Specialisation.players");
-			 * this.logger.log(Level.SEVERE, "[LC] " + e); return false; } }
-			 */
-			for (Plugin p : LevelNames.keySet()) {
-				String S = LevelNames.get(p);
-				File ExpFile = new File(getDataFolder() + "/Data/" + S + ".exp");
-				try {
-					ExpFile.createNewFile();
-					this.LevelFiles.put(p, ExpFile);
-				} catch (IOException e) {
-					this.logger.log(Level.SEVERE, "[LC] Could not write file: "
-							+ S + ".exp");
-					this.logger.log(Level.SEVERE, "[LC] " + e);
-					return false;
-				}
-			}
-			this.logger.log(Level.INFO, "[LC] Using FlatFile To Store Data.");
-			return true;
-		} else if (this.database.equalsIgnoreCase("MySql")) {
-			this.MySqlDB.prepare();
-			this.logger.log(Level.INFO, "[LC] Using MySql To Store Data.");
-		} else if (this.database.equalsIgnoreCase("Sqlite")) {
-			this.SqliteDB.prepare();
-			this.logger.log(Level.INFO, "[LC] Using Sqlite To Store Data.");
-		}
-		return false;
-	}
-
-	public boolean onCommand(CommandSender sender, Command cmd,
-			String commandLabel, String[] args) {
-		if (commandLabel.equalsIgnoreCase("level")
-				|| commandLabel.equalsIgnoreCase("lvl")) {
-			if (args.length >= 1 && sender instanceof Player) {
-				this.LCCommands.determineMethod((Player) sender, args);
-			} else if (sender instanceof Player) {
-				this.LCCommands.about(sender);
-			} else {
-				this.LCCommands.credits(sender);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener,
@@ -385,6 +282,65 @@ public class LevelCraftCore extends JavaPlugin {
 			pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener,
 					Event.Priority.High, this);
 		}
+	}
+
+	public boolean reload() {
+		onDisable();
+
+		this.getDataFolder().mkdir();
+		new File(this.getDataFolder() + "/Data/").mkdirs();
+		new File(this.getDataFolder() + "/Configs/").mkdirs();
+		this.loadConfig();
+		this.Permissions.loadPerms();
+		this.lang.loadLang();
+		PluginManager pm = getServer().getPluginManager();
+		for (Plugin plugin : pm.getPlugins()) {
+			if (plugin.getDescription().getName().startsWith("LC")) {
+				if (!getServer().getPluginManager().isPluginEnabled(plugin)) {
+					pm.enablePlugin(plugin);
+				}
+				String[] str = (String[]) plugin.getConfiguration()
+						.getProperty("ReferenceKeys");
+				String[] exp = (String[]) plugin.getConfiguration()
+						.getProperty("LevelExpPer");
+				String[] unlocks = (String[]) plugin.getConfiguration()
+						.getProperty("LevelUnlocks");
+				String[] help = (String[]) plugin.getConfiguration()
+						.getProperty("LevelHelp");
+				int[] unlockslevel = (int[]) plugin.getConfiguration()
+						.getProperty("LevelUnlocksLevel");
+				String index = (String) plugin.getConfiguration().getProperty(
+						"ReferenceIndex");
+				String name = (String) plugin.getConfiguration().getProperty(
+						"LevelName");
+				String author = (String) plugin.getConfiguration().getProperty(
+						"Author");
+				this.LevelReferenceKeys.put(plugin, str);
+				this.LevelIndexes.put(plugin, index);
+				this.LevelNames.put(plugin, name);
+				this.LevelUnlocks.put(plugin, unlocks);
+				this.LevelAuthors.put(plugin, author);
+				this.LevelExp.put(plugin, exp);
+				this.LevelUnlocksLevel.put(plugin, unlockslevel);
+				this.LevelHelp.put(plugin, help);
+
+				// Create hashmap on the cache list
+				synchronized (ExpCache) {
+					ExpCache.init(plugin);
+				}
+
+			}
+
+		}
+		if (PeriodicSave) {
+			sheduleSave(true);
+		}
+		this.createData();
+		this.logger.log(Level.INFO, "[LC] LevelCraftCore "
+				+ this.getDescription().getVersion() + " Loaded");
+		this.logger
+				.log(Level.INFO, "[LC] Loaded levels:" + LevelNames.values());
+		return true;
 	}
 
 	public void saveExp() {
@@ -443,6 +399,24 @@ public class LevelCraftCore extends JavaPlugin {
 		getServer().getLogger().info(
 				"[LC] Saving Exp Done. " + (end - start) + "ms");
 		saving = false;
+
+	}
+
+	private void sheduleSave(final boolean on) {
+		if (on && savingTask == -1) {
+			savingTask = this
+					.getServer()
+					.getScheduler()
+					.scheduleAsyncRepeatingTask(this, new SaveTask(this), 1,
+							SaveInterval * 20);
+			if (savingTask == -1) {
+				this.logger.log(Level.WARNING,
+						"[LC] Could not schedule new saving loop.");
+			}
+		} else if (!on && savingTask != 1) {
+			getServer().getScheduler().cancelTask(savingTask);
+			savingTask = -1;
+		}
 
 	}
 

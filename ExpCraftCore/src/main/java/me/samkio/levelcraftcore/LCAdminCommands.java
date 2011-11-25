@@ -12,43 +12,38 @@ public class LCAdminCommands {
 		plugin = instance;
 	}
 
-	@SuppressWarnings("static-access")
 	public void determineMethid(final Player sender, final String[] args) {
 		if (args.length >= 4) {
 			if (args[1].equalsIgnoreCase("setlvl") && args.length == 5) {
 				if (plugin.LCAdminCommands.setLevel(args[2], args[3], args[4],
 						sender)) {
-					plugin.LCChat.good(sender, plugin.lang.LevelSetSuccess);
+					LCChat.good(sender, plugin.lang.LevelSetSuccess);
 					return;
 				} else {
-					plugin.LCChat.warn(sender, plugin.lang.LevelSetFalse);
+					LCChat.warn(sender, plugin.lang.LevelSetFalse);
 					return;
 				}
 			} else if (args[1].equalsIgnoreCase("setexp") && args.length == 5) {
 				if (plugin.LCAdminCommands.setExp(args[2], args[3], args[4],
 						sender)) {
-					plugin.LCChat
-							.good(sender, plugin.lang.ExperienceSetSuccess);
+					LCChat.good(sender, plugin.lang.ExperienceSetSuccess);
 					return;
 				} else {
-					plugin.LCChat.warn(sender, plugin.lang.ExperienceSetFalse);
+					LCChat.warn(sender, plugin.lang.ExperienceSetFalse);
 					return;
 				}
 			} else if (args[1].equalsIgnoreCase("getlvl") && args.length == 4) {
-				plugin.LCChat.good(sender, plugin.LCAdminCommands.getLevel(
-						args[2], args[3], sender));
+				LCChat.good(sender, plugin.LCAdminCommands.getLevel(args[2],
+						args[3], sender));
 			} else if (args[1].equalsIgnoreCase("getexp") && args.length == 4) {
-				plugin.LCChat
-						.good(sender, plugin.LCAdminCommands.getExp(args[2],
-								args[3], sender));
+				LCChat.good(sender,
+						plugin.LCAdminCommands.getExp(args[2], args[3], sender));
 			} else if (args[1].equalsIgnoreCase("reset") && args.length == 4) {
 				if (plugin.LCAdminCommands.reset(args[2], args[3], sender)) {
-					plugin.LCChat.good(sender,
-							plugin.lang.ExperienceResetSuccess);
+					LCChat.good(sender, plugin.lang.ExperienceResetSuccess);
 					return;
 				} else {
-					plugin.LCChat
-							.warn(sender, plugin.lang.ExperienceResetFalse);
+					LCChat.warn(sender, plugin.lang.ExperienceResetFalse);
 					return;
 				}
 			} else {
@@ -58,7 +53,7 @@ public class LCAdminCommands {
 
 		} else if (args[1].equalsIgnoreCase("reload")) {
 			if (plugin.reload()) {
-				plugin.LCChat.good(sender, "Reload Successful");
+				LCChat.good(sender, "Reload Successful");
 				return;
 			} else {
 				plugin.LCChat.bad(sender, "Reload Unsuccessful");
@@ -70,28 +65,27 @@ public class LCAdminCommands {
 
 	}
 
-	@SuppressWarnings("static-access")
 	private String getExp(final String ref, final String p, final Player pl) {
-		if (!plugin.Permissions.hasAdminCommand(pl, "getexp")) {
+		if (!Whitelist.hasAdminCommand(pl, "getexp")) {
 			return "You do not have Permission";
 		}
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl, plugin.lang.NoMatch);
+			LCChat.warn(pl, plugin.lang.NoMatch);
 			return "Error.";
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl, plugin.lang.TooMany);
+			LCChat.warn(pl, plugin.lang.TooMany);
 			return "Error.";
 		} else {
 			Player leveler = players.get(0);
 			for (Plugin plug : plugin.LevelReferenceKeys.keySet()) {
 				String[] reference = plugin.LevelReferenceKeys.get(plug);
 				if (plugin.Tools.containsValue(reference, ref)
-						&& plugin.Permissions.hasLevel(leveler, plug)) {
+						&& Whitelist.hasLevel(leveler, plug)) {
 					return leveler.getName() + "'s "
 							+ plugin.LevelNames.get(plug)
 							+ plugin.lang.ExperienceIs
-							+ plugin.LevelFunctions.getExp(leveler, plug);
+							+ LevelFunctions.getExp(leveler, plug);
 				}
 			}
 
@@ -99,27 +93,26 @@ public class LCAdminCommands {
 		return "Error";
 	}
 
-	@SuppressWarnings("static-access")
 	private String getLevel(final String ref, final String p, final Player pl) {
-		if (!plugin.Permissions.hasAdminCommand(pl, "getlvl")) {
+		if (!Whitelist.hasAdminCommand(pl, "getlvl")) {
 			return "You do not have Permission";
 		}
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl, plugin.lang.NoMatch);
+			LCChat.warn(pl, plugin.lang.NoMatch);
 			return "Error.";
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl, plugin.lang.TooMany);
+			LCChat.warn(pl, plugin.lang.TooMany);
 			return "Error.";
 		} else {
 			Player leveler = players.get(0);
 			for (Plugin plug : plugin.LevelReferenceKeys.keySet()) {
 				String[] reference = plugin.LevelReferenceKeys.get(plug);
 				if (plugin.Tools.containsValue(reference, ref)
-						&& plugin.Permissions.hasLevel(leveler, plug)) {
+						&& Whitelist.hasLevel(leveler, plug)) {
 					return leveler.getName() + "'s "
 							+ plugin.LevelNames.get(plug) + plugin.lang.LevelIs
-							+ plugin.LevelFunctions.getLevel(leveler, plug);
+							+ LevelFunctions.getLevel(leveler, plug);
 				}
 			}
 
@@ -215,27 +208,26 @@ public class LCAdminCommands {
 		return false;
 	}
 
-	@SuppressWarnings("static-access")
 	private boolean setLevel(final String ref, final String p,
 			final String lvl, final Player pl) {
-		if (!plugin.Permissions.hasAdminCommand(pl, "setlvl")) {
+		if (!Whitelist.hasAdminCommand(pl, "setlvl")) {
 			return false;
 		}
 		int newlvl = Integer.parseInt(lvl);
 		List<Player> players = plugin.getServer().matchPlayer(p);
 		if (players.size() == 0) {
-			plugin.LCChat.warn(pl, plugin.lang.NoMatch);
+			LCChat.warn(pl, plugin.lang.NoMatch);
 			return false;
 		} else if (players.size() != 1) {
-			plugin.LCChat.warn(pl, plugin.lang.TooMany);
+			LCChat.warn(pl, plugin.lang.TooMany);
 			return false;
 		} else {
 			Player leveler = players.get(0);
 			for (Plugin plug : plugin.LevelReferenceKeys.keySet()) {
 				String[] reference = plugin.LevelReferenceKeys.get(plug);
 				if (plugin.Tools.containsValue(reference, ref)
-						&& plugin.Permissions.hasLevel(leveler, plug)) {
-					plugin.LevelFunctions.updateLevel(leveler, plug, newlvl);
+						&& Whitelist.hasLevel(leveler, plug)) {
+					LevelFunctions.updateLevel(leveler, plug, newlvl);
 					return true;
 				}
 			}
