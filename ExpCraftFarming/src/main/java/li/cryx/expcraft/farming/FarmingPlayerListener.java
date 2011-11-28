@@ -21,8 +21,6 @@ public class FarmingPlayerListener extends PlayerListener {
 				|| m == Material.DIAMOND_HOE;
 	}
 
-	private Config config;
-
 	private final Farming plugin;
 
 	private Chat chat;
@@ -52,54 +50,55 @@ public class FarmingPlayerListener extends PlayerListener {
 		int level = plugin.getPersistence().getLevel(plugin, player);
 
 		// ensure player can use hoe
-		if (level < config.TOOL_LEVEL.wood && itemInHand == Material.WOOD_HOE) {
-			warnToolLevel(player, config.TOOL_LEVEL.wood);
+		if (level < plugin.getConfInt("HoeLevel.Wooden")
+				&& itemInHand == Material.WOOD_HOE) {
+			warnToolLevel(player, plugin.getConfInt("HoeLevel.Wooden"));
 			event.setCancelled(true);
 			return;
 		}
-		if (level < config.TOOL_LEVEL.iron && itemInHand == Material.IRON_HOE) {
-			warnToolLevel(player, config.TOOL_LEVEL.iron);
+		if (level < plugin.getConfInt("HoeLevel.Stone")
+				&& itemInHand == Material.STONE_HOE) {
+			warnToolLevel(player, plugin.getConfInt("HoeLevel.Stone"));
 			event.setCancelled(true);
 			return;
 		}
-		if (level < config.TOOL_LEVEL.gold && itemInHand == Material.GOLD_HOE) {
-			warnToolLevel(player, config.TOOL_LEVEL.gold);
+		if (level < plugin.getConfInt("HoeLevel.Iron")
+				&& itemInHand == Material.IRON_HOE) {
+			warnToolLevel(player, plugin.getConfInt("HoeLevel.Iron"));
 			event.setCancelled(true);
 			return;
 		}
-		if (level < config.TOOL_LEVEL.stone && itemInHand == Material.STONE_HOE) {
-			warnToolLevel(player, config.TOOL_LEVEL.stone);
+		if (level < plugin.getConfInt("HoeLevel.Gold")
+				&& itemInHand == Material.GOLD_HOE) {
+			warnToolLevel(player, plugin.getConfInt("HoeLevel.Gold"));
 			event.setCancelled(true);
 			return;
 		}
-		if (level < config.TOOL_LEVEL.diamond
+		if (level < plugin.getConfInt("HoeLevel.Diamond")
 				&& itemInHand == Material.DIAMOND_HOE) {
-			warnToolLevel(player, config.TOOL_LEVEL.diamond);
+			warnToolLevel(player, plugin.getConfInt("HoeLevel.Diamond"));
 			event.setCancelled(true);
 			return;
 		}
 
 		// ensure player can till
-		if (level < config.LEVEL.till
+		if (level < plugin.getConfInt("UseLevel.Till")
 				&& (m == Material.GRASS || m == Material.DIRT)
 				&& isHoe(itemInHand)) {
-			warnCutBlockLevel(player, config.LEVEL.till);
+			warnCutBlockLevel(player, plugin.getConfInt("UseLevel.Till"));
 			event.setCancelled(true);
 			return;
 		}
 
 		if (isHoe(itemInHand) && (m == Material.GRASS || m == Material.DIRT)) {
 			// till grass or dirt
-			plugin.getPersistence().addExp(plugin, player, config.EXP.till);
+			plugin.getPersistence().addExp(plugin, player,
+					plugin.getConfDouble("ExpGain.Till"));
 		}
 	}
 
 	public void setChat(final Chat chat) {
 		this.chat = chat;
-	}
-
-	public void setConfig(final Config config) {
-		this.config = config;
 	}
 
 	private void warnCutBlockLevel(final Player player, final int reqLevel) {

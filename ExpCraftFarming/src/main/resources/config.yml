@@ -1,4 +1,5 @@
 # Default EC-Farming config file
+# enriched with config for MC 1.0
 HoeLevel:
   Wooden: 0
   Stone: 5
@@ -36,3 +37,6 @@ DropLevel:
   PumpkinSeed: 20
   MelonSeed: 40
   CocoaBean: 70
+  GhastTear: 30
+  BlazePowder: 50
+

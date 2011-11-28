@@ -99,7 +99,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		}
 		modules.clear();
 
-		// TODO Auto-generated method stub
+		// TODO cryxli: what else to disable?
 
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 	}
@@ -136,6 +136,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 
 	private void setPermission(final FileConfiguration config) {
 		// TODO cryxli: load proper PermissionManager
+		// TODO cryxli: which one to support?
 
 		Plugin test = getServer().getPluginManager().getPlugin("Permissions");
 		if (test != null) {

@@ -1,39 +1,48 @@
 package li.cryx.expcraft.farming;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+/**
+ * This class is the main entry point of the "Farming" module for ExpCraft. This
+ * module restricts the use of hoes.
+ * 
+ * @author cryxli
+ */
 public class Farming extends ExpCraftModule {
 
-	private static final Logger LOG = Logger.getLogger("ECFarming");
+	private static final Logger LOG = Logger.getLogger("EC-Farming");
 
+	/** Listen to block break and block place events. */
 	private FarmingBlockListener blockListener = null;
 
+	/** Listen to player interact events. */
 	private FarmingPlayerListener playerListener = null;
 
-	private Config config;
-
+	/**
+	 * Create listeners and link them to this plugin and a common
+	 * <code>Chat</code> component.
+	 */
 	private void createListeners() {
+		// use one chat tool
 		Chat chat = new Chat(this);
+
+		// lazy init block listener
 		if (blockListener == null) {
 			blockListener = new FarmingBlockListener(this);
 		}
 		blockListener.setChat(chat);
-		blockListener.setConfig(config);
 
+		// lazy init player listener
 		if (playerListener == null) {
 			playerListener = new FarmingPlayerListener(this);
 		}
 		playerListener.setChat(chat);
-		playerListener.setConfig(config);
 	}
 
 	@Override
@@ -41,81 +50,68 @@ public class Farming extends ExpCraftModule {
 		return "Fm";
 	}
 
+	/**
+	 * Get the <code>int</code> value of the given config key.
+	 * 
+	 * @param key
+	 *            Key in the config YAML.
+	 * @return Value associated with the given key.
+	 */
+	public double getConfDouble(final String key) {
+		// delegate to config
+		return getConfig().getDouble(key);
+	}
+
+	/**
+	 * Get the <code>double</code> value of the given config key.
+	 * 
+	 * @param key
+	 *            Key in the config YAML.
+	 * @return Value associated with the given key.
+	 */
+	public int getConfInt(final String key) {
+		// delegate to config
+		return getConfig().getInt(key);
+	}
+
 	@Override
 	public String getName() {
 		return "Farming";
 	}
 
+	/**
+	 * Load config from disk merge missing default values and store them to
+	 * disk.
+	 */
 	private void loadConfig() {
-		FileConfiguration conf = getConfig();
-		config = new Config();
-
-		config.TOOL_LEVEL.wood = conf.getInt("HoeLevel.Wooden");
-		config.TOOL_LEVEL.stone = conf.getInt("HoeLevel.Stone");
-		config.TOOL_LEVEL.iron = conf.getInt("HoeLevel.Iron");
-		config.TOOL_LEVEL.gold = conf.getInt("HoeLevel.Gold");
-		config.TOOL_LEVEL.diamond = conf.getInt("HoeLevel.Diamond");
-
-		config.LEVEL.till = conf.getInt("UseLevel.Till");
-		config.LEVEL.harvest = conf.getInt("UseLevel.Harvest");
-		config.LEVEL.apple = conf.getInt("UseLevel.Apple");
-		config.LEVEL.sugarCane = conf.getInt("UseLevel.SugarCane");
-		config.LEVEL.goldenApple = conf.getInt("UseLevel.GoldenApple");
-		config.LEVEL.cactus = conf.getInt("UseLevel.Cacti");
-		config.LEVEL.sapling = conf.getInt("UseLevel.Sapling");
-		config.LEVEL.redRose = conf.getInt("UseLevel.RedRose");
-		config.LEVEL.yellowFlower = conf.getInt("UseLevel.YellowFlower");
-		config.LEVEL.mushroom = conf.getInt("UseLevel.Mushroom");
-		config.LEVEL.wheat = conf.getInt("UseLevel.Wheat");
-
-		config.EXP.till = conf.getDouble("ExpGain.Till");
-		config.EXP.harvest = conf.getDouble("ExpGain.Harvest");
-		config.EXP.apple = conf.getDouble("ExpGain.Apple");
-		config.EXP.sugarCane = conf.getDouble("ExpGain.SugarCane");
-		config.EXP.goldenApple = conf.getDouble("ExpGain.GoldenApple");
-		config.EXP.cactus = conf.getDouble("ExpGain.Cacti");
-		config.EXP.sapling = conf.getDouble("ExpGain.Sapling");
-		config.EXP.redRose = conf.getDouble("ExpGain.RedRose");
-		config.EXP.yellowFlower = conf.getDouble("ExpGain.YellowFlower");
-		config.EXP.mushroom = conf.getDouble("ExpGain.Mushroom");
-		config.EXP.wheat = conf.getDouble("ExpGain.Wheat");
-
-		config.DROP_LEVEL.pumpkinSeed = conf.getInt("DropLevel.PumpkinSeed");
-		config.DROP_LEVEL.melonSeed = conf.getInt("DropLevel.MelonSeed");
-		config.DROP_LEVEL.cocoaBean = conf.getInt("DropLevel.CocoaBean");
-
+		// force loading config from default once
+		getConfig();
+		// ...to store at first run
 		saveConfig();
 	}
 
 	@Override
 	public void onDisable() {
-		// TODO Auto-generated method stub
-
+		// disabled plugins don't get events; no need to unregister
+		// listeners
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 	}
 
 	@Override
 	public void onEnable() {
+		// pre-load config
 		loadConfig();
-		createListeners();
-		// TODO Auto-generated method stub
-
-		Plugin expCraftCore = getServer().getPluginManager().getPlugin(
-				"ExpCraftCore");
-		if (expCraftCore == null) {
-			LOG.log(Level.SEVERE,
-					"[EC] Could not find ExpCraftCore. Disabling "
-							+ getDescription().getName());
-			getServer().getPluginManager().disablePlugin(this);
-			return;
-		} else {
-			registerEvents();
-			LOG.info("[EC] " + getDescription().getFullName() + " enabled");
-		}
-
+		// register listeners
+		registerEvents();
+		// ready
+		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
 	}
 
+	/** Register the listeners */
 	private void registerEvents() {
+		// ensure the listeners are ready
+		createListeners();
+		// register listeners
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener,
 				Event.Priority.Highest, this);
@@ -123,8 +119,6 @@ public class Farming extends ExpCraftModule {
 				Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener,
 				Event.Priority.Highest, this);
-		// pm.registerEvent(Event.Type.PLAYER_EGG_THROW, playerListener,
-		// Event.Priority.Normal, this);
 	}
 
 }

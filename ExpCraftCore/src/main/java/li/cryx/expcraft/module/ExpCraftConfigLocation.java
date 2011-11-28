@@ -37,7 +37,6 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 	private File getConfigFile() {
 		if (configFile == null) {
 			File folder = new File(getDataFolder(), "../ExpCraft/config");
-			folder.mkdirs();
 			configFile = new File(folder, getName() + ".yml");
 		}
 		return configFile;
