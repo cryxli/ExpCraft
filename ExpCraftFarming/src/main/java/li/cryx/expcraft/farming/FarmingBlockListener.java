@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Crops;
 
 public class FarmingBlockListener extends BlockListener {
+
 	public Farming plugin;
 
 	private static Random randomGenerator = new Random();
@@ -43,7 +44,7 @@ public class FarmingBlockListener extends BlockListener {
 			// drop pumpkin seeds
 			drop(block, Material.PUMPKIN_SEEDS);
 		} else if (rnd >= 5 && rnd < 10 && level >= config.DROP_LEVEL.cocoaBean) {
-			// TODO drop cocoa bean
+			// drop cocoa bean:
 			// drop(block, Material.COCOA_BEAN);
 			drop(block, Material.INK_SACK, (short) 3); // 351(3)
 		}
@@ -84,12 +85,6 @@ public class FarmingBlockListener extends BlockListener {
 		return true;
 	}
 
-	private void drop(final Block block, final int itemType) {
-		Location locy = new Location(block.getWorld(), block.getX(),
-				block.getY(), block.getZ(), 0, 0);
-		block.getWorld().dropItem(locy, new ItemStack(itemType, 1));
-	}
-
 	private void drop(final Block block, final Material material) {
 		Location locy = new Location(block.getWorld(), block.getX(),
 				block.getY(), block.getZ(), 0, 0);
@@ -102,7 +97,6 @@ public class FarmingBlockListener extends BlockListener {
 				block.getY(), block.getZ(), 0, 0);
 		block.getWorld().dropItem(locy,
 				new ItemStack(material.getId(), 1, damage));
-
 	}
 
 	@Override
@@ -131,11 +125,12 @@ public class FarmingBlockListener extends BlockListener {
 		}
 
 		if (m == Material.LEAVES) {
+			// TODO pablohess: How to detect this event
 			int random1 = randomGenerator.nextInt(100);
 			Logger.getLogger("Minecraft").log(Level.INFO, "LEAVES: " + random1);
 			if ((random1 == 0) && (level >= config.LEVEL.goldenApple)) {
 				pers.addExp(plugin, player, config.EXP.goldenApple);
-				drop(block, 322); // Material.GOLDEN_APPLE);
+				drop(block, Material.GOLDEN_APPLE);
 			} else if ((random1 > 0) && (random1 < 10)
 					&& (level >= config.LEVEL.apple)) {
 				pers.addExp(plugin, player, config.EXP.apple);
@@ -149,9 +144,14 @@ public class FarmingBlockListener extends BlockListener {
 			gained = config.EXP.sugarCane;
 		}
 
+		Logger.getLogger("ExpCraftFarming").info("Material: " + m);
 		if (m == Material.CROPS
 				&& ((Crops) event.getBlock().getState().getData()).getState() == CropState.RIPE
 				&& level >= config.LEVEL.harvest) {
+			Logger.getLogger("ExpCraftFarming").info(
+					"State: "
+							+ ((Crops) event.getBlock().getState().getData())
+									.getState());
 			gained = config.EXP.harvest;
 			bonusDropCrop(player, level, block);
 		}

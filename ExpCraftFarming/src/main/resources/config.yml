@@ -31,3 +31,8 @@ ExpGain:
   YellowFlower: 0.1
   Mushroom: 0.1
   Wheat: 2.0
+  
+DropLevel:
+  PumpkinSeed: 20
+  MelonSeed: 40
+  CocoaBean: 70

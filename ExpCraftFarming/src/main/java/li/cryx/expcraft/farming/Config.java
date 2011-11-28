@@ -33,7 +33,7 @@ public class Config {
 		public int redRose = 0;
 		public int yellowFlower = 0;
 		public int mushroom = 0;
-		public int animalFeed = 0;
+		public int wheat = 0;
 	}
 
 	public class ToolLevel {
@@ -44,15 +44,9 @@ public class Config {
 		public int diamond = 30;
 	}
 
-	public final Level LEVEL;
-	public final Exp EXP;
-	public final DropLevel DROP_LEVEL;
-	public final ToolLevel TOOL_LEVEL;
+	public final Level LEVEL = new Level();
+	public final Exp EXP = new Exp();
+	public final DropLevel DROP_LEVEL = new DropLevel();
+	public final ToolLevel TOOL_LEVEL = new ToolLevel();
 
-	public Config() {
-		LEVEL = new Level();
-		EXP = new Exp();
-		DROP_LEVEL = new DropLevel();
-		TOOL_LEVEL = new ToolLevel();
-	}
 }

@@ -56,11 +56,33 @@ public class Farming extends ExpCraftModule {
 		config.TOOL_LEVEL.gold = conf.getInt("HoeLevel.Gold");
 		config.TOOL_LEVEL.diamond = conf.getInt("HoeLevel.Diamond");
 
+		config.LEVEL.till = conf.getInt("UseLevel.Till");
+		config.LEVEL.harvest = conf.getInt("UseLevel.Harvest");
+		config.LEVEL.apple = conf.getInt("UseLevel.Apple");
+		config.LEVEL.sugarCane = conf.getInt("UseLevel.SugarCane");
+		config.LEVEL.goldenApple = conf.getInt("UseLevel.GoldenApple");
+		config.LEVEL.cactus = conf.getInt("UseLevel.Cacti");
+		config.LEVEL.sapling = conf.getInt("UseLevel.Sapling");
+		config.LEVEL.redRose = conf.getInt("UseLevel.RedRose");
+		config.LEVEL.yellowFlower = conf.getInt("UseLevel.YellowFlower");
+		config.LEVEL.mushroom = conf.getInt("UseLevel.Mushroom");
+		config.LEVEL.wheat = conf.getInt("UseLevel.Wheat");
+
 		config.EXP.till = conf.getDouble("ExpGain.Till");
 		config.EXP.harvest = conf.getDouble("ExpGain.Harvest");
 		config.EXP.apple = conf.getDouble("ExpGain.Apple");
+		config.EXP.sugarCane = conf.getDouble("ExpGain.SugarCane");
+		config.EXP.goldenApple = conf.getDouble("ExpGain.GoldenApple");
+		config.EXP.cactus = conf.getDouble("ExpGain.Cacti");
+		config.EXP.sapling = conf.getDouble("ExpGain.Sapling");
+		config.EXP.redRose = conf.getDouble("ExpGain.RedRose");
+		config.EXP.yellowFlower = conf.getDouble("ExpGain.YellowFlower");
+		config.EXP.mushroom = conf.getDouble("ExpGain.Mushroom");
+		config.EXP.wheat = conf.getDouble("ExpGain.Wheat");
 
-		// TODO cryxli: load config
+		config.DROP_LEVEL.pumpkinSeed = conf.getInt("DropLevel.PumpkinSeed");
+		config.DROP_LEVEL.melonSeed = conf.getInt("DropLevel.MelonSeed");
+		config.DROP_LEVEL.cocoaBean = conf.getInt("DropLevel.CocoaBean");
 
 		saveConfig();
 	}

@@ -2,15 +2,12 @@ package li.cryx.expcraft.farming;
 
 import java.text.MessageFormat;
 
-import li.cryx.expcraft.perm.AbstractPermissionManager;
-import li.cryx.expcraft.persist.AbstractPersistenceManager;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 
@@ -41,25 +38,6 @@ public class FarmingPlayerListener extends PlayerListener {
 	}
 
 	@Override
-	public void onPlayerEggThrow(final PlayerEggThrowEvent event) {
-		if (!(event.isHatching())) {
-			return;
-		}
-		AbstractPermissionManager perm = plugin.getPermission();
-		if (!perm.worldCheck(event.getPlayer().getWorld())) {
-			return;
-		}
-		if (!perm.hasLevel(plugin, event.getPlayer())) {
-			return;
-		}
-		if (!(event.getPlayer() instanceof Player)) {
-			return;
-		}
-
-		plugin.getPersistence().addExp(plugin, event.getPlayer(), 50);
-	}
-
-	@Override
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
@@ -71,10 +49,7 @@ public class FarmingPlayerListener extends PlayerListener {
 		}
 		Material itemInHand = player.getItemInHand().getType();
 		Material m = event.getClickedBlock().getType();
-		AbstractPersistenceManager pers = plugin.getPersistence();
-		int level = pers.getLevel(plugin, player);
-
-		// Logger.getLogger("Test").info(event.getAction() + " on " + m);
+		int level = plugin.getPersistence().getLevel(plugin, player);
 
 		// ensure player can use hoe
 		if (level < config.TOOL_LEVEL.wood && itemInHand == Material.WOOD_HOE) {
@@ -115,7 +90,7 @@ public class FarmingPlayerListener extends PlayerListener {
 
 		if (isHoe(itemInHand) && (m == Material.GRASS || m == Material.DIRT)) {
 			// till grass or dirt
-			pers.addExp(plugin, player, config.EXP.till);
+			plugin.getPersistence().addExp(plugin, player, config.EXP.till);
 		}
 	}
 

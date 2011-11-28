@@ -26,13 +26,16 @@ public abstract class AbstractPermissionManager {
 	abstract public boolean hasLevel(ExpCraftModule module, Player player);
 
 	public void setWorlds(final String worldStr) {
-		worldStr.split(",");
+		setWorlds(worldStr.split(","));
 	}
 
 	public void setWorlds(final String[] worldStrs) {
 		worlds.clear();
 		for (String world : worldStrs) {
-			worlds.add(world.trim().toLowerCase());
+			String name = world.trim().toLowerCase();
+			if (name.length() > 0) {
+				worlds.add(name);
+			}
 		}
 	}
 
@@ -40,7 +43,5 @@ public abstract class AbstractPermissionManager {
 		String name = world.getName().toLowerCase();
 		return worlds.contains(name);
 	}
-
-	// TODO cryxli: everything
 
 }
