@@ -1,9 +1,9 @@
-name: LevelCraftCore
+name: ${project.name}
 
-main: me.samkio.levelcraftcore.LevelCraftCore
-version: 0.1.7.2
+main: li.cryx.expcraft.ExpCraftCore
+version: ${project.version}
 description: >
-             Commands for use with the Levelcraft experience-based plugin for Minecraft.
+             Commands for use with the ${project.name} experience-based plugin for Minecraft.
 
 commands:
   level:

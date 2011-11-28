@@ -1,7 +1,8 @@
 name: ${project.name}
-main: me.torrent.lcfarming.LCFarming
+main: li.cryx.expcraft.farming.Farming
 version: ${project.version}
+depend: [ExpCraftCore]
 description: >
-             LCFarming. The Farming Level for LevelCraftCore.
+             ${project.name}. The Farming Level for ExpCraftCore.
 commands:
 
