@@ -1,0 +1,6 @@
+name: ${project.name}
+main: li.cryx.expcraft.scavenger.Scavenger
+version: ${project.version}
+description: >
+             ${project.name}. The Scavenger Level for ExpCraft.
+commands:
