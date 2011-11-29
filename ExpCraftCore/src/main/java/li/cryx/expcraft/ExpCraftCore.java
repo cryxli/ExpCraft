@@ -166,7 +166,12 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		String storageType = config.getString("Database");
 		if ("mysql".equalsIgnoreCase(storageType)
 				|| "sqlite".equalsIgnoreCase(storageType)) {
-			persistence = new PersistenceDatabase();
+			PersistenceDatabase db = new PersistenceDatabase();
+			persistence = db;
+			db.setDatabase(storageType);
+			db.setDbUrl(config.getString("DbConnection.URL"));
+			db.setDbUser(config.getString("DbConnection.User"));
+			db.setDbPassword(config.getString("DbConnection.Password"));
 		} else {
 			// fallback = "FlatFile"
 			persistence = new PersistenceFlatFile();

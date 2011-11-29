@@ -1,6 +1,7 @@
 name: ${project.name}
 main: li.cryx.expcraft.scavenger.Scavenger
 version: ${project.version}
+depend: [ExpCraftCore]
 description: >
              ${project.name}. The Scavenger Level for ExpCraft.
 commands:

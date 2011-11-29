@@ -6,6 +6,10 @@ Colors:
   ColourBad: RED
 
 Database: FlatFile
+DbConnection:
+  URL: localhost:3306/minecraft
+  User: root
+  Password: 
 
 Levels:
   Constant: 20

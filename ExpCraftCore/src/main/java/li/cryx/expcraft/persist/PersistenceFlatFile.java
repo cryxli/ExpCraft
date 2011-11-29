@@ -65,11 +65,9 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	}
 
 	@Override
-	public void setCore(final ExpCraftCore core) {
+	public synchronized void setCore(final ExpCraftCore core) {
 		super.setCore(core);
-		synchronized (dataFolder) {
-			dataFolder = new File(core.getDataFolder(), "../ExpCraft/data");
-		}
+		dataFolder = new File(core.getDataFolder(), "../ExpCraft/data");
 
 		Thread intervalStorage = new Thread() {
 			@Override
