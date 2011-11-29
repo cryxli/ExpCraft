@@ -14,8 +14,14 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 
 	private AbstractPermissionManager permission;
 
+	private int levelCap;
+
 	/** Get the short reference (1 or 2 characters) to the module) */
 	abstract public String getAbbr();
+
+	public int getLevelCap() {
+		return levelCap;
+	}
 
 	/** Get the full name of the module. */
 	@Override
@@ -29,6 +35,10 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 		return persistence;
 	}
 
+	public void setLevelCap(final int levelCap) {
+		this.levelCap = levelCap;
+	}
+
 	public void setPermission(final AbstractPermissionManager permission) {
 		this.permission = permission;
 	}
@@ -36,5 +46,4 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 	public void setPersistence(final AbstractPersistenceManager persistence) {
 		this.persistence = persistence;
 	}
-
 }

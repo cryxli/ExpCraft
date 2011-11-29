@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * and defines the implementation specific ones.
  * 
  * <p>
- * Note that experiance starts with 0, but level starts with 1.
+ * Note that experience starts with 0, but level starts with 1.
  * </p>
  * 
  * @author cryxli

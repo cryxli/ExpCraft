@@ -120,6 +120,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 				modules.add(module);
 				module.setPersistence(persistence);
 				module.setPermission(permission);
+				module.setLevelCap(getConfig().getInt("Levels.LevelCap"));
 				buf.append(module.getName());
 				buf.append(",");
 			}

@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 
+@Deprecated
 public class Whitelist {
 	public static LevelCraftCore plugin;
 

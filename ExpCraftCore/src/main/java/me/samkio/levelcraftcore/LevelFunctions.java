@@ -5,6 +5,7 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+@Deprecated
 public class LevelFunctions {
 	private static LevelCraftCore plugin;
 

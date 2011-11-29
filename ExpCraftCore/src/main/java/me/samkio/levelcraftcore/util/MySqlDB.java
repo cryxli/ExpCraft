@@ -64,8 +64,7 @@ public class MySqlDB {
 		}
 		try {
 			return DriverManager.getConnection("jdbc:mysql://"
-					+ plugin.MySqlDir + "", "" + plugin.MySqlUser + "", ""
-					+ plugin.MySqlPass + "");
+					+ plugin.MySqlDir, plugin.MySqlUser, plugin.MySqlPass);
 		} catch (SQLException e) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		}
@@ -82,7 +81,7 @@ public class MySqlDB {
 
 			st = conn.createStatement();
 			ResultSet rs = st.executeQuery("SELECT " + string
-					+ "Exp FROM ExperienceTable WHERE name=('" + name + "')");
+					+ "Exp FROM ExperienceTable WHERE name='" + name + "'");
 			while (rs.next()) {
 				exp = rs.getDouble(string + "Exp");
 			}
@@ -161,8 +160,8 @@ public class MySqlDB {
 				if (rs.getString("name").equalsIgnoreCase(name)) {
 					break;
 				}
-
 			}
+
 		} catch (SQLException e) {
 			plugin.logger.log(Level.SEVERE, "[LC]" + e);
 		} finally {
