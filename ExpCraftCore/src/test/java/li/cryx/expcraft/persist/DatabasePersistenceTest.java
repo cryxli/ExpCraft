@@ -74,6 +74,21 @@ public class DatabasePersistenceTest {
 	}
 
 	@Test
+	public void testLargeExp() throws SQLException {
+		// prepare test: 1 module, 1 user
+		prepare();
+		DummyPlayer player = new DummyPlayer("cryxli");
+		ExpCraftModule module = new DummyModule("LargeExp", "Le");
+
+		double exp = db.getExp(module, player);
+		Assert.assertEquals(0, exp, 0);
+
+		db.setExp(module, player, 1523.75);
+		exp = db.getExp(module, player);
+		Assert.assertEquals(1523.75, exp, 0);
+	}
+
+	@Test
 	public void testMultiModule() throws SQLException {
 		// prepare: 2 modules, 1 player
 		prepare();

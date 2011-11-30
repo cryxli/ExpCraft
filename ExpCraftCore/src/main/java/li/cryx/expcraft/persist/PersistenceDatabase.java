@@ -33,7 +33,7 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	private static final String SELECT = "SELECT exp FROM ExpCraftTable WHERE module=''{0}'' AND player=''{1}''";
 
 	// order: module, player, exp
-	private static final String UPDATE = "UPDATE ExpCraftTable SET exp={2} WHERE module=''{0}'' AND player=''{1}''";
+	private static final String UPDATE = "UPDATE ExpCraftTable SET exp={2,number,0.00} WHERE module=''{0}'' AND player=''{1}''";
 
 	private static final String KEEP_ALIVE = "SELECT COUNT(*) FROM ExpCraftTable";
 
@@ -185,11 +185,12 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	public void setExp(final ExpCraftModule module, final Player player,
 			final double exp) {
 		// execute UPDATE
+		String sql = MessageFormat.format(UPDATE, module.getAbbr(), player
+				.getName().toLowerCase(), exp);
 		try {
-			getStmt().executeUpdate(
-					MessageFormat.format(UPDATE, module.getAbbr(), player
-							.getName().toLowerCase(), exp));
+			getStmt().executeUpdate(sql);
 		} catch (SQLException e) {
+			LOG.info(sql);
 			LOG.log(Level.SEVERE, "[EC] Cannot update expereience", e);
 		}
 	}

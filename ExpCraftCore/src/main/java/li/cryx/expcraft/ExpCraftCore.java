@@ -76,8 +76,9 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String commandLabel, final String[] args) {
-		if (sender instanceof Player && commandLabel.equalsIgnoreCase("level")
-				|| commandLabel.equalsIgnoreCase("lvl")) {
+		if (sender instanceof Player && //
+				(commandLabel.equalsIgnoreCase("level") || //
+				commandLabel.equalsIgnoreCase("lvl"))) {
 
 			if (args != null && args.length > 0) {
 				// process player commands
@@ -117,10 +118,11 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 			if (plugin instanceof ExpCraftModule) {
 				// set references on modules
 				ExpCraftModule module = (ExpCraftModule) plugin;
-				modules.add(module);
 				module.setPersistence(persistence);
 				module.setPermission(permission);
 				module.setLevelCap(getConfig().getInt("Levels.LevelCap"));
+
+				modules.add(module);
 				buf.append(module.getName());
 				buf.append(",");
 			}
