@@ -190,6 +190,7 @@ public class ScavengerBlockListener extends BlockListener {
 				material == Material.GRASS || //
 				material == Material.SAND || //
 				material == Material.GRAVEL || //
+				material == Material.CLAY || //
 				material == Material.SOUL_SAND;
 	}
 
