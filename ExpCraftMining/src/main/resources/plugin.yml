@@ -1,6 +1,7 @@
 name: ${project.name}
-main: me.samkio.lcmining.LCMining
+main: li.cryx.expcraft.mining.Mining
 version: ${project.version}
+depend: [ExpCraftCore]
 description: >
-             LCMining. The mining Level for LevelCraftCore.
+             ${project.name}. The Mining Level for ExpCraft.
 commands:
