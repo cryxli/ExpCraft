@@ -36,8 +36,15 @@
 	<repositories>
 		<repository>
 			<id>expcraft-repo</id>
-			<name>local repository for versioned bukkit dependencies</name>
-			<url>file://${basedir}/../repository</url>
+			<name>expcraft-repo</name>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<url>file://${project.basedir}/repository</url>
 		</repository>
 	</repositories>
 
