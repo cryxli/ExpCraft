@@ -2,6 +2,8 @@ package li.cryx.expcraft;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 
+import org.bukkit.entity.Player;
+
 public class DummyModule extends ExpCraftModule {
 
 	private String name;
@@ -11,6 +13,10 @@ public class DummyModule extends ExpCraftModule {
 	public DummyModule(final String name, final String abbr) {
 		this.name = name;
 		this.abbr = abbr;
+	}
+
+	@Override
+	public void displayInfo(final Player sender, final int page) {
 	}
 
 	@Override

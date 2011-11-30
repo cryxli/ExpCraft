@@ -194,7 +194,7 @@ public class FarmingBlockListener extends BlockListener {
 		if (m == Material.LEAVES) {
 			// player has broken a leaf
 			// TODO pablohess: How to detect this event
-			int rnd = randomGenerator.nextInt(100);
+			int rnd = randomGenerator.nextInt(200);
 			Logger.getLogger("Minecraft").log(Level.INFO, "LEAVES: " + rnd);
 
 			if (rnd == 0 && level >= plugin.getConfInt("UseLevel.GoldenApple")) {

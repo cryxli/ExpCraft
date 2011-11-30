@@ -92,6 +92,20 @@ public class Farming extends ExpCraftModule {
 	}
 
 	@Override
+	public void displayInfo(final Player sender, final int page) {
+		chat.info(sender,
+				MessageFormat.format("*** {0} ({1}) ***", getName(), getAbbr()));
+
+		int level = getPersistence().getLevel(this, sender);
+		chat.info(sender, "Tools:");
+		sendToolInfo(sender, "Wooden", level);
+		sendToolInfo(sender, "Stone", level);
+		sendToolInfo(sender, "Iron", level);
+		sendToolInfo(sender, "Gold", level);
+		sendToolInfo(sender, "Diamond", level);
+	}
+
+	@Override
 	public String getAbbr() {
 		return "Fm";
 	}
@@ -183,6 +197,17 @@ public class Farming extends ExpCraftModule {
 				Event.Priority.Highest, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener,
 				Event.Priority.Highest, this);
+	}
+
+	private void sendToolInfo(final Player sender, final String material,
+			final int level) {
+		int toolLevel = getConfInt("HoeLevel." + material);
+		String msg = MessageFormat.format("{0} Hoe: {1}", material, toolLevel);
+		if (level >= toolLevel) {
+			chat.good(sender, msg);
+		} else {
+			chat.bad(sender, msg);
+		}
 	}
 
 	/**

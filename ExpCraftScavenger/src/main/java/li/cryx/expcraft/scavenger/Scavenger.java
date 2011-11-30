@@ -1,5 +1,6 @@
 package li.cryx.expcraft.scavenger;
 
+import java.text.MessageFormat;
 import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.ExpCraftModule;
@@ -27,6 +28,16 @@ public class Scavenger extends ExpCraftModule {
 
 		// block listener
 		blockListener = new ScavengerBlockListener(this);
+	}
+
+	@Override
+	public void displayInfo(final Player sender, final int page) {
+		chat.info(sender,
+				MessageFormat.format("*** {0} ({1}) ***", getName(), getAbbr()));
+
+		chat.info(sender,
+				"Digging through dirt, etc. you can find other items.");
+		chat.info(sender, "The more you search, the more you'll find.");
 	}
 
 	@Override
@@ -104,5 +115,4 @@ public class Scavenger extends ExpCraftModule {
 	void sendHint(final Player player, final String msg) {
 		chat.info(player, msg);
 	}
-
 }

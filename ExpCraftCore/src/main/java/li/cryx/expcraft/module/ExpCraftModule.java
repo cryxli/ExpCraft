@@ -3,6 +3,8 @@ package li.cryx.expcraft.module;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 
+import org.bukkit.entity.Player;
+
 /**
  * This abstract class defines the behaviour of ExpCraft modules.
  * 
@@ -15,6 +17,8 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 	private AbstractPermissionManager permission;
 
 	private int levelCap;
+
+	abstract public void displayInfo(Player sender, int page);
 
 	/** Get the short reference (1 or 2 characters) to the module) */
 	abstract public String getAbbr();

@@ -10,6 +10,7 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.perm.NoPermissionManager;
 import li.cryx.expcraft.perm.PermissionsPermissionManager;
+import li.cryx.expcraft.perm.PlayerPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 import li.cryx.expcraft.persist.PersistenceDatabase;
 import li.cryx.expcraft.persist.PersistenceFlatFile;
@@ -141,10 +142,15 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		// TODO cryxli: load proper PermissionManager
 		// TODO cryxli: which one to support?
 
-		Plugin test = getServer().getPluginManager().getPlugin("Permissions");
-		if (test != null) {
+		Plugin perm = getServer().getPluginManager().getPlugin("Permissions");
+		Plugin permBukkit = getServer().getPluginManager().getPlugin(
+				"PermissionsBukkit");
+		if (permBukkit != null) {
+			permission = new PlayerPermissionManager();
+			LOG.info("[EC] Using PermissionsBukkit.");
+		} else if (perm != null) {
 			permission = new PermissionsPermissionManager(
-					((Permissions) test).getHandler());
+					((Permissions) perm).getHandler());
 			LOG.info("[EC] Using Permissions.");
 		} else {
 			LOG.info("[EC] No Permissions found enabling all levels.");

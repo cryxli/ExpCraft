@@ -28,9 +28,7 @@ public class PermissionsPermissionManager extends AbstractPermissionManager {
 		// }
 		// }
 		try {
-			String abbr = module.getAbbr().toLowerCase();
-			return handler.has(player, "ec.unlevel." + abbr)
-					|| handler.has(player, "ec.level." + abbr);
+			return handler.has(player, "ec.module." + module.getAbbr());
 		} catch (Exception e) {
 			return false;
 		}

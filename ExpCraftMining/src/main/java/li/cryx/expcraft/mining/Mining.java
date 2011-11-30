@@ -14,7 +14,6 @@ public class Mining extends ExpCraftModule {
 	public final Logger LOG = Logger.getLogger("EC-Mining");
 
 	private MiningBlockListener blockListener;
-
 	private Chat chat;
 
 	/**
@@ -27,6 +26,20 @@ public class Mining extends ExpCraftModule {
 
 		// block listener
 		blockListener = new MiningBlockListener(this);
+	}
+
+	@Override
+	public void displayInfo(final Player sender, final int page) {
+		chat.info(sender,
+				MessageFormat.format("*** {0} ({1}) ***", getName(), getAbbr()));
+
+		int level = getPersistence().getLevel(this, sender);
+		chat.info(sender, "Tools:");
+		sendToolInfo(sender, "Wooden", level);
+		sendToolInfo(sender, "Stone", level);
+		sendToolInfo(sender, "Iron", level);
+		sendToolInfo(sender, "Gold", level);
+		sendToolInfo(sender, "Diamond", level);
 	}
 
 	@Override
@@ -101,6 +114,18 @@ public class Mining extends ExpCraftModule {
 				Event.Priority.Highest, this);
 	}
 
+	private void sendToolInfo(final Player sender, final String material,
+			final int level) {
+		int toolLevel = getConfInt("PickaxeLevel." + material);
+		String msg = MessageFormat.format("{0} Pickaxe: {1}", material,
+				toolLevel);
+		if (level >= toolLevel) {
+			chat.good(sender, msg);
+		} else {
+			chat.bad(sender, msg);
+		}
+	}
+
 	/**
 	 * Player cannot mine this block
 	 * 
@@ -126,4 +151,5 @@ public class Mining extends ExpCraftModule {
 		chat.warn(player, MessageFormat.format(
 				"Cannot use this tool. Required Level: {0}", level));
 	}
+
 }

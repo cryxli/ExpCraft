@@ -1,14 +1,26 @@
 name: ${project.name}
-
 main: li.cryx.expcraft.ExpCraftCore
 version: ${project.version}
 description: >
-             Commands for use with the ${project.name} experience-based plugin for Minecraft.
+             ${project.name} is an experience-based plugin for Minecraft.
 
 commands:
   level:
     description: Returns information about a player's experience and levels.
-    usage:
-  lvl:
-    description: Returns information about a player's experience and levels.
-    usage:
+    aliases: lvl
+
+permissions:
+  ec.admin.*:
+    description: Access to all admin functions
+    children:
+      ec.admin.get: true
+      ec.admin.set: true
+  ec.admin.get:
+    description: Show experience or level of other players
+    default: op
+  ec.admin.set:
+    description: Set experience or level to a new value
+    default: op
+  ec.module.*:
+    description: Enable all modules
+    default: true
