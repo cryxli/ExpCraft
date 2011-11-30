@@ -1,6 +1,7 @@
 name: ${project.name}
-main: me.samkio.lcwoodcutting.LCWoodCutting
+main: li.cryx.expcraft.woodcutting.WoodCutting
 version: ${project.version}
+depend: [ExpCraftCore]
 description: >
-             LCWoodCutting. The WoodCutting Level for LevelCraftCore.
+             ${project.name}. The WoodCutting Level for LevelCraftCore.
 commands:

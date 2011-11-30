@@ -1,4 +1,4 @@
-package li.cryx.expcraft.mining;
+package li.cryx.expcraft.woodcutting;
 
 import java.text.MessageFormat;
 import java.util.logging.Logger;
@@ -11,20 +11,19 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
 /**
- * This class is the main entry point for the mining module for ExpCraft. The
- * plugin manages the use of pickaxes and which blocks players can mine with how
- * much experience.
+ * This class is the main entry point for the Wood Cutting module for ExpCraft.
+ * The module manages the use of axes and harvesting of wood.
  * 
  * @author cryxli
  */
-public class Mining extends ExpCraftModule {
+public class WoodCutting extends ExpCraftModule {
 	/** Global logger */
-	public final Logger LOG = Logger.getLogger("EC-Mining");
+	private static final Logger LOG = Logger.getLogger("EC-WoodCutting");
 
 	/** The block listener to do all the work. */
-	private MiningBlockListener blockListener;
+	private WoodCuttingBlockListener blockListener;
 
-	/** One chat utility to send messages. */
+	/** The chat utility to send messages to players. */
 	private Chat chat;
 
 	/**
@@ -36,7 +35,7 @@ public class Mining extends ExpCraftModule {
 		chat = new Chat(this);
 
 		// block listener
-		blockListener = new MiningBlockListener(this);
+		blockListener = new WoodCuttingBlockListener(this);
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class Mining extends ExpCraftModule {
 
 	@Override
 	public String getAbbr() {
-		return "M";
+		return "W";
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class Mining extends ExpCraftModule {
 
 	@Override
 	public String getName() {
-		return "Mining";
+		return "WoodCutting";
 	}
 
 	/**
@@ -126,53 +125,53 @@ public class Mining extends ExpCraftModule {
 	}
 
 	/**
-	 * Send level info about the given pickaxe to the player. If the player
-	 * meets the requirements for the tool, it will be written in "good"
-	 * (default GREEN), or in "bad" (default RED) otherwise.
+	 * Send level info about the given axe to the player. If the player meets
+	 * the requirements for the tool, it will be written in "good" (default
+	 * GREEN), or in "bad" (default RED) otherwise.
 	 * 
 	 * @param sender
 	 *            Current player
 	 * @param material
-	 *            String identifying the material of the pickaxe.
+	 *            String identifying the material of the axe.
 	 * @param level
 	 *            Player's level
 	 */
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
-		int toolLevel = getConfInt("PickaxeLevel." + material);
-		String msg = MessageFormat.format("{0} Pickaxe: {1}", material,
-				toolLevel);
+		int toolLevel = getConfInt("AxeLevel." + material);
+		String msg = MessageFormat.format("{0} Axe: {1}", material, toolLevel);
 		if (level >= toolLevel) {
+			// pleyer meets requirements
 			chat.good(sender, msg);
 		} else {
+			// player cannot use the tool
 			chat.bad(sender, msg);
 		}
 	}
 
 	/**
-	 * Player cannot mine this block
+	 * Warn the player that he can not yet cut the current block.
 	 * 
 	 * @param player
-	 *            Current player
+	 *            Current player.
 	 * @param level
-	 *            Level required to mine the block
+	 *            Required level to cut the block.
 	 */
-	void warnBlockMine(final Player player, final int level) {
-		chat.warn(player, MessageFormat.format(
-				"Cannot mine this block. Required Level: {0}", level));
+	void warnCutBlock(final Player player, final int level) {
+		chat.bad(player, MessageFormat.format(
+				"Cannot cut this block. Required Level: {0}", level));
 	}
 
 	/**
-	 * Player cannot use this tool.
+	 * Warn the player the he cannot us the tool.
 	 * 
 	 * @param player
-	 *            Current player
+	 *            Current player.
 	 * @param level
-	 *            Level required to use the tool
+	 *            Required level to use the tool.
 	 */
-	void warnToolUse(final Player player, final int level) {
-		chat.warn(player, MessageFormat.format(
+	void warnToolLevel(final Player player, final int level) {
+		chat.bad(player, MessageFormat.format(
 				"Cannot use this tool. Required Level: {0}", level));
 	}
-
 }
