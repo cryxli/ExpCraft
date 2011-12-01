@@ -17,6 +17,7 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 
 	private static final Logger LOG = Logger.getLogger("ExpCraftCore");
 
+	/** SQL query to create the table. */
 	private static final String CREATE_TABLE = //
 	"CREATE TABLE ExpCraftTable (" //
 			+ " id BIGINT," //
@@ -26,45 +27,66 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 			+ " PRIMARY KEY (id)" //
 			+ " )";
 
-	// order: module, player
+	/**
+	 * SQL query to insert a new player into the table.
+	 * 
+	 * <p>
+	 * Arguments {@link ExpCraftModule#getAbbr()}, <code>Player.getName()</code>
+	 * </p>
+	 */
 	private static final String INSERT = "INSERT INTO ExpCraftTable (id,module,player,exp) SELECT COALESCE(MAX(id)+1,1),''{0}'',''{1}'',0 FROM ExpCraftTable";
 
-	// order: module, player
+	/**
+	 * SQL query to retrieve exp of a player and module
+	 * 
+	 * <p>
+	 * Arguments {@link ExpCraftModule#getAbbr()}, <code>Player.getName()</code>
+	 * </p>
+	 */
 	private static final String SELECT = "SELECT exp FROM ExpCraftTable WHERE module=''{0}'' AND player=''{1}''";
 
-	// order: module, player, exp
+	/**
+	 * SQL query to update exp of a player and module
+	 * 
+	 * <p>
+	 * Arguments {@link ExpCraftModule#getAbbr()}, <code>Player.getName()</code>
+	 * , experience
+	 * </p>
+	 */
 	private static final String UPDATE = "UPDATE ExpCraftTable SET exp={2,number,0.00} WHERE module=''{0}'' AND player=''{1}''";
 
+	/** SQL query to execute to keep the connection to the database alive. */
 	private static final String KEEP_ALIVE = "SELECT COUNT(*) FROM ExpCraftTable";
 
-	public static void main(final String[] args) {
-		System.out.println(CREATE_TABLE);
-		System.out.println(MessageFormat.format(SELECT, "Fm", "ups"));
-		System.out.println(MessageFormat.format(INSERT, "Fm", "ups", 19.5, 1));
-		System.out.println(MessageFormat.format(UPDATE, "Fm", "ups", 22.0));
-		System.out.println(KEEP_ALIVE);
-	}
-
+	/** The driver class for the used JDBC driver. */
 	private String driverClass;
 
+	/** The open connection to the database. */
 	private Connection conn;
 
+	/** The connection URL to the database. */
 	private String dbUrl;
 
+	/** The database user. */
 	private String dbUser;
 
+	/** The password for the database user. */
 	private String dbPassword;
 
+	/** The statement for a DB connection. */
 	private Statement stmt;
 
+	/** Keep alive interval. Default every half an hour. */
 	private long keepAliveInterval = 1800 * 1000;
 
+	/** Before this class unloads, try to shut down the connection correctly. */
 	@Override
 	protected void finalize() throws Throwable {
 		flush();
 		super.finalize();
 	}
 
+	/** Shut down the connection to the database. */
 	@Override
 	public void flush() {
 		if (stmt != null) {
@@ -83,6 +105,10 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 		}
 	}
 
+	/**
+	 * Get the connection to the database, or create one. When a new connection
+	 * is crate, try to create the ExtCraft table.
+	 */
 	private Connection getConn() {
 		if (conn == null) {
 			try {

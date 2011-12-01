@@ -11,7 +11,8 @@ import org.bukkit.entity.Player;
  * and defines the implementation specific ones.
  * 
  * <p>
- * Note that experience starts with 0, but level starts with 1.
+ * Note that experience starts with <code>0</code>, but level starts with
+ * <code>1</code>.
  * </p>
  * 
  * @author cryxli
@@ -27,8 +28,10 @@ public abstract class AbstractPersistenceManager {
 	/** Maximal level that can be reached. Default is 100 */
 	protected int maxLevel;
 
+	/** Reference to the core */
 	protected ExpCraftCore core;
 
+	/** The chat utility to send messages to players */
 	private Chat chat;
 
 	/** Create a new manager with default values. */

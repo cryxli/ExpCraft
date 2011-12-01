@@ -12,17 +12,31 @@ import li.cryx.expcraft.util.Chat;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+/**
+ * This class handles commands sent to ExpCraftCore
+ * 
+ * @author cryxli
+ */
 public class CommandManager {
 
+	/** Reference to the core. */
 	private final ExpCraftCore core;
 
+	/** The chat utility to send answers to the requesting player. */
 	private final Chat chat;
 
+	/** Create a new manager for the given core. */
 	public CommandManager(final ExpCraftCore core) {
 		this.core = core;
 		chat = new Chat(core);
 	}
 
+	/**
+	 * Display all level stats a player has reached so far.
+	 * 
+	 * @param sender
+	 *            Current player
+	 */
 	private void displayAllLevelForPlayer(final Player sender) {
 		List<String> levels = new ArrayList<String>();
 		for (ExpCraftModule module : core.getModules()) {
@@ -45,6 +59,13 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Display informaion about ExpCraft, namely the commands the given player
+	 * can issue.
+	 * 
+	 * @param sender
+	 *            Current player
+	 */
 	private void displayCoreInfo(final Player sender) {
 		chat.topBar(sender);
 		chat.info(sender, "Available commands:");
@@ -65,6 +86,16 @@ public class CommandManager {
 		// TODO cryxli: display info/about
 	}
 
+	/**
+	 * Display gathered experience for the given player and module.
+	 * 
+	 * @param sender
+	 *            ConsoleSender requesting the information
+	 * @param modAbbr
+	 *            Short identifier for a module
+	 * @param name
+	 *            Name of the player
+	 */
 	private void displayExp(final Player sender, final String modAbbr,
 			final String name) {
 		ExpCraftModule module = getModuleByAbbr(modAbbr);
@@ -96,6 +127,16 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Display the level for the given player and module.
+	 * 
+	 * @param sender
+	 *            ConsoleSender requesting the information
+	 * @param modAbbr
+	 *            Short identifier for a module
+	 * @param name
+	 *            Name of the player
+	 */
 	private void displayLevel(final Player sender, final String modAbbr,
 			final String name) {
 		ExpCraftModule module = getModuleByAbbr(modAbbr);
@@ -126,12 +167,23 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Display information about the given plugin.
+	 * 
+	 * @param sender
+	 *            ConsoleSender requesting the information
+	 * @param modAbbr
+	 *            Short identifier for a module
+	 * @param pageStr
+	 *            String containing a number referening to the page to display.
+	 */
 	private void displayModuleInfo(final Player sender, final String modAbbr,
 			final String pageStr) {
-		int page = 1;
+		int page;
 		try {
 			page = Integer.parseInt(pageStr);
 		} catch (NumberFormatException e) {
+			page = 1;
 		}
 		ExpCraftModule module = getModuleByAbbr(modAbbr);
 		if (module == null) {
@@ -143,6 +195,18 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Change the experience of a player and module
+	 * 
+	 * @param sender
+	 *            ConsoleSender issuing the command
+	 * @param modAbbr
+	 *            Short identifier for a module
+	 * @param valueStr
+	 *            New amount of expereience points.
+	 * @param name
+	 *            Name of the player
+	 */
 	private void execSetExp(final Player sender, final String modAbbr,
 			final String valueStr, final String name) {
 		double value;
@@ -178,6 +242,18 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Change the level of a player and module
+	 * 
+	 * @param sender
+	 *            ConsoleSender issuing the command
+	 * @param modAbbr
+	 *            Short identifier for a module
+	 * @param valueStr
+	 *            New level
+	 * @param name
+	 *            Name of the player
+	 */
 	private void execSetLevel(final Player sender, final String modAbbr,
 			final String valueStr, final String name) {
 		int value;
@@ -212,6 +288,14 @@ public class CommandManager {
 		}
 	}
 
+	/**
+	 * Get the module identified by its abbreviation.
+	 * 
+	 * @param abbr
+	 *            Short identifier of a module
+	 * @return The instance of the module, or, <code>null</code>, if no module
+	 *         exists for the given abbreviation.
+	 */
 	private ExpCraftModule getModuleByAbbr(final String abbr) {
 		ExpCraftModule module = null;
 		for (ExpCraftModule m : core.getModules()) {
@@ -223,13 +307,25 @@ public class CommandManager {
 		return module;
 	}
 
+	/**
+	 * Process a command received by the core.
+	 * 
+	 * @param sender
+	 *            CommandSender issuing the command
+	 * @param cmd
+	 *            The ExCraft sub-command
+	 * @param args
+	 *            Optional arguments for the command
+	 */
 	public void onCommand(final Player sender, final Command cmd,
 			final String[] args) {
 
 		if ("all".equalsIgnoreCase(args[0])) {
+			// display all level for a player
 			displayAllLevelForPlayer(sender);
 
 		} else if ("getexp".equalsIgnoreCase(args[0])) {
+			// display exp for a player and module
 			if (args.length < 2) {
 				chat.info(sender, "Syntax: /level getExp <Module> [Player]");
 			} else if (args.length == 2) {
@@ -239,6 +335,7 @@ public class CommandManager {
 			}
 
 		} else if ("setexp".equalsIgnoreCase(args[0])) {
+			// change exp for a player and module
 			if (args.length < 3) {
 				chat.info(sender,
 						"Syntax: /level setExp <Module> <Value> [Player]");
@@ -249,6 +346,7 @@ public class CommandManager {
 			}
 		} else if ("setlevel".equalsIgnoreCase(args[0])
 				|| "setlvl".equalsIgnoreCase(args[0])) {
+			// change level for a player and module
 			if (args.length < 3) {
 				chat.info(sender,
 						"Syntax: /level setLevel <Module> <Value> [Player]");
@@ -260,6 +358,7 @@ public class CommandManager {
 
 		} else if ("getlevel".equalsIgnoreCase(args[0])
 				|| "getlvl".equalsIgnoreCase(args[0])) {
+			// display level for a player and module
 			if (args.length < 2) {
 				chat.info(sender, "Syntax: /level getLevel <Module> [Player]");
 			} else if (args.length == 2) {
@@ -269,6 +368,7 @@ public class CommandManager {
 			}
 
 		} else if ("info".equalsIgnoreCase(args[0])) {
+			// display information about ExpCraft or a module
 			if (args.length < 2) {
 				displayCoreInfo(sender);
 			} else if (args.length == 2) {
@@ -278,6 +378,7 @@ public class CommandManager {
 			}
 
 		} else {
+			// unknown command, display info about ExpCraft
 			displayCoreInfo(sender);
 		}
 

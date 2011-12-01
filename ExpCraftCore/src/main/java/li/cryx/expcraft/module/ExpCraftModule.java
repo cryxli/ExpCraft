@@ -18,11 +18,25 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 
 	private int levelCap;
 
+	/**
+	 * A player want information about the module.
+	 * 
+	 * @param sender
+	 *            Current player
+	 * @param page
+	 *            For multi page settings, which page to display. Will always
+	 *            default to <code>1</code>.
+	 */
 	abstract public void displayInfo(Player sender, int page);
 
-	/** Get the short reference (1 or 2 characters) to the module) */
+	/** Get the short reference (1 or 2 characters) of the module) */
 	abstract public String getAbbr();
 
+	/**
+	 * Get the current level cap injected by the core.
+	 * 
+	 * @return Max level reachable
+	 */
 	public int getLevelCap() {
 		return levelCap;
 	}
@@ -31,10 +45,20 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 	@Override
 	abstract public String getName();
 
+	/**
+	 * Get the current permission manager injected by the core.
+	 * 
+	 * @return Current permission manager
+	 */
 	public AbstractPermissionManager getPermission() {
 		return permission;
 	}
 
+	/**
+	 * Get the current persistence manager injected by the core.
+	 * 
+	 * @return Curent persistence manager
+	 */
 	public AbstractPersistenceManager getPersistence() {
 		return persistence;
 	}
