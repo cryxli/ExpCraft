@@ -9,7 +9,7 @@ Database: FlatFile
 DbConnection:
   URL: localhost:3306/minecraft
   User: root
-  Password: 
+  Password: pass
 
 Levels:
   Constant: 20

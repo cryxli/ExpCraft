@@ -7,6 +7,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ExpCraftCore</name>
 
+	<scm>
+		<connection>scm:git:git://github.com/pablohess/ExpCraft.git</connection>
+		<developerConnection>scm:git:git@github.com:pablohess/ExpCraft.git</developerConnection>
+		<url>https://github.com/pablohess/ExpCraft/tree/master/</url>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.bukkit</groupId>
