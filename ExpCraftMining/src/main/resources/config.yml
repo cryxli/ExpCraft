@@ -1,5 +1,4 @@
-# Default EC-Farming config file
-# enriched with config for MC 1.0
+# Default EC-Mining config file
 PickaxeLevel:
   Wooden: 0
   Stone: 5

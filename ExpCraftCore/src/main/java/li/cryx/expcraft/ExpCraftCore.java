@@ -78,8 +78,8 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String commandLabel, final String[] args) {
 		if (sender instanceof Player && //
-				(commandLabel.equalsIgnoreCase("level") || //
-				commandLabel.equalsIgnoreCase("lvl"))) {
+				("level".equalsIgnoreCase(commandLabel) || //
+				"lvl".equalsIgnoreCase(commandLabel))) {
 
 			if (args != null && args.length > 0) {
 				// process player commands

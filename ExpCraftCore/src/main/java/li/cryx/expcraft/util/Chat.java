@@ -137,7 +137,7 @@ public class Chat {
 				module.getName()));
 
 		good(player, MessageFormat.format(
-				"See /level unlocks {0} - To see what you have unlocked.",
+				"See /level info {0} - To see what you have unlocked.",
 				module.getAbbr()));
 
 		if (notifyAll) {
