@@ -1,8 +1,6 @@
 package li.cryx.expcraft.farming;
 
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.CropState;
 import org.bukkit.Location;
@@ -193,17 +191,16 @@ public class FarmingBlockListener extends BlockListener {
 
 		if (m == Material.LEAVES) {
 			// player has broken a leaf
-			// TODO pablohess: How to detect this event
 			int rnd = randomGenerator.nextInt(200);
-			Logger.getLogger("Minecraft").log(Level.INFO, "LEAVES: " + rnd);
-
 			if (rnd == 0 && level >= plugin.getConfInt("UseLevel.GoldenApple")) {
+				// 5%o
 				plugin.getPersistence().addExp(plugin, player,
 						plugin.getConfDouble("ExpGain.GoldenApple"));
 				drop(block, Material.GOLDEN_APPLE);
 
 			} else if (rnd > 0 && rnd < 10
 					&& level >= plugin.getConfInt("UseLevel.Apple")) {
+				// 50%o
 				plugin.getPersistence().addExp(plugin, player,
 						plugin.getConfDouble("ExpGain.Apple"));
 				drop(block, Material.APPLE);

@@ -30,6 +30,12 @@ public class FarmingPlayerListener extends PlayerListener {
 			return;
 		}
 
+		Material m = event.getClickedBlock().getType();
+		if (m != Material.DIRT && m != Material.GRASS) {
+			// we only want to monitor tilling
+			return;
+		}
+
 		Player player = event.getPlayer();
 		if (!plugin.getPermission().hasLevel(plugin, player)) {
 			// player does not have permission to us this module
@@ -37,7 +43,6 @@ public class FarmingPlayerListener extends PlayerListener {
 		}
 
 		Material itemInHand = player.getItemInHand().getType();
-		Material m = event.getClickedBlock().getType();
 		int level = plugin.getPersistence().getLevel(plugin, player);
 		if (!plugin.checkTool(player, itemInHand, level)) {
 			// player is not allowed to use the tool he's holding
@@ -47,19 +52,16 @@ public class FarmingPlayerListener extends PlayerListener {
 
 		if (plugin.isHoe(itemInHand)) {
 			// ensure player can till
-			if (level < plugin.getConfInt("UseLevel.Till")
-					&& (m == Material.GRASS || m == Material.DIRT)) {
+			if (level < plugin.getConfInt("UseLevel.Till")) {
 				plugin.warnCutBlockLevel(player,
 						plugin.getConfInt("UseLevel.Till"));
 				event.setCancelled(true);
 				return;
 			}
 
-			if (m == Material.GRASS || m == Material.DIRT) {
-				// till grass or dirt
-				plugin.getPersistence().addExp(plugin, player,
-						plugin.getConfDouble("ExpGain.Till"));
-			}
+			// till grass or dirt
+			plugin.getPersistence().addExp(plugin, player,
+					plugin.getConfDouble("ExpGain.Till"));
 		}
 	}
 
