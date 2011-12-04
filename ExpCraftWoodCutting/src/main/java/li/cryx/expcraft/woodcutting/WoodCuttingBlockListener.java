@@ -64,6 +64,10 @@ public class WoodCuttingBlockListener extends BlockListener {
 				return true;
 
 			}
+
+			// } else if (material == Material.LEAVES) {
+			// TODO cryxli: implement cutting leaves with shears
+
 		} else {
 			return true;
 		}

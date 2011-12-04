@@ -10,6 +10,11 @@ commands:
     aliases: lvl
 
 permissions:
+  ec.*:
+    description: Access to all ExpCraft functions
+    children:
+      ec.admin.*: true
+      ex.module.*: true
   ec.admin.*:
     description: Access to all admin functions
     children:

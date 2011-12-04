@@ -16,7 +16,7 @@ public class PermissionsPermissionManager extends AbstractPermissionManager {
 
 	@Override
 	public boolean hasAdminCommand(final Player player, final String command) {
-		return handler.has(player, "ec.admin." + command);
+		return handler.has(player, "ec.admin." + command.toLowerCase());
 	}
 
 	@Override
@@ -28,7 +28,8 @@ public class PermissionsPermissionManager extends AbstractPermissionManager {
 		// }
 		// }
 		try {
-			return handler.has(player, "ec.module." + module.getAbbr());
+			return handler.has(player, "ec.module."
+					+ module.getAbbr().toLowerCase());
 		} catch (Exception e) {
 			return false;
 		}

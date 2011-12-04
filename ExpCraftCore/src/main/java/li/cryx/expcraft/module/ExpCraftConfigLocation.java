@@ -81,4 +81,8 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 		}
 	}
 
+	protected void unloadConfig() {
+		newConfig = null;
+	}
+
 }

@@ -6,3 +6,7 @@ description: >
              ${project.name}. The Farming Level for ExpCraftCore.
 commands:
 
+permissions:
+  ec.module.fm:
+    description: Enable Farming module
+    default: true

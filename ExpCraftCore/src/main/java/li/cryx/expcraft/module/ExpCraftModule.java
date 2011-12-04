@@ -63,6 +63,14 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 		return persistence;
 	}
 
+	@Override
+	public void onDisable() {
+		unloadConfig();
+		onModuleDisable();
+	}
+
+	abstract public void onModuleDisable();
+
 	public void setLevelCap(final int levelCap) {
 		this.levelCap = levelCap;
 	}

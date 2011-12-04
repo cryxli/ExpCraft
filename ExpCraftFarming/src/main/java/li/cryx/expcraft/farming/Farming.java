@@ -166,14 +166,6 @@ public class Farming extends ExpCraftModule {
 		saveConfig();
 	}
 
-	// server wants the plugin to stop working
-	@Override
-	public void onDisable() {
-		// disabled plugins don't get events; no need to unregister
-		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
-	}
-
 	// server want the plugin to start working
 	@Override
 	public void onEnable() {
@@ -183,6 +175,14 @@ public class Farming extends ExpCraftModule {
 		registerEvents();
 		// ready
 		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+	}
+
+	// server wants the plugin to stop working
+	@Override
+	public void onModuleDisable() {
+		// disabled plugins don't get events; no need to unregister
+		// listeners
+		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 	}
 
 	/** Register the listeners */

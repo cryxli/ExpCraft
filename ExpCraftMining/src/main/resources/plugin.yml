@@ -5,3 +5,8 @@ depend: [ExpCraftCore]
 description: >
              ${project.name}. The Mining Level for ExpCraft.
 commands:
+
+permissions:
+  ec.module.m:
+    description: Enable Mining module
+    default: true

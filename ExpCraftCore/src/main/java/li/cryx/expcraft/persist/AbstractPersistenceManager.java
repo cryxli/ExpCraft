@@ -121,6 +121,23 @@ public abstract class AbstractPersistenceManager {
 	 */
 	abstract public double getExp(ExpCraftModule module, Player player);
 
+	/**
+	 * Return the required experience to reach the next level.
+	 * 
+	 * @param module
+	 *            The module in question
+	 * @param player
+	 *            Current player
+	 * @return Experience for next level. Will never be larger than
+	 *         {@link #maxExp}.
+	 */
+	public double getExpForNextLevel(final ExpCraftModule module,
+			final Player player) {
+		int level = getLevel(module, player);
+		int levelInBound = Math.min(maxLevel - 1, Math.max(0, level));
+		return Math.min(constant * Math.pow(levelInBound, 2), maxExp);
+	}
+
 	private int getLevel(final double exp) {
 		return 1 + (int) Math.floor(Math.sqrt(exp / constant));
 	}

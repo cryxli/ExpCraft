@@ -5,3 +5,8 @@ depend: [ExpCraftCore]
 description: >
              ${project.name}. The Scavenger Level for ExpCraft.
 commands:
+
+permissions:
+  ec.module.sc:
+    description: Enable Scavenger module
+    default: true
