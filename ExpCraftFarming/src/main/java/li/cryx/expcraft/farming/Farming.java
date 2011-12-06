@@ -103,6 +103,14 @@ public class Farming extends ExpCraftModule {
 		sendToolInfo(sender, "Iron", level);
 		sendToolInfo(sender, "Gold", level);
 		sendToolInfo(sender, "Diamond", level);
+
+		double exp = getPersistence().getExp(this, sender);
+		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
+		chat.info(sender, "Stats:");
+		chat.info(sender, MessageFormat.format(
+				"Current level: {0}, XP: {1} points", level, exp));
+		chat.info(sender, MessageFormat.format(
+				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
 	@Override

@@ -3,11 +3,16 @@ package li.cryx.expcraft.woodcutting;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
 
-import li.cryx.expcraft.module.ExpCraftModule;
+import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
+import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Tree;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -16,7 +21,7 @@ import org.bukkit.plugin.PluginManager;
  * 
  * @author cryxli
  */
-public class WoodCutting extends ExpCraftModule {
+public class WoodCutting extends DropExpCraftModule {
 	/** Global logger */
 	private static final Logger LOG = Logger.getLogger("EC-WoodCutting");
 
@@ -25,6 +30,28 @@ public class WoodCutting extends ExpCraftModule {
 
 	/** The chat utility to send messages to players. */
 	private Chat chat;
+
+	@Override
+	protected ItemStack calculateDrop(final Block block) {
+		switch (block.getType()) {
+		case LOG:
+			Tree tree = (Tree) block.getState().getData();
+			TreeSpecies species = tree.getSpecies();
+			if (species == TreeSpecies.BIRCH) {
+				return new ItemStack(Material.LOG, 1, (short) 2);
+			} else if (species == TreeSpecies.REDWOOD) {
+				return new ItemStack(Material.LOG, 1, (short) 1);
+			} else {
+				return new ItemStack(Material.LOG, 1, (short) 0);
+			}
+
+		case WOOD:
+			return new ItemStack(Material.WOOD, 1);
+
+		default:
+			return null;
+		}
+	}
 
 	/**
 	 * Create listeners and link them to this plugin and a common
@@ -50,6 +77,14 @@ public class WoodCutting extends ExpCraftModule {
 		sendToolInfo(sender, "Iron", level);
 		sendToolInfo(sender, "Gold", level);
 		sendToolInfo(sender, "Diamond", level);
+
+		double exp = getPersistence().getExp(this, sender);
+		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
+		chat.info(sender, "Stats:");
+		chat.info(sender, MessageFormat.format(
+				"Current level: {0}, XP: {1} points", level, exp));
+		chat.info(sender, MessageFormat.format(
+				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
 	@Override

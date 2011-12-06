@@ -160,5 +160,8 @@ public class MiningBlockListener extends BlockListener {
 			break;
 		}
 		plugin.getPersistence().addExp(plugin, player, expGain);
+
+		// double drops
+		plugin.dropItem(event.getBlock(), level);
 	}
 }

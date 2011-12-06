@@ -1,0 +1,18 @@
+# Default EC-Dexterity config file
+BootsLevel:
+  Leather: 0
+  Chainmail: 5
+  Iron: 10
+  Gold: 20
+  Diamond: 30
+
+ExpGain:
+  Jump: 0.5
+
+LevelGain:
+  AdvancedJump: 20
+  SuperJump: 50
+
+Settings:
+  FallDmgMultiplier: 1.0
+

@@ -66,7 +66,7 @@ public class CommandManager {
 	 * @param sender
 	 *            Current player
 	 */
-	private void displayCoreInfo(final Player sender) {
+	public void displayCoreInfo(final Player sender) {
 		chat.topBar(sender);
 		chat.info(sender, "Available commands:");
 		chat.info(sender, " /lvl all");
@@ -98,7 +98,7 @@ public class CommandManager {
 	 */
 	private void displayExp(final Player sender, final String modAbbr,
 			final String name) {
-		ExpCraftModule module = getModuleByAbbr(modAbbr);
+		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
@@ -139,7 +139,7 @@ public class CommandManager {
 	 */
 	private void displayLevel(final Player sender, final String modAbbr,
 			final String name) {
-		ExpCraftModule module = getModuleByAbbr(modAbbr);
+		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
@@ -185,7 +185,7 @@ public class CommandManager {
 		} catch (NumberFormatException e) {
 			page = 1;
 		}
-		ExpCraftModule module = getModuleByAbbr(modAbbr);
+		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
@@ -216,7 +216,7 @@ public class CommandManager {
 			chat.info(sender, "Experience must be a floating point number");
 			return;
 		}
-		ExpCraftModule module = getModuleByAbbr(modAbbr);
+		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
@@ -263,7 +263,7 @@ public class CommandManager {
 			chat.info(sender, "Experience must be a natural number");
 			return;
 		}
-		ExpCraftModule module = getModuleByAbbr(modAbbr);
+		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
@@ -286,25 +286,6 @@ public class CommandManager {
 			// no permission
 			chat.bad(sender, "You do not have enough rights");
 		}
-	}
-
-	/**
-	 * Get the module identified by its abbreviation.
-	 * 
-	 * @param abbr
-	 *            Short identifier of a module
-	 * @return The instance of the module, or, <code>null</code>, if no module
-	 *         exists for the given abbreviation.
-	 */
-	private ExpCraftModule getModuleByAbbr(final String abbr) {
-		ExpCraftModule module = null;
-		for (ExpCraftModule m : core.getModules()) {
-			if (m.getAbbr().equalsIgnoreCase(abbr)) {
-				module = m;
-				break;
-			}
-		}
-		return module;
 	}
 
 	/**
@@ -378,8 +359,16 @@ public class CommandManager {
 			}
 
 		} else {
-			// unknown command, display info about ExpCraft
-			displayCoreInfo(sender);
+			if (core.getModuleByAbbr(args[0]) == null) {
+				// unknown command, display info about ExpCraft
+				displayCoreInfo(sender);
+
+			} else if (args.length == 1) {
+				displayModuleInfo(sender, args[0], "1");
+			} else {
+				displayModuleInfo(sender, args[0], args[1]);
+			}
+
 		}
 
 		// TODO cryxli: handle player commands

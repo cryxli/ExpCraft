@@ -3,11 +3,14 @@ package li.cryx.expcraft.mining;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
 
-import li.cryx.expcraft.module.ExpCraftModule;
+import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -17,7 +20,7 @@ import org.bukkit.plugin.PluginManager;
  * 
  * @author cryxli
  */
-public class Mining extends ExpCraftModule {
+public class Mining extends DropExpCraftModule {
 	/** Global logger */
 	public final Logger LOG = Logger.getLogger("EC-Mining");
 
@@ -26,6 +29,37 @@ public class Mining extends ExpCraftModule {
 
 	/** One chat utility to send messages. */
 	private Chat chat;
+
+	@Override
+	protected ItemStack calculateDrop(final Block block) {
+		Material material = block.getType();
+		switch (material) {
+		case STONE:
+			return new ItemStack(Material.COBBLESTONE, 1);
+
+		case COBBLESTONE:
+		case SANDSTONE:
+		case GOLD_ORE:
+		case IRON_ORE:
+		case MOSSY_COBBLESTONE:
+		case OBSIDIAN:
+		case NETHERRACK:
+			return new ItemStack(material, 1);
+
+		case REDSTONE_ORE:
+		case GLOWING_REDSTONE_ORE:
+			return new ItemStack(Material.REDSTONE, 5);
+		case COAL_ORE:
+			return new ItemStack(Material.COAL, 1);
+		case LAPIS_ORE:
+			return new ItemStack(Material.INK_SACK, 5, (short) 4);
+		case GLOWSTONE:
+			return new ItemStack(Material.GLOWSTONE_DUST, 1);
+
+		default:
+			return null;
+		}
+	}
 
 	/**
 	 * Create listeners and link them to this plugin and a common
@@ -51,11 +85,30 @@ public class Mining extends ExpCraftModule {
 		sendToolInfo(sender, "Iron", level);
 		sendToolInfo(sender, "Gold", level);
 		sendToolInfo(sender, "Diamond", level);
+
+		double exp = getPersistence().getExp(this, sender);
+		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
+		chat.info(sender, "Stats:");
+		chat.info(sender, MessageFormat.format(
+				"Current level: {0}, XP: {1} points", level, exp));
+		chat.info(sender, MessageFormat.format(
+				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
 	@Override
 	public String getAbbr() {
 		return "M";
+	}
+
+	/**
+	 * Get the <code>boolean</code> value of the given config key.
+	 * 
+	 * @param key
+	 *            Key in the config YAML.
+	 * @return Value associated with the given key.
+	 */
+	boolean getConfBool(final String key) {
+		return getConfig().getBoolean(key);
 	}
 
 	/**

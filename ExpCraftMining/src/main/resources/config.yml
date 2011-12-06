@@ -33,3 +33,8 @@ UseLevel:
   DiamondOre: 25
   Netherrack: 0
   SandStone: 0
+
+Settings:
+  EnableDoubleDrop: true
+  DropMultiplier: 1.0
+  

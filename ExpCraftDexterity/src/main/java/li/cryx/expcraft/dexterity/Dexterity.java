@@ -1,4 +1,4 @@
-package li.cryx.expcraft.scavenger;
+package li.cryx.expcraft.dexterity;
 
 import java.text.MessageFormat;
 import java.util.logging.Logger;
@@ -7,16 +7,18 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
-public class Scavenger extends ExpCraftModule {
-	public final Logger LOG = Logger.getLogger("EC-Scavenger");
+public class Dexterity extends ExpCraftModule {
 
-	private ScavengerBlockListener blockListener;
+	private static final Logger LOG = Logger.getLogger("EC-Dexterity");
 
 	private Chat chat;
+
+	private DexterityEntityListener entityListener;
+
+	private DexterityPlayerListener playerListener;
 
 	/**
 	 * Create listeners and link them to this plugin and a common
@@ -26,8 +28,11 @@ public class Scavenger extends ExpCraftModule {
 		// use one chat tool
 		chat = new Chat(this);
 
-		// block listener
-		blockListener = new ScavengerBlockListener(this);
+		// player listener
+		playerListener = new DexterityPlayerListener(this);
+
+		// entity listener
+		entityListener = new DexterityEntityListener(this);
 	}
 
 	@Override
@@ -35,11 +40,14 @@ public class Scavenger extends ExpCraftModule {
 		chat.info(sender,
 				MessageFormat.format("*** {0} ({1}) ***", getName(), getAbbr()));
 
-		chat.info(sender,
-				"Digging through dirt, etc. you can find other items.");
-		chat.info(sender, "The more you search, the more you'll find.");
-
 		int level = getPersistence().getLevel(this, sender);
+		chat.info(sender, "Boots:");
+		sendToolInfo(sender, "Leather", level);
+		sendToolInfo(sender, "Chainmail", level);
+		sendToolInfo(sender, "Iron", level);
+		sendToolInfo(sender, "Gold", level);
+		sendToolInfo(sender, "Diamond", level);
+
 		double exp = getPersistence().getExp(this, sender);
 		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
 		chat.info(sender, "Stats:");
@@ -47,11 +55,13 @@ public class Scavenger extends ExpCraftModule {
 				"Current level: {0}, XP: {1} points", level, exp));
 		chat.info(sender, MessageFormat.format(
 				"Experience to next level: {0} points", nextLvl - exp));
+
+		// TODO cryxli: show info
 	}
 
 	@Override
 	public String getAbbr() {
-		return "Sc";
+		return "Dx";
 	}
 
 	/**
@@ -78,7 +88,7 @@ public class Scavenger extends ExpCraftModule {
 
 	@Override
 	public String getName() {
-		return "Scavenger";
+		return "Dexterity";
 	}
 
 	/**
@@ -92,7 +102,6 @@ public class Scavenger extends ExpCraftModule {
 		saveConfig();
 	}
 
-	// server want the plugin to start working
 	@Override
 	public void onEnable() {
 		// pre-load config
@@ -109,7 +118,7 @@ public class Scavenger extends ExpCraftModule {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
-	}
+	}// server want the plugin to start working
 
 	/** Register the listeners */
 	private void registerEvents() {
@@ -117,11 +126,39 @@ public class Scavenger extends ExpCraftModule {
 		createListeners();
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest,
-				this);
+		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener,
+				Event.Priority.Highest, this);
+		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener,
+				Event.Priority.Highest, this);
 	}
 
-	void sendHint(final Player player, final String msg) {
-		chat.info(player, msg);
+	/**
+	 * Send level info about the given pickaxe to the player. If the player
+	 * meets the requirements for the tool, it will be written in "good"
+	 * (default GREEN), or in "bad" (default RED) otherwise.
+	 * 
+	 * @param sender
+	 *            Current player
+	 * @param material
+	 *            String identifying the material of the pickaxe.
+	 * @param level
+	 *            Player's level
+	 */
+	private void sendToolInfo(final Player sender, final String material,
+			final int level) {
+		int toolLevel = getConfInt("BootsLevel." + material);
+		String msg = MessageFormat
+				.format("{0} Boots: {1}", material, toolLevel);
+		if (level >= toolLevel) {
+			chat.good(sender, msg);
+		} else {
+			chat.bad(sender, msg);
+		}
 	}
+
+	void warnBoots(final Player player) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

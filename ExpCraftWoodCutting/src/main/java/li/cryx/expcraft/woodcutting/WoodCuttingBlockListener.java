@@ -151,5 +151,8 @@ public class WoodCuttingBlockListener extends BlockListener {
 			break;
 		}
 		plugin.getPersistence().addExp(plugin, player, gained);
+
+		// double drops
+		plugin.dropItem(event.getBlock(), level);
 	}
 }

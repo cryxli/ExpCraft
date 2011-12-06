@@ -1,7 +1,12 @@
 name: ${project.name}
-main: me.samkio.lcdexterity.LCDexterity
+main: li.cryx.expcraft.dexterity.Dexterity
 version: ${project.version}
+depend: [ExpCraftCore]
 description: >
-             LCDexterity. The Dexterity Level for LevelCraftCore.
+             ${project.name}. The Dexterity Level for ExpCraft.
 commands:
 
+permissions:
+  ec.module.dx:
+    description: Enable Dexterity module
+    default: true

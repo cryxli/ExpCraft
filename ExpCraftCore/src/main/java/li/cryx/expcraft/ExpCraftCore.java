@@ -1,7 +1,8 @@
 package li.cryx.expcraft;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import li.cryx.expcraft.cmd.CommandManager;
@@ -36,14 +37,26 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 
 	private final CommandManager cmd;
 
-	private final Set<ExpCraftModule> modules = new HashSet<ExpCraftModule>();
+	private final Map<String, ExpCraftModule> modules = new TreeMap<String, ExpCraftModule>();
 
 	public ExpCraftCore() {
 		cmd = new CommandManager(this);
 	}
 
-	public Set<ExpCraftModule> getModules() {
-		return modules;
+	/**
+	 * Get the module identified by its abbreviation.
+	 * 
+	 * @param abbr
+	 *            Short identifier of a module
+	 * @return The instance of the module, or, <code>null</code>, if no module
+	 *         exists for the given abbreviation.
+	 */
+	public ExpCraftModule getModuleByAbbr(final String abbr) {
+		return modules.get(abbr.toLowerCase());
+	}
+
+	public Collection<ExpCraftModule> getModules() {
+		return modules.values();
 	}
 
 	@Override
@@ -85,7 +98,8 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 				// process player commands
 				this.cmd.onCommand((Player) sender, cmd, args);
 			} else {
-				// TODO cryxli: show info about plugin
+				// show info about plugin
+				this.cmd.displayCoreInfo((Player) sender);
 			}
 
 			return true;
@@ -123,7 +137,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 				module.setPermission(permission);
 				module.setLevelCap(getConfig().getInt("Levels.LevelCap"));
 
-				modules.add(module);
+				modules.put(module.getAbbr().toLowerCase(), module);
 				buf.append(module.getName());
 				buf.append(",");
 			}
