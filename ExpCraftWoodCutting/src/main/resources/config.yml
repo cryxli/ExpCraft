@@ -15,3 +15,7 @@ UseLevel:
   Birch: 0
   Log: 0
   Plank: 0
+
+Settings:
+  EnableDoubleDrop: true
+  DropMultiplier: 1.0

@@ -23,3 +23,7 @@ ExpGain:
   Gravel: 1.0
   Clay: 10.0
   Sand: 2.0
+
+Settings:
+  EnableDoubleDrop: true
+  DropMultiplier: 1.0
