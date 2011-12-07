@@ -9,6 +9,7 @@ AxeLevel:
 ExpGain:
   Log: 5.0
   Plank: 2.0
+  Leaves: 0.1
 
 UseLevel:
   Redwood: 0

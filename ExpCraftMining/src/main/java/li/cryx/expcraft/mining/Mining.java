@@ -54,7 +54,7 @@ public class Mining extends DropExpCraftModule {
 		case LAPIS_ORE:
 			return new ItemStack(Material.INK_SACK, 5, (short) 4);
 		case GLOWSTONE:
-			return new ItemStack(Material.GLOWSTONE_DUST, 1);
+			return new ItemStack(Material.GLOWSTONE_DUST, 2);
 
 		default:
 			return null;

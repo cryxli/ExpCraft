@@ -146,6 +146,11 @@ public class WoodCuttingBlockListener extends BlockListener {
 		case WOOD: // wooden plank
 			gained = plugin.getConfDouble("ExpGain.Plank");
 			break;
+		case LEAVES:
+			if (itemInHand == Material.SHEARS) {
+				gained = plugin.getConfDouble("ExpGain.Leaves");
+				break;
+			}
 		default:
 			gained = 0;
 			break;

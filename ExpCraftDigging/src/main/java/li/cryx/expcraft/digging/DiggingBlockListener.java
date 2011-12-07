@@ -129,6 +129,9 @@ public class DiggingBlockListener extends BlockListener {
 		if (!checkTools(player, itemInHand, level)) {
 			event.setCancelled(true);
 			return;
+
+		} else if (itemInHand == Material.GOLD_SPADE) {
+			// TODO
 		}
 
 		Material m = event.getBlock().getType();
