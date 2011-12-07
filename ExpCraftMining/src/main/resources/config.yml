@@ -37,4 +37,4 @@ UseLevel:
 Settings:
   EnableDoubleDrop: true
   DropMultiplier: 1.0
-  
+  FirePickaxeLevel: 80
