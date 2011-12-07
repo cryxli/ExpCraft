@@ -27,3 +27,4 @@ ExpGain:
 Settings:
   EnableDoubleDrop: true
   DropMultiplier: 1.0
+  FireShovelLevel: 80

@@ -1,9 +1,11 @@
 package li.cryx.expcraft.digging;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
+import org.bukkit.inventory.ItemStack;
 
 public class DiggingBlockListener extends BlockListener {
 
@@ -111,6 +113,45 @@ public class DiggingBlockListener extends BlockListener {
 		return false;
 	}
 
+	/**
+	 * Execute fire shovel actions.
+	 * 
+	 * @param player
+	 *            Current player. Must hold a golden shovel in hand.
+	 * @param level
+	 *            Player's level. Must be above
+	 *            <code>Settings.FireShovelLevel</code> to have golden shovel
+	 *            act as fire shovels.
+	 * @param event
+	 *            Digging event.
+	 * @return <code>true</code>, if the fire shovel produced something.
+	 */
+	private boolean fireShovel(final Player player, final int level,
+			final BlockBreakEvent event) {
+		if (level < plugin.getConfInt("Settings.FireShovelLevel")
+				|| player.getItemInHand().getType() != Material.GOLD_SPADE) {
+			// requirements not met
+			return false;
+		}
+
+		Block block = event.getBlock();
+		ItemStack drop;
+		switch (block.getType()) {
+		case SAND:
+			drop = new ItemStack(Material.GLASS, 1);
+			break;
+		case CLAY:
+			drop = new ItemStack(Material.CLAY_BRICK, 4);
+			break;
+		default:
+			return false;
+		}
+
+		block.setType(Material.AIR);
+		block.getWorld().dropItem(block.getLocation(), drop);
+		return true;
+	}
+
 	@Override
 	public void onBlockBreak(final BlockBreakEvent event) {
 		if (event.isCancelled()
@@ -129,15 +170,16 @@ public class DiggingBlockListener extends BlockListener {
 		if (!checkTools(player, itemInHand, level)) {
 			event.setCancelled(true);
 			return;
-
-		} else if (itemInHand == Material.GOLD_SPADE) {
-			// TODO
 		}
 
 		Material m = event.getBlock().getType();
 		addExperience(player, m, level);
 
-		// double drops
-		plugin.dropItem(event.getBlock(), level);
+		// since fire shovel may drop different items, only do double drops, if
+		// nothing special happened
+		if (!fireShovel(player, level, event)) {
+			// double drops
+			plugin.dropItem(event.getBlock(), level);
+		}
 	}
 }
