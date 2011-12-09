@@ -21,7 +21,6 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -90,16 +89,15 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String commandLabel, final String[] args) {
-		if (sender instanceof Player && //
-				("level".equalsIgnoreCase(commandLabel) || //
-				"lvl".equalsIgnoreCase(commandLabel))) {
+		if ("level".equalsIgnoreCase(commandLabel) || //
+				"lvl".equalsIgnoreCase(commandLabel)) {
 
 			if (args != null && args.length > 0) {
 				// process player commands
-				this.cmd.onCommand((Player) sender, cmd, args);
+				this.cmd.onCommand(sender, args);
 			} else {
 				// show info about plugin
-				this.cmd.displayCoreInfo((Player) sender);
+				this.cmd.onCommand(sender, "info");
 			}
 
 			return true;
@@ -204,5 +202,4 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		persistence.setConstant(config.getInt("Levels.Constant"));
 		persistence.setMaxLevel(config.getInt("Levels.LevelCap"));
 	}
-
 }

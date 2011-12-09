@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Achievement;
@@ -14,7 +13,6 @@ import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Note;
-import org.bukkit.Server;
 import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -28,41 +26,12 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-public class DummyPlayer implements Player {
-
-	private String name;
+public class DummyPlayer extends DummyCommandSender implements Player {
 
 	public DummyPlayer(final String name) {
-		this.name = name;
-	}
-
-	@Override
-	public PermissionAttachment addAttachment(final Plugin plugin) {
-		return null;
-	}
-
-	@Override
-	public PermissionAttachment addAttachment(final Plugin plugin,
-			final int ticks) {
-		return null;
-	}
-
-	@Override
-	public PermissionAttachment addAttachment(final Plugin plugin,
-			final String name, final boolean value) {
-		return null;
-	}
-
-	@Override
-	public PermissionAttachment addAttachment(final Plugin plugin,
-			final String name, final boolean value, final int ticks) {
-		return null;
+		super(name);
 	}
 
 	@Override
@@ -103,11 +72,6 @@ public class DummyPlayer implements Player {
 
 	@Override
 	public String getDisplayName() {
-		return null;
-	}
-
-	@Override
-	public Set<PermissionAttachmentInfo> getEffectivePermissions() {
 		return null;
 	}
 
@@ -224,11 +188,6 @@ public class DummyPlayer implements Player {
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public List<Entity> getNearbyEntities(final double x, final double y,
 			final double z) {
 		return null;
@@ -267,11 +226,6 @@ public class DummyPlayer implements Player {
 	@Override
 	public float getSaturation() {
 		return 0;
-	}
-
-	@Override
-	public Server getServer() {
-		return null;
 	}
 
 	@Override
@@ -316,16 +270,6 @@ public class DummyPlayer implements Player {
 	}
 
 	@Override
-	public boolean hasPermission(final Permission perm) {
-		return false;
-	}
-
-	@Override
-	public boolean hasPermission(final String name) {
-		return false;
-	}
-
-	@Override
 	public void incrementStatistic(final Statistic statistic) {
 	}
 
@@ -365,22 +309,7 @@ public class DummyPlayer implements Player {
 
 	@Override
 	public boolean isOnline() {
-		return false;
-	}
-
-	@Override
-	public boolean isOp() {
-		return false;
-	}
-
-	@Override
-	public boolean isPermissionSet(final Permission perm) {
-		return false;
-	}
-
-	@Override
-	public boolean isPermissionSet(final String name) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -447,15 +376,7 @@ public class DummyPlayer implements Player {
 	}
 
 	@Override
-	public void recalculatePermissions() {
-	}
-
-	@Override
 	public void remove() {
-	}
-
-	@Override
-	public void removeAttachment(final PermissionAttachment attachment) {
 	}
 
 	@Override
@@ -484,10 +405,6 @@ public class DummyPlayer implements Player {
 
 	@Override
 	public void sendMap(final MapView map) {
-	}
-
-	@Override
-	public void sendMessage(final String message) {
 	}
 
 	@Override
@@ -563,16 +480,8 @@ public class DummyPlayer implements Player {
 	public void setMaximumNoDamageTicks(final int ticks) {
 	}
 
-	public void setName(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public void setNoDamageTicks(final int ticks) {
-	}
-
-	@Override
-	public void setOp(final boolean value) {
 	}
 
 	@Override

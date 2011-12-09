@@ -17,6 +17,7 @@ public class DummyModule extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender, final int page) {
+		sender.sendMessage("Module info here, page: " + page);
 	}
 
 	@Override

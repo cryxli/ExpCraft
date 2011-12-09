@@ -9,7 +9,7 @@ import li.cryx.expcraft.ExpCraftCore;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
-import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -37,14 +37,14 @@ public class CommandManager {
 	 * @param sender
 	 *            Current player
 	 */
-	private void displayAllLevelForPlayer(final Player sender) {
+	private void executeCmdAll(final CommandSender sender, final Player player) {
 		List<String> levels = new ArrayList<String>();
 		for (ExpCraftModule module : core.getModules()) {
-			if (core.getPermissions().hasLevel(module, sender)) {
-				levels.add(MessageFormat.format("{0}, ({1}): {2}", //
+			if (core.getPermissions().hasLevel(module, player)) {
+				levels.add(MessageFormat.format("{0} ({1}): {2}", //
 						module.getName(), //
 						module.getAbbr(), //
-						core.getPersistence().getLevel(module, sender)));
+						core.getPersistence().getLevel(module, player)));
 			}
 		}
 
@@ -60,110 +60,67 @@ public class CommandManager {
 	}
 
 	/**
+	 * Send experience of given player for given module to given sender.
+	 * 
+	 * @param sender
+	 *            The player issuing the command.
+	 * @param player
+	 *            The player who's experience should be queried.
+	 * @param modAbbr
+	 *            Short name of the module.
+	 */
+	private void executeCmdGetExp(final CommandSender sender,
+			final Player player, final String modAbbr) {
+
+		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
+		if (module == null) {
+			// module not found
+			chat.info(sender, "No module found");
+
+		} else if (sender != player
+				|| core.getPermissions().hasLevel(module, player)) {
+
+			// display
+			chat.info(sender,
+					MessageFormat.format("{0} ({1}): lv{2} at {3} points", //
+							module.getName(), //
+							module.getAbbr(), //
+							core.getPersistence().getLevel(module, player), //
+							core.getPersistence().getExp(module, player)));
+
+		} else {
+			// no permission
+			chat.bad(sender, "You cannot use this module");
+		}
+	}
+
+	/**
 	 * Display informaion about ExpCraft, namely the commands the given player
 	 * can issue.
 	 * 
 	 * @param sender
 	 *            Current player
 	 */
-	public void displayCoreInfo(final Player sender) {
+	private void executeCmdInfoCore(final CommandSender sender,
+			final Player player) {
 		chat.topBar(sender);
 		chat.info(sender, "Available commands:");
 		chat.info(sender, " /lvl all");
-		chat.info(sender, " /lvl info <Module> [Page]");
-		if (core.getPermissions().hasAdminCommand(sender, "get")) {
+		if (player != null) {
+			chat.info(sender, " /lvl info <Module> [Page]");
+		}
+		if (player == null
+				|| core.getPermissions().hasAdminCommand(player, "get")) {
 			chat.info(sender, " /lvl getExp <Module> [Player]");
 			chat.info(sender, " /lvl getLvl <Module> [Player]");
 		} else {
 			chat.info(sender, " /lvl getExp <Module>");
 			chat.info(sender, " /lvl getLvl <Module>");
 		}
-		if (core.getPermissions().hasAdminCommand(sender, "set")) {
+		if (player == null
+				|| core.getPermissions().hasAdminCommand(player, "set")) {
 			chat.info(sender, " /lvl setExp <Module> <Value> [Player]");
 			chat.info(sender, " /lvl setLvl <Module> <Value> [Player]");
-		}
-
-		// TODO cryxli: display info/about
-	}
-
-	/**
-	 * Display gathered experience for the given player and module.
-	 * 
-	 * @param sender
-	 *            ConsoleSender requesting the information
-	 * @param modAbbr
-	 *            Short identifier for a module
-	 * @param name
-	 *            Name of the player
-	 */
-	private void displayExp(final Player sender, final String modAbbr,
-			final String name) {
-		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
-		if (module == null) {
-			// module not found
-			chat.info(sender, "No module found");
-		} else if (core.getPermissions().hasLevel(module, sender)) {
-			Player player = null;
-			if (sender.getName().equalsIgnoreCase(name)) {
-				player = sender;
-			} else if (core.getPermissions().hasAdminCommand(sender, "get")) {
-				player = core.getServer().getPlayer(name);
-			}
-			if (player == null) {
-				// player not found
-				chat.info(sender,
-						"Player isn't online or you don't have enough rights");
-			} else {
-				// display
-				chat.info(sender,
-						MessageFormat.format("{0}, ({1}): {2} points", //
-								module.getName(), //
-								module.getAbbr(), //
-								core.getPersistence().getExp(module, player)));
-			}
-		} else {
-			// no permission
-			chat.bad(sender, "You cannot use this module");
-		}
-	}
-
-	/**
-	 * Display the level for the given player and module.
-	 * 
-	 * @param sender
-	 *            ConsoleSender requesting the information
-	 * @param modAbbr
-	 *            Short identifier for a module
-	 * @param name
-	 *            Name of the player
-	 */
-	private void displayLevel(final Player sender, final String modAbbr,
-			final String name) {
-		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
-		if (module == null) {
-			// module not found
-			chat.info(sender, "No module found");
-		} else if (core.getPermissions().hasLevel(module, sender)) {
-			Player player = null;
-			if (sender.getName().equalsIgnoreCase(name)) {
-				player = sender;
-			} else if (core.getPermissions().hasAdminCommand(sender, "get")) {
-				player = core.getServer().getPlayer(name);
-			}
-			if (player == null) {
-				// player not found
-				chat.info(sender,
-						"Player isn't online or you don't have enough rights");
-			} else {
-				// display
-				chat.info(sender, MessageFormat.format("{0}, ({1}): {2}", //
-						module.getName(), //
-						module.getAbbr(), //
-						core.getPersistence().getLevel(module, player)));
-			}
-		} else {
-			// no permission
-			chat.bad(sender, "You cannot use this module");
 		}
 	}
 
@@ -177,21 +134,22 @@ public class CommandManager {
 	 * @param pageStr
 	 *            String containing a number referening to the page to display.
 	 */
-	private void displayModuleInfo(final Player sender, final String modAbbr,
-			final String pageStr) {
+	private void executeCmdInfoModule(final CommandSender sender,
+			final Player player, final String modAbbr, final String pageStr) {
 		int page;
 		try {
 			page = Integer.parseInt(pageStr);
 		} catch (NumberFormatException e) {
 			page = 1;
 		}
+
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
 		} else {
 			// have the module display its info
-			module.displayInfo(sender, page);
+			module.displayInfo(player, page);
 		}
 	}
 
@@ -200,45 +158,31 @@ public class CommandManager {
 	 * 
 	 * @param sender
 	 *            ConsoleSender issuing the command
+	 * @param player
+	 *            Target player for command.
 	 * @param modAbbr
 	 *            Short identifier for a module
-	 * @param valueStr
-	 *            New amount of expereience points.
-	 * @param name
-	 *            Name of the player
+	 * @param exp
+	 *            New amount of experience points.
 	 */
-	private void execSetExp(final Player sender, final String modAbbr,
-			final String valueStr, final String name) {
-		double value;
-		try {
-			value = Double.parseDouble(valueStr);
-		} catch (NumberFormatException e) {
-			chat.info(sender, "Experience must be a floating point number");
-			return;
-		}
+	private void executeCmdSetExp(final CommandSender sender,
+			final Player player, final String modAbbr, final double exp) {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
-			chat.info(sender, "No module found");
-		} else if (core.getPermissions().hasAdminCommand(sender, "set")) {
-			Player player = core.getServer().getPlayer(name);
-
-			if (player == null) {
-				// player not found
-				chat.info(sender, "Player isn't online");
-			} else {
-				// execute
-				core.getPersistence().setExp(module, player, value);
-				// display
-				chat.info(sender,
-						MessageFormat.format("{0}, ({1}): {2} points", //
-								module.getName(), //
-								module.getAbbr(), //
-								value));
-			}
+			chat.info(player, "No module found");
+		} else if (sender != player
+				|| core.getPermissions().hasLevel(module, player)) {
+			// execute
+			core.getPersistence().setExp(module, player, exp);
+			// display
+			chat.info(sender, MessageFormat.format("{0} ({1}): {2} points", //
+					module.getName(), //
+					module.getAbbr(), //
+					exp));
 		} else {
 			// no permission
-			chat.bad(sender, "You do not have enough rights");
+			msgNoPermission(sender);
 		}
 	}
 
@@ -246,46 +190,37 @@ public class CommandManager {
 	 * Change the level of a player and module
 	 * 
 	 * @param sender
-	 *            ConsoleSender issuing the command
+	 *            CommandSender issuing the command
+	 * @param player
+	 *            Target player for the command
 	 * @param modAbbr
 	 *            Short identifier for a module
-	 * @param valueStr
+	 * @param level
 	 *            New level
-	 * @param name
-	 *            Name of the player
 	 */
-	private void execSetLevel(final Player sender, final String modAbbr,
-			final String valueStr, final String name) {
-		int value;
-		try {
-			value = Integer.parseInt(valueStr);
-		} catch (NumberFormatException e) {
-			chat.info(sender, "Experience must be a natural number");
-			return;
-		}
+	private void executeCmdSetLevel(final CommandSender sender,
+			final Player player, final String modAbbr, final int level) {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
-		} else if (core.getPermissions().hasAdminCommand(sender, "set")) {
-			Player player = core.getServer().getPlayer(name);
-
-			if (player == null) {
-				// player not found
-				chat.info(sender, "Player isn't online");
-			} else {
-				// execute
-				core.getPersistence().setLevel(module, player, value);
-				// display
-				chat.info(sender, MessageFormat.format("{0}, ({1}): {2}", //
-						module.getName(), //
-						module.getAbbr(), //
-						value));
-			}
+		} else if (sender != player
+				|| core.getPermissions().hasAdminCommand(player, "set")) {
+			// execute
+			core.getPersistence().setLevel(module, player, level);
+			// display
+			chat.info(sender, MessageFormat.format("{0} ({1}): lv{2}", //
+					module.getName(), //
+					module.getAbbr(), //
+					level));
 		} else {
 			// no permission
-			chat.bad(sender, "You do not have enough rights");
+			msgNoPermission(sender);
 		}
+	}
+
+	private void msgNoPermission(final CommandSender sender) {
+		chat.bad(sender, "You cannot execute that command.");
 	}
 
 	/**
@@ -298,79 +233,238 @@ public class CommandManager {
 	 * @param args
 	 *            Optional arguments for the command
 	 */
-	public void onCommand(final Player sender, final Command cmd,
-			final String[] args) {
+	public void onCommand(final CommandSender sender, final String... args) {
+		Player player = null;
+		if (sender instanceof Player) {
+			player = (Player) sender;
+		}
 
-		if ("all".equalsIgnoreCase(args[0])) {
-			// display all level for a player
-			displayAllLevelForPlayer(sender);
+		if (args == null || args.length == 0) {
+			preprocessCmdInfo(sender, player, new String[] { "info" });
 
-		} else if ("getexp".equalsIgnoreCase(args[0])) {
-			// display exp for a player and module
-			if (args.length < 2) {
-				chat.info(sender, "Syntax: /level getExp <Module> [Player]");
-			} else if (args.length == 2) {
-				displayExp(sender, args[1], sender.getName());
-			} else {
-				displayExp(sender, args[1], args[2]);
-			}
+		} else if ("all".equalsIgnoreCase(args[0])) {
+			preprocessCmdAll(sender, player, args);
+
+		} else if ("getexp".equalsIgnoreCase(args[0])
+				|| "getlevel".equalsIgnoreCase(args[0])
+				|| "getlvl".equalsIgnoreCase(args[0])) {
+			preprocessCmdGetExp(sender, player, args);
 
 		} else if ("setexp".equalsIgnoreCase(args[0])) {
-			// change exp for a player and module
-			if (args.length < 3) {
-				chat.info(sender,
-						"Syntax: /level setExp <Module> <Value> [Player]");
-			} else if (args.length == 3) {
-				execSetExp(sender, args[1], args[2], sender.getName());
-			} else {
-				execSetExp(sender, args[1], args[2], args[3]);
-			}
+			preprocessCmdSetExp(sender, player, args);
+
 		} else if ("setlevel".equalsIgnoreCase(args[0])
 				|| "setlvl".equalsIgnoreCase(args[0])) {
-			// change level for a player and module
-			if (args.length < 3) {
+			preprocessCmdSetLevel(sender, player, args);
+
+		} else {
+			preprocessCmdInfo(sender, player, args);
+		}
+	}
+
+	private void preprocessCmdAll(final CommandSender sender, Player player,
+			final String[] args) {
+		if (player == null) {
+			// console command
+			if (args.length >= 2) {
+				player = core.getServer().getPlayer(args[1]);
+				if (player == null) {
+					// no player found
+					chat.info(sender, MessageFormat.format(
+							"Player {0} is offline", args[1]));
+				} else {
+					executeCmdAll(sender, player);
+				}
+			} else {
+				chat.info(sender, "Syntax: /level all <Player>");
+			}
+
+		} else if (args.length == 1) {
+			// for player, by player
+			executeCmdAll(sender, player);
+
+		} else if (args.length >= 2
+				&& core.getPermissions().hasAdminCommand(player, "get")) {
+			// for player, by op
+			player = core.getServer().getPlayer(args[1]);
+			if (player == null) {
+				// no player found
+				chat.info(sender,
+						MessageFormat.format("Player {0} is offline", args[1]));
+			} else {
+				executeCmdAll(sender, player);
+			}
+		} else {
+
+			msgNoPermission(sender);
+		}
+	}
+
+	private void preprocessCmdGetExp(final CommandSender sender,
+			final Player player, final String[] args) {
+
+		CmdArgs cmdArgs = preprocessTwoArgCmd(sender, player,
+				"getExp <Module>", "get", args);
+		if (cmdArgs != null) {
+			executeCmdGetExp(cmdArgs.sender, cmdArgs.player, cmdArgs.args[0]);
+		}
+	}
+
+	private void preprocessCmdInfo(final CommandSender sender,
+			final Player player, final String[] args) {
+
+		// handle the following cases:
+		// - /level info
+		// - /level info <module>
+		// - /level info <module> <page>
+		// - /level
+		// - /level <module>
+		// - /level <module> <page>
+		int len = 0;
+		if ("info".equalsIgnoreCase(args[0])) {
+			len = 1;
+		}
+
+		if (args.length < 1 + len) {
+			// no module stated
+			executeCmdInfoCore(sender, player);
+
+		} else if (player != null && args.length == 1 + len) {
+			// only module, no page
+			executeCmdInfoModule(sender, player, args[len], "1");
+
+		} else if (player != null && args.length >= 2 + len) {
+			// module and page
+			executeCmdInfoModule(sender, player, args[1], args[2]);
+
+		} else {
+			executeCmdInfoCore(sender, player);
+		}
+	}
+
+	private void preprocessCmdSetExp(final CommandSender sender,
+			final Player player, final String[] args) {
+
+		CmdArgs cmdArgs = preprocessThreeArgCmd(sender, player,
+				"setExp <Module> <Value>", "set", args);
+		if (cmdArgs != null) {
+			try {
+				double exp = Double.parseDouble(cmdArgs.args[1]);
+				executeCmdSetExp(cmdArgs.sender, cmdArgs.player,
+						cmdArgs.args[0], exp);
+			} catch (NumberFormatException e) {
+				chat.info(sender,
+						"Syntax: /level setExp <Module> <Value> [Player]");
+				chat.info(sender, "  <Value> has to be a floating point number");
+			}
+		}
+	}
+
+	private void preprocessCmdSetLevel(final CommandSender sender,
+			final Player player, final String[] args) {
+
+		CmdArgs cmdArgs = preprocessThreeArgCmd(sender, player,
+				"setLevel <Module> <Value>", "set", args);
+		if (cmdArgs != null) {
+			try {
+				int level = Integer.parseInt(cmdArgs.args[1]);
+				executeCmdSetLevel(cmdArgs.sender, cmdArgs.player,
+						cmdArgs.args[0], level);
+			} catch (NumberFormatException e) {
 				chat.info(sender,
 						"Syntax: /level setLevel <Module> <Value> [Player]");
-			} else if (args.length == 3) {
-				execSetLevel(sender, args[1], args[2], sender.getName());
+				chat.info(sender, "  <Value> has to be a natural number");
+			}
+		}
+	}
+
+	private CmdArgs preprocessThreeArgCmd(final CommandSender sender,
+			Player player, final String cmdInfo, final String adminCmd,
+			final String[] args) {
+
+		if (player == null) {
+			// console command
+			if (args.length >= 4) {
+				player = core.getServer().getPlayer(args[3]);
+				if (player == null) {
+					// no player found
+					chat.info(sender, MessageFormat.format(
+							"Player {0} is offline", args[3]));
+				} else {
+					return new CmdArgs(sender, player, args[1], args[2]);
+				}
 			} else {
-				execSetLevel(sender, args[1], args[2], args[3]);
+				chat.info(sender, "Syntax: /level " + cmdInfo + " <Player>");
+			}
+		} else if (args.length < 3) {
+			// wrong number of arguments
+			chat.info(sender, "Syntax: /level " + cmdInfo + " [Player]");
+		} else if (args.length == 3) {
+			// for player, by player
+			return new CmdArgs(sender, player, args[1], args[2]);
+		} else if (args.length >= 3
+				&& core.getPermissions().hasAdminCommand(player, adminCmd)) {
+			// for player, by op
+			player = core.getServer().getPlayer(args[3]);
+			if (player == null) {
+				// no player found
+				chat.info(sender,
+						MessageFormat.format("Player {0} is offline", args[3]));
+			} else {
+				return new CmdArgs(sender, player, args[1], args[2]);
+			}
+		} else {
+
+			msgNoPermission(sender);
+		}
+
+		return null;
+	}
+
+	private CmdArgs preprocessTwoArgCmd(final CommandSender sender,
+			Player player, final String cmdInfo, final String adminCmd,
+			final String[] args) {
+
+		if (player == null) {
+			// console command
+			if (args.length >= 3) {
+				player = core.getServer().getPlayer(args[2]);
+				if (player == null) {
+					// no player found
+					chat.info(sender, MessageFormat.format(
+							"Player {0} is offline", args[2]));
+				} else {
+					return new CmdArgs(sender, player, args[1]);
+				}
+			} else {
+				chat.info(sender, "Syntax: /level " + cmdInfo + " <Player>");
 			}
 
-		} else if ("getlevel".equalsIgnoreCase(args[0])
-				|| "getlvl".equalsIgnoreCase(args[0])) {
-			// display level for a player and module
-			if (args.length < 2) {
-				chat.info(sender, "Syntax: /level getLevel <Module> [Player]");
-			} else if (args.length == 2) {
-				displayLevel(sender, args[1], sender.getName());
-			} else {
-				displayLevel(sender, args[1], args[2]);
-			}
+		} else if (args.length < 2) {
+			// wrong number of arguments
+			chat.info(sender, "Syntax: /level " + cmdInfo + " [Player]");
 
-		} else if ("info".equalsIgnoreCase(args[0])) {
-			// display information about ExpCraft or a module
-			if (args.length < 2) {
-				displayCoreInfo(sender);
-			} else if (args.length == 2) {
-				displayModuleInfo(sender, args[1], "1");
+		} else if (args.length == 2) {
+			// for player, by player
+			return new CmdArgs(sender, player, args[1]);
+
+		} else if (args.length >= 2
+				&& core.getPermissions().hasAdminCommand(player, adminCmd)) {
+			// for player, by op
+			player = core.getServer().getPlayer(args[2]);
+			if (player == null) {
+				// no player found
+				chat.info(sender,
+						MessageFormat.format("Player {0} is offline", args[2]));
 			} else {
-				displayModuleInfo(sender, args[1], args[2]);
+				return new CmdArgs(sender, player, args[1]);
 			}
 
 		} else {
-			if (core.getModuleByAbbr(args[0]) == null) {
-				// unknown command, display info about ExpCraft
-				displayCoreInfo(sender);
 
-			} else if (args.length == 1) {
-				displayModuleInfo(sender, args[0], "1");
-			} else {
-				displayModuleInfo(sender, args[0], args[1]);
-			}
-
+			msgNoPermission(sender);
 		}
 
-		// TODO cryxli: handle player commands
+		return null;
 	}
 }

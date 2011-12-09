@@ -25,7 +25,8 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 	 *            Current player
 	 * @param page
 	 *            For multi page settings, which page to display. Will always
-	 *            default to <code>1</code>.
+	 *            default to <code>1</code>. Usually, you can display 9 lines at
+	 *            once.
 	 */
 	abstract public void displayInfo(Player sender, int page);
 
