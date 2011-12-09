@@ -43,19 +43,19 @@ public class Chat {
 	private final ExpCraftCore core;
 
 	/** Chat color to highlight things. */
-	protected static ChatColor colorHighlight = ChatColor.valueOf("GOLD");
+	private static ChatColor colorHighlight = ChatColor.valueOf("GOLD");
 
 	/** Chat color to indicate something special. */
-	protected static ChatColor colorSpecial = ChatColor.valueOf("YELLOW");
+	private static ChatColor colorSpecial = ChatColor.valueOf("YELLOW");
 
 	/** Chat color to indicate good news. */
-	protected static ChatColor colorGood = ChatColor.valueOf("GREEN");
+	private static ChatColor colorGood = ChatColor.valueOf("GREEN");
 
 	/** Chat color to indicate bad news. */
-	protected static ChatColor colorBad = ChatColor.valueOf("RED");
+	private static ChatColor colorBad = ChatColor.valueOf("RED");
 
 	/** Indicator whether to broadcast information to all players. */
-	protected static boolean notifyAll = true;
+	private static boolean notifyAll = true;
 
 	/** Set the bad color, by color name. */
 	public static void setBadColor(final String color) {
