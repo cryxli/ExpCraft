@@ -115,6 +115,28 @@ public class CommandManagerTest {
 	}
 
 	@Test
+	public void playerNoOpInfoModule() {
+		cmd.onCommand(player, "info", "t");
+		Assert.assertEquals("Module info here, page: 1\n",
+				player.getLastMessage());
+
+		player.clearMsgCache();
+		cmd.onCommand(player, "info", "t", "2");
+		Assert.assertEquals("Module info here, page: 2\n",
+				player.getLastMessage());
+
+		player.clearMsgCache();
+		cmd.onCommand(player, "t");
+		Assert.assertEquals("Module info here, page: 1\n",
+				player.getLastMessage());
+
+		player.clearMsgCache();
+		cmd.onCommand(player, "t", "2");
+		Assert.assertEquals("Module info here, page: 2\n",
+				player.getLastMessage());
+	}
+
+	@Test
 	public void playerNoOpNothing() {
 		cmd.onCommand(player);
 		playerInfoCheck();
@@ -238,6 +260,12 @@ public class CommandManagerTest {
 				lines[6]);
 		Assert.assertEquals("§6[EC] §e /lvl setLvl <Module> <Value> [Player]",
 				lines[7]);
+	}
+
+	@Test
+	public void playerOpInfoModule() {
+		player.setOp(true);
+		playerNoOpInfoModule();
 	}
 
 	@Test
@@ -379,6 +407,10 @@ public class CommandManagerTest {
 	@Test
 	public void senderInfoModule() {
 		cmd.onCommand(sender, "info", "t");
+		senderInfoCheck();
+
+		sender.clearMsgCache();
+		cmd.onCommand(sender, "info", "t", "2");
 		senderInfoCheck();
 	}
 

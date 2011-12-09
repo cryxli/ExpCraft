@@ -335,7 +335,7 @@ public class CommandManager {
 
 		} else if (player != null && args.length >= 2 + len) {
 			// module and page
-			executeCmdInfoModule(sender, player, args[1], args[2]);
+			executeCmdInfoModule(sender, player, args[len], args[1 + len]);
 
 		} else {
 			executeCmdInfoCore(sender, player);
