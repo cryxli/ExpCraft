@@ -1,0 +1,57 @@
+
+/* center everything on the page */
+#mainpage .content {
+	text-align: center;
+}
+#mainpage .content table { 
+	margin: auto;
+	/* table should drop a shadow */
+	-moz-box-shadow: 5px 5px 5px #ccc;
+	-webkit-box-shadow: 5px 5px 5px #ccc;
+	box-shadow: 5px 5px 5px #ccc;
+	/* have nice cell borders */
+	border-collapse: collapse;
+}
+/* have a min cell size */
+#mainpage .content tr.head {
+	height: 50px;
+}
+#mainpage .content td,
+#mainpage .content th {
+	width: 50px;
+	text-align: center;
+	/* cell borders */
+	border: solid 1px #ccc;
+}
+/* the player names should be wider */
+#mainpage .content th.player {
+	width: 75px;
+	padding: 5px;
+}
+
+/* display skin faces and player names */
+.face {
+	background-repeat: no-repeat;
+	background-position: -32px -32px;
+	background-size: 800%;
+	width: 32px;
+	height: 32px;
+	margin: auto;
+	display: block;
+}
+
+/* player detail dialog */
+#playerdetail .content div {
+	display: inline;
+	width: 160px;
+	float: left;
+}
+#playerdetail .content img {
+	margin: 16px 16px 0 16px;
+}
+
+/*
+#mainpage th span.ui-btn-inner {
+	padding: 6px 0;
+}
+*/

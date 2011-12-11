@@ -1,0 +1,23 @@
+<?php
+
+# database connection
+$conf['db']['url'] = 'localhost:3306';
+$conf['db']['user'] = 'root';
+$conf['db']['pass'] = 'pass';
+$conf['db']['database'] = 'minecraft';
+
+# translate/describe modules
+$conf['module']['D'] = 'Digging';
+$conf['module']['Dx'] = 'Dexterity';
+$conf['module']['Fm'] = 'Farming';
+$conf['module']['M'] = 'Mining';
+$conf['module']['Sc'] = 'Scavenger';
+$conf['module']['W'] = 'Wood Cutting';
+
+# constant to calculate level from experience
+$conf['constant'] = 20;
+
+# display player faces
+$conf['playerFaces'] = false;
+
+?>
