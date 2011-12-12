@@ -35,7 +35,6 @@ var refreshCallback = function(data) {
 	$('#mainpage .content').html('<table><tr class="head"><th class="player">Player</th></tr></table>');
 	var i,table = $('#mainpage tr');
 	for (i in data.modules) {
-//		table.append('<th><a data-shadow="false" data-corners="false" data-role="button" href="#"><img src="res/'+data.modules[i].short+'.png" alt="'+data.modules[i].name+'" title="'+data.modules[i].name+'" /></a></td>');
 		table.append('<th><img src="res/'+data.modules[i].short+'.png" alt="'+data.modules[i].name+'" title="'+data.modules[i].name+'" /></td>');
 	}
 	
@@ -58,7 +57,6 @@ var refreshCallback = function(data) {
 	$('#mainpage').trigger('create');
 	$('#mainpage table a').css('margin','0');
 	$('#mainpage td a').click(playerDetail);
-//	$('#mainpage th a').click(playerDetail);
 	
 	// FIX for update bug in jquerymobile
 	$('#mainpage a.refresh').removeClass('ui-btn-active');

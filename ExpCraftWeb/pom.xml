@@ -26,6 +26,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<!-- TODO cryxli: Find a way to make a nice ZIP instead of JAR -->
 	</build>
 
 	<properties>
