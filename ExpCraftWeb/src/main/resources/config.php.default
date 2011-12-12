@@ -13,6 +13,7 @@ $conf['module']['Fm'] = 'Farming';
 $conf['module']['M'] = 'Mining';
 $conf['module']['Sc'] = 'Scavenger';
 $conf['module']['W'] = 'Wood Cutting';
+$conf['module']['De'] = 'Defence';
 
 # constant to calculate level from experience
 $conf['constant'] = 20;
