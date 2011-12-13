@@ -200,7 +200,6 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public int getMaxHealth() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
