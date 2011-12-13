@@ -75,8 +75,6 @@ public class Digging extends DropExpCraftModule {
 				"Current level: {0}, XP: {1} points", level, exp));
 		chat.info(sender, MessageFormat.format(
 				"Experience to next level: {0} points", nextLvl - exp));
-
-		// TODO
 	}
 
 	@Override
