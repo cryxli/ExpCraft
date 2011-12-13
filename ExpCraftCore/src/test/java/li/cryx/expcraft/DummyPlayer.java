@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
@@ -86,6 +87,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public float getExp() {
+		return 0;
+	}
+
+	@Override
 	public int getExperience() {
 		return 0;
 	}
@@ -116,6 +122,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public long getFirstPlayed() {
+		return 0;
+	}
+
+	@Override
 	public int getFoodLevel() {
 		return 0;
 	}
@@ -141,6 +152,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public Player getKiller() {
+		return null;
+	}
+
+	@Override
 	public int getLastDamage() {
 		return 0;
 	}
@@ -148,6 +164,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public EntityDamageEvent getLastDamageCause() {
 		return null;
+	}
+
+	@Override
+	public long getLastPlayed() {
+		return 0;
 	}
 
 	@Override
@@ -178,6 +199,12 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public int getMaxHealth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
 	public int getMaximumAir() {
 		return 0;
 	}
@@ -200,6 +227,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public Entity getPassenger() {
+		return null;
+	}
+
+	@Override
+	public Player getPlayer() {
 		return null;
 	}
 
@@ -267,6 +299,15 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public World getWorld() {
 		return null;
+	}
+
+	@Override
+	public void giveExp(int amount) {
+	}
+
+	@Override
+	public boolean hasPlayedBefore() {
+		return false;
 	}
 
 	@Override
@@ -433,6 +474,10 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public void setExp(float exp) {
+	}
+
+	@Override
 	public void setExperience(final int exp) {
 	}
 
@@ -544,7 +589,17 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public boolean teleport(Entity destination, TeleportCause cause) {
+		return false;
+	}
+
+	@Override
 	public boolean teleport(final Location location) {
+		return false;
+	}
+
+	@Override
+	public boolean teleport(Location location, TeleportCause cause) {
 		return false;
 	}
 
@@ -561,5 +616,4 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public void updateInventory() {
 	}
-
 }

@@ -107,6 +107,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public boolean getAllowEnd() {
+		return false;
+	}
+
+	@Override
 	public boolean getAllowFlight() {
 		return false;
 	}
@@ -118,6 +123,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public Set<OfflinePlayer> getBannedPlayers() {
+		return null;
+	}
+
+	@Override
+	public String getBukkitVersion() {
 		return null;
 	}
 
@@ -168,6 +178,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(final String name) {
+		return null;
+	}
+
+	@Override
+	public OfflinePlayer[] getOfflinePlayers() {
 		return null;
 	}
 
@@ -274,6 +289,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public World getWorld(final UUID uid) {
+		return null;
+	}
+
+	@Override
+	public File getWorldContainer() {
 		return null;
 	}
 
