@@ -77,15 +77,14 @@ public class FarmingBlockListener extends BlockListener {
 	 */
 	private void bonusDropForNetherWart(final Player player, final int level,
 			final Block block) {
-		// TODO cryxli: finalise with bukkit for 1.0
 		int rnd = randomGenerator.nextInt(100);
 		if (rnd >= 0 && rnd < 2
 				&& level >= plugin.getConfInt("DropLevel.GhastTear")) {
-			// drop(block, Material.GHAST_TEAR);
+			drop(block, Material.GHAST_TEAR);
 
 		} else if (rnd >= 2 && rnd < 4
 				&& level >= plugin.getConfInt("DropLevel.BlazePowder")) {
-			// drop(block, Material.BLAZE_POWDER);
+			drop(block, Material.BLAZE_POWDER);
 		}
 	}
 
