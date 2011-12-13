@@ -4,7 +4,8 @@
 
 	<groupId>li.cryx</groupId>
 	<artifactId>expcraft-web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-1337-181b</version>
+	<name>WebGui</name>
 
 	<build>
 		<finalName>${project.name}</finalName>

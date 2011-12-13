@@ -4,7 +4,7 @@
 
 	<groupId>li.cryx</groupId>
 	<artifactId>expcraft-digging</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-1337-181b</version>
 	<name>EC-Digging</name>
 
 	<dependencies>
