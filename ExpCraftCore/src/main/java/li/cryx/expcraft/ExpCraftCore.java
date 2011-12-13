@@ -76,10 +76,10 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		FileConfiguration config = getConfig();
 
 		// delegate chat colors
-		Chat.setHighlightColor(config.getString("Colors.ColourOne"));
-		Chat.setSpecialColor(config.getString("Colors.ColourTwo"));
-		Chat.setGoodColor(config.getString("Colors.ColourGood"));
-		Chat.setBadColor(config.getString("Colors.ColourBad"));
+		Chat.setHighlightColor(config.getString("Colors.ColorOne"));
+		Chat.setSpecialColor(config.getString("Colors.ColorTwo"));
+		Chat.setGoodColor(config.getString("Colors.ColorGood"));
+		Chat.setBadColor(config.getString("Colors.ColorBad"));
 
 		// delegate config to managers
 		setPersistence(config);

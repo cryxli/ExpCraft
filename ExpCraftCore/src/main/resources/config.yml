@@ -1,9 +1,9 @@
 #Default ExpCraftCore config file
 Colors:
-  ColourOne: GOLD
-  ColourTwo: YELLOW
-  ColourGood: GREEN
-  ColourBad: RED
+  ColorOne: GOLD
+  ColorTwo: YELLOW
+  ColorGood: GREEN
+  ColorBad: RED
 
 Database: FlatFile
 DbConnection:
