@@ -3,14 +3,14 @@
   
   <groupId>li.cryx</groupId>
   <artifactId>expcraft-woodcutting</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.1.0-1337-181b</version>
   <name>EC-WoodCutting</name>
   
   <dependencies>
     <dependency>
       <groupId>li.cryx</groupId>
       <artifactId>expcraft-core</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.1.0-1337-181b</version>
     </dependency>
   </dependencies>
   

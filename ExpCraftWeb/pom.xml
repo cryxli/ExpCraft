@@ -4,7 +4,7 @@
 
 	<groupId>li.cryx</groupId>
 	<artifactId>expcraft-web</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.1.0-1337-181b</version>
 	<name>WebGui</name>
 
 	<build>
