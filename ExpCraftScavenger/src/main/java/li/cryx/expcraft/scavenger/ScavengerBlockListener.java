@@ -53,8 +53,7 @@ public class ScavengerBlockListener extends BlockListener {
 			// 4 %o - 4%
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.GhastTear"));
-			// TODO cryxli: enable with bukkit for 1.0
-			// dropItem(block, Material.GHAST_TEAR);
+			dropItem(block, Material.GHAST_TEAR);
 			plugin.sendHint(player, "A Ghast must have been sad, here.");
 
 		} else if (rnd > 3 && rnd <= 6
@@ -62,16 +61,14 @@ public class ScavengerBlockListener extends BlockListener {
 			// 3 %o - 3%
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Nugget"));
-			// TODO cryxli: enable with bukkit for 1.0
-			// dropItem(block, Material.NUGGET);
+			dropItem(block, Material.GOLD_NUGGET);
 
 		} else if (rnd > 6 && rnd <= 8
 				&& level >= plugin.getConfInt("DropLevel.BlazePowder")) {
 			// 2 %o - 2%
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.BlazePowder"));
-			// TODO cryxli: enable with bukkit for 1.0
-			// dropItem(block, Material.BLAZE_POWDER);
+			dropItem(block, Material.BLAZE_POWDER);
 
 		}
 	}
@@ -225,10 +222,13 @@ public class ScavengerBlockListener extends BlockListener {
 		case NETHER:
 			dropNether(player, level, block, random);
 			break;
-		case SKYLANDS: // TODO cryxli: is this the END ???
 		case NORMAL:
-		default:
 			dropNormal(player, level, block, random);
+			break;
+		case THE_END:
+		default:
+			// no drops
+			break;
 		}
 	}
 }
