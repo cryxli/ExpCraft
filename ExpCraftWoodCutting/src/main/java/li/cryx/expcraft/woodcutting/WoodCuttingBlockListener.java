@@ -8,6 +8,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.material.Tree;
 
+/**
+ * Listener to detect breaking of wooden blocks (planks and logs) and leaves.
+ * 
+ * @author cryxli
+ */
 public class WoodCuttingBlockListener extends BlockListener {
 
 	/** Reference to the ExpCraft module */
@@ -64,10 +69,6 @@ public class WoodCuttingBlockListener extends BlockListener {
 				return true;
 
 			}
-
-			// } else if (material == Material.LEAVES) {
-			// TODO cryxli: implement cutting leaves with shears
-
 		} else {
 			return true;
 		}
