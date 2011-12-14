@@ -1,0 +1,13 @@
+This project could be the template that is turned into an maven-archtype. 
+But it isn't... yet?
+
+How to create a new ExpCraft module:
+- Copy this project
+- Adjust all default settings:
+  o pom.xml must contain your module's maven group and artifact ID
+  o src/main/resources
+    * plugin.yml Update the bukkit plugin definition for the module
+    * config.yml Set default values for the configurable parameters
+  o src/main/java
+    * Rename and implement Template.java
+    * Add listener classes

@@ -1,0 +1,6 @@
+# Default config file
+# TODO set all the default values here
+
+Example:
+  Key: 100.0
+# the upper key can be accessed using Example.Key
