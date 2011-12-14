@@ -1,11 +1,17 @@
 
+/**
+ * Indicator whether to display player faces.
+ * @type boolean
+ */
 var playerFaces = false;
 
+// load player detail
 var playerDetail = function(event) {
 	var player = $(event.currentTarget).text();
 	$.getJSON('json.php/'+player, playerDetailCallback);
 };
 
+// process and display player detail
 var playerDetailCallback = function(data) {
 	if (data.status != 'ok') {
 		return;
@@ -21,11 +27,13 @@ var playerDetailCallback = function(data) {
 	$.mobile.changePage($('#playerdetail'));
 };
 
+// reload exp table
 var refresh = function() {
 	$('#mainpage .content').html('<img src="res/loading.gif" alt="loading" title="loading" />');
 	$.getJSON('json.php/all', refreshCallback);
 };
 
+// process and display exp table data
 var refreshCallback = function(data) {
 	if (data.status != 'ok') {
 		$('#mainpage .content').html('<p>ERROR!</p>');
@@ -62,11 +70,7 @@ var refreshCallback = function(data) {
 	$('#mainpage a.refresh').removeClass('ui-btn-active');
 }
 
-$(document).ready(function(){
-	$('#mainpage a.refresh').click(refresh);
-	$.getJSON('json.php/config', loadConfigCallback);
-});
-
+// process config from server
 var loadConfigCallback = function(data) {
 	if (data.status != 'ok') {
 		alert('Error fetching data:\n' + data.status);
@@ -75,3 +79,9 @@ var loadConfigCallback = function(data) {
 	}
 	refresh();
 };
+
+// init javascript
+$(document).ready(function(){
+	$('#mainpage a.refresh').click(refresh);
+	$.getJSON('json.php/config', loadConfigCallback);
+});
