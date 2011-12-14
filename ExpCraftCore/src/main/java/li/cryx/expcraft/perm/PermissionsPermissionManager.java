@@ -6,6 +6,13 @@ import org.bukkit.entity.Player;
 
 import com.nijiko.permissions.PermissionHandler;
 
+/**
+ * This class implements the permission manager using the <a
+ * href="https://github.com/TheYeti/Permissions">Permissions</a> plugin in
+ * version 2.7.4+.
+ * 
+ * @author cryxli
+ */
 public class PermissionsPermissionManager extends AbstractPermissionManager {
 
 	private final PermissionHandler handler;
@@ -21,12 +28,6 @@ public class PermissionsPermissionManager extends AbstractPermissionManager {
 
 	@Override
 	public boolean hasLevel(final ExpCraftModule module, final Player player) {
-		// TODO cryxli: consider the following lines
-		// for (String playerN : plugin.Bypassers) {
-		// if (playerN.equalsIgnoreCase(s.getName())) {
-		// return false;
-		// }
-		// }
 		try {
 			return handler.has(player, "ec.module."
 					+ module.getAbbr().toLowerCase());

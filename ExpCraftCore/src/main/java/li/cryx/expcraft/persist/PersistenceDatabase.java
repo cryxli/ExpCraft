@@ -13,6 +13,13 @@ import li.cryx.expcraft.module.ExpCraftModule;
 
 import org.bukkit.entity.Player;
 
+/**
+ * This class implements a storage mechanism using databases. The implementation
+ * should be so generic that it should work with any relational database that
+ * implements the SQL standard.
+ * 
+ * @author cryxli
+ */
 public class PersistenceDatabase extends AbstractPersistenceManager {
 
 	private static final Logger LOG = Logger.getLogger("ExpCraftCore");

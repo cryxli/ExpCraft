@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 /**
  * This class implements a {@link AbstractPermissionManager} that uses the
  * <code>Player</code> objects to determine permission nodes a player has. This
- * method works for the <b>PermissionsBukkit</b> plugin.
+ * method works for the <a
+ * href="http://dev.bukkit.org/server-mods/permbukkit/">PermissionsBukkit</a>
+ * plugin.
  * 
  * @author cryxli
  */
@@ -23,5 +25,4 @@ public class PlayerPermissionManager extends AbstractPermissionManager {
 		return player.hasPermission("ec.module." //
 				+ module.getAbbr().toLowerCase());
 	}
-
 }

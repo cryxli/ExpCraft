@@ -36,6 +36,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 
 	private final CommandManager cmd;
 
+	/** List of active {@link ExpCraftModule}s. */
 	private final Map<String, ExpCraftModule> modules = new TreeMap<String, ExpCraftModule>();
 
 	public ExpCraftCore() {
@@ -108,12 +109,13 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 
 	@Override
 	public void onDisable() {
+		// fotget everything
 		if (persistence != null) {
 			persistence.flush();
+			persistence = null;
 		}
 		modules.clear();
-
-		// TODO cryxli: what else to disable?
+		permission = null;
 
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 	}
@@ -195,7 +197,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 			db.setDbPassword(config.getString("DbConnection.Password"));
 
 		} else {
-			// persist to flat file, als fallback = "FlatFile"
+			// persist to flat file, also fallback = "FlatFile"
 			persistence = new PersistenceFlatFile();
 		}
 		persistence.setCore(this);

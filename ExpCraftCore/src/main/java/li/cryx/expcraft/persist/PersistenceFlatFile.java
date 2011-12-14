@@ -13,15 +13,29 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+/**
+ * This class implements a storage using flat files, YALM actually. Each module
+ * will have its own file that will be stored in the <code>ExpCraft/data/</code>
+ * folder.
+ * 
+ * @author cryxli
+ */
 public class PersistenceFlatFile extends AbstractPersistenceManager {
 
 	private static final Logger LOG = Logger.getLogger("ExpCraftCore");
 
+	/** How often to save files [ms]. Defaults to every 10s. */
 	private static final long SAVE_INTERVAL = 10 * 1000;
 
+	/**
+	 * Keep the files in memory for faster access. But write them regularely to
+	 * disk.
+	 */
 	private final Map<ExpCraftModule, YamlConfiguration> cache = new HashMap<ExpCraftModule, YamlConfiguration>();
+	/** Keep track whether files have changed. */
 	private final Map<ExpCraftModule, Boolean> dirty = new HashMap<ExpCraftModule, Boolean>();
 
+	/** Folder containing the module files. */
 	private File dataFolder;
 
 	@Override
@@ -30,8 +44,7 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 			YamlConfiguration data = getModuleData(module);
 			if (dirty.get(module)) {
 				try {
-					data.save(new File(getDataFolder(), module.getName()
-							+ ".yml"));
+					data.save(new File(dataFolder, module.getName() + ".yml"));
 					dirty.put(module, false);
 				} catch (IOException e) {
 					LOG.log(Level.SEVERE, "[EC] Unable to persist level info",
@@ -39,10 +52,6 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 				}
 			}
 		}
-	}
-
-	private File getDataFolder() {
-		return dataFolder;
 	}
 
 	@Override
@@ -69,6 +78,7 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 		super.setCore(core);
 		dataFolder = new File(core.getDataFolder(), "../ExpCraft/data");
 
+		// start storing interval
 		Thread intervalStorage = new Thread() {
 			@Override
 			public void run() {
