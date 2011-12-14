@@ -1,0 +1,24 @@
+# Default config file for Defence module
+ArmorLevel:
+  LeatherBoots: 0
+  LeatherChestplate: 0
+  LeatherHelmet: 0
+  LeatherLeggings: 0
+  ChainmailBoots: 5
+  ChainmailChestplate: 5
+  ChainmailHelmet: 5
+  ChainmailLeggings: 5
+  IronBoots: 10
+  IronChestplate: 10
+  IronHelmet: 10
+  IronLeggings: 10
+  GoldBoots: 20
+  GoldChestplate: 20
+  GoldHelmet: 20
+  GoldLeggings: 20
+  DiamondBoots: 30
+  DiamondChestplate: 30
+  DiamondHelmet: 30
+  DiamondLeggings: 30
+
+ExperienceMultiplier: 1.0

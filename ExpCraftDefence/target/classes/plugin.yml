@@ -1,0 +1,11 @@
+name: EC-Defence
+main: li.cryx.expcraft.defence.Defence
+version: 0.0.1-SNAPSHOT
+depend: [ExpCraftCore]
+description: >
+             EC-Defence. The Defence Level for ExpCraft.
+
+permissions:
+  ec.module.de:
+    description: Enable Defence module
+    default: true
