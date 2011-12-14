@@ -23,16 +23,17 @@ public class DefenceEntityListener extends EntityListener {
 
 	private boolean checkArmor(final Player player) {
 		int level = plugin.getPersistence().getLevel(plugin, player);
-		checkArmorPiece(player, level, player.getInventory().getBoots());
-		checkArmorPiece(player, level, player.getInventory().getLeggings());
-		checkArmorPiece(player, level, player.getInventory().getChestplate());
-		checkArmorPiece(player, level, player.getInventory().getHelmet());
+		PlayerInventory inv = player.getInventory();
+		checkArmorPiece(player, level, inv.getBoots());
+		checkArmorPiece(player, level, inv.getLeggings());
+		checkArmorPiece(player, level, inv.getChestplate());
+		checkArmorPiece(player, level, inv.getHelmet());
 		return isWearingArmor(player);
 	}
 
 	private void checkArmorPiece(final Player player, final int level,
-			final ItemStack material) {
-		switch (material.getType()) {
+			final ItemStack armor) {
+		switch (armor.getType()) {
 		case LEATHER_BOOTS:
 			checkBoots(player, level, "Leather");
 			break;
@@ -111,6 +112,7 @@ public class DefenceEntityListener extends EntityListener {
 				player.getInventory().setItem(
 						player.getInventory().firstEmpty(), drop);
 			}
+			plugin.notifyRequirements(player, config, "Boots");
 		}
 	}
 
@@ -127,6 +129,7 @@ public class DefenceEntityListener extends EntityListener {
 				player.getInventory().setItem(
 						player.getInventory().firstEmpty(), drop);
 			}
+			plugin.notifyRequirements(player, config, "Chestplate");
 		}
 	}
 
@@ -143,6 +146,7 @@ public class DefenceEntityListener extends EntityListener {
 				player.getInventory().setItem(
 						player.getInventory().firstEmpty(), drop);
 			}
+			plugin.notifyRequirements(player, config, "Helmet");
 		}
 	}
 
@@ -159,6 +163,7 @@ public class DefenceEntityListener extends EntityListener {
 				player.getInventory().setItem(
 						player.getInventory().firstEmpty(), drop);
 			}
+			plugin.notifyRequirements(player, config, "Leggings");
 		}
 	}
 

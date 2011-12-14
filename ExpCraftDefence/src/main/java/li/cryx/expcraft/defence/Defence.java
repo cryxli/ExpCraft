@@ -81,6 +81,12 @@ public class Defence extends ExpCraftModule {
 		saveConfig();
 	}
 
+	void notifyRequirements(final Player player, final String material,
+			final String armor) {
+		chat.bad(player, MessageFormat.format("You cannot wear {0} {1}.",
+				material, armor));
+	}
+
 	@Override
 	public void onEnable() {
 		// pre-load config
