@@ -15,12 +15,28 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public class DefenceEntityListener extends EntityListener {
 
+	/** Reference to plugin. */
 	private final Defence plugin;
 
+	/**
+	 * Create a new listener for given plugin.
+	 * 
+	 * @param plugin
+	 *            Reference to plugin
+	 */
 	public DefenceEntityListener(final Defence plugin) {
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Check a players armor. If a worn armor piece does not meet the
+	 * requirements, it will be moved into inventory or dropped.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @return <code>true</code>, if the player still wears at least one armor
+	 *         piece after the test
+	 */
 	private boolean checkArmor(final Player player) {
 		int level = plugin.getPersistence().getLevel(plugin, player);
 		PlayerInventory inv = player.getInventory();
@@ -31,6 +47,16 @@ public class DefenceEntityListener extends EntityListener {
 		return isWearingArmor(player);
 	}
 
+	/**
+	 * Separates the check depending on armor type (boots, leggins, etc).
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param level
+	 *            Player's level
+	 * @param armor
+	 *            Armor piece
+	 */
 	private void checkArmorPiece(final Player player, final int level,
 			final ItemStack armor) {
 		switch (armor.getType()) {
@@ -94,11 +120,24 @@ public class DefenceEntityListener extends EntityListener {
 		case DIAMOND_LEGGINGS:
 			checkLeggings(player, level, "Diamond");
 			break;
+		case PUMPKIN:
+			// do not check pumpkins
 		default:
 			break;
 		}
 	}
 
+	/**
+	 * Test whether a player is allowed to wear his boots, or, drop them into
+	 * inventory.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param level
+	 *            Player's level
+	 * @param config
+	 *            String identifying a material (wood, iron, etc.)
+	 */
 	private void checkBoots(final Player player, final int level,
 			final String config) {
 		if (level < plugin.getConfInt("ArmorLevel." + config + "Boots")) {
@@ -116,6 +155,17 @@ public class DefenceEntityListener extends EntityListener {
 		}
 	}
 
+	/**
+	 * Test whether a player is allowed to wear his chestplate, or, drop them
+	 * into inventory.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param level
+	 *            Player's level
+	 * @param config
+	 *            String identifying a material (wood, iron, etc.)
+	 */
 	private void checkChestplate(final Player player, final int level,
 			final String config) {
 		if (level < plugin.getConfInt("ArmorLevel." + config + "Chestplate")) {
@@ -133,6 +183,17 @@ public class DefenceEntityListener extends EntityListener {
 		}
 	}
 
+	/**
+	 * Test whether a player is allowed to wear his helmet, or, drop them into
+	 * inventory.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param level
+	 *            Player's level
+	 * @param config
+	 *            String identifying a material (wood, iron, etc.)
+	 */
 	private void checkHelmet(final Player player, final int level,
 			final String config) {
 		if (level < plugin.getConfInt("ArmorLevel." + config + "Helmet")) {
@@ -150,6 +211,17 @@ public class DefenceEntityListener extends EntityListener {
 		}
 	}
 
+	/**
+	 * Test whether a player is allowed to wear his leggings, or, drop them into
+	 * inventory.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param level
+	 *            Player's level
+	 * @param config
+	 *            String identifying a material (wood, iron, etc.)
+	 */
 	private void checkLeggings(final Player player, final int level,
 			final String config) {
 		if (level < plugin.getConfInt("ArmorLevel." + config + "Leggings")) {
@@ -210,6 +282,14 @@ public class DefenceEntityListener extends EntityListener {
 		}
 	}
 
+	/**
+	 * Test whether a player is wearing armor.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @return <code>true</code>, if player is wearing at least one piece of
+	 *         armor.
+	 */
 	private boolean isWearingArmor(final Player player) {
 		PlayerInventory inv = player.getInventory();
 		return isArmor(inv.getBoots().getType()) || //
@@ -221,24 +301,28 @@ public class DefenceEntityListener extends EntityListener {
 	@Override
 	public void onEntityDamage(final EntityDamageEvent event) {
 		if (event.isCancelled()) {
+			// event has been canceled
 			return;
 		}
 		if (event.getCause() != DamageCause.ENTITY_ATTACK
 				&& event.getCause() != DamageCause.PROJECTILE) {
+			// not a damage type that indicates a fight
 			return;
 		}
-
 		if (!(event.getEntity() instanceof Player)) {
+			// target is not a player
 			return;
 		}
+
 		Player player = (Player) event.getEntity();
-
-		System.out.println(event.getDamage() + " dmg on " + player + "("
-				+ event.getCause() + ")");
-
-		event.setCancelled(true);
+		if (!plugin.getPermission().hasLevel(plugin, player)) {
+			// plugin is not active for player
+			return;
+		}
 
 		if (checkArmor(player)) {
+			// get exp proportional to dealt damage (before armor bonus is
+			// applied)
 			plugin.getPersistence().addExp(
 					plugin,
 					player,

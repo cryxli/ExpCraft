@@ -11,11 +11,19 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 
+/**
+ * This class is the main entry point for the Defence module for ExpCraft.
+ * 
+ * @author cryxli
+ */
 public class Defence extends ExpCraftModule {
+	/** A logger */
 	public final Logger LOG = Logger.getLogger("EC-Defence");
 
+	/** Chat utility. */
 	private Chat chat;
 
+	/** The damage listener. */
 	private DefenceEntityListener entityListener;
 
 	/**
@@ -81,6 +89,17 @@ public class Defence extends ExpCraftModule {
 		saveConfig();
 	}
 
+	/**
+	 * Send a message to the player, that he cannot wear a certain piece of
+	 * armor.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param material
+	 *            Material of the armor piece.
+	 * @param armor
+	 *            Type of the armor piece.
+	 */
 	void notifyRequirements(final Player player, final String material,
 			final String armor) {
 		chat.bad(player, MessageFormat.format("You cannot wear {0} {1}.",
