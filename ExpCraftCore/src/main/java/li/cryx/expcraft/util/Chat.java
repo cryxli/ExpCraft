@@ -23,6 +23,53 @@ import org.bukkit.plugin.Plugin;
  */
 public class Chat {
 
+	/** Chat color to highlight things. */
+	private static ChatColor colorHighlight = ChatColor.valueOf("GOLD");
+
+	/** Chat color to indicate something special. */
+	private static ChatColor colorSpecial = ChatColor.valueOf("YELLOW");
+
+	/** Chat color to indicate good news. */
+	private static ChatColor colorGood = ChatColor.valueOf("GREEN");
+
+	/** Chat color to indicate bad news. */
+	private static ChatColor colorBad = ChatColor.valueOf("RED");
+
+	/** Indicator whether to broadcast information to all players. */
+	private static boolean notifyAll = true;
+
+	public static ChatColor getBadColor() {
+		return colorBad;
+	}
+
+	public static ChatColor getGoodColor() {
+		return colorGood;
+	}
+
+	public static ChatColor getHighlightColor() {
+		return colorHighlight;
+	}
+
+	public static ChatColor getSpecialColor() {
+		return colorSpecial;
+	}
+
+	/** Set the bad color, by color name. */
+	public static void setBadColor(final String color) {
+		ChatColor chatColor = ChatColor.valueOf(color);
+		if (chatColor != null) {
+			colorBad = chatColor;
+		}
+	}
+
+	/** Set the good color, by color name. */
+	public static void setGoodColor(final String color) {
+		ChatColor chatColor = ChatColor.valueOf(color);
+		if (chatColor != null) {
+			colorGood = chatColor;
+		}
+	}
+
 	/** Set the highlight color, by color name. */
 	public static void setHighlightColor(final String color) {
 		ChatColor chatColor = ChatColor.valueOf(color);
@@ -41,37 +88,6 @@ public class Chat {
 
 	/** Reference to the core plugin. */
 	private final ExpCraftCore core;
-
-	/** Chat color to highlight things. */
-	private static ChatColor colorHighlight = ChatColor.valueOf("GOLD");
-
-	/** Chat color to indicate something special. */
-	private static ChatColor colorSpecial = ChatColor.valueOf("YELLOW");
-
-	/** Chat color to indicate good news. */
-	private static ChatColor colorGood = ChatColor.valueOf("GREEN");
-
-	/** Chat color to indicate bad news. */
-	private static ChatColor colorBad = ChatColor.valueOf("RED");
-
-	/** Indicator whether to broadcast information to all players. */
-	private static boolean notifyAll = true;
-
-	/** Set the bad color, by color name. */
-	public static void setBadColor(final String color) {
-		ChatColor chatColor = ChatColor.valueOf(color);
-		if (chatColor != null) {
-			colorBad = chatColor;
-		}
-	}
-
-	/** Set the good color, by color name. */
-	public static void setGoodColor(final String color) {
-		ChatColor chatColor = ChatColor.valueOf(color);
-		if (chatColor != null) {
-			colorGood = chatColor;
-		}
-	}
 
 	/**
 	 * Create a new instance of the chat util. It must be bound to a plugin and
