@@ -156,8 +156,12 @@ public class FarmingBlockListener extends BlockListener {
 	 *         state ripe.
 	 */
 	private boolean isRipeNetherWart(final Block block) {
-		// TODO cryxli: implement with bukkit for 1.0
-		return false;
+		// TODO cryxli: implement the proper way, once bukkit is ready
+		if (block.getType() == Material.NETHER_WARTS) {
+			return block.getData() == NetherWartState.RIPE.getData();
+		} else {
+			return false;
+		}
 	}
 
 	// A block has been destroyed
