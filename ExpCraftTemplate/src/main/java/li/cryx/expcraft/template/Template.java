@@ -60,6 +60,7 @@ public class Template extends ExpCraftModule {
 		saveConfig();
 	}
 
+	@Override
 	public void onEnable() {
 		// pre-load config
 		loadConfig();
@@ -75,7 +76,7 @@ public class Template extends ExpCraftModule {
 		// listeners
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 
-		// TODO if you instanciated other things, that are not under control of
+		// TODO if you instantiated other things, that are not under control of
 		// bukkit, disable them here too
 	}
 
