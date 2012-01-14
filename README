@@ -19,3 +19,4 @@ Setup
 
 Tips
 - Use the preconfigured Launchers to build the projects
+- Launchers may not work in certain eclipse indogo/maven plugin constellations
