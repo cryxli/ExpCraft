@@ -4,13 +4,13 @@
 
 	<groupId>li.cryx</groupId>
 	<artifactId>expcraft-core</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<name>ExpCraftCore</name>
 
 	<scm>
-		<connection>scm:git:git://github.com/pablohess/ExpCraft.git</connection>
-		<developerConnection>scm:git:git@github.com:pablohess/ExpCraft.git</developerConnection>
-		<url>https://github.com/pablohess/ExpCraft/tree/master/</url>
+		<connection>scm:git:git://github.com/cryxli/ExpCraft.git</connection>
+		<developerConnection>scm:git:git@github.com:cryxli/ExpCraft.git</developerConnection>
+		<url>https://github.com/cryxli/ExpCraft/tree/master/</url>
 	</scm>
 
 	<dependencies>
