@@ -2,9 +2,11 @@ package li.cryx.expcraft.defence;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -13,7 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
  * 
  * @author cryxli
  */
-public class DefenceEntityListener extends EntityListener {
+public class DefenceEntityListener implements Listener {
 
 	/** Reference to plugin. */
 	private final Defence plugin;
@@ -298,7 +300,7 @@ public class DefenceEntityListener extends EntityListener {
 				isArmor(inv.getHelmet().getType());
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEntityDamage(final EntityDamageEvent event) {
 		if (event.isCancelled()) {
 			// event has been canceled

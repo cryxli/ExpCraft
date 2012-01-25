@@ -7,8 +7,6 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -145,8 +143,7 @@ public class Defence extends ExpCraftModule {
 		createListeners();
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Priority.Normal,
-				this);
+		pm.registerEvents(entityListener, this);
 	}
 
 	/**
