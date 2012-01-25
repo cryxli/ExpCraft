@@ -4,10 +4,12 @@ import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Achievement;
 import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
@@ -27,9 +29,12 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 public class DummyPlayer extends DummyCommandSender implements Player {
+
+	private boolean allowFlight;
 
 	public DummyPlayer(final String name) {
 		super(name);
@@ -59,6 +64,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public InetSocketAddress getAddress() {
 		return null;
+	}
+
+	@Override
+	public boolean getAllowFlight() {
+		return allowFlight;
 	}
 
 	@Override
@@ -189,6 +199,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public Set<String> getListeningPluginChannels() {
+		return null;
+	}
+
+	@Override
 	public Location getLocation() {
 		return null;
 	}
@@ -301,7 +316,7 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
-	public void giveExp(int amount) {
+	public void giveExp(final int amount) {
 	}
 
 	@Override
@@ -401,6 +416,10 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public void playEffect(final EntityEffect type) {
+	}
+
+	@Override
 	public void playEffect(final Location loc, final Effect effect,
 			final int data) {
 	}
@@ -448,6 +467,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public void sendPluginMessage(final Plugin source, final String channel,
+			final byte[] message) {
+	}
+
+	@Override
 	public void sendRawMessage(final String message) {
 	}
 
@@ -457,7 +481,16 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public void setAllowFlight(final boolean flight) {
+		allowFlight = flight;
+	}
+
+	@Override
 	public void setBanned(final boolean banned) {
+	}
+
+	@Override
+	public void setBedSpawnLocation(final Location location) {
 	}
 
 	@Override
@@ -473,7 +506,7 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
-	public void setExp(float exp) {
+	public void setExp(final float exp) {
 	}
 
 	@Override
@@ -588,7 +621,7 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
-	public boolean teleport(Entity destination, TeleportCause cause) {
+	public boolean teleport(final Entity destination, final TeleportCause cause) {
 		return false;
 	}
 
@@ -598,7 +631,7 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
-	public boolean teleport(Location location, TeleportCause cause) {
+	public boolean teleport(final Location location, final TeleportCause cause) {
 		return false;
 	}
 

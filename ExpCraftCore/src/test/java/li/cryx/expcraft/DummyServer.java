@@ -23,8 +23,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.map.MapView;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.avaje.ebean.config.ServerConfig;
@@ -157,6 +159,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public Set<String> getListeningPluginChannels() {
+		return null;
+	}
+
+	@Override
 	public Logger getLogger() {
 		return null;
 	}
@@ -169,6 +176,11 @@ public class DummyServer implements Server {
 	@Override
 	public int getMaxPlayers() {
 		return 0;
+	}
+
+	@Override
+	public Messenger getMessenger() {
+		return null;
 	}
 
 	@Override
@@ -324,6 +336,11 @@ public class DummyServer implements Server {
 	@Override
 	public void savePlayers() {
 
+	}
+
+	@Override
+	public void sendPluginMessage(final Plugin source, final String channel,
+			final byte[] message) {
 	}
 
 	@Override
