@@ -4,8 +4,10 @@ import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.material.Tree;
 
 /**
@@ -13,7 +15,7 @@ import org.bukkit.material.Tree;
  * 
  * @author cryxli
  */
-public class WoodCuttingBlockListener extends BlockListener {
+public class WoodCuttingBlockListener implements Listener {
 
 	/** Reference to the ExpCraft module */
 	private final WoodCutting plugin;
@@ -108,7 +110,7 @@ public class WoodCuttingBlockListener extends BlockListener {
 		return false;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(final BlockBreakEvent event) {
 		if (event.isCancelled()
 				|| !plugin.getPermission().worldCheck(
