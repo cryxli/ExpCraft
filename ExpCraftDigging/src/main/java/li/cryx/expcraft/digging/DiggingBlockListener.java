@@ -3,11 +3,13 @@ package li.cryx.expcraft.digging;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.inventory.ItemStack;
 
-public class DiggingBlockListener extends BlockListener {
+public class DiggingBlockListener implements Listener {
 
 	private final Digging plugin;
 
@@ -152,7 +154,7 @@ public class DiggingBlockListener extends BlockListener {
 		return true;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(final BlockBreakEvent event) {
 		if (event.isCancelled()
 				|| !plugin.getPermission().worldCheck(

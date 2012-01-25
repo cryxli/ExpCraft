@@ -9,7 +9,6 @@ import li.cryx.expcraft.util.Chat;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
@@ -147,8 +146,7 @@ public class Digging extends DropExpCraftModule {
 		createListeners();
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener,
-				Event.Priority.Highest, this);
+		pm.registerEvents(blockListener, this);
 	}
 
 	private void sendToolInfo(final Player sender, final String material,
