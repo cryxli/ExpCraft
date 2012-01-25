@@ -6,8 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -16,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
  * 
  * @author cryxli
  */
-public class ScavengerBlockListener extends BlockListener {
+public class ScavengerBlockListener implements Listener {
 
 	/** A random generator to determine drops. */
 	private static final Random randomGenerator = new Random();
@@ -192,7 +194,7 @@ public class ScavengerBlockListener extends BlockListener {
 	}
 
 	// A block has been destroyed
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(final BlockBreakEvent event) {
 		if (event.isCancelled()
 				|| !plugin.getPermission().worldCheck(

@@ -7,8 +7,6 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 
 public class Scavenger extends ExpCraftModule {
@@ -117,8 +115,7 @@ public class Scavenger extends ExpCraftModule {
 		createListeners();
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Highest,
-				this);
+		pm.registerEvents(blockListener, this);
 	}
 
 	void sendHint(final Player player, final String msg) {
