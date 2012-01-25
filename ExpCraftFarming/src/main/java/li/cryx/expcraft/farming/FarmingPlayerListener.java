@@ -2,9 +2,11 @@ package li.cryx.expcraft.farming;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 
 /**
  * This class implements a player listener to trace a player's actions before
@@ -12,7 +14,7 @@ import org.bukkit.event.player.PlayerListener;
  * 
  * @author cryxli
  */
-public class FarmingPlayerListener extends PlayerListener {
+public class FarmingPlayerListener implements Listener {
 
 	/** Reference to parent plugin. */
 	private final Farming plugin;
@@ -23,7 +25,7 @@ public class FarmingPlayerListener extends PlayerListener {
 	}
 
 	// Player want to do something
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			// player does not right-click

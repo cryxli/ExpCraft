@@ -8,7 +8,6 @@ import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -24,8 +23,10 @@ public class Farming extends ExpCraftModule {
 
 	private static final Logger LOG = Logger.getLogger("EC-Farming");
 
-	/** Listen to block break and block place events. */
-	private FarmingBlockListener blockListener = null;
+	/** Listen to block break events. */
+	private FarmingBlockBreakListener blockBreakListener = null;
+	/** Listen to block place events. */
+	private FarmingBlockPlaceListener blockPlaceListener = null;
 
 	/** Listen to player interact events. */
 	private FarmingPlayerListener playerListener = null;
@@ -85,7 +86,8 @@ public class Farming extends ExpCraftModule {
 		chat = new Chat(this);
 
 		// block listener
-		blockListener = new FarmingBlockListener(this);
+		blockBreakListener = new FarmingBlockBreakListener(this);
+		blockPlaceListener = new FarmingBlockPlaceListener(this);
 
 		// player listener
 		playerListener = new FarmingPlayerListener(this);
@@ -199,12 +201,9 @@ public class Farming extends ExpCraftModule {
 		createListeners();
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener,
-				Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener,
-				Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener,
-				Event.Priority.Highest, this);
+		pm.registerEvents(blockBreakListener, this);
+		pm.registerEvents(blockPlaceListener, this);
+		pm.registerEvents(playerListener, this);
 	}
 
 	private void sendToolInfo(final Player sender, final String material,
