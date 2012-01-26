@@ -29,7 +29,7 @@ class CmdArgs {
 		this.args = args;
 	}
 
-	/** Readble debugging output. */
+	/** Readable debugging output. */
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer();
