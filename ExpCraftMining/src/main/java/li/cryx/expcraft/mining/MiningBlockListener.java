@@ -3,11 +3,13 @@ package li.cryx.expcraft.mining;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.inventory.ItemStack;
 
-public class MiningBlockListener extends BlockListener {
+public class MiningBlockListener implements Listener {
 
 	private final Mining plugin;
 
@@ -145,7 +147,7 @@ public class MiningBlockListener extends BlockListener {
 		return false;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(final BlockBreakEvent event) {
 		if (event.isCancelled()
 				|| !plugin.getPermission().worldCheck(
