@@ -87,7 +87,6 @@ public class Template extends ExpCraftModule {
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
 		// TODO add your listeners, like
-		// pm.registerEvent(Type.BLOCK_BREAK, blockListener, Priority.Normal,
-		// this);
+		// pm.registerEvents(blockListener, this);
 	}
 }
