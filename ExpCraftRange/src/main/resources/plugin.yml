@@ -1,7 +1,0 @@
-name: ${project.name}
-main: me.samkio.lcrange.LCRange
-version: ${project.version}
-description: >
-             LCRange. The ranging Level for LevelCraftCore.
-commands:
-

@@ -1,6 +1,8 @@
 === ExpCraft ===
-A fork of the great LevelCraft plugin for Bukkit to add some experiance
-gathering to the game.
+A reimplementation of the great LevelCraft plugin for Bukkit to add some
+experiance gathering to the game. There are implementations for Minecraft
+versions since 1.8.1 for all basic plugins of the original LevelCraft but
+the fighting plugins.
 
 ==== DEV Setup ====
 Tools
@@ -19,4 +21,4 @@ Setup
 
 Tips
 - Use the preconfigured Launchers to build the projects
-- Launchers may not work in certain eclipse indogo/maven plugin constellations
+- Launchers may not work in certain eclipse/maven plugin constellations

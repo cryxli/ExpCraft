@@ -1,11 +1,13 @@
 package li.cryx.expcraft.dexterity;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityListener;
 
-public class DexterityEntityListener extends EntityListener {
+public class DexterityEntityListener implements Listener {
 
 	private final Dexterity plugin;
 
@@ -13,7 +15,7 @@ public class DexterityEntityListener extends EntityListener {
 		this.plugin = plugin;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamage(final EntityDamageEvent event) {
 		if (event.isCancelled()
 				|| !plugin.getPermission().worldCheck(

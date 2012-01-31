@@ -7,7 +7,6 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 
 public class Dexterity extends ExpCraftModule {
@@ -126,10 +125,8 @@ public class Dexterity extends ExpCraftModule {
 		createListeners();
 		// register listeners
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener,
-				Event.Priority.Highest, this);
-		pm.registerEvent(Event.Type.PLAYER_MOVE, playerListener,
-				Event.Priority.Highest, this);
+		pm.registerEvents(entityListener, this);
+		pm.registerEvents(playerListener, this);
 	}
 
 	/**

@@ -2,11 +2,13 @@ package li.cryx.expcraft.dexterity;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
-public class DexterityPlayerListener extends PlayerListener {
+public class DexterityPlayerListener implements Listener {
 
 	private final Dexterity plugin;
 
@@ -49,7 +51,7 @@ public class DexterityPlayerListener extends PlayerListener {
 				material == Material.DIAMOND_BOOTS;
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		if (!plugin.getPermission().hasLevel(plugin, player)) {
