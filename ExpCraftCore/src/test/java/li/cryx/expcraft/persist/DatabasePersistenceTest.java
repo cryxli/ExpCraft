@@ -6,12 +6,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 import junit.framework.Assert;
 import li.cryx.expcraft.DummyModule;
 import li.cryx.expcraft.DummyPlayer;
 import li.cryx.expcraft.module.ExpCraftModule;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -25,7 +29,22 @@ public class DatabasePersistenceTest {
 
 	private final static String DB_FILE = "target/test.db";
 
-	private void prepare() throws SQLException {
+	@BeforeClass
+	public static void setupWrongLocale() {
+		// Thanks to seberoth from github, we're aware that with certain
+		// system defaults, the first persistence implementation failed.
+		// Therefore, before any DB tests are run, we set the system's default
+		// locale to one of the troublesome locales. Sorry, Germany.
+		Locale.setDefault(Locale.GERMANY);
+		Assert.assertEquals("1,23",
+				MessageFormat.format("{0,number,0.00}", 1.2345));
+		// SQL standard defines floating points to have to be written with "."
+		// E.g., German "1,5" would cause the DB to throw an error on every
+		// single exp update.
+	}
+
+	@Before
+	public void prepare() throws SQLException {
 		if (db != null) {
 			// closing previous database connection
 			db.flush();
@@ -52,7 +71,6 @@ public class DatabasePersistenceTest {
 	@Test
 	public void testDbOperations() throws SQLException {
 		// prepare test: 1 module, 1 user
-		prepare();
 		DummyPlayer player = new DummyPlayer("cryxli");
 		ExpCraftModule module = new DummyModule("Testing", "T");
 
@@ -76,7 +94,6 @@ public class DatabasePersistenceTest {
 	@Test
 	public void testLargeExp() throws SQLException {
 		// prepare test: 1 module, 1 user
-		prepare();
 		DummyPlayer player = new DummyPlayer("cryxli");
 		ExpCraftModule module = new DummyModule("LargeExp", "Le");
 
@@ -91,7 +108,6 @@ public class DatabasePersistenceTest {
 	@Test
 	public void testMultiModule() throws SQLException {
 		// prepare: 2 modules, 1 player
-		prepare();
 		DummyPlayer player = new DummyPlayer("cryxli");
 		ExpCraftModule mod1 = new DummyModule("Testing 1", "T1");
 		ExpCraftModule mod2 = new DummyModule("Testing 2", "T2");
@@ -99,6 +115,7 @@ public class DatabasePersistenceTest {
 		db.getExp(mod1, player);
 		db.getExp(mod2, player);
 
+		// manually inspect test results
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
 		Statement stmt = conn.createStatement();
 		ResultSet set = stmt.executeQuery("SELECT COUNT(*) FROM ExpCraftTable");
@@ -121,9 +138,11 @@ public class DatabasePersistenceTest {
 		stmt.close();
 		conn.close();
 
+		// next step
 		db.setExp(mod1, player, 1.8);
 		db.setExp(mod2, player, 5.3);
 
+		// manually inspect test results
 		conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
 		stmt = conn.createStatement();
 		set = stmt.executeQuery("SELECT COUNT(*) FROM ExpCraftTable");
@@ -150,7 +169,6 @@ public class DatabasePersistenceTest {
 	@Test
 	public void testMultiPlayer() throws Throwable {
 		// preapre: 1 module, 2 players
-		prepare();
 		DummyPlayer cryxli = new DummyPlayer("cryxli");
 		DummyPlayer fakt00r = new DummyPlayer("fakt00r");
 		ExpCraftModule module = new DummyModule("Testing", "T");
@@ -158,6 +176,7 @@ public class DatabasePersistenceTest {
 		db.getExp(module, cryxli);
 		db.getExp(module, fakt00r);
 
+		// manually inspect test results
 		Connection conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
 		Statement stmt = conn.createStatement();
 		ResultSet set = stmt.executeQuery("SELECT COUNT(*) FROM ExpCraftTable");
@@ -180,9 +199,11 @@ public class DatabasePersistenceTest {
 		stmt.close();
 		conn.close();
 
+		// next step
 		db.setExp(module, cryxli, 5.4);
 		db.setExp(module, fakt00r, 15.0);
 
+		// manually inspect test results
 		conn = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
 		stmt = conn.createStatement();
 		set = stmt.executeQuery("SELECT COUNT(*) FROM ExpCraftTable");

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +42,8 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	 * Arguments {@link ExpCraftModule#getAbbr()}, <code>Player.getName()</code>
 	 * </p>
 	 */
-	private static final String INSERT = "INSERT INTO ExpCraftTable (id,module,player,exp) SELECT COALESCE(MAX(id)+1,1),''{0}'',''{1}'',0 FROM ExpCraftTable";
+	private static final MessageFormat INSERT = new MessageFormat(
+			"INSERT INTO ExpCraftTable (id,module,player,exp) SELECT COALESCE(MAX(id)+1,1),''{0}'',''{1}'',0 FROM ExpCraftTable");
 
 	/**
 	 * SQL query to retrieve exp of a player and module
@@ -50,7 +52,8 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	 * Arguments {@link ExpCraftModule#getAbbr()}, <code>Player.getName()</code>
 	 * </p>
 	 */
-	private static final String SELECT = "SELECT exp FROM ExpCraftTable WHERE module=''{0}'' AND player=''{1}''";
+	private static final MessageFormat SELECT = new MessageFormat(
+			"SELECT exp FROM ExpCraftTable WHERE module=''{0}'' AND player=''{1}''");
 
 	/**
 	 * SQL query to update exp of a player and module
@@ -60,7 +63,9 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	 * , experience
 	 * </p>
 	 */
-	private static final String UPDATE = "UPDATE ExpCraftTable SET exp={2,number,0.00} WHERE module=''{0}'' AND player=''{1}''";
+	private static final MessageFormat UPDATE = new MessageFormat(
+			"UPDATE ExpCraftTable SET exp={2,number,0.00} WHERE module=''{0}'' AND player=''{1}''",
+			Locale.US);
 
 	/** SQL query to execute to keep the connection to the database alive. */
 	private static final String KEEP_ALIVE = "SELECT COUNT(*) FROM ExpCraftTable";
@@ -153,18 +158,18 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 		double exp = 0;
 		try {
 			// execute SELECT
-			ResultSet set = getStmt().executeQuery(
-					MessageFormat.format(SELECT, module.getAbbr(), player
-							.getName().toLowerCase()));
+			Object[] objects = new Object[] { module.getAbbr(), //
+					player.getName().toLowerCase() //
+			};
+			String sql = SELECT.format(objects);
+			ResultSet set = getStmt().executeQuery(sql);
 
 			if (set.next()) {
 				// return found value
 				exp = set.getDouble(1);
 			} else {
 				// on NO-ROW-FOUND -> execute INSERT
-				getStmt().executeUpdate(
-						MessageFormat.format(INSERT, module.getAbbr(), player
-								.getName().toLowerCase()));
+				getStmt().executeUpdate(INSERT.format(objects));
 			}
 			set.close();
 		} catch (SQLException e) {
@@ -218,13 +223,16 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	public void setExp(final ExpCraftModule module, final Player player,
 			final double exp) {
 		// execute UPDATE
-		String sql = MessageFormat.format(UPDATE, module.getAbbr(), player
-				.getName().toLowerCase(), exp);
+		Object[] objects = new Object[] { module.getAbbr(), //
+				player.getName().toLowerCase(), //
+				exp //
+		};
+		String sql = UPDATE.format(objects);
 		try {
 			getStmt().executeUpdate(sql);
 		} catch (SQLException e) {
 			LOG.info(sql);
-			LOG.log(Level.SEVERE, "[EC] Cannot update expereience", e);
+			LOG.log(Level.SEVERE, "[EC] Cannot update experience", e);
 		}
 	}
 
