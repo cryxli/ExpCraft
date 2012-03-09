@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class DexterityPlayerListener implements Listener {
@@ -21,7 +22,11 @@ public class DexterityPlayerListener implements Listener {
 	}
 
 	private boolean checkBoots(final Player player, final int level) {
-		Material material = player.getInventory().getBoots().getType();
+		final ItemStack boots = player.getInventory().getBoots();
+		Material material = null;
+		if (boots != null) {
+			material = boots.getType();
+		}
 		if (material == Material.LEATHER_BOOTS
 				&& level < plugin.getConfInt("BootsLevel.Leather")) {
 			plugin.warnBoots(player);
@@ -43,12 +48,18 @@ public class DexterityPlayerListener implements Listener {
 		return false;
 	}
 
-	private boolean isBoots(final Material material) {
-		return material == Material.LEATHER_BOOTS || //
-				material == Material.CHAINMAIL_BOOTS || //
-				material == Material.IRON_BOOTS || //
-				material == Material.GOLD_BOOTS || //
-				material == Material.DIAMOND_BOOTS;
+	// private boolean isBoots(final Material material) {
+	private boolean isBoots(final ItemStack item) {
+		if (item == null) {
+			return false;
+		} else {
+			final Material material = item.getType();
+			return material == Material.LEATHER_BOOTS || //
+					material == Material.CHAINMAIL_BOOTS || //
+					material == Material.IRON_BOOTS || //
+					material == Material.GOLD_BOOTS || //
+					material == Material.DIAMOND_BOOTS;
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -71,7 +82,7 @@ public class DexterityPlayerListener implements Listener {
 				// wrong level for boots, no bonus
 				return;
 			}
-			if (!isBoots(player.getInventory().getBoots().getType())) {
+			if (!isBoots(player.getInventory().getBoots())) {
 				// only jump higher when wearing boots
 				return;
 			}
