@@ -30,8 +30,8 @@ public class Scavenger extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender,
-				MessageFormat.format("*** {0} ({1}) ***", getName(), getAbbr()));
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
+				getModuleName(), getAbbr()));
 
 		chat.info(sender,
 				"Digging through dirt, etc. you can find other items.");

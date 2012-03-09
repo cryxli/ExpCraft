@@ -36,8 +36,8 @@ public class Dexterity extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender,
-				MessageFormat.format("*** {0} ({1}) ***", getName(), getAbbr()));
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
+				getModuleName(), getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		chat.info(sender, "Boots:");
