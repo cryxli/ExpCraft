@@ -4,7 +4,6 @@ version: ${project.version}
 depend: [ExpCraftCore]
 description: >
              ${project.name}. The Farming Level for ExpCraftCore.
-commands:
 
 permissions:
   ec.module.fm:

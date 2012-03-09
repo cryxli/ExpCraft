@@ -4,7 +4,6 @@ version: ${project.version}
 depend: [ExpCraftCore]
 description: >
              ${project.name}. The WoodCutting Level for LevelCraftCore.
-commands:
 
 permissions:
   ec.module.w:
