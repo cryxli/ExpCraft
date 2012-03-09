@@ -27,6 +27,8 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	/** How often to save files [ms]. Defaults to every 10s. */
 	private static final long SAVE_INTERVAL = 10 * 1000;
 
+	private boolean running = false;
+
 	/**
 	 * Keep the files in memory for faster access. But write them regularely to
 	 * disk.
@@ -39,20 +41,9 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	private File dataFolder;
 
 	@Override
-	public synchronized void flush() {
-		for (ExpCraftModule module : cache.keySet()) {
-			YamlConfiguration data = getModuleData(module);
-			if (dirty.get(module)) {
-				try {
-					data.save(new File(dataFolder, module.getModuleName()
-							+ ".yml"));
-					dirty.put(module, false);
-				} catch (IOException e) {
-					LOG.log(Level.SEVERE, "[EC] Unable to persist level info",
-							e);
-				}
-			}
-		}
+	public void flush() {
+		running = false;
+		saveFiles();
 	}
 
 	@Override
@@ -74,6 +65,22 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 		return data;
 	}
 
+	private synchronized void saveFiles() {
+		for (ExpCraftModule module : cache.keySet()) {
+			YamlConfiguration data = getModuleData(module);
+			if (dirty.get(module)) {
+				try {
+					data.save(new File(dataFolder, module.getModuleName()
+							+ ".yml"));
+					dirty.put(module, false);
+				} catch (IOException e) {
+					LOG.log(Level.SEVERE, "[EC] Unable to persist level info",
+							e);
+				}
+			}
+		}
+	}
+
 	@Override
 	public synchronized void setCore(final ExpCraftCore core) {
 		super.setCore(core);
@@ -83,12 +90,13 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 		Thread intervalStorage = new Thread() {
 			@Override
 			public void run() {
-				while (true) {
+				running = true;
+				while (running) {
+					saveFiles();
 					try {
 						Thread.sleep(SAVE_INTERVAL);
 					} catch (InterruptedException e) {
 					}
-					flush();
 				}
 			}
 		};

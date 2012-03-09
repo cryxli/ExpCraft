@@ -91,6 +91,8 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	/** Keep alive interval. Default every half an hour. */
 	private long keepAliveInterval = 1800 * 1000;
 
+	private boolean running = false;
+
 	/** Before this class unloads, try to shut down the connection correctly. */
 	@Override
 	protected void finalize() throws Throwable {
@@ -101,6 +103,8 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 	/** Shut down the connection to the database. */
 	@Override
 	public void flush() {
+		running = false;
+
 		if (stmt != null) {
 			try {
 				stmt.close();
@@ -244,17 +248,18 @@ public class PersistenceDatabase extends AbstractPersistenceManager {
 		Thread keepAlive = new Thread() {
 			@Override
 			public void run() {
-				while (true) {
-					try {
-						Thread.sleep(keepAliveInterval);
-					} catch (InterruptedException e) {
-					}
-
+				running = true;
+				while (running) {
 					try {
 						// send ping to DB
 						getStmt().execute(KEEP_ALIVE);
 					} catch (SQLException e) {
 						LOG.log(Level.INFO, "[EC] Ping to database failed", e);
+					}
+
+					try {
+						Thread.sleep(keepAliveInterval);
+					} catch (InterruptedException e) {
 					}
 				}
 			}
