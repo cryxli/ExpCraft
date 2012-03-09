@@ -150,7 +150,7 @@ public class Chat {
 			final Player player, final int newLevel) {
 		good(player, MessageFormat.format(
 				"LEVEL UP. You are now level {0} in {1}", newLevel,
-				module.getName()));
+				module.getModuleName()));
 
 		good(player, MessageFormat.format(
 				"See /level info {0} - To see what you have unlocked.",
@@ -158,7 +158,7 @@ public class Chat {
 
 		if (notifyAll) {
 			broadcast(MessageFormat.format("{0} is now level {1} in {2}.",
-					player.getName(), newLevel, module.getName()));
+					player.getName(), newLevel, module.getModuleName()));
 		}
 	}
 

@@ -44,7 +44,8 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 			YamlConfiguration data = getModuleData(module);
 			if (dirty.get(module)) {
 				try {
-					data.save(new File(dataFolder, module.getName() + ".yml"));
+					data.save(new File(dataFolder, module.getModuleName()
+							+ ".yml"));
 					dirty.put(module, false);
 				} catch (IOException e) {
 					LOG.log(Level.SEVERE, "[EC] Unable to persist level info",
@@ -66,7 +67,7 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 		YamlConfiguration data = cache.get(module);
 		if (data == null) {
 			data = YamlConfiguration.loadConfiguration(new File(dataFolder,
-					module.getName() + ".yml"));
+					module.getModuleName() + ".yml"));
 			dirty.put(module, false);
 			cache.put(module, data);
 		}

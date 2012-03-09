@@ -42,7 +42,7 @@ public class CommandManager {
 		for (ExpCraftModule module : core.getModules()) {
 			if (core.getPermissions().hasLevel(module, player)) {
 				levels.add(MessageFormat.format("{0} ({1}): {2}", //
-						module.getName(), //
+						module.getModuleName(), //
 						module.getAbbr(), //
 						core.getPersistence().getLevel(module, player)));
 			}
@@ -83,7 +83,7 @@ public class CommandManager {
 			// display
 			chat.info(sender,
 					MessageFormat.format("{0} ({1}): lv{2} at {3} points", //
-							module.getName(), //
+							module.getModuleName(), //
 							module.getAbbr(), //
 							core.getPersistence().getLevel(module, player), //
 							core.getPersistence().getExp(module, player)));
@@ -177,7 +177,7 @@ public class CommandManager {
 			core.getPersistence().setExp(module, player, exp);
 			// display
 			chat.info(sender, MessageFormat.format("{0} ({1}): {2} points", //
-					module.getName(), //
+					module.getModuleName(), //
 					module.getAbbr(), //
 					exp));
 		} else {
@@ -210,7 +210,7 @@ public class CommandManager {
 			core.getPersistence().setLevel(module, player, level);
 			// display
 			chat.info(sender, MessageFormat.format("{0} ({1}): lv{2}", //
-					module.getName(), //
+					module.getModuleName(), //
 					module.getAbbr(), //
 					level));
 		} else {
