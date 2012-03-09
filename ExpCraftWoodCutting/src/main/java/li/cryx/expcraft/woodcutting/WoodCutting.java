@@ -114,7 +114,7 @@ public class WoodCutting extends DropExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		return "WoodCutting";
 	}
 

@@ -145,7 +145,7 @@ public class Farming extends ExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		return "Farming";
 	}
 

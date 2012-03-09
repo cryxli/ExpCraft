@@ -44,7 +44,7 @@ public class Template extends ExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		// TODO define the name of the module
 		return "Template";
 	}

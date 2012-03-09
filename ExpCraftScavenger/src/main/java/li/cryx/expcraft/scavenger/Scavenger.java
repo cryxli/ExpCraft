@@ -75,7 +75,7 @@ public class Scavenger extends ExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		return "Scavenger";
 	}
 

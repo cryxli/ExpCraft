@@ -88,7 +88,7 @@ public class Defence extends ExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		return "Defence";
 	}
 

@@ -133,7 +133,7 @@ public class Mining extends DropExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		return "Mining";
 	}
 
