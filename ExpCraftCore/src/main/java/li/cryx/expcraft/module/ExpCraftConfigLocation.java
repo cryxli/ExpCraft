@@ -64,7 +64,7 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 	}
 
 	/** Get the full name of the module. */
-	abstract public String getName();
+	abstract public String getModuleName();
 
 	/**
 	 * Save config of the module.

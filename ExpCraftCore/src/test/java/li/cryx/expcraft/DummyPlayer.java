@@ -1,6 +1,7 @@
 package li.cryx.expcraft;
 
 import java.net.InetSocketAddress;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,18 +19,27 @@ import org.bukkit.Note;
 import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.InventoryView.Property;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class DummyPlayer extends DummyCommandSender implements Player {
@@ -41,11 +51,48 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public void abandonConversation(final Conversation arg0) {
+	}
+
+	@Override
+	public void acceptConversationInput(final String arg0) {
+	}
+
+	@Override
+	public boolean addPotionEffect(final PotionEffect arg0) {
+		return false;
+	}
+
+	@Override
+	public boolean addPotionEffect(final PotionEffect arg0, final boolean arg1) {
+		return false;
+	}
+
+	@Override
+	public boolean addPotionEffects(final Collection<PotionEffect> arg0) {
+		return false;
+	}
+
+	@Override
 	public void awardAchievement(final Achievement achievement) {
 	}
 
 	@Override
+	public boolean beginConversation(final Conversation arg0) {
+		return false;
+	}
+
+	@Override
+	public boolean canSee(final Player arg0) {
+		return false;
+	}
+
+	@Override
 	public void chat(final String msg) {
+	}
+
+	@Override
+	public void closeInventory() {
 	}
 
 	@Override
@@ -59,6 +106,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public boolean eject() {
 		return false;
+	}
+
+	@Override
+	public Collection<PotionEffect> getActivePotionEffects() {
+		return null;
 	}
 
 	@Override
@@ -98,11 +150,6 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public float getExp() {
-		return 0;
-	}
-
-	@Override
-	public int getExperience() {
 		return 0;
 	}
 
@@ -158,6 +205,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public ItemStack getItemInHand() {
+		return null;
+	}
+
+	@Override
+	public ItemStack getItemOnCursor() {
 		return null;
 	}
 
@@ -229,6 +281,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public List<MetadataValue> getMetadata(final String arg0) {
+		return null;
+	}
+
+	@Override
 	public List<Entity> getNearbyEntities(final double x, final double y,
 			final double z) {
 		return null;
@@ -237,6 +294,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public int getNoDamageTicks() {
 		return 0;
+	}
+
+	@Override
+	public InventoryView getOpenInventory() {
+		return null;
 	}
 
 	@Override
@@ -296,6 +358,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public EntityType getType() {
+		return EntityType.PLAYER;
+	}
+
+	@Override
 	public UUID getUniqueId() {
 		return null;
 	}
@@ -320,8 +387,22 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public boolean hasMetadata(final String arg0) {
+		return false;
+	}
+
+	@Override
 	public boolean hasPlayedBefore() {
 		return false;
+	}
+
+	@Override
+	public boolean hasPotionEffect(final PotionEffectType arg0) {
+		return false;
+	}
+
+	@Override
+	public void hidePlayer(final Player arg0) {
 	}
 
 	@Override
@@ -344,6 +425,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public boolean isBanned() {
+		return false;
+	}
+
+	@Override
+	public boolean isConversing() {
 		return false;
 	}
 
@@ -402,12 +488,37 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public <T extends Projectile> T launchProjectile(
+			final Class<? extends T> arg0) {
+		return null;
+	}
+
+	@Override
 	public boolean leaveVehicle() {
 		return false;
 	}
 
 	@Override
 	public void loadData() {
+	}
+
+	@Override
+	public InventoryView openEnchanting(final Location arg0, final boolean arg1) {
+		return null;
+	}
+
+	@Override
+	public InventoryView openInventory(final Inventory arg0) {
+		return null;
+	}
+
+	@Override
+	public void openInventory(final InventoryView arg0) {
+	}
+
+	@Override
+	public InventoryView openWorkbench(final Location arg0, final boolean arg1) {
+		return null;
 	}
 
 	@Override
@@ -425,6 +536,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public <T> void playEffect(final Location arg0, final Effect arg1,
+			final T arg2) {
+	}
+
+	@Override
 	public void playNote(final Location loc, final byte instrument,
 			final byte note) {
 	}
@@ -436,6 +552,14 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public void remove() {
+	}
+
+	@Override
+	public void removeMetadata(final String arg0, final Plugin arg1) {
+	}
+
+	@Override
+	public void removePotionEffect(final PotionEffectType arg0) {
 	}
 
 	@Override
@@ -464,6 +588,10 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public void sendMap(final MapView map) {
+	}
+
+	@Override
+	public void sendMessage(final String[] arg0) {
 	}
 
 	@Override
@@ -510,10 +638,6 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
-	public void setExperience(final int exp) {
-	}
-
-	@Override
 	public void setFallDistance(final float distance) {
 	}
 
@@ -538,6 +662,10 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public void setItemOnCursor(final ItemStack arg0) {
+	}
+
+	@Override
 	public void setLastDamage(final int damage) {
 	}
 
@@ -555,6 +683,10 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public void setMaximumNoDamageTicks(final int ticks) {
+	}
+
+	@Override
+	public void setMetadata(final String arg0, final MetadataValue arg1) {
 	}
 
 	@Override
@@ -611,8 +743,17 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public boolean setWindowProperty(final Property arg0, final int arg1) {
+		return false;
+	}
+
+	@Override
 	public Arrow shootArrow() {
 		return null;
+	}
+
+	@Override
+	public void showPlayer(final Player arg0) {
 	}
 
 	@Override

@@ -26,20 +26,21 @@ public class CommandManagerTest {
 
 	@BeforeClass
 	public static void init() {
-		PluginDescriptionFile pdf = new PluginDescriptionFile("ExpCraft", "0",
-				"this");
 
 		pluginManager = new DummyPluginManager();
-		testModule = new DummyModule("Test", "T");
-		pluginManager.addPlugin(testModule);
-
 		server = new DummyServer();
 		server.setPluginManager(pluginManager);
 
-		pluginManager = new DummyPluginManager();
+		PluginDescriptionFile pdf = new PluginDescriptionFile("Test", "0",
+				"DummyModule");
+		testModule = new DummyModule("Test", "T", server, pdf);
+		pluginManager.addPlugin(testModule);
+
+		pdf = new PluginDescriptionFile("ExpCraft", "0", "this");
 		core = new DummyExpCraftCore(server, pdf);
 		cmd = new CommandManager(core);
 
+		pluginManager = new DummyPluginManager();
 		core.onEnable();
 	}
 

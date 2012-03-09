@@ -3,6 +3,7 @@ package li.cryx.expcraft;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,14 +14,17 @@ import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.help.HelpMap;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
@@ -65,35 +69,33 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public void clearRecipes() {
+	}
+
+	@Override
 	public void configureDbConfig(final ServerConfig config) {
 
 	}
 
 	@Override
+	public Inventory createInventory(final InventoryHolder owner, final int size) {
+		return null;
+	}
+
+	@Override
+	public Inventory createInventory(final InventoryHolder owner,
+			final int size, final String title) {
+		return null;
+	}
+
+	@Override
+	public Inventory createInventory(final InventoryHolder owner,
+			final InventoryType type) {
+		return null;
+	}
+
+	@Override
 	public MapView createMap(final World world) {
-		return null;
-	}
-
-	@Override
-	public World createWorld(final String name, final Environment environment) {
-		return null;
-	}
-
-	@Override
-	public World createWorld(final String name, final Environment environment,
-			final ChunkGenerator generator) {
-		return null;
-	}
-
-	@Override
-	public World createWorld(final String name, final Environment environment,
-			final long seed) {
-		return null;
-	}
-
-	@Override
-	public World createWorld(final String name, final Environment environment,
-			final long seed, final ChunkGenerator generator) {
 		return null;
 	}
 
@@ -145,6 +147,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public GameMode getDefaultGameMode() {
+		return null;
+	}
+
+	@Override
+	public HelpMap getHelpMap() {
 		return null;
 	}
 
@@ -245,6 +252,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public List<Recipe> getRecipesFor(final ItemStack result) {
+		return null;
+	}
+
+	@Override
 	public BukkitScheduler getScheduler() {
 		return null;
 	}
@@ -266,6 +278,16 @@ public class DummyServer implements Server {
 
 	@Override
 	public int getSpawnRadius() {
+		return 0;
+	}
+
+	@Override
+	public int getTicksPerAnimalSpawns() {
+		return 0;
+	}
+
+	@Override
+	public int getTicksPerMonsterSpawns() {
 		return 0;
 	}
 
@@ -325,12 +347,21 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public Iterator<Recipe> recipeIterator() {
+		return null;
+	}
+
+	@Override
 	public void reload() {
 
 	}
 
 	@Override
 	public void reloadWhitelist() {
+	}
+
+	@Override
+	public void resetRecipes() {
 	}
 
 	@Override
@@ -374,6 +405,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public boolean unloadWorld(final World world, final boolean save) {
+		return false;
+	}
+
+	@Override
+	public boolean useExactLoginLocation() {
 		return false;
 	}
 }

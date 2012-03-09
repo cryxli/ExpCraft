@@ -55,13 +55,13 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		return modules.get(abbr.toLowerCase());
 	}
 
-	public Collection<ExpCraftModule> getModules() {
-		return modules.values();
+	@Override
+	public String getModuleName() {
+		return "Core";
 	}
 
-	@Override
-	public String getName() {
-		return "Core";
+	public Collection<ExpCraftModule> getModules() {
+		return modules.values();
 	}
 
 	public AbstractPermissionManager getPermissions() {

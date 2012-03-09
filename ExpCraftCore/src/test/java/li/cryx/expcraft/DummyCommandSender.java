@@ -109,6 +109,15 @@ public class DummyCommandSender implements CommandSender {
 	}
 
 	@Override
+	public void sendMessage(final String[] messages) {
+		if (messages != null) {
+			for (String line : messages) {
+				sendMessage(line);
+			}
+		}
+	}
+
+	@Override
 	public void setOp(final boolean isOperator) {
 		operator = isOperator;
 	}

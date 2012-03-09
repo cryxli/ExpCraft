@@ -44,7 +44,7 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 
 	/** Get the full name of the module. */
 	@Override
-	abstract public String getName();
+	abstract public String getModuleName();
 
 	/**
 	 * Get the current permission manager injected by the core.

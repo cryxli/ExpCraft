@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permissible;
@@ -19,7 +17,6 @@ import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.UnknownDependencyException;
 
-@SuppressWarnings("deprecation")
 public class DummyPluginManager implements PluginManager {
 
 	Set<Plugin> plugins = new HashSet<Plugin>();
@@ -120,16 +117,10 @@ public class DummyPluginManager implements PluginManager {
 	}
 
 	@Override
-	@Deprecated
-	public void registerEvent(final Type type, final Listener listener,
-			final EventExecutor executor, final Priority priority,
-			final Plugin plugin) {
-	}
-
-	@Override
-	@Deprecated
-	public void registerEvent(final Type type, final Listener listener,
-			final Priority priority, final Plugin plugin) {
+	public void registerEvent(final Class<? extends Event> event,
+			final Listener listener, final EventPriority priority,
+			final EventExecutor executor, final Plugin plugin,
+			final boolean ignoreCancelled) {
 	}
 
 	@Override

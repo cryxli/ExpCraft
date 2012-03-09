@@ -1,8 +1,11 @@
 package li.cryx.expcraft;
 
+import java.io.File;
+
 import li.cryx.expcraft.module.ExpCraftModule;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 public class DummyModule extends ExpCraftModule {
 
@@ -13,6 +16,17 @@ public class DummyModule extends ExpCraftModule {
 	public DummyModule(final String name, final String abbr) {
 		this.name = name;
 		this.abbr = abbr;
+	}
+
+	public DummyModule(final String name, final String abbr,
+			final DummyServer server, final PluginDescriptionFile pdf) {
+		this(name, abbr);
+		initialize(null, //
+				server, //
+				pdf, //
+				new File("target/plugins/test"), //
+				null, //
+				getClass().getClassLoader());
 	}
 
 	@Override
@@ -26,7 +40,7 @@ public class DummyModule extends ExpCraftModule {
 	}
 
 	@Override
-	public String getName() {
+	public String getModuleName() {
 		return name;
 	}
 
