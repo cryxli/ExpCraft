@@ -7,9 +7,9 @@ project can be used to display their progress.
 
 - Check out ExpCraftWeb
 - Compile it with maven
-- The created JAR contains all the files necessary to run the page
-  <project>/target/*.jar
-- copy the JAR to you web server alias and extract it
+- The created ZIP contains all the files necessary to run the page
+  <project>/target/*.zip
+- copy the ZIP to you web server alias and extract it
 - rename the config.php.default to config.php and set the database connection
 
 ==== Migration from LevelCraft ====
