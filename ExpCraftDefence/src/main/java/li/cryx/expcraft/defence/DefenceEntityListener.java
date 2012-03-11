@@ -61,6 +61,9 @@ public class DefenceEntityListener implements Listener {
 	 */
 	private void checkArmorPiece(final Player player, final int level,
 			final ItemStack armor) {
+		if (armor == null) {
+			return;
+		}
 		switch (armor.getType()) {
 		case LEATHER_BOOTS:
 			checkBoots(player, level, "Leather");
@@ -294,10 +297,23 @@ public class DefenceEntityListener implements Listener {
 	 */
 	private boolean isWearingArmor(final Player player) {
 		PlayerInventory inv = player.getInventory();
-		return isArmor(inv.getBoots().getType()) || //
-				isArmor(inv.getLeggings().getType()) || //
-				isArmor(inv.getChestplate().getType()) || //
-				isArmor(inv.getHelmet().getType());
+		boolean wears = false;
+
+		if (inv.getBoots() != null) {
+			wears = isArmor(inv.getBoots().getType());
+		}
+		if (!wears && inv.getLeggings() != null) {
+			wears = isArmor(inv.getLeggings().getType());
+		}
+		if (!wears && inv.getChestplate() != null) {
+			wears = isArmor(inv.getChestplate().getType());
+
+		}
+		if (!wears && inv.getHelmet() != null) {
+			wears = isArmor(inv.getHelmet().getType());
+		}
+
+		return wears;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
