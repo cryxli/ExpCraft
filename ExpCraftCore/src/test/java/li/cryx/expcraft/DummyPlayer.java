@@ -20,6 +20,7 @@ import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
@@ -52,6 +53,12 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public void abandonConversation(final Conversation arg0) {
+	}
+
+	@Override
+	public void abandonConversation(final Conversation conversation,
+			final ConversationAbandonedEvent details) {
+
 	}
 
 	@Override
@@ -789,4 +796,5 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	@Override
 	public void updateInventory() {
 	}
+
 }

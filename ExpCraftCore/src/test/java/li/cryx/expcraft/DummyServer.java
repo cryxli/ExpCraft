@@ -151,6 +151,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public boolean getGenerateStructures() {
+		return false;
+	}
+
+	@Override
 	public HelpMap getHelpMap() {
 		return null;
 	}
@@ -334,6 +339,11 @@ public class DummyServer implements Server {
 	@Override
 	public List<World> getWorlds() {
 		return new ArrayList<World>();
+	}
+
+	@Override
+	public String getWorldType() {
+		return "DEFAULT";
 	}
 
 	@Override
