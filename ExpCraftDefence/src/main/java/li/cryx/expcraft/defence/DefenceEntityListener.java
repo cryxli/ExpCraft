@@ -346,6 +346,8 @@ public class DefenceEntityListener implements Listener {
 					player,
 					event.getDamage()
 							* plugin.getConfDouble("ExperienceMultiplier"));
+
+			// TODO reduce dmg depending on exp to levelCap and material ratio
 		}
 	}
 
