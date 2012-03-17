@@ -5,8 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -103,37 +101,5 @@ public class DexterityPlayerListener implements Listener {
 				player.setVelocity(v);
 			}
 		}
-	}
-
-	// less fall dmg depending on exp levelCap ratio and boots material
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void playerDamageEvent(final EntityDamageEvent event) {
-		if (event.isCancelled() || event.getCause() != DamageCause.FALL) {
-			return;
-		}
-		// entity takes fall damage
-		if (!(event.getEntity() instanceof Player)) {
-			return;
-		}
-		Player player = (Player) event.getEntity();
-		// player takes fall damage
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
-			return;
-		}
-		int level = plugin.getPersistence().getLevel(plugin, player);
-
-		if (!checkBoots(player, level)) {
-			// wrong level for boots, no bonus
-			return;
-		}
-		if (!isBoots(player.getInventory().getBoots())) {
-			// only get bonus when wearing boots
-			return;
-		}
-
-		// reduce damage
-		int levelCap = plugin.getLevelCap();
-		double dmg = 1.0 - 0.75 * level / levelCap;
-		event.setDamage((int) Math.ceil(event.getDamage() * dmg));
 	}
 }
