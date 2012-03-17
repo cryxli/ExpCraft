@@ -27,7 +27,7 @@ public class WoodCuttingBlockListener implements Listener {
 
 	/**
 	 * Check whether the player meets the requirements to collect the broken
-	 * block, if it is a plank or a log. If not, he receives a warning.
+	 * block, if it is a fence, plank or a log. If not, he receives a warning.
 	 * 
 	 * @param player
 	 *            Current player
@@ -71,6 +71,12 @@ public class WoodCuttingBlockListener implements Listener {
 				return true;
 
 			}
+
+		} else if (material == Material.FENCE
+				&& level < plugin.getConfInt("UseLevel.Fence")) {
+			plugin.warnCutBlock(player, plugin.getConfInt("UseLevel.Fence"));
+			return false;
+
 		} else {
 			return true;
 		}
@@ -154,6 +160,9 @@ public class WoodCuttingBlockListener implements Listener {
 				gained = plugin.getConfDouble("ExpGain.Leaves");
 				break;
 			}
+		case FENCE:
+			gained = plugin.getConfDouble("ExpGain.Fence");
+			break;
 		default:
 			gained = 0;
 			break;
