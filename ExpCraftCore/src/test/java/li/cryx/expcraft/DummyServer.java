@@ -141,6 +141,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public long getConnectionThrottle() {
+		return 0;
+	}
+
+	@Override
 	public ConsoleCommandSender getConsoleSender() {
 		return null;
 	}

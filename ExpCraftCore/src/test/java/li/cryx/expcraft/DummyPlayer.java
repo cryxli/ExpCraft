@@ -436,6 +436,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 	}
 
 	@Override
+	public boolean isBlocking() {
+		return false;
+	}
+
+	@Override
 	public boolean isConversing() {
 		return false;
 	}
@@ -447,6 +452,11 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public boolean isEmpty() {
+		return false;
+	}
+
+	@Override
+	public boolean isFlying() {
 		return false;
 	}
 
@@ -650,6 +660,10 @@ public class DummyPlayer extends DummyCommandSender implements Player {
 
 	@Override
 	public void setFireTicks(final int ticks) {
+	}
+
+	@Override
+	public void setFlying(final boolean arg0) {
 	}
 
 	@Override
