@@ -99,7 +99,7 @@ public abstract class DropExpCraftModule extends ExpCraftModule {
 			// ExpCraft not enabled for this world
 			return;
 		}
-		if (!getPermission().hasLevel(this, player)) {
+		if (!getPermission().hasModule(this, player)) {
 			// player does not have permission to use this plugin
 			return;
 		}

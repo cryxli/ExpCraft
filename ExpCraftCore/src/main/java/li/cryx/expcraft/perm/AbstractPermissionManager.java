@@ -5,6 +5,7 @@ import java.util.TreeSet;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -39,6 +40,21 @@ public abstract class AbstractPermissionManager {
 	 * @return Indicator. <code>true</code>, if player can use the module.
 	 */
 	abstract public boolean hasLevel(ExpCraftModule module, Player player);
+
+	/**
+	 * Check whether the given player has enough rights to use the given module
+	 * and is in SURVIVAL mode.
+	 * 
+	 * @param module
+	 *            The module in question.
+	 * @param player
+	 *            Current player
+	 * @return Indicator. <code>true</code>, if player can use the module.
+	 */
+	public boolean hasModule(final ExpCraftModule module, final Player player) {
+		return player.getGameMode() == GameMode.SURVIVAL
+				&& hasLevel(module, player);
+	}
 
 	/**
 	 * Set the world for which ExpCraft is activated.
