@@ -31,7 +31,7 @@ public class DexterityEntityListener implements Listener {
 		}
 
 		Player player = (Player) event.getEntity();
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
+		if (!plugin.getPermission().hasModule(plugin, player)) {
 			return;
 		}
 

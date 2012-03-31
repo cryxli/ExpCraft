@@ -163,7 +163,7 @@ public class DiggingBlockListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
+		if (!plugin.getPermission().hasModule(plugin, player)) {
 			return;
 		}
 

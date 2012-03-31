@@ -127,7 +127,7 @@ public class WoodCuttingBlockListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
+		if (!plugin.getPermission().hasModule(plugin, player)) {
 			// player is not allowed to use this plugin
 			return;
 		}

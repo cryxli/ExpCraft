@@ -65,7 +65,7 @@ public class DexterityPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		Player player = event.getPlayer();
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
+		if (!plugin.getPermission().hasModule(plugin, player)) {
 			return;
 		}
 

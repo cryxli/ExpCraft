@@ -39,7 +39,7 @@ public class FarmingPlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
+		if (!plugin.getPermission().hasModule(plugin, player)) {
 			// player does not have permission to us this module
 			return;
 		}

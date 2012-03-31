@@ -333,7 +333,7 @@ public class DefenceEntityListener implements Listener {
 		}
 
 		Player player = (Player) event.getEntity();
-		if (!plugin.getPermission().hasLevel(plugin, player)) {
+		if (!plugin.getPermission().hasModule(plugin, player)) {
 			// plugin is not active for player
 			return;
 		}
