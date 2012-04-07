@@ -22,4 +22,4 @@ Setup
 Tips
 - Use the preconfigured Launchers to build the projects
 - Launchers may not work in certain eclipse/maven plugin constellations
-- Source works for bukkit b1.2.3-R0.1 and r1.2.4-R1.0
+- Source works for b1.2.5-R0.1 and r1.2.5-R1.0
