@@ -15,14 +15,16 @@
 
 	<dependencies>
 		<dependency>
+			<!-- the server API -->
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.2.4-R1.0</version>
+			<version>1.2.5-R1.0</version>
 		</dependency>
 		<dependency>
+			<!-- an alternative permissions engine -->
 			<groupId>com.nijikokun.bukkit</groupId>
 			<artifactId>Permissions</artifactId>
-			<version>2.7.4</version>
+			<version>2.7.7</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -41,17 +43,17 @@
 	</dependencies>
 
 	<repositories>
+		<!-- the server API -->
 		<repository>
-			<id>expcraft-repo</id>
-			<name>expcraft-repo</name>
-			<releases>
-				<enabled>true</enabled>
-				<checksumPolicy>ignore</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<url>file://${project.basedir}/repository</url>
+			<id>bukkit</id>
+			<name>bukkit</name>
+			<url>http://repo.bukkit.org/content/repositories/releases/</url>
+		</repository>
+		<!-- an alternative permissions engine -->
+		<repository>
+			<id>permissions</id>
+			<name>permissions</name>
+			<url>http://mcft.im/nexus/content/repositories/dependencies/</url>
 		</repository>
 	</repositories>
 
