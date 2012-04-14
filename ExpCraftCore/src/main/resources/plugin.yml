@@ -4,6 +4,8 @@ version: ${project.version}
 description: >
              ${project.name} is an experience-based plugin for Minecraft.
 
+database: true
+
 commands:
   level:
     description: Returns information about a player's experience and levels.

@@ -1,9 +1,13 @@
 package li.cryx.expcraft;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
+
+import javax.persistence.PersistenceException;
 
 import li.cryx.expcraft.cmd.CommandManager;
 import li.cryx.expcraft.module.ExpCraftConfigLocation;
@@ -14,7 +18,9 @@ import li.cryx.expcraft.perm.PermissionsPermissionManager;
 import li.cryx.expcraft.perm.PlayerPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 import li.cryx.expcraft.persist.PersistenceDatabase;
+import li.cryx.expcraft.persist.PersistenceDatabaseBukkit;
 import li.cryx.expcraft.persist.PersistenceFlatFile;
+import li.cryx.expcraft.persist.model.Experience;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.World;
@@ -41,6 +47,13 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 
 	public ExpCraftCore() {
 		cmd = new CommandManager(this);
+	}
+
+	@Override
+	public List<Class<?>> getDatabaseClasses() {
+		List<Class<?>> classes = new LinkedList<Class<?>>();
+		classes.add(Experience.class);
+		return classes;
 	}
 
 	/**
@@ -186,7 +199,18 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 	private void setPersistence(final FileConfiguration config) {
 		// crate persistence manager
 		String storageType = config.getString("Database");
-		if ("mysql".equalsIgnoreCase(storageType)
+		if ("bukkit".equalsIgnoreCase(storageType)) {
+			// databse through bukkit
+			try {
+				// test for ExpCraftTable
+				getDatabase().createQuery(Experience.class).findRowCount();
+			} catch (PersistenceException e) {
+				// create table
+				installDDL();
+			}
+			// create DAO
+			persistence = new PersistenceDatabaseBukkit();
+		} else if ("mysql".equalsIgnoreCase(storageType)
 				|| "sqlite".equalsIgnoreCase(storageType)) {
 			// persist to database
 			PersistenceDatabase db = new PersistenceDatabase();
