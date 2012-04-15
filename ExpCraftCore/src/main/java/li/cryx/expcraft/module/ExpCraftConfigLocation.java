@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -52,15 +51,25 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 	 * <code><b>Plugin</b>/config.yml</code> to
 	 * <code>ExpCraft/config/<b>Module</b>.yml</code>. While <b>Plugin</b> is
 	 * the name of the module with which it registers with bukkit server, while
-	 * <b>Module</b> is get result of {@link #getName()} method.
+	 * <b>Module</b> is the result of {@link #getModuleName()} method.
 	 */
 	private File getConfigFile() {
 		if (configFile == null) {
-			File folder = new File(getDataFolder().getParentFile(),
-					"ExpCraft/config");
+			File folder = new File(getDataFolder(), "config");
 			configFile = new File(folder, getModuleName() + ".yml");
 		}
 		return configFile;
+	}
+
+	/**
+	 * Change data folder to <code>plugins/ExpCraftCore/../ExpCraft/</code>
+	 * preventing bukkit from creating the default data folder
+	 * <code>plugins/ExpCraftCore/</code>.
+	 */
+	@Override
+	public File getDataFolder() {
+		// plugins/ExpCraftCore/../ExpCraft/
+		return new File(super.getDataFolder().getParentFile(), "ExpCraft");
 	}
 
 	/** Get the full name of the module. */
@@ -76,8 +85,8 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 		try {
 			newConfig.save(getConfigFile());
 		} catch (IOException ex) {
-			Logger.getLogger(ExpCraftConfigLocation.class.getName()).log(
-					Level.SEVERE, "Could not save config to " + configFile, ex);
+			getLogger().log(Level.SEVERE,
+					"Could not save config to " + configFile, ex);
 		}
 	}
 

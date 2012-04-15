@@ -30,7 +30,7 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 	 */
 	abstract public void displayInfo(Player sender, int page);
 
-	/** Get the short reference (1 or 2 characters) of the module) */
+	/** Get the short reference (1 or 2 characters) of the module. */
 	abstract public String getAbbr();
 
 	/**
