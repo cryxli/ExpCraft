@@ -14,6 +14,7 @@ UseLevel:
   Gravel: 0
   Clay: 0
   Sand: 0
+  Mycelium: 0
 
 ExpGain:
   Dirt: 1.0
@@ -23,6 +24,7 @@ ExpGain:
   Gravel: 1.0
   Clay: 10.0
   Sand: 2.0
+  Mycelium: 1.0
 
 Settings:
   EnableDoubleDrop: true

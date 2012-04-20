@@ -77,6 +77,14 @@ public class DiggingBlockListener implements Listener {
 				exp = plugin.getConfDouble("ExpGain.Snow");
 			}
 			break;
+		case MYCEL:
+			if (level < plugin.getConfInt("UseLevel.Mycelium")) {
+				plugin.warnCutBlockLevel(player,
+						plugin.getConfInt("UseLevel.Mycelium"));
+			} else {
+				exp = plugin.getConfDouble("ExpGain.Mycelium");
+			}
+			break;
 		default:
 			// nothing to do
 			break;
