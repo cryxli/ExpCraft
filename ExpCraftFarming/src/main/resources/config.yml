@@ -19,6 +19,8 @@ UseLevel:
   YellowFlower: 0
   Mushroom: 0
   Wheat: 0
+  Pumpkin: 0
+  Melon: 0
 
 ExpGain:
   Till: 1.0
@@ -32,7 +34,9 @@ ExpGain:
   YellowFlower: 0.1
   Mushroom: 0.1
   Wheat: 2.0
-  
+  Pumpkin: 2.0
+  Melon: 2.0
+
 DropLevel:
   PumpkinSeed: 20
   MelonSeed: 40

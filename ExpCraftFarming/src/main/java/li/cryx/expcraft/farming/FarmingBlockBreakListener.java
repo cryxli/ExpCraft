@@ -6,6 +6,7 @@ import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -90,6 +91,36 @@ public class FarmingBlockBreakListener implements Listener {
 	}
 
 	/**
+	 * Test the blocks around the given one.
+	 * 
+	 * @param center
+	 *            The block in the center.
+	 * @param aroundType
+	 *            Material of the blocks around the center block.
+	 * @return <code>true</code>, if at least one of the blocks around is of the
+	 *         given material.
+	 */
+	private boolean checkAround(final Block center, final Material aroundType) {
+		Block stem = center.getRelative(BlockFace.SOUTH);
+		if (stem.getType() == aroundType) {
+			return true;
+		}
+		stem = center.getRelative(BlockFace.NORTH);
+		if (stem.getType() == aroundType) {
+			return true;
+		}
+		stem = center.getRelative(BlockFace.WEST);
+		if (stem.getType() == aroundType) {
+			return true;
+		}
+		stem = center.getRelative(BlockFace.EAST);
+		if (stem.getType() == aroundType) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Drop one item of the given material at the given block's position.
 	 * 
 	 * @param block
@@ -130,6 +161,36 @@ public class FarmingBlockBreakListener implements Listener {
 				block.getY(), block.getZ(), 0, 0);
 		block.getWorld().dropItem(locy,
 				new ItemStack(material.getId(), 1, damage));
+	}
+
+	/**
+	 * Test whether the given block is a melon next to a stem.
+	 * 
+	 * @param block
+	 *            The block to test
+	 * @return <code>true</code>, if the harvested block is a grown melon
+	 */
+	private boolean isMelon(final Block block) {
+		if (block.getType() != Material.MELON_BLOCK) {
+			return false;
+		} else {
+			return checkAround(block, Material.MELON_STEM);
+		}
+	}
+
+	/**
+	 * Test whether the given block is a pumpkin next to a stem.
+	 * 
+	 * @param block
+	 *            The block to test
+	 * @return <code>true</code>, if the harvested block is a grown pumpkin
+	 */
+	private boolean isPumpkin(final Block block) {
+		if (block.getType() != Material.PUMPKIN) {
+			return false;
+		} else {
+			return checkAround(block, Material.PUMPKIN_STEM);
+		}
 	}
 
 	/**
@@ -217,13 +278,13 @@ public class FarmingBlockBreakListener implements Listener {
 			// harvesting sugar cane
 			gained = plugin.getConfDouble("ExpGain.SugarCane");
 
-		} else if (isRipeCrops(event.getBlock())
+		} else if (isRipeCrops(block)
 				&& level >= plugin.getConfInt("UseLevel.Harvest")) {
 			// harvesting crops
 			gained = plugin.getConfDouble("ExpGain.Harvest");
 			bonusDropForCrops(player, level, block);
 
-		} else if (isRipeNetherWart(event.getBlock())
+		} else if (isRipeNetherWart(block)
 				&& level >= plugin.getConfInt("UseLevel.NetherWart")) {
 			// harvesting nether wart
 			gained = plugin.getConfDouble("ExpGain.NetherWart");
@@ -233,9 +294,17 @@ public class FarmingBlockBreakListener implements Listener {
 				&& level >= plugin.getConfInt("UseLevel.Cacti")) {
 			// harvesting cacti
 			gained = plugin.getConfDouble("ExpGain.Cacti");
-		}
 
+		} else if (isMelon(block)
+				&& level >= plugin.getConfInt("UseLevel.Melon")) {
+			// harvest melon
+			gained = plugin.getConfDouble("ExpGain.Melon");
+
+		} else if (isPumpkin(block)
+				&& level >= plugin.getConfInt("UseLevel.Pumpkin")) {
+			// harvest pumpkins
+			gained = plugin.getConfDouble("ExpGain.Pumpkin");
+		}
 		plugin.getPersistence().addExp(plugin, player, gained);
 	}
-
 }
