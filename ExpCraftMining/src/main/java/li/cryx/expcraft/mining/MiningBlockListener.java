@@ -17,6 +17,16 @@ public class MiningBlockListener implements Listener {
 		this.plugin = plugin;
 	}
 
+	private boolean checkAndWarn(final Player player, final int level,
+			final String confKey) {
+		if (level < plugin.getConfInt(confKey)) {
+			plugin.warnBlockMine(player, plugin.getConfInt(confKey));
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	private boolean checkPickaxe(final Player player,
 			final Material itemInHand, final int level) {
 		if (itemInHand == Material.WOOD_PICKAXE
@@ -101,50 +111,39 @@ public class MiningBlockListener implements Listener {
 	 */
 	private boolean isMinable(final Player player, final Material material,
 			final int level) {
-		if (material == Material.STONE
-				&& level < plugin.getConfInt("UseLevel.Stone")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.Stone"));
-		} else if (material == Material.COBBLESTONE
-				&& level < plugin.getConfInt("UseLevel.Cobble")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.Cobble"));
-		} else if (material == Material.MOSSY_COBBLESTONE
-				&& level < plugin.getConfInt("UseLevel.MossStone")) {
-			plugin.warnBlockMine(player,
-					plugin.getConfInt("UseLevel.MossStone"));
-		} else if (material == Material.COAL_ORE
-				&& level < plugin.getConfInt("UseLevel.CoalOre")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.CoalOre"));
-		} else if (material == Material.IRON_ORE
-				&& level < plugin.getConfInt("UseLevel.IronOre")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.IronOre"));
-		} else if (material == Material.SANDSTONE
-				&& level < plugin.getConfInt("UseLevel.SandStone")) {
-			plugin.warnBlockMine(player,
-					plugin.getConfInt("UseLevel.SandStone"));
-		} else if (material == Material.GOLD_ORE
-				&& level < plugin.getConfInt("UseLevel.GoldOre")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.GoldOre"));
-		} else if (material == Material.LAPIS_ORE
-				&& level < plugin.getConfInt("UseLevel.LapisOre")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.LapisOre"));
-		} else if (material == Material.REDSTONE_ORE
-				&& level < plugin.getConfInt("UseLevel.Redstone")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.Redstone"));
-		} else if (material == Material.DIAMOND_ORE
-				&& level < plugin.getConfInt("UseLevel.DiamondOre")) {
-			plugin.warnBlockMine(player,
-					plugin.getConfInt("UseLevel.DiamondOre"));
-		} else if (material == Material.OBSIDIAN
-				&& level < plugin.getConfInt("UseLevel.Obsidian")) {
-			plugin.warnBlockMine(player, plugin.getConfInt("UseLevel.Obsidian"));
-		} else if (material == Material.NETHERRACK
-				&& level < plugin.getConfInt("UseLevel.Netherrack")) {
-			plugin.warnBlockMine(player,
-					plugin.getConfInt("UseLevel.Netherrack"));
-		} else {
+
+		switch (material) {
+		case STONE:
+			return checkAndWarn(player, level, "UseLevel.Stone");
+		case COBBLESTONE:
+			return checkAndWarn(player, level, "UseLevel.Cobble");
+		case MOSSY_COBBLESTONE:
+			return checkAndWarn(player, level, "UseLevel.MossStone");
+		case COAL_ORE:
+			return checkAndWarn(player, level, "UseLevel.CoalOre");
+		case IRON_ORE:
+			return checkAndWarn(player, level, "UseLevel.IronOre");
+		case SANDSTONE:
+			return checkAndWarn(player, level, "UseLevel.SandStone");
+		case GOLD_ORE:
+			return checkAndWarn(player, level, "UseLevel.GoldOre");
+		case LAPIS_ORE:
+			return checkAndWarn(player, level, "UseLevel.LapisOre");
+		case REDSTONE_ORE:
+		case GLOWING_REDSTONE_ORE:
+			return checkAndWarn(player, level, "UseLevel.Redstone");
+		case DIAMOND_ORE:
+			return checkAndWarn(player, level, "UseLevel.DiamondOre");
+		case OBSIDIAN:
+			return checkAndWarn(player, level, "UseLevel.Obsidian");
+		case NETHERRACK:
+			return checkAndWarn(player, level, "UseLevel.Netherrack");
+		case SMOOTH_BRICK:
+			return checkAndWarn(player, level, "UseLevel.StoneBrick");
+		default:
 			return true;
 		}
-		return false;
+
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -185,6 +184,7 @@ public class MiningBlockListener implements Listener {
 			expGain = plugin.getConfDouble("ExpGain.Cobble");
 			break;
 		case REDSTONE_ORE:
+		case GLOWING_REDSTONE_ORE:
 			expGain = plugin.getConfDouble("ExpGain.Redstone");
 			break;
 		case GOLD_ORE:
@@ -213,6 +213,9 @@ public class MiningBlockListener implements Listener {
 			break;
 		case SANDSTONE:
 			expGain = plugin.getConfDouble("ExpGain.SandStone");
+			break;
+		case SMOOTH_BRICK:
+			expGain = plugin.getConfDouble("ExpGain.StoneBrick");
 			break;
 		}
 		plugin.getPersistence().addExp(plugin, player, expGain);
