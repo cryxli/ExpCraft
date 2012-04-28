@@ -37,14 +37,16 @@ public class Mining extends DropExpCraftModule {
 			return new ItemStack(Material.COBBLESTONE, 1);
 
 		case COBBLESTONE:
-		case SANDSTONE:
 		case GOLD_ORE:
 		case IRON_ORE:
 		case MOSSY_COBBLESTONE:
 		case OBSIDIAN:
 		case NETHERRACK:
+		case NETHER_BRICK:
 			return new ItemStack(material, 1);
 
+		case SANDSTONE:
+			return new ItemStack(Material.SANDSTONE, 1, block.getData());
 		case REDSTONE_ORE:
 		case GLOWING_REDSTONE_ORE:
 			return new ItemStack(Material.REDSTONE, 5);
