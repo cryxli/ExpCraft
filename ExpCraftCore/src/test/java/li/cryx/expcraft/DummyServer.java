@@ -126,6 +126,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public int getAnimalSpawnLimit() {
+		return 0;
+	}
+
+	@Override
 	public Set<OfflinePlayer> getBannedPlayers() {
 		return null;
 	}
@@ -198,6 +203,11 @@ public class DummyServer implements Server {
 	@Override
 	public Messenger getMessenger() {
 		return null;
+	}
+
+	@Override
+	public int getMonsterSpawnLimit() {
+		return 0;
 	}
 
 	@Override
@@ -318,6 +328,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public int getViewDistance() {
+		return 0;
+	}
+
+	@Override
+	public int getWaterAnimalSpawnLimit() {
 		return 0;
 	}
 
