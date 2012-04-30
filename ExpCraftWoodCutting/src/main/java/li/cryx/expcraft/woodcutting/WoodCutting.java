@@ -36,16 +36,10 @@ public class WoodCutting extends DropExpCraftModule {
 		case LOG:
 			Tree tree = (Tree) block.getState().getData();
 			TreeSpecies species = tree.getSpecies();
-			if (species == TreeSpecies.BIRCH) {
-				return new ItemStack(Material.LOG, 1, (short) 2);
-			} else if (species == TreeSpecies.REDWOOD) {
-				return new ItemStack(Material.LOG, 1, (short) 1);
-			} else {
-				return new ItemStack(Material.LOG, 1, (short) 0);
-			}
+			return new ItemStack(Material.LOG, 1, species.getData());
 
 		case WOOD:
-			return new ItemStack(Material.WOOD, 1);
+			return new ItemStack(Material.WOOD, 1, block.getData());
 
 		default:
 			return null;
