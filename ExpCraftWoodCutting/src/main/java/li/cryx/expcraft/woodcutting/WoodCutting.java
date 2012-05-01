@@ -6,12 +6,9 @@ import java.util.logging.Logger;
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
-import org.bukkit.Material;
-import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Tree;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -34,12 +31,8 @@ public class WoodCutting extends DropExpCraftModule {
 	protected ItemStack calculateDrop(final Block block) {
 		switch (block.getType()) {
 		case LOG:
-			Tree tree = (Tree) block.getState().getData();
-			TreeSpecies species = tree.getSpecies();
-			return new ItemStack(Material.LOG, 1, species.getData());
-
 		case WOOD:
-			return new ItemStack(Material.WOOD, 1, block.getData());
+			return new ItemStack(block.getType(), 1, block.getData());
 
 		default:
 			return null;
