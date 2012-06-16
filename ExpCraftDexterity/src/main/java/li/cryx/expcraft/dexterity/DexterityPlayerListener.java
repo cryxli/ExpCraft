@@ -1,5 +1,6 @@
 package li.cryx.expcraft.dexterity;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,15 +8,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public class DexterityPlayerListener implements Listener {
 
 	private final Dexterity plugin;
-
-	private static final double jumpHalfHigher = 0.4;
-
-	private static final double jumpOneHigher = 0.48;
 
 	public DexterityPlayerListener(final Dexterity plugin) {
 		this.plugin = plugin;
@@ -89,16 +85,15 @@ public class DexterityPlayerListener implements Listener {
 
 			// jump higher
 			if (level >= plugin.getConfInt("LevelGain.SuperJump")) {
-				// jump 2 blocks (unstable)
-				Vector v = player.getVelocity();
-				v.setY(jumpOneHigher);
-				player.setVelocity(v);
-
+				// // jump 2 blocks (unstable)
+				Location loc = event.getTo().clone();
+				loc.setY(loc.getY() + 1);
+				player.teleport(loc);
 			} else if (level >= plugin.getConfInt("LevelGain.AdvancedJump")) {
 				// jump 1.5 blocks
-				Vector v = player.getVelocity();
-				v.setY(jumpHalfHigher);
-				player.setVelocity(v);
+				Location loc = event.getTo().clone();
+				loc.setY(loc.getY() + 0.5);
+				player.teleport(loc);
 			}
 		}
 	}
