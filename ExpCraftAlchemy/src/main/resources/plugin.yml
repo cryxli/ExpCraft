@@ -1,0 +1,11 @@
+name: ${project.name}
+main: li.cryx.expcraft.alchemy.Alchemy
+version: ${project.version}
+depend: [ExpCraftCore]
+description: >
+             ${project.name}. An alchemy component for ExpCraft.
+
+permissions:
+  ec.module.a:
+    description: Enable Alchemy module
+    default: true
