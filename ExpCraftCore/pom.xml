@@ -20,13 +20,6 @@
 			<artifactId>bukkit</artifactId>
 			<version>1.2.5-R2.0</version>
 		</dependency>
-		<dependency>
-			<!-- an alternative permissions engine -->
-			<groupId>com.nijikokun.bukkit</groupId>
-			<artifactId>Permissions</artifactId>
-			<version>2.7.7</version>
-			<scope>provided</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -48,12 +41,6 @@
 			<id>bukkit</id>
 			<name>bukkit</name>
 			<url>http://repo.bukkit.org/content/repositories/releases/</url>
-		</repository>
-		<!-- an alternative permissions engine -->
-		<repository>
-			<id>permissions</id>
-			<name>permissions</name>
-			<url>http://mcft.im/nexus/content/repositories/dependencies/</url>
 		</repository>
 	</repositories>
 

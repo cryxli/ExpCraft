@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * 
  * @author cryxli
  */
-public class PlayerPermissionManager extends AbstractPermissionManager {
+public class PermissionsBukkitManager extends AbstractPermissionManager {
 
 	@Override
 	public boolean hasAdminCommand(final Player player, final String command) {

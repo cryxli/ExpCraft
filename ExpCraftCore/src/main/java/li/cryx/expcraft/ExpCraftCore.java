@@ -14,10 +14,8 @@ import li.cryx.expcraft.module.ExpCraftConfigLocation;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.perm.NoPermissionManager;
-import li.cryx.expcraft.perm.PermissionsPermissionManager;
-import li.cryx.expcraft.perm.PlayerPermissionManager;
+import li.cryx.expcraft.perm.PermissionsBukkitManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
-import li.cryx.expcraft.persist.PersistenceDatabase;
 import li.cryx.expcraft.persist.PersistenceDatabaseBukkit;
 import li.cryx.expcraft.persist.PersistenceFlatFile;
 import li.cryx.expcraft.persist.model.Experience;
@@ -29,8 +27,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class ExpCraftCore extends ExpCraftConfigLocation {
 
@@ -166,19 +162,11 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 	}
 
 	private void setPermission(final FileConfiguration config) {
-		// TODO cryxli: load proper PermissionManager
-		// TODO cryxli: which one to support?
-
-		Plugin perm = getServer().getPluginManager().getPlugin("Permissions");
 		Plugin permBukkit = getServer().getPluginManager().getPlugin(
 				"PermissionsBukkit");
 		if (permBukkit != null) {
-			permission = new PlayerPermissionManager();
+			permission = new PermissionsBukkitManager();
 			LOG.info("[EC] Using PermissionsBukkit.");
-		} else if (perm != null) {
-			permission = new PermissionsPermissionManager(
-					((Permissions) perm).getHandler());
-			LOG.info("[EC] Using Permissions.");
 		} else {
 			LOG.info("[EC] No Permissions found enabling all levels.");
 			permission = new NoPermissionManager();
@@ -210,15 +198,6 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 			}
 			// create DAO
 			persistence = new PersistenceDatabaseBukkit();
-		} else if ("mysql".equalsIgnoreCase(storageType)
-				|| "sqlite".equalsIgnoreCase(storageType)) {
-			// persist to database
-			PersistenceDatabase db = new PersistenceDatabase();
-			persistence = db;
-			db.setDatabase(storageType);
-			db.setDbUrl(config.getString("DbConnection.URL"));
-			db.setDbUser(config.getString("DbConnection.User"));
-			db.setDbPassword(config.getString("DbConnection.Password"));
 
 		} else {
 			// persist to flat file, also fallback = "FlatFile"
