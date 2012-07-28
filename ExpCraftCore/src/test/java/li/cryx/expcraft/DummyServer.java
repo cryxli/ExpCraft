@@ -211,6 +211,11 @@ public class DummyServer implements Server {
 	}
 
 	@Override
+	public String getMotd() {
+		return "";
+	}
+
+	@Override
 	public String getName() {
 		return null;
 	}
@@ -368,6 +373,11 @@ public class DummyServer implements Server {
 
 	@Override
 	public boolean hasWhitelist() {
+		return false;
+	}
+
+	@Override
+	public boolean isPrimaryThread() {
 		return false;
 	}
 
