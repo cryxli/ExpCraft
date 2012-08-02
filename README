@@ -22,4 +22,5 @@ Setup
 Tips
 - Use the preconfigured Launchers to build the projects
 - Launchers may not work in certain eclipse/maven plugin constellations
-- Source works for r1.2.5-R4.0
+- Source works for r1.2.5-R5.0
+- Source compiles for d1.3.1-R0.1-SNAPSHOT
