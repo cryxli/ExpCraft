@@ -15,7 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 
 /**
- * TODO write doc
+ * Storage to handle custom recipes and compare recipes (from events) against
+ * them.
  * 
  * @author cryxli
  */

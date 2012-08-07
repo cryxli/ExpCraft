@@ -14,6 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
 
+/**
+ * Main entry point for the ExpCraft module Alchemy (A). Adds custom recipes
+ * depending on crafting experiance.
+ * 
+ * @author cryxli
+ */
 public class Alchemy extends ExpCraftModule {
 
 	private static final Logger LOG = Logger.getLogger("EC-Alchemy");
@@ -31,17 +37,14 @@ public class Alchemy extends ExpCraftModule {
 	private void createListeners() {
 		// use one chat tool
 		chat = new Chat(this);
-
+		// add crafting listener
 		craftListener = new CraftingListener(this);
-		// TODO
 	}
 
 	@Override
 	public void displayInfo(final Player sender, final int page) {
 		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
 				getModuleName(), getAbbr()));
-
-		// TODO Auto-generated method stub
 
 		int level = getPersistence().getLevel(this, sender);
 		double exp = getPersistence().getExp(this, sender);

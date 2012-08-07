@@ -14,7 +14,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 /**
- * This helper class offers methods to opperate on bukkit <code>Recipe</code>s.
+ * This helper class offers methods to operate on bukkit <code>Recipe</code>s.
  * 
  * @author cryxli
  */
@@ -206,11 +206,17 @@ public class Recipes {
 	 * fixed. This method also accepts furnace and shapeless recipes and just
 	 * returns them unchanged.
 	 * 
+	 * <p>
+	 * <a href="https://bukkit.atlassian.net/browse/BUKKIT-1334">BUKIT-1334</a>
+	 * is fixed with Recommended 1.3.1-R1.0
+	 * </p>
+	 * 
 	 * @param recipe
 	 *            A (shaped) recipe to correct.
 	 * @return The corrected (shaped) recipe, or, the unchanged furnace or
 	 *         shapeless recipe.
 	 */
+	@Deprecated
 	public static Recipe unturn(final Recipe recipe) {
 		if (recipe instanceof ShapedRecipe) {
 			ShapedRecipe shaped = clone((ShapedRecipe) recipe);

@@ -3,7 +3,6 @@ package li.cryx.expcraft.alchemy;
 import java.util.logging.Logger;
 
 import li.cryx.expcraft.alchemy.recipe.TypedRecipe;
-import li.cryx.expcraft.util.Recipes;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,6 +13,14 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Listen to <code>CraftItemEvent</code>s. Prevent high level recipes from being
+ * used and keep track of exp gain.
+ * 
+ * TODO get exp when taking items from furnaces
+ * 
+ * @author cryxli
+ */
 public class CraftingListener implements Listener {
 
 	private static final int SENTINEL_MAX_STACK_SIZE = 65;
@@ -28,17 +35,28 @@ public class CraftingListener implements Listener {
 		plugin = alchemy;
 	}
 
+	private boolean isValidEvent(final CraftItemEvent event) {
+		return // only player interactions
+		(event.getWhoClicked() instanceof Player)
+		// only unconsumed events are interessting
+				&& !event.isCancelled()
+				// the event is fired everytime the result slot is clicked
+				// when there has been a valid recipe in the matrix -
+				// but the inventory (event.getInventory()) is updated and
+				// does not have an item
+				&& event.getInventory().getResult() != null;
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onCrafting(final CraftItemEvent event) {
-		if (!(event.getWhoClicked() instanceof Player) || event.isCancelled()) {
-			// unknown event
+		if (!isValidEvent(event)) {
 			return;
 		}
+
 		Player player = (Player) event.getWhoClicked();
 		boolean hasPlugin = plugin.getPermission().hasLevel(plugin, player);
 
-		TypedRecipe recipe = plugin
-				.getRecipe(Recipes.unturn(event.getRecipe()));
+		TypedRecipe recipe = plugin.getRecipe(event.getRecipe());
 
 		if (!hasPlugin && recipe.isModuleRecipe()) {
 			event.setCancelled(true);

@@ -76,7 +76,7 @@ public class RecipeFactory {
 			recipe = shapelessFromMap(output, map);
 			break;
 		case FURNACE:
-			recipe = furnanceFromMap(output, map);
+			recipe = furnaceFromMap(output, map);
 			break;
 		default:
 			LOG.warning("Unknown recipe shape in " + map);
@@ -114,7 +114,7 @@ public class RecipeFactory {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static CustomFurnaceRecipe furnanceFromMap(final ItemStack output,
+	private static CustomFurnaceRecipe furnaceFromMap(final ItemStack output,
 			final Map<String, Object> map) {
 		CustomFurnaceRecipe recipe = new CustomFurnaceRecipe(output,
 				Material.AIR);
@@ -191,7 +191,9 @@ public class RecipeFactory {
 		try {
 			recipe.shape(buf.toString().split(","));
 			for (Map.Entry<Character, MaterialData> e : ingreds.entrySet()) {
-				recipe.setIngredient(e.getKey(), e.getValue());
+				if (e.getValue().getItemType() != Material.AIR) {
+					recipe.setIngredient(e.getKey(), e.getValue());
+				}
 			}
 		} catch (IllegalArgumentException e) {
 			LOG.warning("Illegal shape from " + map);
@@ -294,7 +296,7 @@ public class RecipeFactory {
 			return null;
 		}
 		short data;
-		if (ss[1] == null || ss[1].length() == 0 || ss[1].trim() == "-1") {
+		if (ss[1] == null || ss[1].length() == 0 || "-1".equals(ss[1].trim())) {
 			data = -1;
 		} else {
 			try {
