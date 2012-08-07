@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
+import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandException;
@@ -334,6 +335,11 @@ public class DummyServer implements Server {
 	@Override
 	public int getViewDistance() {
 		return 0;
+	}
+
+	@Override
+	public WarningState getWarningState() {
+		return null;
 	}
 
 	@Override
