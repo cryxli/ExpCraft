@@ -13,6 +13,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.CocoaPlant;
+import org.bukkit.material.CocoaPlant.CocoaPlantSize;
 import org.bukkit.material.Crops;
 
 /**
@@ -194,6 +196,22 @@ public class FarmingBlockBreakListener implements Listener {
 	}
 
 	/**
+	 * Test whether the given block represents fully grown cocoa bean.
+	 * 
+	 * @param block
+	 *            A block participating in an event.
+	 * @return <code>true</code>, only if the block represents a cocoa plant of
+	 *         size large.
+	 */
+	private boolean isRipeCocoaBean(final Block block) {
+		if (block.getType() == Material.COCOA) {
+			return ((CocoaPlant) block.getState().getData()).getSize() == CocoaPlantSize.LARGE;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Test whether the given block represents fully grown, ripe crops.
 	 * 
 	 * @param block
@@ -304,6 +322,12 @@ public class FarmingBlockBreakListener implements Listener {
 				&& level >= plugin.getConfInt("UseLevel.Pumpkin")) {
 			// harvest pumpkins
 			gained = plugin.getConfDouble("ExpGain.Pumpkin");
+
+		} else if (isRipeCocoaBean(block)
+				&& level >= plugin.getConfInt("UseLevel.CocoaBean")) {
+			// harvest cocoa bean
+			gained = plugin.getConfDouble("ExpGain.CocoaBean");
+
 		}
 		plugin.getPersistence().addExp(plugin, player, gained);
 	}
