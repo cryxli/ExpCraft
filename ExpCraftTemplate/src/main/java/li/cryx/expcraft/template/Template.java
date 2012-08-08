@@ -25,7 +25,7 @@ public class Template extends ExpCraftModule {
 		// use one chat tool
 		chat = new Chat(this);
 
-		// TODO creat your listeners like
+		// TODO create your listeners like
 		// blockListener = new ScavengerBlockListener(this);
 	}
 
