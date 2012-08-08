@@ -100,6 +100,7 @@ public class RecipesTest {
 		Assert.assertTrue(Recipes.equals((Recipe) shaped, (Recipe) shapedClone));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void unturnRecipe() {
 		Recipe recipe = Recipes.unturn(furnace);
