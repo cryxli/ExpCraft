@@ -7,16 +7,33 @@ AxeLevel:
   Diamond: 30
 
 ExpGain:
-  Log: 5.0
-  Plank: 2.0
-  Leaves: 0.1
+  LogOak: 5.0
+  LogBirch: 5.0
+  LogRedwood: 5.0
+  LogJungle: 5.0
+  PlankOak: 2.0
+  PlankBirch: 2.0
+  PlankRedwood: 2.0
+  PlankJungle: 2.0
+  LeavesOak: 0.1
+  LeavesBirch: 0.1
+  LeavesRedwood: 0.1
+  LeavesJungle: 0.1
   Fence: 1.0
 
 UseLevel:
-  Redwood: 0
-  Birch: 0
-  Log: 0
-  Plank: 0
+  LogOak: 0
+  LogBirch: 0
+  LogRedwood: 0
+  LogJungle: 0
+  PlankOak: 0
+  PlankBirch: 0
+  PlankRedwood: 0
+  PlankJungle: 0
+  LeavesOak: 0
+  LeavesBirch: 0
+  LeavesRedwood: 0
+  LeavesJungle: 0
   Fence: 0
 
 Settings:
