@@ -24,16 +24,16 @@ import org.bukkit.plugin.Plugin;
 public class Chat {
 
 	/** Chat color to highlight things. */
-	private static ChatColor colorHighlight = ChatColor.valueOf("GOLD");
+	private static ChatColor colorHighlight = ChatColor.GOLD;
 
 	/** Chat color to indicate something special. */
-	private static ChatColor colorSpecial = ChatColor.valueOf("YELLOW");
+	private static ChatColor colorSpecial = ChatColor.YELLOW;
 
 	/** Chat color to indicate good news. */
-	private static ChatColor colorGood = ChatColor.valueOf("GREEN");
+	private static ChatColor colorGood = ChatColor.GREEN;
 
 	/** Chat color to indicate bad news. */
-	private static ChatColor colorBad = ChatColor.valueOf("RED");
+	private static ChatColor colorBad = ChatColor.RED;
 
 	/** Indicator whether to broadcast information to all players. */
 	private static boolean notifyAll = true;

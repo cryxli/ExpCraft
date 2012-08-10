@@ -1,483 +1,451 @@
 package li.cryx.expcraft.cmp;
 
 import junit.framework.Assert;
-import li.cryx.expcraft.DummyCommandSender;
 import li.cryx.expcraft.DummyExpCraftCore;
 import li.cryx.expcraft.DummyModule;
-import li.cryx.expcraft.DummyPlayer;
-import li.cryx.expcraft.DummyPluginManager;
-import li.cryx.expcraft.DummyServer;
 import li.cryx.expcraft.ExpCraftCore;
 import li.cryx.expcraft.cmd.CommandManager;
 
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class CommandManagerTest {
 
-	private static DummyServer server;
-	private static DummyPluginManager pluginManager;
+	private Server server;
 
-	private static ExpCraftCore core;
-	private static CommandManager cmd;
-	private static DummyModule testModule;
+	private PluginManager pluginManager;
 
-	@BeforeClass
-	public static void init() {
+	private ExpCraftCore core;
 
-		pluginManager = new DummyPluginManager();
-		server = new DummyServer();
-		server.setPluginManager(pluginManager);
+	private CommandManager cmd;
+
+	private DummyModule testModule;
+
+	@Before
+	public void beforeTest() {
+		pluginManager = Mockito.mock(PluginManager.class);
+
+		server = Mockito.mock(Server.class);
+		Mockito.when(server.getPluginManager()).thenReturn(pluginManager);
 
 		PluginDescriptionFile pdf = new PluginDescriptionFile("Test", "0",
 				"DummyModule");
 		testModule = new DummyModule("Test", "T", server, pdf);
-		pluginManager.addPlugin(testModule);
 
 		pdf = new PluginDescriptionFile("ExpCraft", "0", "this");
 		core = new DummyExpCraftCore(server, pdf);
-		cmd = new CommandManager(core);
 
-		pluginManager = new DummyPluginManager();
+		Mockito.when(pluginManager.getPlugins()).thenReturn(
+				new Plugin[] { testModule, core });
 		core.onEnable();
+
+		cmd = new CommandManager(core);
 	}
 
-	private final DummyCommandSender sender = new DummyCommandSender("CONSOLE");
+	private void infoModuleTest(final Player player) {
+		cmd.onCommand(player, "info", "t");
+		Mockito.verify(player).sendMessage("Module info here, page: 1");
 
-	private final DummyPlayer player = new DummyPlayer("cryxli");
+		cmd.onCommand(player, "info", "t", "2");
+		Mockito.verify(player).sendMessage("Module info here, page: 2");
 
-	private void playerInfoCheck() {
-		String[] lines = player.getLastMessage().split("\n");
-		Assert.assertEquals(6, lines.length);
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eAvailable commands:", lines[1]);
-		Assert.assertEquals("§6[EC] §e /lvl all", lines[2]);
-		Assert.assertEquals("§6[EC] §e /lvl info <Module> [Page]", lines[3]);
-		Assert.assertEquals("§6[EC] §e /lvl getExp <Module>", lines[4]);
-		Assert.assertEquals("§6[EC] §e /lvl getLvl <Module>", lines[5]);
+		cmd.onCommand(player, "t");
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"Module info here, page: 1");
+
+		cmd.onCommand(player, "t", "2");
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"Module info here, page: 2");
+	}
+
+	private void playerInfoCheck(final Player player) {
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player).sendMessage("§6[EC] §eAvailable commands:");
+		Mockito.verify(player).sendMessage("§6[EC] §e /lvl all");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e /lvl info <Module> [Page]");
+		Mockito.verify(player).sendMessage("§6[EC] §e /lvl getExp <Module>");
+		Mockito.verify(player).sendMessage("§6[EC] §e /lvl getLvl <Module>");
+		Mockito.verify(player, Mockito.times(6)).sendMessage(
+				Mockito.anyString());
 	}
 
 	@Test
 	public void playerInfoModule() {
+		Player player = Mockito.mock(Player.class);
+
 		cmd.onCommand(player, "info", "t");
-		Assert.assertEquals("Module info here, page: 1\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("Module info here, page: 1");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "info", "t", "2");
-		Assert.assertEquals("Module info here, page: 2\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("Module info here, page: 2");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "info", "d");
-		Assert.assertEquals("§6[EC] §eNo module found\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §eNo module found");
 	}
 
 	@Test
 	public void playerNoOpAll() {
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+
 		core.getPersistence().setExp(testModule, player, 0);
 		cmd.onCommand(player, "all");
-		String[] lines = player.getLastMessage().split("\n");
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eTest (T): 1", lines[1]);
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player).sendMessage("§6[EC] §eTest (T): 1");
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				Mockito.anyString());
 	}
 
 	@Test
 	public void playerNoOpGetExp() {
-		cmd.onCommand(player, "getexp");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level getExp <Module> [Player]\n",
-				player.getLastMessage());
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
 
-		player.clearMsgCache();
+		cmd.onCommand(player, "getexp");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §eSyntax: /level getExp <Module> [Player]");
+
 		core.getPersistence().setExp(testModule, player, 0);
 		cmd.onCommand(player, "getexp", "t");
-		Assert.assertEquals("§6[EC] §eTest (T): lv1 at 0 points\n",
-				player.getLastMessage());
+		Mockito.verify(player)
+				.sendMessage("§6[EC] §eTest (T): lv1 at 0 points");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "getexp", "t", "cryxli");
-		Assert.assertEquals("§6[EC] §cYou cannot execute that command.\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §cYou cannot execute that command.");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "getexp", "d", "cryxli");
-		Assert.assertEquals("§6[EC] §cYou cannot execute that command.\n",
-				player.getLastMessage());
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] §cYou cannot execute that command.");
 	}
 
 	@Test
 	public void playerNoOpInfo() {
+		Player player = Mockito.mock(Player.class);
 		cmd.onCommand(player, "info");
-		playerInfoCheck();
+		playerInfoCheck(player);
 	}
 
 	@Test
 	public void playerNoOpInfoModule() {
-		cmd.onCommand(player, "info", "t");
-		Assert.assertEquals("Module info here, page: 1\n",
-				player.getLastMessage());
-
-		player.clearMsgCache();
-		cmd.onCommand(player, "info", "t", "2");
-		Assert.assertEquals("Module info here, page: 2\n",
-				player.getLastMessage());
-
-		player.clearMsgCache();
-		cmd.onCommand(player, "t");
-		Assert.assertEquals("Module info here, page: 1\n",
-				player.getLastMessage());
-
-		player.clearMsgCache();
-		cmd.onCommand(player, "t", "2");
-		Assert.assertEquals("Module info here, page: 2\n",
-				player.getLastMessage());
+		Player player = Mockito.mock(Player.class);
+		infoModuleTest(player);
 	}
 
 	@Test
 	public void playerNoOpNothing() {
+		Player player = Mockito.mock(Player.class);
 		cmd.onCommand(player);
-		playerInfoCheck();
+		playerInfoCheck(player);
 	}
 
 	@Test
 	public void playerNoOpSetLvl() {
+		Player player = Mockito.mock(Player.class);
+
 		cmd.onCommand(player, "setlvl");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlvl", "t");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]\n",
-				player.getLastMessage());
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlevel", "t", "5");
-		Assert.assertEquals("§6[EC] §cYou cannot execute that command.\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §cYou cannot execute that command.");
 
-		player.clearMsgCache();
+		player = Mockito.mock(Player.class);
 		cmd.onCommand(player, "setlevel", "t", "asd");
-		String[] lines = player.getLastMessage().split("\n");
-		Assert.assertEquals(2, lines.length);
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]",
-				lines[0]);
-		Assert.assertEquals("§6[EC] §e  <Value> has to be a natural number",
-				lines[1]);
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e  <Value> has to be a natural number");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlvl", "t", "5", "cryxli");
-		Assert.assertEquals("§6[EC] §cYou cannot execute that command.\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §cYou cannot execute that command.");
 
-		player.clearMsgCache();
-		server.addPlayer(player);
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		cmd.onCommand(player, "setlvl", "t", "5", "cryxli");
-		Assert.assertEquals("§6[EC] §cYou cannot execute that command.\n",
-				player.getLastMessage());
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] §cYou cannot execute that command.");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlvl", "d", "15", "cryxli");
-		Assert.assertEquals("§6[EC] §cYou cannot execute that command.\n",
-				player.getLastMessage());
+		Mockito.verify(player, Mockito.times(3)).sendMessage(
+				"§6[EC] §cYou cannot execute that command.");
 	}
 
 	@Test
 	public void playerOpAll() {
-		player.setOp(true);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+		Mockito.when(player.isOp()).thenReturn(true);
 		core.getPersistence().setExp(testModule, player, 0);
+
 		cmd.onCommand(player, "all");
-		String[] lines = player.getLastMessage().split("\n");
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eTest (T): 1", lines[1]);
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player).sendMessage("§6[EC] §eTest (T): 1");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "all", "cryxli");
-		Assert.assertEquals("§6[EC] §ePlayer cryxli is offline\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §ePlayer cryxli is offline");
 
-		server.addPlayer(player);
-		player.clearMsgCache();
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		cmd.onCommand(player, "all", "cryxli");
-		lines = player.getLastMessage().split("\n");
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eTest (T): 1", lines[1]);
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] §eTest (T): 1");
 	}
 
 	@Test
 	public void playerOpGetExp() {
-		player.setOp(true);
-		cmd.onCommand(player, "getexp");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level getExp <Module> [Player]\n",
-				player.getLastMessage());
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+		Mockito.when(player.isOp()).thenReturn(true);
 
-		player.clearMsgCache();
+		cmd.onCommand(player, "getexp");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §eSyntax: /level getExp <Module> [Player]");
+
 		core.getPersistence().setExp(testModule, player, 0);
 		cmd.onCommand(player, "getexp", "t");
-		Assert.assertEquals("§6[EC] §eTest (T): lv1 at 0 points\n",
-				player.getLastMessage());
+		Mockito.verify(player)
+				.sendMessage("§6[EC] §eTest (T): lv1 at 0 points");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "getexp", "t", "cryxli");
-		Assert.assertEquals("§6[EC] §ePlayer cryxli is offline\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §ePlayer cryxli is offline");
 
-		server.addPlayer(player);
-		player.clearMsgCache();
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		cmd.onCommand(player, "getexp", "t", "cryxli");
-		Assert.assertEquals("§6[EC] §eTest (T): lv1 at 0 points\n",
-				player.getLastMessage());
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] §eTest (T): lv1 at 0 points");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "getexp", "d", "cryxli");
-		Assert.assertEquals("§6[EC] §eNo module found\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §eNo module found");
 	}
 
 	@Test
 	public void playerOpInfo() {
-		player.setOp(true);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.isOp()).thenReturn(true);
 		cmd.onCommand(player, "info");
-		playerOpInfoCheck();
+		playerOpInfoCheck(player);
 	}
 
-	private void playerOpInfoCheck() {
-		String[] lines = player.getLastMessage().split("\n");
-		Assert.assertEquals(8, lines.length);
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eAvailable commands:", lines[1]);
-		Assert.assertEquals("§6[EC] §e /lvl all", lines[2]);
-		Assert.assertEquals("§6[EC] §e /lvl info <Module> [Page]", lines[3]);
-		Assert.assertEquals("§6[EC] §e /lvl getExp <Module> [Player]", lines[4]);
-		Assert.assertEquals("§6[EC] §e /lvl getLvl <Module> [Player]", lines[5]);
-		Assert.assertEquals("§6[EC] §e /lvl setExp <Module> <Value> [Player]",
-				lines[6]);
-		Assert.assertEquals("§6[EC] §e /lvl setLvl <Module> <Value> [Player]",
-				lines[7]);
+	private void playerOpInfoCheck(final Player player) {
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player).sendMessage("§6[EC] §eAvailable commands:");
+		Mockito.verify(player).sendMessage("§6[EC] §e /lvl all");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e /lvl info <Module> [Page]");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e /lvl getExp <Module> [Player]");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e /lvl getLvl <Module> [Player]");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e /lvl setExp <Module> <Value> [Player]");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e /lvl setLvl <Module> <Value> [Player]");
+		Mockito.verify(player, Mockito.times(8)).sendMessage(
+				Mockito.anyString());
 	}
 
 	@Test
 	public void playerOpInfoModule() {
-		player.setOp(true);
-		playerNoOpInfoModule();
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.isOp()).thenReturn(true);
+		infoModuleTest(player);
 	}
 
 	@Test
 	public void playerOpNothing() {
-		player.setOp(true);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.isOp()).thenReturn(true);
 		cmd.onCommand(player);
-		playerOpInfoCheck();
+		playerOpInfoCheck(player);
 	}
 
 	@Test
 	public void playerOpSetLvl() {
-		player.setOp(true);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+		Mockito.when(player.isOp()).thenReturn(true);
+
 		cmd.onCommand(player, "setlvl");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlvl", "t");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]\n",
-				player.getLastMessage());
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlevel", "t", "5");
-		Assert.assertEquals("§6[EC] §eTest (T): lv5\n", player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §eTest (T): lv5");
 		Assert.assertEquals(5,
 				core.getPersistence().getLevel(testModule, player));
 
-		player.clearMsgCache();
+		player = Mockito.mock(Player.class);
+		Mockito.when(player.isOp()).thenReturn(true);
 		cmd.onCommand(player, "setlevel", "t", "asd");
-		String[] lines = player.getLastMessage().split("\n");
-		Assert.assertEquals(2, lines.length);
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]",
-				lines[0]);
-		Assert.assertEquals("§6[EC] §e  <Value> has to be a natural number",
-				lines[1]);
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
+		Mockito.verify(player).sendMessage(
+				"§6[EC] §e  <Value> has to be a natural number");
+		Mockito.verify(player, Mockito.times(2)).sendMessage(
+				Mockito.anyString());
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlvl", "t", "10", "testus");
-		Assert.assertEquals("§6[EC] §ePlayer testus is offline\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §ePlayer testus is offline");
 
-		DummyPlayer testus = new DummyPlayer("testus");
-		server.addPlayer(testus);
-		player.clearMsgCache();
+		Player testus = Mockito.mock(Player.class);
+		Mockito.when(testus.getName()).thenReturn("testus");
+		Mockito.when(server.getPlayer(testus.getName())).thenReturn(testus);
 		cmd.onCommand(player, "setlvl", "t", "10", "testus");
-		Assert.assertEquals("§6[EC] §eTest (T): lv10\n",
-				player.getLastMessage());
+		Mockito.verify(player).sendMessage("§6[EC] §eTest (T): lv10");
 		Assert.assertEquals(10,
 				core.getPersistence().getLevel(testModule, testus));
 
-		player.clearMsgCache();
 		cmd.onCommand(player, "setlvl", "d", "15", "testus");
-		Assert.assertEquals("§6[EC] §eNo module found\n",
-				player.getLastMessage());
-	}
-
-	@SuppressWarnings("unused")
-	private void printStringArray(final String[] ss) {
-		for (String s : ss) {
-			System.out.println(s);
-		}
+		Mockito.verify(player).sendMessage("§6[EC] §eNo module found");
 	}
 
 	@Test
 	public void senderAll() {
+		CommandSender sender = Mockito.mock(CommandSender.class);
+
 		cmd.onCommand(sender, "all");
-		Assert.assertEquals("§6[EC] §eSyntax: /level all <Player>\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §eSyntax: /level all <Player>");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "all", "cryxli");
-		Assert.assertEquals("§6[EC] §ePlayer cryxli is offline\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage("§6[EC] §ePlayer cryxli is offline");
 
-		server.addPlayer(player);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
+		sender = Mockito.mock(CommandSender.class);
 		core.getPersistence().setExp(testModule, player, 0);
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "all", "cryxli");
-		String[] lines = sender.getLastMessage().split("\n");
-		Assert.assertEquals(2, lines.length);
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eTest (T): 1", lines[1]);
+		Mockito.verify(sender).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(sender).sendMessage("§6[EC] §eTest (T): 1");
+		Mockito.verify(sender, Mockito.times(2)).sendMessage(
+				Mockito.anyString());
 	}
 
 	@Test
 	public void senderGetExp() {
+		CommandSender sender = Mockito.mock(CommandSender.class);
+
 		cmd.onCommand(sender, "getexp");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level getExp <Module> <Player>\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §eSyntax: /level getExp <Module> <Player>");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "getexp", "t");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level getExp <Module> <Player>\n",
-				sender.getLastMessage());
+		Mockito.verify(sender, Mockito.times(2)).sendMessage(
+				"§6[EC] §eSyntax: /level getExp <Module> <Player>");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "getexp", "t", "cryxli");
-		Assert.assertEquals("§6[EC] §ePlayer cryxli is offline\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage("§6[EC] §ePlayer cryxli is offline");
 
-		server.addPlayer(player);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		core.getPersistence().setExp(testModule, player, 0);
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "getexp", "t", "cryxli");
-		Assert.assertEquals("§6[EC] §eTest (T): lv1 at 0 points\n",
-				sender.getLastMessage());
+		Mockito.verify(sender)
+				.sendMessage("§6[EC] §eTest (T): lv1 at 0 points");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "getexp", "d", "cryxli");
-		Assert.assertEquals("§6[EC] §eNo module found\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage("§6[EC] §eNo module found");
 	}
 
 	@Test
 	public void senderInfo() {
+		CommandSender sender = Mockito.mock(CommandSender.class);
 		cmd.onCommand(sender, "info");
-		senderInfoCheck();
+		senderInfoCheck(sender);
 	}
 
-	private void senderInfoCheck() {
-		String[] lines = sender.getLastMessage().split("\n");
-		Assert.assertEquals(7, lines.length);
-		Assert.assertEquals("§6[EC] --- ExpCraftPlugin --- ", lines[0]);
-		Assert.assertEquals("§6[EC] §eAvailable commands:", lines[1]);
-		Assert.assertEquals("§6[EC] §e /lvl all", lines[2]);
-		Assert.assertEquals("§6[EC] §e /lvl getExp <Module> [Player]", lines[3]);
-		Assert.assertEquals("§6[EC] §e /lvl getLvl <Module> [Player]", lines[4]);
-		Assert.assertEquals("§6[EC] §e /lvl setExp <Module> <Value> [Player]",
-				lines[5]);
-		Assert.assertEquals("§6[EC] §e /lvl setLvl <Module> <Value> [Player]",
-				lines[6]);
+	private void senderInfoCheck(final CommandSender sender) {
+		Mockito.verify(sender).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(sender).sendMessage("§6[EC] §eAvailable commands:");
+		Mockito.verify(sender).sendMessage("§6[EC] §e /lvl all");
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §e /lvl getExp <Module> [Player]");
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §e /lvl getLvl <Module> [Player]");
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §e /lvl setExp <Module> <Value> [Player]");
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §e /lvl setLvl <Module> <Value> [Player]");
 	}
 
 	@Test
 	public void senderInfoModule() {
+		CommandSender sender = Mockito.mock(CommandSender.class);
 		cmd.onCommand(sender, "info", "t");
-		senderInfoCheck();
+		senderInfoCheck(sender);
 
-		sender.clearMsgCache();
+		sender = Mockito.mock(CommandSender.class);
 		cmd.onCommand(sender, "info", "t", "2");
-		senderInfoCheck();
+		senderInfoCheck(sender);
 	}
 
 	@Test
 	public void senderNothing() {
+		CommandSender sender = Mockito.mock(CommandSender.class);
 		cmd.onCommand(sender);
-		senderInfoCheck();
+		senderInfoCheck(sender);
 	}
 
 	@Test
 	public void senderSetLvl() {
+		CommandSender sender = Mockito.mock(CommandSender.class);
+
 		cmd.onCommand(sender, "setlvl");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> <Player>\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> <Player>");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "setlvl", "t");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> <Player>\n",
-				sender.getLastMessage());
+		Mockito.verify(sender, Mockito.times(2)).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> <Player>");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "setlevel", "t", "5");
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> <Player>\n",
-				sender.getLastMessage());
+		Mockito.verify(sender, Mockito.times(3)).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> <Player>");
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "setlvl", "t", "5", "cryxli");
-		Assert.assertEquals("§6[EC] §ePlayer cryxli is offline\n",
-				sender.getLastMessage());
+		Mockito.verify(sender).sendMessage("§6[EC] §ePlayer cryxli is offline");
 
-		sender.clearMsgCache();
-		server.addPlayer(player);
+		sender = Mockito.mock(CommandSender.class);
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("cryxli");
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		cmd.onCommand(sender, "setlvl", "t", "asd", "cryxli");
-		String[] lines = sender.getLastMessage().split("\n");
-		Assert.assertEquals(2, lines.length);
-		Assert.assertEquals(
-				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]",
-				lines[0]);
-		Assert.assertEquals("§6[EC] §e  <Value> has to be a natural number",
-				lines[1]);
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
+		Mockito.verify(sender).sendMessage(
+				"§6[EC] §e  <Value> has to be a natural number");
+		Mockito.verify(sender, Mockito.times(2)).sendMessage(
+				Mockito.anyString());
 
-		// Assert.assertEquals(1, core.getPersistence().getLevel(testModule,
-		// player));
-		sender.clearMsgCache();
-		server.addPlayer(player);
+		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		cmd.onCommand(sender, "setlvl", "t", "5", "cryxli");
-		Assert.assertEquals("§6[EC] §eTest (T): lv5\n", sender.getLastMessage());
+		Mockito.verify(sender).sendMessage("§6[EC] §eTest (T): lv5");
 		Assert.assertEquals(5,
 				core.getPersistence().getLevel(testModule, player));
 
-		sender.clearMsgCache();
 		cmd.onCommand(sender, "setlvl", "d", "15", "cryxli");
-		Assert.assertEquals("§6[EC] §eNo module found\n",
-				sender.getLastMessage());
-	}
-
-	@Before
-	public void setup() {
-		server.clearPlayers();
-
-		sender.clearMsgCache();
-		player.clearMsgCache();
-		player.setOp(false);
+		Mockito.verify(sender).sendMessage("§6[EC] §eNo module found");
 	}
 
 }

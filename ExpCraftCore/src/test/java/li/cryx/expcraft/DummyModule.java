@@ -4,6 +4,7 @@ import java.io.File;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 
@@ -19,7 +20,7 @@ public class DummyModule extends ExpCraftModule {
 	}
 
 	public DummyModule(final String name, final String abbr,
-			final DummyServer server, final PluginDescriptionFile pdf) {
+			final Server server, final PluginDescriptionFile pdf) {
 		this(name, abbr);
 		initialize(null, //
 				server, //

@@ -30,7 +30,7 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	private boolean running = false;
 
 	/**
-	 * Keep the files in memory for faster access. But write them regularely to
+	 * Keep the files in memory for faster access. But write them regularly to
 	 * disk.
 	 */
 	private final Map<ExpCraftModule, YamlConfiguration> cache = new HashMap<ExpCraftModule, YamlConfiguration>();
