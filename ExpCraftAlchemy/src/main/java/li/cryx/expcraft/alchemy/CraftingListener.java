@@ -38,16 +38,14 @@ public class CraftingListener implements Listener {
 	private boolean isValidEvent(final CraftItemEvent event) {
 		return // only player interactions
 		(event.getWhoClicked() instanceof Player)
-		// only unconsumed events are interessting
-				&& !event.isCancelled()
-				// the event is fired everytime the result slot is clicked
-				// when there has been a valid recipe in the matrix -
-				// but the inventory (event.getInventory()) is updated and
-				// does not have an item
+		// the event is fired everytime the result slot is clicked
+		// when there has been a valid recipe in the matrix -
+		// but the inventory (event.getInventory()) is updated and
+		// does not have an item
 				&& event.getInventory().getResult() != null;
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCrafting(final CraftItemEvent event) {
 		if (!isValidEvent(event)) {
 			return;
