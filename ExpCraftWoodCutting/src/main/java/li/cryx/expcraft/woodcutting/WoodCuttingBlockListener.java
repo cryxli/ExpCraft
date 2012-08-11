@@ -27,13 +27,10 @@ public class WoodCuttingBlockListener implements Listener {
 		test = new WoodCuttingConstraints(plugin);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		if (event.isCancelled()
-				|| !plugin.getPermission().worldCheck(
-						event.getBlock().getWorld())) {
-			// event has been canceled
-			// or ExpCraft is not activated for the current world
+		if (!plugin.getPermission().worldCheck(event.getBlock().getWorld())) {
+			// ExpCraft is not activated for the current world
 			return;
 		}
 

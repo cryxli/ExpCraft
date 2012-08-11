@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
+import li.cryx.expcraft.AbstractPluginTest;
 
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
@@ -19,7 +20,7 @@ import org.mockito.Mockito;
  * 
  * @author cryxli
  */
-public class WoodCuttingConstraintsTest extends AbstractPluginTest {
+public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> {
 
 	private WoodCuttingConstraints test;
 
@@ -29,6 +30,14 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest {
 	private static final TreeSpecies[] TREE_SPECIES = new TreeSpecies[] {
 			TreeSpecies.GENERIC, TreeSpecies.BIRCH, TreeSpecies.REDWOOD,
 			TreeSpecies.JUNGLE };
+
+	@Before
+	public void beforeTest() {
+		Mockito.when(plugin.getConfInt(Mockito.anyString()))
+				.thenCallRealMethod();
+		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
+				.thenCallRealMethod();
+	}
 
 	@Test
 	public void checkLeafBreaking() {
@@ -92,6 +101,11 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest {
 
 		// not an axe
 		Assert.assertTrue(test.checkTool(player, Material.WOOD_SWORD, 10));
+	}
+
+	@Override
+	protected Class<WoodCutting> getClazz() {
+		return WoodCutting.class;
 	}
 
 	// this test will throw an IndexOutOfBoundsException when bukkit adds a new

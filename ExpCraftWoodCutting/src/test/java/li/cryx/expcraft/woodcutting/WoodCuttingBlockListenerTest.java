@@ -1,6 +1,7 @@
 package li.cryx.expcraft.woodcutting;
 
 import junit.framework.Assert;
+import li.cryx.expcraft.AbstractPluginTest;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 
@@ -9,10 +10,25 @@ import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class WoodCuttingBlockListenerTest extends AbstractPluginTest {
+public class WoodCuttingBlockListenerTest extends
+		AbstractPluginTest<WoodCutting> {
+
+	@Before
+	public void beforeTest() {
+		Mockito.when(plugin.getConfInt(Mockito.anyString()))
+				.thenCallRealMethod();
+		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
+				.thenCallRealMethod();
+	}
+
+	@Override
+	protected Class<WoodCutting> getClazz() {
+		return WoodCutting.class;
+	}
 
 	// only one positive case
 	@Test
