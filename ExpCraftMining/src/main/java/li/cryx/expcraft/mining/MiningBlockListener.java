@@ -1,156 +1,26 @@
 package li.cryx.expcraft.mining;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class MiningBlockListener implements Listener {
 
 	private final Mining plugin;
 
+	private final MiningConstraints test;
+
 	public MiningBlockListener(final Mining plugin) {
 		this.plugin = plugin;
+		test = new MiningConstraints(plugin);
 	}
 
-	private boolean checkAndWarn(final Player player, final int level,
-			final String confKey) {
-		if (level < plugin.getConfInt(confKey)) {
-			plugin.warnBlockMine(player, plugin.getConfInt(confKey));
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	private boolean checkPickaxe(final Player player,
-			final Material itemInHand, final int level) {
-		if (itemInHand == Material.WOOD_PICKAXE
-				&& level < plugin.getConfInt("PickaxeLevel.Wooden")) {
-			plugin.warnToolUse(player, plugin.getConfInt("PickaxeLevel.Wooden"));
-
-		} else if (itemInHand == Material.STONE_PICKAXE
-				&& level < plugin.getConfInt("PickaxeLevel.Stone")) {
-			plugin.warnToolUse(player, plugin.getConfInt("PickaxeLevel.Stone"));
-
-		} else if (itemInHand == Material.IRON_PICKAXE
-				&& level < plugin.getConfInt("PickaxeLevel.Iron")) {
-			plugin.warnToolUse(player, plugin.getConfInt("PickaxeLevel.Iron"));
-
-		} else if (itemInHand == Material.GOLD_PICKAXE
-				&& level < plugin.getConfInt("PickaxeLevel.Gold")) {
-			plugin.warnToolUse(player, plugin.getConfInt("PickaxeLevel.Gold"));
-
-		} else if (itemInHand == Material.DIAMOND_PICKAXE
-				&& level < plugin.getConfInt("PickaxeLevel.Diamond")) {
-			plugin.warnToolUse(player,
-					plugin.getConfInt("PickaxeLevel.Diamond"));
-
-		} else {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Check and produce drops for the fire version of the golden pickaxe.
-	 * 
-	 * @param player
-	 *            Current player. Must have a golden pickaxe in hand.
-	 * @param level
-	 *            Player's level. Must be above
-	 *            <code>Settings.FirePickaxeLevel</code> for golden pickaxes to
-	 *            act as fire pickaxes.
-	 * @param event
-	 *            Mining event
-	 * @return <code>true</code>, if a special drop was produced.
-	 */
-	private boolean firePickaxe(final Player player, final int level,
-			final BlockBreakEvent event) {
-		if (level < plugin.getConfInt("Settings.FirePickaxeLevel")
-				|| player.getItemInHand().getType() != Material.GOLD_PICKAXE) {
-			// requirements not met
-			return false;
-		}
-
-		Block block = event.getBlock();
-		ItemStack drop;
-		switch (block.getType()) {
-		case STONE:
-			drop = new ItemStack(Material.STONE, 1);
-			break;
-		case IRON_ORE:
-			drop = new ItemStack(Material.IRON_INGOT, 1);
-			break;
-		case GOLD_ORE:
-			drop = new ItemStack(Material.GOLD_INGOT, 1);
-			break;
-		default:
-			return false;
-		}
-
-		block.setType(Material.AIR);
-		block.getWorld().dropItem(block.getLocation(), drop);
-		return true;
-	}
-
-	/**
-	 * Checks that the target block is minable. Will warn player when not.
-	 * 
-	 * @param player
-	 *            Current player.
-	 * @param material
-	 *            Block that is mined.
-	 * @param level
-	 *            Player's level in mining.
-	 * @return <code>true</code>, if player can mine target block.
-	 */
-	private boolean isMinable(final Player player, final Material material,
-			final int level) {
-
-		switch (material) {
-		case STONE:
-			return checkAndWarn(player, level, "UseLevel.Stone");
-		case COBBLESTONE:
-			return checkAndWarn(player, level, "UseLevel.Cobble");
-		case MOSSY_COBBLESTONE:
-			return checkAndWarn(player, level, "UseLevel.MossStone");
-		case COAL_ORE:
-			return checkAndWarn(player, level, "UseLevel.CoalOre");
-		case IRON_ORE:
-			return checkAndWarn(player, level, "UseLevel.IronOre");
-		case SANDSTONE:
-			return checkAndWarn(player, level, "UseLevel.SandStone");
-		case GOLD_ORE:
-			return checkAndWarn(player, level, "UseLevel.GoldOre");
-		case LAPIS_ORE:
-			return checkAndWarn(player, level, "UseLevel.LapisOre");
-		case REDSTONE_ORE:
-		case GLOWING_REDSTONE_ORE:
-			return checkAndWarn(player, level, "UseLevel.Redstone");
-		case DIAMOND_ORE:
-			return checkAndWarn(player, level, "UseLevel.DiamondOre");
-		case OBSIDIAN:
-			return checkAndWarn(player, level, "UseLevel.Obsidian");
-		case NETHERRACK:
-			return checkAndWarn(player, level, "UseLevel.Netherrack");
-		case SMOOTH_BRICK:
-			return checkAndWarn(player, level, "UseLevel.StoneBrick");
-		default:
-			return true;
-		}
-
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		if (event.isCancelled()
-				|| !plugin.getPermission().worldCheck(
-						event.getBlock().getWorld())) {
+		if (!plugin.getPermission().worldCheck(event.getBlock().getWorld())) {
 			return;
 		}
 
@@ -161,13 +31,13 @@ public class MiningBlockListener implements Listener {
 
 		Material itemInHand = player.getItemInHand().getType();
 		int level = plugin.getPersistence().getLevel(plugin, player);
-		if (!checkPickaxe(player, itemInHand, level)) {
+		if (!test.checkPickaxe(player, itemInHand, level)) {
 			event.setCancelled(true);
 			return;
 		}
 
 		Material m = event.getBlock().getType();
-		if (!isMinable(player, m, level)) {
+		if (!test.isMinable(player, m, level)) {
 			event.setCancelled(true);
 			return;
 		}
@@ -222,7 +92,7 @@ public class MiningBlockListener implements Listener {
 
 		// fire pickaxe can produce different drops, therefore do only call
 		// double drops when nothing special happened
-		if (!firePickaxe(player, level, event)) {
+		if (!test.firePickaxe(player, level, event)) {
 			// double drops
 			plugin.dropItem(event.getBlock(), level);
 		}
