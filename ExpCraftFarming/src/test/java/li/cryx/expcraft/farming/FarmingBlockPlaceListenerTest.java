@@ -133,7 +133,7 @@ public class FarmingBlockPlaceListenerTest extends AbstractPluginTest<Farming> {
 	}
 
 	@Before
-	public void preapreTest() {
+	public void prepreTestSpecific() {
 		Mockito.when(plugin.getConfInt(Mockito.anyString()))
 				.thenCallRealMethod();
 		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
