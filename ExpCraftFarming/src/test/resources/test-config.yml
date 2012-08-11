@@ -1,0 +1,46 @@
+# Default EC-Farming config file
+HoeLevel:
+  Wooden: 0
+  Stone: 5
+  Iron: 10
+  Gold: 20
+  Diamond: 30
+
+UseLevel:
+  Till: 0
+  Harvest: 0
+  Apple: 0
+  SugarCane: 0
+  GoldenApple: 0
+  Cacti: 0
+  Sapling: 0
+  RedRose: 0
+  YellowFlower: 0
+  Mushroom: 0
+  Wheat: 0
+  Pumpkin: 0
+  Melon: 0
+  CocoaBean: 0
+
+ExpGain:
+  Till: 1.0
+  Harvest: 5.0
+  Apple: 3.0
+  GoldenApple: 100.0
+  SugarCane: 2.0
+  Cactus: 3.0
+  Sapling: 0.5
+  RedRose: 0.1
+  YellowFlower: 0.1
+  Mushroom: 0.1
+  Wheat: 2.0
+  Pumpkin: 2.0
+  Melon: 2.0
+  CocoaBean: 2.0
+
+DropLevel:
+  PumpkinSeed: 20
+  MelonSeed: 40
+  CocoaBean: 70
+  GhastTear: 30
+  BlazePowder: 50

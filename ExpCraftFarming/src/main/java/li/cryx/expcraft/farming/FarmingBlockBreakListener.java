@@ -245,13 +245,10 @@ public class FarmingBlockBreakListener implements Listener {
 	}
 
 	// A block has been destroyed
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		if (event.isCancelled()
-				|| !plugin.getPermission().worldCheck(
-						event.getBlock().getWorld())) {
-			// event is already consumed
-			// or, the world is not managed by the ExpCraft
+		if (!plugin.getPermission().worldCheck(event.getBlock().getWorld())) {
+			// the world is not managed by the ExpCraft
 			return;
 		}
 

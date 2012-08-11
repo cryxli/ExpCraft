@@ -23,13 +23,10 @@ public class FarmingBlockPlaceListener implements Listener {
 		this.plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event) {
-		if (event.isCancelled()
-				|| !plugin.getPermission().worldCheck(
-						event.getBlock().getWorld())) {
-			// event is already consumed
-			// or, the world is not managed by the ExpCraft
+		if (!plugin.getPermission().worldCheck(event.getBlock().getWorld())) {
+			// the world is not managed by the ExpCraft
 			return;
 		}
 

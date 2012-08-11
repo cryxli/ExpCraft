@@ -25,9 +25,11 @@ public class FarmingPlayerListener implements Listener {
 	}
 
 	// Player want to do something
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK
+				|| !plugin.getPermission().worldCheck(
+						event.getClickedBlock().getWorld())) {
 			// player does not right-click
 			return;
 		}
@@ -66,5 +68,4 @@ public class FarmingPlayerListener implements Listener {
 					plugin.getConfDouble("ExpGain.Till"));
 		}
 	}
-
 }
