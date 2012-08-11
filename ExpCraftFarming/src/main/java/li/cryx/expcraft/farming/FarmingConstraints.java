@@ -4,6 +4,7 @@ import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.material.CocoaPlant;
 import org.bukkit.material.CocoaPlant.CocoaPlantSize;
 import org.bukkit.material.Crops;
@@ -15,6 +16,12 @@ import org.bukkit.material.Crops;
  * @author cryxli
  */
 public class FarmingConstraints {
+
+	private final Farming plugin;
+
+	public FarmingConstraints(final Farming plugin) {
+		this.plugin = plugin;
+	}
 
 	/**
 	 * Test the blocks around the given one.
@@ -43,6 +50,49 @@ public class FarmingConstraints {
 		if (stem.getType() == aroundType) {
 			return true;
 		}
+		return false;
+	}
+
+	/**
+	 * Test whether the given item is a hoe. All hoes are taken into
+	 * consideration with their respective requirements defined in the config.
+	 * 
+	 * @param player
+	 *            Current player.
+	 * @param itemInHand
+	 *            The item the current player is holding in his hand.
+	 * @param level
+	 *            Player's farming level.
+	 * @return <code>true</code>, only if the given item is a hoe of any kind
+	 *         and the player's level allows him to use this particular hoe.
+	 */
+	public boolean checkTool(final Player player, final Material itemInHand,
+			final int level) {
+		if (level < plugin.getConfInt("HoeLevel.Wooden")
+				&& itemInHand == Material.WOOD_HOE) {
+			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Wooden"));
+
+		} else if (level < plugin.getConfInt("HoeLevel.Stone")
+				&& itemInHand == Material.STONE_HOE) {
+			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Stone"));
+
+		} else if (level < plugin.getConfInt("HoeLevel.Iron")
+				&& itemInHand == Material.IRON_HOE) {
+			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Iron"));
+
+		} else if (level < plugin.getConfInt("HoeLevel.Gold")
+				&& itemInHand == Material.GOLD_HOE) {
+			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Gold"));
+
+		} else if (level < plugin.getConfInt("HoeLevel.Diamond")
+				&& itemInHand == Material.DIAMOND_HOE) {
+			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Diamond"));
+
+		} else {
+			// all tool checks passed
+			return true;
+		}
+		// one tool check failed
 		return false;
 	}
 

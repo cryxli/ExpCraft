@@ -21,6 +21,7 @@ UseLevel:
   Pumpkin: 0
   Melon: 0
   CocoaBean: 0
+  NetherWart: 0
 
 ExpGain:
   Till: 1.0
@@ -28,7 +29,7 @@ ExpGain:
   Apple: 3.0
   GoldenApple: 100.0
   SugarCane: 2.0
-  Cactus: 3.0
+  Cacti: 3.0
   Sapling: 0.5
   RedRose: 0.1
   YellowFlower: 0.1
@@ -37,6 +38,7 @@ ExpGain:
   Pumpkin: 2.0
   Melon: 2.0
   CocoaBean: 2.0
+  NetherWart: 5.0
 
 DropLevel:
   PumpkinSeed: 20

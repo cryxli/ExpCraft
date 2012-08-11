@@ -35,49 +35,6 @@ public class Farming extends ExpCraftModule {
 	private Chat chat;
 
 	/**
-	 * Test whether the given item is a hoe. All hoes are taken into
-	 * consideration with their respective requirements defined in the config.
-	 * 
-	 * @param player
-	 *            Current player.
-	 * @param itemInHand
-	 *            The item the current player is holding in his hand.
-	 * @param level
-	 *            Player's farming level.
-	 * @return <code>true</code>, only if the given item is a hoe of any kind
-	 *         and the player's level allows him to use this particular hoe.
-	 */
-	boolean checkTool(final Player player, final Material itemInHand,
-			final int level) {
-		if (level < getConfInt("HoeLevel.Wooden")
-				&& itemInHand == Material.WOOD_HOE) {
-			warnToolLevel(player, getConfInt("HoeLevel.Wooden"));
-
-		} else if (level < getConfInt("HoeLevel.Stone")
-				&& itemInHand == Material.STONE_HOE) {
-			warnToolLevel(player, getConfInt("HoeLevel.Stone"));
-
-		} else if (level < getConfInt("HoeLevel.Iron")
-				&& itemInHand == Material.IRON_HOE) {
-			warnToolLevel(player, getConfInt("HoeLevel.Iron"));
-
-		} else if (level < getConfInt("HoeLevel.Gold")
-				&& itemInHand == Material.GOLD_HOE) {
-			warnToolLevel(player, getConfInt("HoeLevel.Gold"));
-
-		} else if (level < getConfInt("HoeLevel.Diamond")
-				&& itemInHand == Material.DIAMOND_HOE) {
-			warnToolLevel(player, getConfInt("HoeLevel.Diamond"));
-
-		} else {
-			// all tool checks passed
-			return true;
-		}
-		// one tool check failed
-		return false;
-	}
-
-	/**
 	 * Create listeners and link them to this plugin and a common
 	 * <code>Chat</code> component.
 	 */

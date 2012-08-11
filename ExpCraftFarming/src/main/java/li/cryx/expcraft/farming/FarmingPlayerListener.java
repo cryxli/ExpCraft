@@ -19,9 +19,12 @@ public class FarmingPlayerListener implements Listener {
 	/** Reference to parent plugin. */
 	private final Farming plugin;
 
+	private final FarmingConstraints test;
+
 	/** Create a new listener for the given plugin. */
-	public FarmingPlayerListener(final Farming instance) {
-		this.plugin = instance;
+	public FarmingPlayerListener(final Farming plugin) {
+		this.plugin = plugin;
+		test = new FarmingConstraints(plugin);
 	}
 
 	// Player want to do something
@@ -48,7 +51,7 @@ public class FarmingPlayerListener implements Listener {
 
 		Material itemInHand = player.getItemInHand().getType();
 		int level = plugin.getPersistence().getLevel(plugin, player);
-		if (!plugin.checkTool(player, itemInHand, level)) {
+		if (!test.checkTool(player, itemInHand, level)) {
 			// player is not allowed to use the tool he's holding
 			event.setCancelled(true);
 			return;

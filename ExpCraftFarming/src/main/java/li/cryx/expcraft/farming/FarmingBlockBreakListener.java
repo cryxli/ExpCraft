@@ -29,9 +29,9 @@ public class FarmingBlockBreakListener implements Listener {
 	private final FarmingConstraints test;
 
 	/** Create a new listener for the given plugin. */
-	public FarmingBlockBreakListener(final Farming instance) {
-		this.plugin = instance;
-		test = new FarmingConstraints();
+	public FarmingBlockBreakListener(final Farming plugin) {
+		this.plugin = plugin;
+		test = new FarmingConstraints(plugin);
 	}
 
 	/**
@@ -145,12 +145,15 @@ public class FarmingBlockBreakListener implements Listener {
 			return;
 		}
 
-		Material itemInHand = player.getItemInHand().getType();
+		Material itemInHand = Material.AIR;
+		if (player.getItemInHand() != null) {
+			itemInHand = player.getItemInHand().getType();
+		}
 		Block block = event.getBlock();
 		Material m = block.getType();
 		int level = plugin.getPersistence().getLevel(plugin, player);
 
-		if (!plugin.checkTool(player, itemInHand, level)) {
+		if (!test.checkTool(player, itemInHand, level)) {
 			// player is not allowed to use the tool he's holding
 			event.setCancelled(true);
 			return;

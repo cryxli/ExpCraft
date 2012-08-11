@@ -1,15 +1,18 @@
 package li.cryx.expcraft.farming;
 
 import junit.framework.Assert;
+import li.cryx.expcraft.AbstractPluginTest;
 
 import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.material.CocoaPlant;
 import org.bukkit.material.CocoaPlant.CocoaPlantSize;
 import org.bukkit.material.Crops;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -18,10 +21,36 @@ import org.mockito.Mockito;
  * 
  * @author cryxli
  */
-public class FarmingConstraintsTest {
+public class FarmingConstraintsTest extends AbstractPluginTest<Farming> {
+
+	public static Block getBlock(final Material center, final Material south,
+			final Material north, final Material west, final Material east) {
+		Block centerBlock = Mockito.mock(Block.class);
+		Mockito.when(centerBlock.getType()).thenReturn(center);
+
+		Block block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(south);
+		Mockito.when(centerBlock.getRelative(BlockFace.SOUTH))
+				.thenReturn(block);
+
+		block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(north);
+		Mockito.when(centerBlock.getRelative(BlockFace.NORTH))
+				.thenReturn(block);
+
+		block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(west);
+		Mockito.when(centerBlock.getRelative(BlockFace.WEST)).thenReturn(block);
+
+		block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(east);
+		Mockito.when(centerBlock.getRelative(BlockFace.EAST)).thenReturn(block);
+
+		return centerBlock;
+	}
 
 	/** The class to test. */
-	private static final FarmingConstraints test = new FarmingConstraints();
+	private FarmingConstraints test;
 
 	/** Test for {@link FarmingConstraints#checkAround(Block, Material)} */
 	@Test
@@ -47,30 +76,34 @@ public class FarmingConstraintsTest {
 		Assert.assertTrue(test.checkAround(block, Material.STONE));
 	}
 
-	private Block getBlock(final Material center, final Material south,
-			final Material north, final Material west, final Material east) {
-		Block centerBlock = Mockito.mock(Block.class);
-		Mockito.when(centerBlock.getType()).thenReturn(center);
+	/**
+	 * Test for
+	 * {@link FarmingConstraints#checkTool(org.bukkit.entity.Player, Material, int)}
+	 */
+	@Test
+	public void checkTool() {
+		Player player = Mockito.mock(Player.class);
+		Assert.assertTrue(test.checkTool(player, Material.AIR, 1));
 
-		Block block = Mockito.mock(Block.class);
-		Mockito.when(block.getType()).thenReturn(south);
-		Mockito.when(centerBlock.getRelative(BlockFace.SOUTH))
-				.thenReturn(block);
+		Assert.assertTrue(test.checkTool(player, Material.WOOD_HOE, 1));
+		Assert.assertFalse(test.checkTool(player, Material.WOOD_HOE, -1));
 
-		block = Mockito.mock(Block.class);
-		Mockito.when(block.getType()).thenReturn(north);
-		Mockito.when(centerBlock.getRelative(BlockFace.NORTH))
-				.thenReturn(block);
+		Assert.assertTrue(test.checkTool(player, Material.STONE_HOE, 6));
+		Assert.assertFalse(test.checkTool(player, Material.STONE_HOE, 1));
 
-		block = Mockito.mock(Block.class);
-		Mockito.when(block.getType()).thenReturn(west);
-		Mockito.when(centerBlock.getRelative(BlockFace.WEST)).thenReturn(block);
+		Assert.assertTrue(test.checkTool(player, Material.IRON_HOE, 11));
+		Assert.assertFalse(test.checkTool(player, Material.IRON_HOE, 1));
 
-		block = Mockito.mock(Block.class);
-		Mockito.when(block.getType()).thenReturn(east);
-		Mockito.when(centerBlock.getRelative(BlockFace.EAST)).thenReturn(block);
+		Assert.assertTrue(test.checkTool(player, Material.GOLD_HOE, 21));
+		Assert.assertFalse(test.checkTool(player, Material.GOLD_HOE, 1));
 
-		return centerBlock;
+		Assert.assertTrue(test.checkTool(player, Material.DIAMOND_HOE, 31));
+		Assert.assertFalse(test.checkTool(player, Material.DIAMOND_HOE, 1));
+	}
+
+	@Override
+	protected Class<Farming> getClazz() {
+		return Farming.class;
 	}
 
 	/** Test for {@link FarmingConstraints#isMelon(Block)} */
@@ -188,6 +221,16 @@ public class FarmingConstraintsTest {
 			Assert.assertEquals(size == NetherWartState.RIPE,
 					test.isRipeNetherWart(wart));
 		}
+	}
+
+	@Before
+	public void prepareTestSpecific() {
+		Mockito.when(plugin.getConfInt(Mockito.anyString()))
+				.thenCallRealMethod();
+		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
+				.thenCallRealMethod();
+
+		test = new FarmingConstraints(plugin);
 	}
 
 }

@@ -25,10 +25,10 @@ public class FarmingPlayerListenerTest extends AbstractPluginTest<Farming> {
 				.thenCallRealMethod();
 		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
 				.thenCallRealMethod();
-		Mockito.when(
-				plugin.checkTool(Mockito.any(Player.class),
-						Mockito.any(Material.class), Mockito.anyInt()))
-				.thenCallRealMethod();
+		// Mockito.when(
+		// plugin.checkTool(Mockito.any(Player.class),
+		// Mockito.any(Material.class), Mockito.anyInt()))
+		// .thenCallRealMethod();
 		Mockito.when(plugin.isHoe(Mockito.any(Material.class)))
 				.thenCallRealMethod();
 
