@@ -6,6 +6,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Progam logic used by {@link ScavengerBlockListener}.
+ * 
+ * @author cryxli
+ */
 public class ScavengerConstraints {
 
 	private final Scavenger plugin;
@@ -14,6 +19,14 @@ public class ScavengerConstraints {
 		this.plugin = plugin;
 	}
 
+	/**
+	 * Drop the given material at the location of the block.
+	 * 
+	 * @param block
+	 *            Location reference in the world.
+	 * @param material
+	 *            Item to drop.
+	 */
 	public void dropItem(final Block block, final Material material) {
 		Location locy = new Location(block.getWorld(), block.getX(),
 				block.getY(), block.getZ(), 0.0f, 0.0f);
@@ -28,7 +41,7 @@ public class ScavengerConstraints {
 	 * @param level
 	 *            Player's level
 	 * @param block
-	 *            The block that was destroyed
+	 *            The block that was destroyed for location and world reference
 	 * @param rnd
 	 *            A random number
 	 */
@@ -85,7 +98,7 @@ public class ScavengerConstraints {
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Saddle"));
 
-		} else if (rnd == 5 && level >= plugin.getConfInt("DropLevel.Ingot")) {
+		} else if (rnd == 6 && level >= plugin.getConfInt("DropLevel.Ingot")) {
 			// 1 %o - 1%
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Ingot"));
@@ -93,35 +106,35 @@ public class ScavengerConstraints {
 			plugin.sendHint(player,
 					"Hey, do you see that shiny thing in the sand?.");
 
-		} else if (rnd > 5 && rnd <= 7
+		} else if (rnd > 6 && rnd <= 8
 				&& level >= plugin.getConfInt("DropLevel.Bowl")) {
 			// 3 %O -3%
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Bowl"));
 			dropItem(block, Material.BOWL);
 
-		} else if (rnd > 7 && rnd <= 9
+		} else if (rnd > 8 && rnd <= 10
 				&& level >= plugin.getConfInt("DropLevel.Boots")) {
 			// 2 %o - 2% (ori: 3 %o - 3%)
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Boots"));
 			dropItem(block, Material.LEATHER_BOOTS);
 
-		} else if (rnd > 9 && rnd <= 11
+		} else if (rnd > 10 && rnd <= 12
 				&& level >= plugin.getConfInt("DropLevel.Helmet")) {
 			// 2 %o - 2% (ori: 0)
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Helmet"));
 			dropItem(block, Material.LEATHER_HELMET);
 
-		} else if (rnd > 11 && rnd <= 14
+		} else if (rnd > 12 && rnd <= 15
 				&& level >= plugin.getConfInt("DropLevel.Bucket")) {
 			// 3 %o - 3% (ori: 4 %o - 4%)
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfDouble("ExpGain.Bucket"));
 			dropItem(block, Material.BUCKET);
 
-		} else if (rnd > 14 && rnd <= 16
+		} else if (rnd > 15 && rnd <= 17
 				&& level >= plugin.getConfInt("DropLevel.Leggins")) {
 			// 2 %o - 2% (ori: 0)
 			plugin.getPersistence().addExp(plugin, player,
@@ -168,12 +181,20 @@ public class ScavengerConstraints {
 	 *         soulsand.
 	 */
 	public boolean isDiggable(final Material material) {
-		return material == Material.DIRT || //
-				material == Material.GRASS || //
-				material == Material.SAND || //
-				material == Material.GRAVEL || //
-				material == Material.CLAY || //
-				material == Material.SOUL_SAND;
+		switch (material) {
+		case DIRT:
+		case GRASS:
+		case SOUL_SAND:
+		case GRAVEL:
+		case CLAY:
+		case SAND:
+		case MYCEL:
+			return true;
+
+			// case SNOW:
+		default:
+			return false;
+		}
 	}
 
 }
