@@ -7,6 +7,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+/**
+ * Listener for block breaks related to digging.
+ * 
+ * @author cryxli
+ */
 public class DiggingBlockListener implements Listener {
 
 	private final Digging plugin;
@@ -18,11 +23,9 @@ public class DiggingBlockListener implements Listener {
 		test = new DiggingContraints(plugin);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		if (event.isCancelled()
-				|| !plugin.getPermission().worldCheck(
-						event.getBlock().getWorld())) {
+		if (!plugin.getPermission().worldCheck(event.getBlock().getWorld())) {
 			return;
 		}
 
