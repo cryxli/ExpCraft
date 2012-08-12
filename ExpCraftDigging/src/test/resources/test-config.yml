@@ -1,0 +1,32 @@
+# Default EC-Digging config file
+ShovelLevel:
+  Wooden: 0
+  Stone: 5
+  Iron: 10
+  Gold: 20
+  Diamond: 30
+
+UseLevel:
+  Dirt: 0
+  Grass: 0
+  Snow: 0
+  SoulSand: 0
+  Gravel: 0
+  Clay: 0
+  Sand: 0
+  Mycelium: 0
+
+ExpGain:
+  Dirt: 1.0
+  Grass: 1.0
+  Snow: 5.0
+  SoulSand: 8.0
+  Gravel: 1.0
+  Clay: 10.0
+  Sand: 2.0
+  Mycelium: 1.0
+
+Settings:
+  EnableDoubleDrop: true
+  DropMultiplier: 1.0
+  FireShovelLevel: 80
