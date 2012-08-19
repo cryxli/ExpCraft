@@ -30,12 +30,9 @@ public class DefenceEntityListener implements Listener {
 		test = new DefenceConstraints(plugin);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDamage(final EntityDamageEvent event) {
-		if (event.isCancelled()) {
-			// event has been canceled
-			return;
-		}
+		// TODO Does this include dmg from sssss-boom?
 		if (event.getCause() != DamageCause.ENTITY_ATTACK
 				&& event.getCause() != DamageCause.PROJECTILE) {
 			// not a damage type that indicates a fight
@@ -55,13 +52,16 @@ public class DefenceEntityListener implements Listener {
 		if (test.checkArmor(player)) {
 			// get exp proportional to dealt damage (before armor bonus is
 			// applied)
-			plugin.getPersistence().addExp(
-					plugin,
-					player,
-					event.getDamage()
-							* plugin.getConfDouble("ExperienceMultiplier"));
+			int dmg = event.getDamage();
+			plugin.getPersistence().addExp(plugin, player,
+					dmg * plugin.getConfDouble("ExperienceMultiplier"));
 
-			// TODO reduce dmg depending on exp to levelCap and material ratio
+			// TODO add material to the equation
+			// reduce dmg depending on exp to levelCap ratio
+			int level = plugin.getPersistence().getLevel(plugin, player);
+			int reducedDmg = 1 + dmg * (plugin.getLevelCap() - level)
+					/ plugin.getLevelCap();
+			event.setDamage(reducedDmg);
 		}
 	}
 
