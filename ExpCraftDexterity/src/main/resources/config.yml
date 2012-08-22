@@ -7,12 +7,7 @@ BootsLevel:
   Diamond: 30
 
 ExpGain:
-  Jump: 0.5
-
-LevelGain:
-  AdvancedJump: 20
-  SuperJump: 50
+  Jump: 1.0
 
 Settings:
   FallDmgMultiplier: 1.0
-
