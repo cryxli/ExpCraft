@@ -7,6 +7,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+/**
+ * Listener that observes fall dmg to players and grants dmg reduction, if they
+ * wear boots and meet their level requirements.
+ * 
+ * @author cryxli
+ */
 public class DexterityEntityListener implements Listener {
 
 	private final Dexterity plugin;
@@ -31,7 +37,6 @@ public class DexterityEntityListener implements Listener {
 			return;
 		}
 
-		System.out.println("fall");
 		Player player = (Player) event.getEntity();
 		if (!plugin.getPermission().hasModule(plugin, player)) {
 			return;
@@ -40,9 +45,6 @@ public class DexterityEntityListener implements Listener {
 		int level = plugin.getPersistence().getLevel(plugin, player);
 		if (!test.checkBoots(player, level)) {
 			// wrong level for boots
-			return;
-		} else if (!test.isBoots(player.getInventory().getBoots())) {
-			// not wearing boots
 			return;
 		}
 

@@ -130,14 +130,14 @@ public class Dexterity extends ExpCraftModule {
 	}
 
 	/**
-	 * Send level info about the given pickaxe to the player. If the player
-	 * meets the requirements for the tool, it will be written in "good"
-	 * (default GREEN), or in "bad" (default RED) otherwise.
+	 * Send level info about the given boots to the player. If the player meets
+	 * the requirements for the armor, it will be written in "good" (default
+	 * GREEN), or in "bad" (default RED) otherwise.
 	 * 
 	 * @param sender
 	 *            Current player
 	 * @param material
-	 *            String identifying the material of the pickaxe.
+	 *            String identifying the material of the boots.
 	 * @param level
 	 *            Player's level
 	 */
@@ -153,9 +153,20 @@ public class Dexterity extends ExpCraftModule {
 		}
 	}
 
-	void warnBoots(final Player player) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * Warn the player that she does not meet the requirements for her current
+	 * boots.
+	 * 
+	 * @param player
+	 *            Current player
+	 * @param material
+	 *            String identifying the material of the boots.
+	 * @param level
+	 *            Required level to get bonus for current boots.
+	 */
+	void warnBoots(final Player player, final String material, final int level) {
+		chat.bad(player, MessageFormat.format(
+				"To wear {0} Boots you have to be lv{1}", material, level));
 	}
 
 }
