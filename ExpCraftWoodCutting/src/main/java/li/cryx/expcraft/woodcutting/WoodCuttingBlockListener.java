@@ -87,6 +87,6 @@ public class WoodCuttingBlockListener implements Listener {
 		plugin.getPersistence().addExp(plugin, player, gained);
 
 		// double drops
-		plugin.dropItem(event.getBlock(), level);
+		plugin.dropItem(event.getBlock(), level, player);
 	}
 }

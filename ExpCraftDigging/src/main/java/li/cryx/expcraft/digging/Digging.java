@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
+import li.cryx.expcraft.util.ToolQuality;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,21 +22,33 @@ public class Digging extends DropExpCraftModule {
 	private Chat chat;
 
 	@Override
-	protected ItemStack calculateDrop(final Block block) {
+	protected ItemStack calculateDrop(final Block block, final Player player) {
 		Material material = block.getType();
+		ToolQuality quality = ToolQuality.NONE;
+		if (player != null) {
+			quality = ToolQuality.getQuality(player.getItemInHand());
+		}
+		if (ToolQuality.isLess(ToolQuality.STONE, quality)) {
+			// wooden spade does not give double drops
+			return null;
+		}
+
 		switch (material) {
 		case GRASS:
 			return new ItemStack(Material.DIRT, 1);
 		case CLAY:
-			return new ItemStack(Material.CLAY_BALL, 4);
+			return new ItemStack(Material.CLAY_BALL, ToolQuality.isAtLeast(
+					ToolQuality.IRON, quality) ? 8 : 4);
 		case SNOW:
-			return new ItemStack(Material.SNOW_BALL, 4);
+			return new ItemStack(Material.SNOW_BALL, ToolQuality.isAtLeast(
+					ToolQuality.IRON, quality) ? 8 : 4);
 
 		case GRAVEL:
 		case SOUL_SAND:
 		case DIRT:
 		case SAND:
-			return new ItemStack(material, 1);
+			return new ItemStack(material, ToolQuality.isAtLeast(
+					ToolQuality.IRON, quality) ? 2 : 1);
 
 		default:
 			return null;

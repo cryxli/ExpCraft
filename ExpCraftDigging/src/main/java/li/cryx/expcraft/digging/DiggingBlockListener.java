@@ -48,7 +48,7 @@ public class DiggingBlockListener implements Listener {
 		// nothing special happened
 		if (!test.fireShovel(player, level, event)) {
 			// double drops
-			plugin.dropItem(event.getBlock(), level);
+			plugin.dropItem(event.getBlock(), level, player);
 		}
 	}
 }

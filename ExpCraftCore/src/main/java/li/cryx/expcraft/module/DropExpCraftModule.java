@@ -22,15 +22,15 @@ import org.bukkit.inventory.ItemStack;
  * 
  * <p>
  * From within the code the two methods {@link #saveDropItem(Player, Block)} and
- * {@link DropExpCraftModule#dropItem(Block, int)} can then be used to trigger a
- * drop. The given block must point to a location and material within the game
- * world. Drops will happen with a probability of about <b>Player's level</b> to
- * <b>3 times the level cap</b>.
+ * {@link DropExpCraftModule#dropItem(Block, int, Player)} can then be used to
+ * trigger a drop. The given block must point to a location and material within
+ * the game world. Drops will happen with a probability of about <b>Player's
+ * level</b> to <b>3 times the level cap</b>.
  * </p>
  * 
  * <p>
- * With the method {@link #calculateDrop(Block)} the implementing class must
- * provide the <code>ItemStack</code> that should be dropped.
+ * With the method {@link #calculateDrop(Block, Player)} the implementing class
+ * must provide the <code>ItemStack</code> that should be dropped.
  * </p>
  * 
  * @author cryxli
@@ -52,10 +52,13 @@ public abstract class DropExpCraftModule extends ExpCraftModule {
 	 * @param block
 	 *            It is expected that the given block is part of a bukkit event
 	 *            and therefore represents a location and material (item).
+	 * @param player
+	 *            Optional reference to involved player. May be
+	 *            <code>null</code>.
 	 * @return A <code>ItemStack</code> object describing what should be
 	 *         dropped. If <code>null</code> is returned, nothing is dropped.
 	 */
-	protected abstract ItemStack calculateDrop(Block block);
+	protected abstract ItemStack calculateDrop(Block block, Player player);
 
 	/**
 	 * Check and eventually drop additional items. Drop will happen only when
@@ -66,8 +69,10 @@ public abstract class DropExpCraftModule extends ExpCraftModule {
 	 *            location and is used to calculate the dropped item.
 	 * @param level
 	 *            Current player's level for the module.
+	 * @param player
+	 *            Optional reference to player.
 	 */
-	public void dropItem(final Block block, final int level) {
+	public void dropItem(final Block block, final int level, final Player player) {
 		if (!getConfig().getBoolean(enableDropKey)) {
 			// dropping is not enabled
 			return;
@@ -78,8 +83,8 @@ public abstract class DropExpCraftModule extends ExpCraftModule {
 			return;
 		}
 
-		ItemStack drop = calculateDrop(block);
-		if (drop != null) {
+		ItemStack drop = calculateDrop(block, player);
+		if (drop != null && drop.getAmount() > 0) {
 			block.getWorld().dropItem(block.getLocation(), drop);
 		}
 	}
@@ -104,7 +109,7 @@ public abstract class DropExpCraftModule extends ExpCraftModule {
 			return;
 		}
 		// drop
-		dropItem(block, getPersistence().getLevel(this, player));
+		dropItem(block, getPersistence().getLevel(this, player), player);
 	}
 
 	/**

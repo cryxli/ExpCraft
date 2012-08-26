@@ -94,7 +94,7 @@ public class MiningBlockListener implements Listener {
 		// double drops when nothing special happened
 		if (!test.firePickaxe(player, level, event)) {
 			// double drops
-			plugin.dropItem(event.getBlock(), level);
+			plugin.dropItem(event.getBlock(), level, player);
 		}
 	}
 

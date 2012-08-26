@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
+import li.cryx.expcraft.util.ToolQuality;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -28,11 +29,24 @@ public class WoodCutting extends DropExpCraftModule {
 	private Chat chat;
 
 	@Override
-	protected ItemStack calculateDrop(final Block block) {
+	protected ItemStack calculateDrop(final Block block, final Player player) {
+		ToolQuality quality = ToolQuality.NONE;
+		if (player != null) {
+			quality = ToolQuality.getQuality(player.getItemInHand());
+		}
+		if (ToolQuality.isLess(ToolQuality.STONE, quality)) {
+			// wooden axe does not give double drops
+			return null;
+		}
+
 		switch (block.getType()) {
 		case LOG:
 		case WOOD:
-			return new ItemStack(block.getType(), 1, block.getData());
+			int amount = 1;
+			if (ToolQuality.isAtLeast(ToolQuality.IRON, quality)) {
+				amount = 2;
+			}
+			return new ItemStack(block.getType(), amount, block.getData());
 
 		default:
 			return null;

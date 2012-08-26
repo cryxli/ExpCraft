@@ -1,10 +1,13 @@
 package li.cryx.expcraft.mining;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
+import li.cryx.expcraft.util.ToolQuality;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,33 +32,68 @@ public class Mining extends DropExpCraftModule {
 	/** One chat utility to send messages. */
 	private Chat chat;
 
+	/** Tool material dependent amounts for double drops. */
+	private static final Map<Material, int[]> doubleDrops = new HashMap<Material, int[]>();
+	static {
+		// stone, gold, iron, diamond
+		doubleDrops.put(Material.STONE, new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.COBBLESTONE, new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.IRON_ORE, new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.MOSSY_COBBLESTONE, //
+				new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.NETHERRACK, new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.NETHER_BRICK, new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.GOLD_ORE, new int[] { 0, 0, 1, 2 });
+		doubleDrops.put(Material.SANDSTONE, new int[] { 1, 2, 2, 3 });
+		doubleDrops.put(Material.REDSTONE_ORE, new int[] { 0, 5, 5, 8 });
+		doubleDrops.put(Material.GLOWING_REDSTONE_ORE, //
+				new int[] { 0, 5, 5, 8 });
+		doubleDrops.put(Material.COAL_ORE, new int[] { 1, 2, 2, 3 });
+		doubleDrops.put(Material.LAPIS_ORE, new int[] { 0, 5, 5, 8 });
+		doubleDrops.put(Material.GLOWSTONE, new int[] { 2, 2, 4, 6 });
+	}
+
 	@Override
-	protected ItemStack calculateDrop(final Block block) {
+	public ItemStack calculateDrop(final Block block, final Player player) {
 		Material material = block.getType();
+		ToolQuality quality = ToolQuality.NONE;
+		if (player != null) {
+			quality = ToolQuality.getQuality(player.getItemInHand());
+		}
+		if (ToolQuality.isLess(ToolQuality.STONE, quality)) {
+			// wooden tools do not produce double drops
+			return null;
+		}
+
+		int amount = 1;
+		int[] amounts = doubleDrops.get(material);
+		if (amounts != null) {
+			amount = amounts[quality.getQuality() - 2];
+		}
+
 		switch (material) {
 		case STONE:
-			return new ItemStack(Material.COBBLESTONE, 1);
-
+			return new ItemStack(Material.COBBLESTONE, amount);
 		case COBBLESTONE:
-		case GOLD_ORE:
 		case IRON_ORE:
 		case MOSSY_COBBLESTONE:
-		case OBSIDIAN:
 		case NETHERRACK:
 		case NETHER_BRICK:
+		case GOLD_ORE:
+			return new ItemStack(material, amount);
+		case OBSIDIAN:
 			return new ItemStack(material, 1);
-
 		case SANDSTONE:
-			return new ItemStack(Material.SANDSTONE, 1, block.getData());
+			return new ItemStack(Material.SANDSTONE, amount, block.getData());
 		case REDSTONE_ORE:
 		case GLOWING_REDSTONE_ORE:
-			return new ItemStack(Material.REDSTONE, 5);
+			return new ItemStack(Material.REDSTONE, amount);
 		case COAL_ORE:
-			return new ItemStack(Material.COAL, 1);
+			return new ItemStack(Material.COAL, amount);
 		case LAPIS_ORE:
-			return new ItemStack(Material.INK_SACK, 5, (short) 4);
+			return new ItemStack(Material.INK_SACK, amount, (short) 4);
 		case GLOWSTONE:
-			return new ItemStack(Material.GLOWSTONE_DUST, 2);
+			return new ItemStack(Material.GLOWSTONE_DUST, amount);
 
 		default:
 			return null;
