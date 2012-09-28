@@ -10,7 +10,7 @@ Tools
 - maven (plugin)
 - git (console)
 
-Setup
+--- Setup ---
  1) Get Java JDK 1.6
  2) Get eclipse indigo from eclipse.org
  3) Get "Maven Integration for Eclipse" through the Eclipse Marketplace
@@ -19,7 +19,14 @@ Setup
  6) Open the workspace in eclipse
  7) Import the projects into eclipse workspace (Import existing maven project)
 
+--- Compile order ---
+ 1) expcraft-core
+ 2) expcraft-testing
+ 3) all the other projects
+The expcraft-testing project provides a mock of the core and therefore has 
+to be compiled after the core but before any of the module projects.
+
 Tips
 - Use the preconfigured Launchers to build the projects
 - Launchers may not work in certain eclipse/maven plugin constellations
-- Source works for r1.3.1-R1.0 / r1.3.1-R2.0
+- Source works for br1.3.2-R0.1+
