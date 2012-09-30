@@ -7,6 +7,7 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -38,6 +39,9 @@ public class Chat {
 	/** Indicator whether to broadcast information to all players. */
 	private static boolean notifyAll = true;
 
+	/** Indicator whether to play a sound when leveling up. */
+	private static boolean playSound = true;
+
 	public static ChatColor getBadColor() {
 		return colorBad;
 	}
@@ -52,6 +56,14 @@ public class Chat {
 
 	public static ChatColor getSpecialColor() {
 		return colorSpecial;
+	}
+
+	public static boolean isNotifyAll() {
+		return notifyAll;
+	}
+
+	public static boolean isPlaySound() {
+		return playSound;
 	}
 
 	/** Set the bad color, by color name. */
@@ -76,6 +88,14 @@ public class Chat {
 		if (chatColor != null) {
 			colorHighlight = chatColor;
 		}
+	}
+
+	public static void setNotifyAll(boolean enabled) {
+		notifyAll = enabled;
+	}
+
+	public static void setPlaySound(boolean enabled) {
+		playSound = enabled;
 	}
 
 	/** Set the special color, by color name. */
@@ -153,8 +173,12 @@ public class Chat {
 				module.getModuleName()));
 
 		good(player, MessageFormat.format(
-				"See /level info {0} - To see what you have unlocked.",
+				"See /level {0} - To see what you have unlocked.",
 				module.getAbbr()));
+
+		if (playSound) {
+			player.playSound(player.getLocation(), Sound.LEVEL_UP, 0.5f, 1);
+		}
 
 		if (notifyAll) {
 			broadcast(MessageFormat.format("{0} is now level {1} in {2}.",

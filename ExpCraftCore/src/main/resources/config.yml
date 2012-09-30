@@ -1,4 +1,8 @@
 #Default ExpCraftCore config file
+Chat:
+  PlayLevelUpSound: true
+  NotifyAll: true
+
 Colors:
   ColorOne: GOLD
   ColorTwo: YELLOW
@@ -6,10 +10,6 @@ Colors:
   ColorBad: RED
 
 Database: FlatFile
-DbConnection:
-  URL: localhost:3306/minecraft
-  User: root
-  Password: pass
 
 Levels:
   Constant: 20

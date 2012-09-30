@@ -90,6 +90,9 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 		Chat.setSpecialColor(config.getString("Colors.ColorTwo"));
 		Chat.setGoodColor(config.getString("Colors.ColorGood"));
 		Chat.setBadColor(config.getString("Colors.ColorBad"));
+		// and other chat properties
+		Chat.setNotifyAll(config.getBoolean("Chat.NotifyAll", true));
+		Chat.setPlaySound(config.getBoolean("Chat.PlayLevelUpSound", true));
 
 		// delegate config to managers
 		setPersistence(config);
