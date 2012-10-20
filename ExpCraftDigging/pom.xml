@@ -13,13 +13,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>li.cryx</groupId>
+			<groupId>li.cryx.expcraft</groupId>
 			<artifactId>expcraft-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>li.cryx</groupId>
+			<groupId>li.cryx.expcraft</groupId>
 			<artifactId>expcraft-testing</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
