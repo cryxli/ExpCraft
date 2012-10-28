@@ -1,0 +1,24 @@
+<assembly>
+	<!-- create an assembly ZIP -->
+	<formats>
+		<format>zip</format>
+	</formats>
+	
+	<!-- create ZIP in ./target/ folder -->
+	<baseDirectory>${project.build.directory}</baseDirectory>
+	<!-- do not include other things from ./target/ in the ZIP -->
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<!-- pack the dependencies stated in the POM -->
+	<dependencySets>
+		<dependencySet>
+			<!-- do not include the dummy JAR create for the assembly project -->
+			<useProjectArtifact>false</useProjectArtifact>
+			<!-- put everything into the root of the ZIP -->
+			<outputDirectory></outputDirectory>
+			<!-- do not unpack dependency JARs -->
+			<unpack>false</unpack>
+		</dependencySet>
+	</dependencySets>
+
+</assembly>

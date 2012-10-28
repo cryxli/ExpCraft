@@ -97,6 +97,7 @@
 		<module>ExpCraftMining</module>
 		<module>ExpCraftScavenger</module>
 		<module>ExpCraftWoodCutting</module>
+		<module>ExpCraftAssembly</module>
 	</modules>
 
 </project>
