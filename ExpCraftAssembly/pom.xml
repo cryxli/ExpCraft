@@ -9,6 +9,7 @@
 
 	<artifactId>expcraft-assembly</artifactId>
 	<name>ExpCraft-Suite</name>
+	<packaging>pom</packaging>
 
 	<dependencies>
 		<dependency>
@@ -64,16 +65,15 @@
 			<version>${project.version}</version>
 		</dependency>
 		<!-- optional -->
-		<!-- <dependency> -->
-		<!-- <groupId>li.cryx.expcraft</groupId> -->
-		<!-- <artifactId>expcraft-web</artifactId> -->
-		<!-- <version>${project.version}</version> -->
-		<!-- <type>zip</type> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>li.cryx.expcraft</groupId>
+			<artifactId>expcraft-web</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>${project.name}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -88,6 +88,7 @@
 					<descriptors>
 						<descriptor>src/main/assembly/assemply.xml</descriptor>
 					</descriptors>
+					<finalName>${project.name}-${project.version}</finalName>
 				</configuration>
 				<executions>
 					<execution>

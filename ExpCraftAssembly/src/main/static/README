@@ -1,0 +1,50 @@
+Contents
+-+------
+ I Core plugin
+ +-> ExpCraftCore.jar   - The main plugin, required!
+ |
+ I Ordinary modules
+ +-> EC-Alchemy.jar     - Building things
+ +-> EC-Digging.jar     - Digging through sand, etc.
+ +-> EC-Farming.jar     - Planting and harvesting
+ +-> EC-Mining.jar      - Mining through stone, etc.
+ +-> EC-Scavenger.jar   - Additional drops when digging
+ +-> EC-WoodCutting.jar - Collecting wood
+ |
+ I Experimental modules
+ +-> EC-Defence.jar     - Wearing armor
+ +-> EC-Dexterity.jar   - Jumping and fall damage
+ |
+ I Other files
+ +-> WebGui.zip         - A PHP/MySQL gui
+ +-> README             - This file.
+ '
+Installation
+-+----------
+ |
+ I Works with CraftBukkit server version ${bukkit.version}.
+ |
+ > Copy "ExpCraftCore.jar" and all the modules you want to use to
+ | your bukkit's "plugins" folder.
+ |
+ > Run bukkit once to have ExpCraft and the modules generate their
+ | default configuration files.
+ |
+ > Edit the files as you please. "plugins/ExpCraft/config/"
+ |
+ > Start bukkit for real.
+ '
+Web GUI
+-+-----
+ |
+ I If you store the progress in a MySQL database, you can use the
+ | contents of "WebGui.zip" to display the stats on the net. You'll
+ | need a web server and working PHP installation, together with a
+ | working connection to the database.
+ |
+ > Just extract the content of the ZIP archive anywhere on your web
+ | server.
+ |
+ > Rename config.php.default to config.php and set the database
+ | connection right.
+ '

@@ -1,4 +1,5 @@
-<assembly>
+<assembly xmlns="http://maven.apache.org/xsd/assembly" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/xsd/assembly http://maven.apache.org/xsd/assembly-1.1.1.xsd">
 	<!-- create an assembly ZIP -->
 	<formats>
 		<format>zip</format>
@@ -15,10 +16,29 @@
 			<!-- do not include the dummy JAR create for the assembly project -->
 			<useProjectArtifact>false</useProjectArtifact>
 			<!-- put everything into the root of the ZIP -->
-			<outputDirectory></outputDirectory>
+			<outputDirectory>.</outputDirectory>
 			<!-- do not unpack dependency JARs -->
 			<unpack>false</unpack>
+			<!-- use the final name of the dependencies -->
+			<outputFileNameMapping>${artifact.build.finalName}.${artifact.packaging}</outputFileNameMapping>
 		</dependencySet>
 	</dependencySets>
+
+	<files>
+		<file>
+			<!-- put everything into the root of the ZIP -->
+			<outputDirectory>.</outputDirectory>
+			<!-- add the ZIP from the web gui -->
+			<source>${basedir}/../ExpCraftWeb/target/WebGui.zip</source>
+		</file>
+		<file>
+			<!-- put everything into the root of the ZIP -->
+			<outputDirectory>.</outputDirectory>
+			<!-- add the README -->
+			<source>${basedir}/src/main/static/README</source>
+			<!-- filter the resource -->
+			<filtered>true</filtered>
+		</file>
+	</files>
 
 </assembly>
