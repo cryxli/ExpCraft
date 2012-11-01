@@ -162,6 +162,23 @@ public class FarmingConstraintsTest extends AbstractPluginTest<Farming> {
 		Assert.assertTrue(test.isPumpkin(plantedPumpkin));
 	}
 
+	/** Test for {@link FarmingConstraints#isRipeCarrot(Block)} */
+	@Test
+	public void isRipeCarrots() {
+		Block stone = Mockito.mock(Block.class);
+		Mockito.when(stone.getType()).thenReturn(Material.STONE);
+		Assert.assertFalse(test.isRipeNetherWart(stone));
+
+		for (NetherWartState size : NetherWartState.values()) {
+			Block carrot = Mockito.mock(Block.class);
+			Mockito.when(carrot.getType()).thenReturn(Material.CARROT);
+			Mockito.when(carrot.getData()).thenReturn(size.getData());
+
+			Assert.assertEquals(size == NetherWartState.RIPE,
+					test.isRipeCarrot(carrot));
+		}
+	}
+
 	/** Test for {@link FarmingConstraints#isRipeCocoaBean(Block)} */
 	@Test
 	public void isRipeCocoaBean() {
@@ -220,6 +237,23 @@ public class FarmingConstraintsTest extends AbstractPluginTest<Farming> {
 
 			Assert.assertEquals(size == NetherWartState.RIPE,
 					test.isRipeNetherWart(wart));
+		}
+	}
+
+	/** Test for {@link FarmingConstraints#isRipePotato(Block)} */
+	@Test
+	public void isRipePotato() {
+		Block stone = Mockito.mock(Block.class);
+		Mockito.when(stone.getType()).thenReturn(Material.STONE);
+		Assert.assertFalse(test.isRipeNetherWart(stone));
+
+		for (NetherWartState size : NetherWartState.values()) {
+			Block potato = Mockito.mock(Block.class);
+			Mockito.when(potato.getType()).thenReturn(Material.POTATO);
+			Mockito.when(potato.getData()).thenReturn(size.getData());
+
+			Assert.assertEquals(size == NetherWartState.RIPE,
+					test.isRipePotato(potato));
 		}
 	}
 

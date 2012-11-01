@@ -215,6 +215,16 @@ public class FarmingBlockBreakListener implements Listener {
 			// harvest cocoa bean
 			gained = plugin.getConfDouble("ExpGain.CocoaBean");
 
+		} else if (test.isRipePotato(block)
+				&& level >= plugin.getConfInt("UseLevel.Potato")) {
+			// harvest potato
+			gained = plugin.getConfDouble("ExpGain.Potato");
+
+		} else if (test.isRipeCarrot(block)
+				&& level >= plugin.getConfInt("UseLevel.Carrot")) {
+			// harvest carrot
+			gained = plugin.getConfDouble("ExpGain.Carrot");
+
 		}
 		plugin.getPersistence().addExp(plugin, player, gained);
 	}

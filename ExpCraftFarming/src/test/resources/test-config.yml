@@ -22,6 +22,8 @@ UseLevel:
   Melon: 0
   CocoaBean: 0
   NetherWart: 0
+  Carrot: 0
+  Potato: 0
 
 ExpGain:
   Till: 1.0
@@ -39,6 +41,8 @@ ExpGain:
   Melon: 2.0
   CocoaBean: 2.0
   NetherWart: 5.0
+  Carrot: 5.0
+  Potato: 5.0
 
 # disable for testing
 DropLevel:

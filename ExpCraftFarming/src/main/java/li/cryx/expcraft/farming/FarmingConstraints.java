@@ -127,6 +127,23 @@ public class FarmingConstraints {
 	}
 
 	/**
+	 * Test whether the given block represents fully grown, ripe carrots.
+	 * 
+	 * @param block
+	 *            A block participating in an event.
+	 * @return <code>true</code>, only if the block represents carrots in state
+	 *         ripe.
+	 */
+	public boolean isRipeCarrot(final Block block) {
+		// TODO cryxli: implement the proper way, once bukkit is ready
+		if (block.getType() == Material.CARROT) {
+			return block.getData() == NetherWartState.RIPE.getData();
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Test whether the given block represents fully grown cocoa bean.
 	 * 
 	 * @param block
@@ -169,6 +186,23 @@ public class FarmingConstraints {
 	public boolean isRipeNetherWart(final Block block) {
 		// TODO cryxli: implement the proper way, once bukkit is ready
 		if (block.getType() == Material.NETHER_WARTS) {
+			return block.getData() == NetherWartState.RIPE.getData();
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Test whether the given block represents fully grown, ripe potato.
+	 * 
+	 * @param block
+	 *            A block participating in an event.
+	 * @return <code>true</code>, only if the block represents potato in state
+	 *         ripe.
+	 */
+	public boolean isRipePotato(final Block block) {
+		// TODO cryxli: implement the proper way, once bukkit is ready
+		if (block.getType() == Material.POTATO) {
 			return block.getData() == NetherWartState.RIPE.getData();
 		} else {
 			return false;

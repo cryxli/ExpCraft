@@ -80,6 +80,17 @@ public class FarmingBlockBreakListenerTest extends AbstractPluginTest<Farming> {
 		harvest(block, "UseLevel.Cacti", 3);
 	}
 
+	/** Test 11 */
+	@Test
+	public void playerHarvestsCarrot() {
+		Block carrot = Mockito.mock(Block.class);
+		Mockito.when(carrot.getType()).thenReturn(Material.CARROT);
+		Mockito.when(carrot.getData()).thenReturn(
+				NetherWartState.RIPE.getData());
+
+		harvest(carrot, "UseLevel.Carrot", 5);
+	}
+
 	/** Test 9 */
 	@Test
 	public void playerHarvestsCocoaBean() {
@@ -128,6 +139,17 @@ public class FarmingBlockBreakListenerTest extends AbstractPluginTest<Farming> {
 		Mockito.when(wart.getData()).thenReturn(NetherWartState.RIPE.getData());
 
 		harvest(wart, "UseLevel.NetherWart", 5);
+	}
+
+	/** Test 10 */
+	@Test
+	public void playerHarvestsPotato() {
+		Block potato = Mockito.mock(Block.class);
+		Mockito.when(potato.getType()).thenReturn(Material.POTATO);
+		Mockito.when(potato.getData()).thenReturn(
+				NetherWartState.RIPE.getData());
+
+		harvest(potato, "UseLevel.Potato", 5);
 	}
 
 	/** Test 8 */
