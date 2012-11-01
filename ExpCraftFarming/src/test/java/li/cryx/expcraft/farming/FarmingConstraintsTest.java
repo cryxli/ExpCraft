@@ -169,12 +169,12 @@ public class FarmingConstraintsTest extends AbstractPluginTest<Farming> {
 		Mockito.when(stone.getType()).thenReturn(Material.STONE);
 		Assert.assertFalse(test.isRipeNetherWart(stone));
 
-		for (NetherWartState size : NetherWartState.values()) {
+		for (CarrotState size : CarrotState.values()) {
 			Block carrot = Mockito.mock(Block.class);
 			Mockito.when(carrot.getType()).thenReturn(Material.CARROT);
 			Mockito.when(carrot.getData()).thenReturn(size.getData());
 
-			Assert.assertEquals(size == NetherWartState.RIPE,
+			Assert.assertEquals(size == CarrotState.RIPE,
 					test.isRipeCarrot(carrot));
 		}
 	}
@@ -247,12 +247,12 @@ public class FarmingConstraintsTest extends AbstractPluginTest<Farming> {
 		Mockito.when(stone.getType()).thenReturn(Material.STONE);
 		Assert.assertFalse(test.isRipeNetherWart(stone));
 
-		for (NetherWartState size : NetherWartState.values()) {
+		for (PotatoState size : PotatoState.values()) {
 			Block potato = Mockito.mock(Block.class);
 			Mockito.when(potato.getType()).thenReturn(Material.POTATO);
 			Mockito.when(potato.getData()).thenReturn(size.getData());
 
-			Assert.assertEquals(size == NetherWartState.RIPE,
+			Assert.assertEquals(size == PotatoState.RIPE,
 					test.isRipePotato(potato));
 		}
 	}
