@@ -125,6 +125,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 		Mockito.when(
 				perm.hasModule(Mockito.eq(plugin), Mockito.any(Player.class)))
 				.thenAnswer(new Answer<Boolean>() {
+					@Override
 					public Boolean answer(final InvocationOnMock invocation)
 							throws Throwable {
 						return hasModule;
@@ -135,6 +136,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 		Mockito.when(plugin.getPermission()).thenReturn(perm);
 
 		pers = new InMemoryPersistentManager();
+		pers.setCore(Mockito.mock(ExpCraftCore.class));
 		Mockito.when(plugin.getPersistence()).thenReturn(pers);
 	}
 }
