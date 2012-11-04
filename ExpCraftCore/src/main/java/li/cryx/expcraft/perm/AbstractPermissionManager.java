@@ -69,8 +69,8 @@ public abstract class AbstractPermissionManager {
 	/**
 	 * Set the world for which ExpCraft is activated.
 	 * 
-	 * @param An
-	 *            array of Strings containing world names.
+	 * @param worldStrs
+	 *            An array of Strings containing world names.
 	 */
 	public void setWorlds(final String[] worldStrs) {
 		worlds.clear();
