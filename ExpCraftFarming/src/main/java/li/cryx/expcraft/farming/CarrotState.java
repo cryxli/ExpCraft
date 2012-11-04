@@ -7,13 +7,13 @@ package li.cryx.expcraft.farming;
  */
 public enum CarrotState {
 	/** Carrot has just been planted. */
-	PLANTED(1), //
+	PLANTED(0), //
 	/** Carrot has grown one state. */
 	LIGHT_GROW(2), //
 	/** Carrot has grown two states. */
-	HIGH_GROW(3), //
+	HIGH_GROW(4), //
 	/** Carrot is fully grown. */
-	RIPE(4);
+	RIPE(7);
 
 	private byte data;
 

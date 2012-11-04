@@ -137,6 +137,7 @@ public class FarmingConstraints {
 	public boolean isRipeCarrot(final Block block) {
 		// TODO cryxli: implement the proper way, once bukkit is ready
 		if (block.getType() == Material.CARROT) {
+			System.out.println(block);
 			return block.getData() == CarrotState.RIPE.getData();
 		} else {
 			return false;
@@ -203,6 +204,7 @@ public class FarmingConstraints {
 	public boolean isRipePotato(final Block block) {
 		// TODO cryxli: implement the proper way, once bukkit is ready
 		if (block.getType() == Material.POTATO) {
+			System.out.println(block);
 			return block.getData() == PotatoState.RIPE.getData();
 		} else {
 			return false;
