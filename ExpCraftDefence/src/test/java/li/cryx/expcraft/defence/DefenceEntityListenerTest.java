@@ -5,7 +5,6 @@ import li.cryx.expcraft.AbstractPluginTest;
 import li.cryx.expcraft.ExpCraftCoreStub;
 
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -69,7 +68,6 @@ public class DefenceEntityListenerTest extends AbstractPluginTest<Defence> {
 				.thenCallRealMethod();
 		Mockito.when(plugin.getLevelCap()).thenReturn(100);
 
-		Server server = Mockito.mock(Server.class);
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
 		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
 				new PluginDescriptionFile("ExpCraft", "0", ""));

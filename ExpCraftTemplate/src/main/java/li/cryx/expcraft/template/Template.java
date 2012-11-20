@@ -61,16 +61,6 @@ public class Template extends ExpCraftModule {
 	}
 
 	@Override
-	public void onEnable() {
-		// pre-load config
-		loadConfig();
-		// register listeners
-		registerEvents();
-		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
-	}
-
-	@Override
 	public void onModuleDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
@@ -78,6 +68,16 @@ public class Template extends ExpCraftModule {
 
 		// TODO if you instantiated other things, that are not under control of
 		// bukkit, disable them here too
+	}
+
+	@Override
+	public void onModuleEnable() {
+		// pre-load config
+		loadConfig();
+		// register listeners
+		registerEvents();
+		// ready
+		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */

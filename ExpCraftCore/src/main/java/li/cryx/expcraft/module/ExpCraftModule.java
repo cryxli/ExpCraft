@@ -70,7 +70,8 @@ public abstract class ExpCraftModule extends ExpCraftConfigLocation {
 		onModuleDisable();
 	}
 
-	abstract public void onModuleDisable();
+	/** Delegates <code>JavaPlugin.onDiable()</code> event. */
+	public abstract void onModuleDisable();
 
 	public void setLevelCap(final int levelCap) {
 		this.levelCap = levelCap;

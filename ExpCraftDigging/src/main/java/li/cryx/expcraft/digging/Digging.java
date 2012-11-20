@@ -134,23 +134,23 @@ public class Digging extends DropExpCraftModule {
 		saveConfig();
 	}
 
-	// server want the plugin to start working
-	@Override
-	public void onEnable() {
-		// pre-load config
-		loadConfig();
-		// register listeners
-		registerEvents();
-		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
-	}
-
 	// server wants the plugin to stop working
 	@Override
 	public void onModuleDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+	}
+
+	// server want the plugin to start working
+	@Override
+	public void onModuleEnable() {
+		// pre-load config
+		loadConfig();
+		// register listeners
+		registerEvents();
+		// ready
+		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */

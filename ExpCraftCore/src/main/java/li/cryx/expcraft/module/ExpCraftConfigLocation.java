@@ -24,6 +24,16 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 	private File configFile;
 
 	/**
+	 * Change data folder to <code>plugins/ExpCraftCore/../ExpCraft/</code>
+	 * preventing bukkit from creating the default data folder
+	 * <code>plugins/ExpCraftCore/</code>.
+	 */
+	public File getCommonDataFolder() {
+		// plugins/ExpCraftCore/../ExpCraft/
+		return new File(super.getDataFolder().getParentFile(), "ExpCraft");
+	}
+
+	/**
 	 * Load config file for the current module.
 	 * 
 	 * @see #getConfigFile()
@@ -55,25 +65,27 @@ public abstract class ExpCraftConfigLocation extends JavaPlugin {
 	 */
 	private File getConfigFile() {
 		if (configFile == null) {
-			File folder = new File(getDataFolder(), "config");
+			File folder = new File(getCommonDataFolder(), "config");
 			configFile = new File(folder, getModuleName() + ".yml");
 		}
 		return configFile;
 	}
 
-	/**
-	 * Change data folder to <code>plugins/ExpCraftCore/../ExpCraft/</code>
-	 * preventing bukkit from creating the default data folder
-	 * <code>plugins/ExpCraftCore/</code>.
-	 */
-	@Override
-	public File getDataFolder() {
-		// plugins/ExpCraftCore/../ExpCraft/
-		return new File(super.getDataFolder().getParentFile(), "ExpCraft");
-	}
-
 	/** Get the full name of the module. */
 	abstract public String getModuleName();
+
+	@Override
+	public void onEnable() {
+		// since getDataFolder() is final, our design is broken
+		// -> try to fix it
+		getDataFolder().delete();
+
+		// delegate event
+		onModuleEnable();
+	}
+
+	/** Delegated <code>JavaPlugin.onEnable()</code> method. */
+	protected abstract void onModuleEnable();
 
 	/**
 	 * Save config of the module.

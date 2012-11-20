@@ -101,16 +101,6 @@ public class Dexterity extends ExpCraftModule {
 		saveConfig();
 	}
 
-	@Override
-	public void onEnable() {
-		// pre-load config
-		loadConfig();
-		// register listeners
-		registerEvents();
-		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
-	}
-
 	// server want the plugin to stop working
 	@Override
 	public void onModuleDisable() {
@@ -118,6 +108,16 @@ public class Dexterity extends ExpCraftModule {
 		// listeners
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 	}// server want the plugin to start working
+
+	@Override
+	public void onModuleEnable() {
+		// pre-load config
+		loadConfig();
+		// register listeners
+		registerEvents();
+		// ready
+		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+	}
 
 	/** Register the listeners */
 	private void registerEvents() {

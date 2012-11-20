@@ -104,16 +104,6 @@ public class Alchemy extends ExpCraftModule {
 	}
 
 	@Override
-	public void onEnable() {
-		// pre-load config
-		loadConfig();
-		// register listeners
-		registerEvents();
-		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
-	}
-
-	@Override
 	public void onModuleDisable() {
 		// uninstall recipes
 		store.uninstallRecipes(getServer());
@@ -125,6 +115,16 @@ public class Alchemy extends ExpCraftModule {
 
 		// done
 		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+	}
+
+	@Override
+	public void onModuleEnable() {
+		// pre-load config
+		loadConfig();
+		// register listeners
+		registerEvents();
+		// ready
+		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */

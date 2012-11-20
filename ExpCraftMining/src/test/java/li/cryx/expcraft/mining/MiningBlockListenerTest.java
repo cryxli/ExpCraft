@@ -5,7 +5,6 @@ import li.cryx.expcraft.AbstractPluginTest;
 import li.cryx.expcraft.ExpCraftCoreStub;
 
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -118,7 +117,6 @@ public class MiningBlockListenerTest extends AbstractPluginTest<Mining> {
 				.thenCallRealMethod();
 
 		// for an eventual CommandManager calls
-		Server server = Mockito.mock(Server.class);
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
 		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
 				new PluginDescriptionFile("ExpCraft", "0", ""));

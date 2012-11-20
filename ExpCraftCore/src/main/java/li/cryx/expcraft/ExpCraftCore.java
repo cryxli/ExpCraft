@@ -133,7 +133,7 @@ public class ExpCraftCore extends ExpCraftConfigLocation {
 	}
 
 	@Override
-	public void onEnable() {
+	public void onModuleEnable() {
 		loadConfig();
 		saveConfig();
 

@@ -5,7 +5,6 @@ import li.cryx.expcraft.ExpCraftCoreStub;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -123,7 +122,6 @@ public class ScavengerConstraintsTest extends AbstractPluginTest<Scavenger> {
 		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
 				.thenCallRealMethod();
 
-		Server server = Mockito.mock(Server.class);
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
 		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
 				new PluginDescriptionFile("ExpCraft", "0", ""));

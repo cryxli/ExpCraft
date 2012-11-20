@@ -46,11 +46,11 @@ public class DummyModule extends ExpCraftModule {
 	}
 
 	@Override
-	public void onEnable() {
+	public void onModuleDisable() {
 	}
 
 	@Override
-	public void onModuleDisable() {
+	protected void onModuleEnable() {
 	}
 
 	public void setAbbr(final String abbr) {

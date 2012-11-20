@@ -1,5 +1,7 @@
 package li.cryx.expcraft.cmp;
 
+import java.util.logging.Logger;
+
 import junit.framework.Assert;
 import li.cryx.expcraft.DummyExpCraftCore;
 import li.cryx.expcraft.DummyModule;
@@ -34,6 +36,8 @@ public class CommandManagerTest {
 
 		server = Mockito.mock(Server.class);
 		Mockito.when(server.getPluginManager()).thenReturn(pluginManager);
+		Mockito.when(server.getLogger())
+				.thenReturn(Logger.getAnonymousLogger());
 
 		PluginDescriptionFile pdf = new PluginDescriptionFile("Test", "0",
 				"DummyModule");

@@ -121,20 +121,20 @@ public class Defence extends ExpCraftModule {
 	}
 
 	@Override
-	public void onEnable() {
+	public void onModuleDisable() {
+		// disabled plugins don't get events; no need to unregister
+		// listeners
+		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+	}
+
+	@Override
+	public void onModuleEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
 		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
-	}
-
-	@Override
-	public void onModuleDisable() {
-		// disabled plugins don't get events; no need to unregister
-		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
 	}
 
 	/** Register the listeners */
