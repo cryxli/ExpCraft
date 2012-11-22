@@ -6,6 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * TODO documentation
+ * 
+ * @author cryxli
+ */
 public class DiggingContraints {
 
 	private final Digging plugin;
@@ -19,67 +24,67 @@ public class DiggingContraints {
 		double exp = 0;
 		switch (m) {
 		case DIRT:
-			if (level < plugin.getConfInt("UseLevel.Dirt")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Dirt")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Dirt"));
+						plugin.getConfig().getInteger("UseLevel.Dirt"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Dirt");
+				exp = plugin.getConfig().getDouble("ExpGain.Dirt");
 			}
 			break;
 		case GRASS:
-			if (level < plugin.getConfInt("UseLevel.Grass")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Grass")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Grass"));
+						plugin.getConfig().getInteger("UseLevel.Grass"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Grass");
+				exp = plugin.getConfig().getDouble("ExpGain.Grass");
 			}
 			break;
 		case SAND:
-			if (level < plugin.getConfInt("UseLevel.Sand")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Sand")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Sand"));
+						plugin.getConfig().getInteger("UseLevel.Sand"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Sand");
+				exp = plugin.getConfig().getDouble("ExpGain.Sand");
 			}
 			break;
 		case CLAY:
-			if (level < plugin.getConfInt("UseLevel.Clay")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Clay")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Clay"));
+						plugin.getConfig().getInteger("UseLevel.Clay"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Clay");
+				exp = plugin.getConfig().getDouble("ExpGain.Clay");
 			}
 			break;
 		case SOUL_SAND:
-			if (level < plugin.getConfInt("UseLevel.SoulSand")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.SoulSand")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.SoulSand"));
+						plugin.getConfig().getInteger("UseLevel.SoulSand"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.SoulSand");
+				exp = plugin.getConfig().getDouble("ExpGain.SoulSand");
 			}
 			break;
 		case GRAVEL:
-			if (level < plugin.getConfInt("UseLevel.Gravel")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Gravel")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Gravel"));
+						plugin.getConfig().getInteger("UseLevel.Gravel"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Gravel");
+				exp = plugin.getConfig().getDouble("ExpGain.Gravel");
 			}
 			break;
 		case SNOW:
-			if (level < plugin.getConfInt("UseLevel.Snow")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Snow")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Snow"));
+						plugin.getConfig().getInteger("UseLevel.Snow"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Snow");
+				exp = plugin.getConfig().getDouble("ExpGain.Snow");
 			}
 			break;
 		case MYCEL:
-			if (level < plugin.getConfInt("UseLevel.Mycelium")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Mycelium")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Mycelium"));
+						plugin.getConfig().getInteger("UseLevel.Mycelium"));
 			} else {
-				exp = plugin.getConfDouble("ExpGain.Mycelium");
+				exp = plugin.getConfig().getDouble("ExpGain.Mycelium");
 			}
 			break;
 		default:
@@ -93,26 +98,29 @@ public class DiggingContraints {
 			final int level) {
 
 		if (itemInHand == Material.WOOD_SPADE
-				&& level < plugin.getConfInt("ShovelLevel.Wooden")) {
+				&& level < plugin.getConfig().getInteger("ShovelLevel.Wooden")) {
 			plugin.warnToolLevel(player,
-					plugin.getConfInt("ShovelLevel.Wooden"));
+					plugin.getConfig().getInteger("ShovelLevel.Wooden"));
 
 		} else if (itemInHand == Material.STONE_SPADE
-				&& level < plugin.getConfInt("ShovelLevel.Stone")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("ShovelLevel.Stone"));
+				&& level < plugin.getConfig().getInteger("ShovelLevel.Stone")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("ShovelLevel.Stone"));
 
 		} else if (itemInHand == Material.IRON_SPADE
-				&& level < plugin.getConfInt("ShovelLevel.Iron")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("ShovelLevel.Iron"));
+				&& level < plugin.getConfig().getInteger("ShovelLevel.Iron")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("ShovelLevel.Iron"));
 
 		} else if (itemInHand == Material.GOLD_SPADE
-				&& level < plugin.getConfInt("ShovelLevel.Gold")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("ShovelLevel.Gold"));
+				&& level < plugin.getConfig().getInteger("ShovelLevel.Gold")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("ShovelLevel.Gold"));
 
 		} else if (itemInHand == Material.DIAMOND_SPADE
-				&& level < plugin.getConfInt("ShovelLevel.Diamond")) {
+				&& level < plugin.getConfig().getInteger("ShovelLevel.Diamond")) {
 			plugin.warnToolLevel(player,
-					plugin.getConfInt("ShovelLevel.Diamond"));
+					plugin.getConfig().getInteger("ShovelLevel.Diamond"));
 
 		} else {
 			return true;
@@ -135,7 +143,7 @@ public class DiggingContraints {
 	 */
 	public boolean fireShovel(final Player player, final int level,
 			final BlockBreakEvent event) {
-		if (level < plugin.getConfInt("Settings.FireShovelLevel")
+		if (level < plugin.getConfig().getInteger("Settings.FireShovelLevel")
 				|| player.getItemInHand().getType() != Material.GOLD_SPADE) {
 			// requirements not met
 			return false;

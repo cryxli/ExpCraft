@@ -1,7 +1,6 @@
 package li.cryx.expcraft.digging;
 
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
@@ -11,10 +10,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Digging extends DropExpCraftModule {
-	private static final Logger LOG = Logger.getLogger("EC-Farming");
+	private static final Logger LOG = LoggerFactory.getLogger(Digging.class);
 
 	/** Listen to block break and block place events. */
 	private DiggingBlockListener blockListener = null;
@@ -61,16 +61,16 @@ public class Digging extends DropExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		// block listener
 		blockListener = new DiggingBlockListener(this);
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		chat.info(sender, "Tools:");
@@ -89,40 +89,6 @@ public class Digging extends DropExpCraftModule {
 				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
-	@Override
-	public String getAbbr() {
-		return "D";
-	}
-
-	/**
-	 * Get the <code>int</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	double getConfDouble(final String key) {
-		// delegate to config
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * Get the <code>double</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	int getConfInt(final String key) {
-		// delegate to config
-		return getConfig().getInt(key);
-	}
-
-	@Override
-	public String getModuleName() {
-		return "Digging";
-	}
-
 	/**
 	 * Load config from disk merge missing default values and store them to
 	 * disk.
@@ -136,21 +102,21 @@ public class Digging extends DropExpCraftModule {
 
 	// server wants the plugin to stop working
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}
 
 	// server want the plugin to start working
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -158,13 +124,12 @@ public class Digging extends DropExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(blockListener, this);
+		registerEvents(blockListener);
 	}
 
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
-		int toolLevel = getConfInt("ShovelLevel." + material);
+		int toolLevel = getConfig().getInteger("ShovelLevel." + material);
 		String msg = MessageFormat.format("{0} Shovel: {1}", material,
 				toolLevel);
 		if (level >= toolLevel) {

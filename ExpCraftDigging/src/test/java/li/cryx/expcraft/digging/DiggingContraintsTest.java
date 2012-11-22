@@ -90,11 +90,6 @@ public class DiggingContraintsTest extends AbstractPluginTest<Digging> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		test = new DiggingContraints(plugin);
 	}
 
@@ -104,14 +99,14 @@ public class DiggingContraintsTest extends AbstractPluginTest<Digging> {
 		Mockito.when(player.getName()).thenReturn("Player");
 		pers.setExp(plugin, player, 0);
 
-		int level = config.getInt(useLevel);
-		config.set(useLevel, 50);
+		int level = config.getInteger(useLevel);
+		config.setInteger(useLevel, 50);
 		test.addExperience(player, material, 1);
 		Mockito.verify(plugin).warnCutBlockLevel(player, 50);
 
-		config.set(useLevel, 0);
+		config.setInteger(useLevel, 0);
 		test.addExperience(player, material, 1);
-		config.set(useLevel, level);
+		config.setInteger(useLevel, level);
 		Assert.assertEquals(exp, pers.getExp(plugin, player));
 	}
 
