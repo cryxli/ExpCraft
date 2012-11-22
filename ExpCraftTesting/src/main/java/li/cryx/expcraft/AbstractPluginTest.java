@@ -1,15 +1,15 @@
 package li.cryx.expcraft;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
+import li.cryx.expcraft.loader.ModuleInfo;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 import li.cryx.expcraft.persist.InMemoryPersistentManager;
+import li.cryx.expcraft.util.TypedProperties;
 
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -17,12 +17,8 @@ import org.bukkit.TreeSpecies;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Tree;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -55,7 +51,7 @@ import org.mockito.stubbing.Answer;
  */
 public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 	/** Loaded configuration file. */
-	protected YamlConfiguration config;
+	protected TypedProperties config;
 
 	/** Mocked {@link ExpCraftModule} subclass. */
 	protected T plugin;
@@ -64,7 +60,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 	private boolean done = false;
 
 	/** Which config file to load. */
-	protected String configFile = "test-config.yml";
+	protected String configFile = "test-config.properties";
 
 	protected AbstractPermissionManager perm;
 
@@ -104,46 +100,15 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 	 */
 	protected abstract Class<T> getClazz();
 
-	/**
-	 * Hack to set the properties of JavaPlugin that were declared
-	 * <code>final</code> with 1.4.5-R0.1 and therefore cannot be mocked
-	 * anymore.
-	 */
-	private void initModule() {
-		Method method;
-		try {
-			method = JavaPlugin.class.getDeclaredMethod("initialize",
-					PluginLoader.class, Server.class,
-					PluginDescriptionFile.class, File.class, File.class,
-					ClassLoader.class);
-		} catch (SecurityException e) {
-			throw new RuntimeException("Cannot access method", e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException("No such method", e);
-		}
-		try {
-			method.setAccessible(true);
-			method.invoke(plugin, null, server, new PluginDescriptionFile(
-					"Test", "0", ""), new File("target/plugins/plugin"), null,
-					getClass().getClassLoader());
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException("Illegal arguments", e);
-		} catch (IllegalAccessException e) {
-			// method.setAccessible(true) prevents this
-			throw new RuntimeException("Method not visible", e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException("Target invokation failed", e);
-		}
-	}
-
-	/** Load the stated config YAML. */
-	private void loadConfig() {
+	/** Load the stated config properties file. */
+	private void loadConfig() throws IOException {
 		InputStream in = ClassLoader.getSystemResourceAsStream(configFile);
-		config = YamlConfiguration.loadConfiguration(in);
+		config = new TypedProperties();
+		config.load(in);
 	}
 
 	@Before
-	public void prepareTest() {
+	public void prepareTest() throws IOException {
 		if (!done) {
 			loadConfig();
 			done = true;
@@ -161,11 +126,8 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 
 		plugin = Mockito.mock(getClazz());
 		Mockito.when(plugin.getConfig()).thenReturn(config);
-		Mockito.when(plugin.getModuleName()).thenReturn("Test");
-		Mockito.when(plugin.getAbbr()).thenReturn("T");
-		initModule();
-		// Mockito.when(plugin.getDescription()).thenReturn(
-		// new PluginDescriptionFile("Test", "0", ""));
+		ModuleInfo info = new ModuleInfo("Test", "T", null);
+		Mockito.when(plugin.getInfo()).thenReturn(info);
 
 		perm = Mockito.mock(AbstractPermissionManager.class);
 		Mockito.when(
@@ -182,7 +144,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 		Mockito.when(plugin.getPermission()).thenReturn(perm);
 
 		pers = new InMemoryPersistentManager();
-		pers.setCore(Mockito.mock(ExpCraftCore.class));
+		pers.setCore(Mockito.mock(ExpCraft.class));
 		Mockito.when(plugin.getPersistence()).thenReturn(pers);
 	}
 }

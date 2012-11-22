@@ -23,6 +23,6 @@ public class PermissionsBukkitManager extends AbstractPermissionManager {
 	@Override
 	public boolean hasLevel(final ExpCraftModule module, final Player player) {
 		return player.hasPermission("ec.module." //
-				+ module.getAbbr().toLowerCase());
+				+ module.getInfo().getAbbr().toLowerCase());
 	}
 }

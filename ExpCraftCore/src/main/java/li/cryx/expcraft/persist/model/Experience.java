@@ -54,7 +54,7 @@ public class Experience {
 	}
 
 	public void setModuleEntity(final ExpCraftModule module) {
-		setModule(module.getAbbr());
+		setModule(module.getInfo().getAbbr());
 	}
 
 	public void setPlayer(final String player) {

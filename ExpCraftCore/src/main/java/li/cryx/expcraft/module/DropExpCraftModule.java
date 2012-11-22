@@ -10,12 +10,11 @@ import org.bukkit.inventory.ItemStack;
  * This class defines a special case of {@link ExpCraftModule}s. These modules
  * also occasionally drop additional blocks.
  * 
- * <div> The <code>config.yml</code> has to be extended with:
+ * <div>The <code>config.yml</code> has to be extended with:
  * 
  * <pre>
- * Settings:
- *   EnableDoubleDrop: true
- *   DropMultiplier: 1.0
+ * Settings.EnableDoubleDrop=true
+ * Settings.DropMultiplier: 1.0
  * </pre>
  * 
  * or the proper keys have to be specified using the setter methods.</div>
@@ -73,12 +72,12 @@ public abstract class DropExpCraftModule extends ExpCraftModule {
 	 *            Optional reference to player.
 	 */
 	public void dropItem(final Block block, final int level, final Player player) {
-		if (!getConfig().getBoolean(enableDropKey)) {
+		if (!getConfig().getBoolean(enableDropKey, false)) {
 			// dropping is not enabled
 			return;
 		}
 		if (rnd.nextInt(3 * getLevelCap()) > level
-				* getConfig().getDouble(dropMultiplierKey) - 5) {
+				* getConfig().getDouble(dropMultiplierKey, 1) - 5) {
 			// no luck
 			return;
 		}

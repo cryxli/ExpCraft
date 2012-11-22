@@ -3,15 +3,14 @@ package li.cryx.expcraft.cmp;
 import java.util.logging.Logger;
 
 import junit.framework.Assert;
-import li.cryx.expcraft.DummyExpCraftCore;
+import li.cryx.expcraft.DummyExpCraft;
 import li.cryx.expcraft.DummyModule;
-import li.cryx.expcraft.ExpCraftCore;
 import li.cryx.expcraft.cmd.CommandManager;
+import li.cryx.expcraft.loader.ModuleInfo;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.junit.Before;
@@ -24,7 +23,7 @@ public class CommandManagerTest {
 
 	private PluginManager pluginManager;
 
-	private ExpCraftCore core;
+	private DummyExpCraft core;
 
 	private CommandManager cmd;
 
@@ -39,15 +38,13 @@ public class CommandManagerTest {
 		Mockito.when(server.getLogger())
 				.thenReturn(Logger.getAnonymousLogger());
 
-		PluginDescriptionFile pdf = new PluginDescriptionFile("Test", "0",
-				"DummyModule");
-		testModule = new DummyModule("Test", "T", server, pdf);
+		testModule = new DummyModule();
+		testModule.setInfo(new ModuleInfo("Test", "T", null));
 
-		pdf = new PluginDescriptionFile("ExpCraft", "0", "this");
-		core = new DummyExpCraftCore(server, pdf);
-
-		Mockito.when(pluginManager.getPlugins()).thenReturn(
-				new Plugin[] { testModule, core });
+		PluginDescriptionFile pdf = new PluginDescriptionFile("ExpCraft", "0",
+				"this");
+		core = new DummyExpCraft(server, pdf);
+		core.setTestModule(testModule);
 		core.onEnable();
 
 		cmd = new CommandManager(core);
@@ -55,18 +52,11 @@ public class CommandManagerTest {
 
 	private void infoModuleTest(final Player player) {
 		cmd.onCommand(player, "info", "t");
-		Mockito.verify(player).sendMessage("Module info here, page: 1");
-
-		cmd.onCommand(player, "info", "t", "2");
-		Mockito.verify(player).sendMessage("Module info here, page: 2");
+		Mockito.verify(player).sendMessage("Module info here");
 
 		cmd.onCommand(player, "t");
-		Mockito.verify(player, Mockito.times(2)).sendMessage(
-				"Module info here, page: 1");
-
-		cmd.onCommand(player, "t", "2");
-		Mockito.verify(player, Mockito.times(2)).sendMessage(
-				"Module info here, page: 2");
+		Mockito.verify(player, Mockito.times(2))
+				.sendMessage("Module info here");
 	}
 
 	private void playerInfoCheck(final Player player) {
@@ -86,10 +76,7 @@ public class CommandManagerTest {
 		Player player = Mockito.mock(Player.class);
 
 		cmd.onCommand(player, "info", "t");
-		Mockito.verify(player).sendMessage("Module info here, page: 1");
-
-		cmd.onCommand(player, "info", "t", "2");
-		Mockito.verify(player).sendMessage("Module info here, page: 2");
+		Mockito.verify(player).sendMessage("Module info here");
 
 		cmd.onCommand(player, "info", "d");
 		Mockito.verify(player).sendMessage("§6[EC] §eNo module found");

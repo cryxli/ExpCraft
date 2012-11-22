@@ -29,14 +29,15 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * 
  * @author cryxli
  */
-public class ExpCraftCoreStub extends ExpCraftCore {
+public class ExpCraftCoreStub extends ExpCraft {
 	public ExpCraftCoreStub(final Server server, final PluginDescriptionFile pdf) {
 		super();
+		File folder = new File("target/plugins");
 		initialize(null, //
 				server, //
 				pdf, //
-				new File("target/plugins/test"), //
-				null, //
+				new File(folder, "test"), //
+				new File(folder, "some.jar"), //
 				getClass().getClassLoader());
 	}
 }

@@ -28,7 +28,7 @@ public abstract class AbstractPermissionManager {
 	 *            The command identified by its permission node
 	 * @return <code>true</code>, if the player can execute the command.
 	 */
-	abstract public boolean hasAdminCommand(Player player, String command);
+	public abstract boolean hasAdminCommand(Player player, String command);
 
 	/**
 	 * Check whether the given player has enough rights to use the given module.
@@ -39,7 +39,7 @@ public abstract class AbstractPermissionManager {
 	 *            Current player
 	 * @return Indicator. <code>true</code>, if player can use the module.
 	 */
-	abstract public boolean hasLevel(ExpCraftModule module, Player player);
+	public abstract boolean hasLevel(ExpCraftModule module, Player player);
 
 	/**
 	 * Check whether the given player has enough rights to use the given module

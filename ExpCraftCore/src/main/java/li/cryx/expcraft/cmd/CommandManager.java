@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import li.cryx.expcraft.ExpCraftCore;
+import li.cryx.expcraft.ExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -20,13 +20,13 @@ import org.bukkit.entity.Player;
 public class CommandManager {
 
 	/** Reference to the core. */
-	private final ExpCraftCore core;
+	private final ExpCraft core;
 
 	/** The chat utility to send answers to the requesting player. */
 	private final Chat chat;
 
 	/** Create a new manager for the given core. */
-	public CommandManager(final ExpCraftCore core) {
+	public CommandManager(final ExpCraft core) {
 		this.core = core;
 		chat = new Chat(core);
 	}
@@ -42,8 +42,8 @@ public class CommandManager {
 		for (ExpCraftModule module : core.getModules()) {
 			if (core.getPermissions().hasLevel(module, player)) {
 				levels.add(MessageFormat.format("{0} ({1}): {2}", //
-						module.getModuleName(), //
-						module.getAbbr(), //
+						module.getInfo().getName(), //
+						module.getInfo().getAbbr(), //
 						core.getPersistence().getLevel(module, player)));
 			}
 		}
@@ -83,8 +83,8 @@ public class CommandManager {
 			// display
 			chat.info(sender,
 					MessageFormat.format("{0} ({1}): lv{2} at {3} points", //
-							module.getModuleName(), //
-							module.getAbbr(), //
+							module.getInfo().getName(), //
+							module.getInfo().getAbbr(), //
 							core.getPersistence().getLevel(module, player), //
 							core.getPersistence().getExp(module, player)));
 
@@ -131,25 +131,16 @@ public class CommandManager {
 	 *            ConsoleSender requesting the information
 	 * @param modAbbr
 	 *            Short identifier for a module
-	 * @param pageStr
-	 *            String containing a number referening to the page to display.
 	 */
 	private void executeCmdInfoModule(final CommandSender sender,
-			final Player player, final String modAbbr, final String pageStr) {
-		int page;
-		try {
-			page = Integer.parseInt(pageStr);
-		} catch (NumberFormatException e) {
-			page = 1;
-		}
-
+			final Player player, final String modAbbr) {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
 			chat.info(sender, "No module found");
 		} else {
 			// have the module display its info
-			module.displayInfo(player, page);
+			module.displayInfo(player);
 		}
 	}
 
@@ -177,8 +168,8 @@ public class CommandManager {
 			core.getPersistence().setExp(module, player, exp);
 			// display
 			chat.info(sender, MessageFormat.format("{0} ({1}): {2} points", //
-					module.getModuleName(), //
-					module.getAbbr(), //
+					module.getInfo().getName(), //
+					module.getInfo().getAbbr(), //
 					exp));
 		} else {
 			// no permission
@@ -210,8 +201,8 @@ public class CommandManager {
 			core.getPersistence().setLevel(module, player, level);
 			// display
 			chat.info(sender, MessageFormat.format("{0} ({1}): lv{2}", //
-					module.getModuleName(), //
-					module.getAbbr(), //
+					module.getInfo().getName(), //
+					module.getInfo().getAbbr(), //
 					level));
 		} else {
 			// no permission
@@ -316,10 +307,8 @@ public class CommandManager {
 		// handle the following cases:
 		// - /level info
 		// - /level info <module>
-		// - /level info <module> <page>
 		// - /level
 		// - /level <module>
-		// - /level <module> <page>
 		int len = 0;
 		if ("info".equalsIgnoreCase(args[0])) {
 			len = 1;
@@ -331,11 +320,7 @@ public class CommandManager {
 
 		} else if (player != null && args.length == 1 + len) {
 			// only module, no page
-			executeCmdInfoModule(sender, player, args[len], "1");
-
-		} else if (player != null && args.length >= 2 + len) {
-			// module and page
-			executeCmdInfoModule(sender, player, args[len], args[1 + len]);
+			executeCmdInfoModule(sender, player, args[len]);
 
 		} else {
 			executeCmdInfoCore(sender, player);

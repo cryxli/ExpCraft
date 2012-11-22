@@ -1,87 +1,161 @@
 package li.cryx.expcraft.module;
 
+import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.loader.ModuleInfo;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
+import li.cryx.expcraft.util.TypedProperties;
 
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 /**
  * This abstract class defines the behaviour of ExpCraft modules.
  * 
  * @author cryxli
  */
-public abstract class ExpCraftModule extends ExpCraftConfigLocation {
+public abstract class ExpCraftModule {
 
-	private AbstractPersistenceManager persistence;
+	/** Reference to ExpCraft core. */
+	private ExpCraft core;
 
-	private AbstractPermissionManager permission;
+	/** The description of this module. */
+	private ModuleInfo info;
 
-	private int levelCap;
+	/** Abstraction to handle config files. */
+	private ConfigProvider config;
 
 	/**
-	 * A player want information about the module.
-	 * 
-	 * @param sender
-	 *            Current player
-	 * @param page
-	 *            For multi page settings, which page to display. Will always
-	 *            default to <code>1</code>. Usually, you can display 9 lines at
-	 *            once.
+	 * Event fired by the core to disable the module. Do not override this
+	 * method. Override {@link #onEnable()}.
 	 */
-	abstract public void displayInfo(Player sender, int page);
+	public final void disable() {
+		onDisable();
+		// forget everything
+		core = null;
+		config = null;
+	}
 
-	/** Get the short reference (1 or 2 characters) of the module. */
-	abstract public String getAbbr();
+	public abstract void displayInfo(final Player sender);
 
 	/**
-	 * Get the current level cap injected by the core.
+	 * Event fired by the core to enable the module. Do not override this
+	 * method. Override {@link #onDisable()}.
+	 */
+	public final void enable() {
+		onEnable();
+	}
+
+	/**
+	 * Get the persisted configuration of the module enriched by the default
+	 * values.
 	 * 
-	 * @return Max level reachable
+	 * @return The configuration properties.
+	 */
+	public TypedProperties getConfig() {
+		return config.getConfig();
+	}
+
+	/**
+	 * Return the reference to the ExpCraft core.
+	 * 
+	 * @return The ExpCraft core.
+	 */
+	protected ExpCraft getCore() {
+		return core;
+	}
+
+	/** Get the module description. */
+	public ModuleInfo getInfo() {
+		return info;
+	}
+
+	/**
+	 * Get the level cap of Expcraft.
+	 * 
+	 * @return Level cap, usually 0 < cap <= 100.
 	 */
 	public int getLevelCap() {
-		return levelCap;
+		return core.getLevelCap();
 	}
 
-	/** Get the full name of the module. */
-	@Override
-	abstract public String getModuleName();
-
 	/**
-	 * Get the current permission manager injected by the core.
+	 * Get the permission manager to check player permissions.
 	 * 
-	 * @return Current permission manager
+	 * @return An implementation of the permission manager.
 	 */
 	public AbstractPermissionManager getPermission() {
-		return permission;
+		return core.getPermissions();
 	}
 
 	/**
-	 * Get the current persistence manager injected by the core.
+	 * Get the persistence manager to store level progress.
 	 * 
-	 * @return Curent persistence manager
+	 * @return An implementation of the persistence manager.
 	 */
 	public AbstractPersistenceManager getPersistence() {
-		return persistence;
+		return core.getPersistence();
 	}
 
-	@Override
-	public void onDisable() {
-		unloadConfig();
-		onModuleDisable();
+	/**
+	 * Get the bukkit server.
+	 * 
+	 * @return Reference to the server.
+	 */
+	public Server getServer() {
+		return core.getServer();
 	}
 
-	/** Delegates <code>JavaPlugin.onDiable()</code> event. */
-	public abstract void onModuleDisable();
+	/**
+	 * Get notified that the module should start monitoring player events.
+	 */
+	public abstract void onDisable();
 
-	public void setLevelCap(final int levelCap) {
-		this.levelCap = levelCap;
+	/**
+	 * Get notified that the module should no longer monitor player events.
+	 */
+	public abstract void onEnable();
+
+	/**
+	 * Register a bukkit event listener with the server.
+	 * 
+	 * @param listener
+	 *            The listener to register.
+	 */
+	protected void registerEvents(final Listener listener) {
+		core.getServer().getPluginManager().registerEvents(listener, core);
 	}
 
-	public void setPermission(final AbstractPermissionManager permission) {
-		this.permission = permission;
+	/** Save the configuration to disk. */
+	public void saveConfig() {
+		config.saveConfig();
 	}
 
-	public void setPersistence(final AbstractPersistenceManager persistence) {
-		this.persistence = persistence;
+	/**
+	 * Link the module to the ExpCraft core.
+	 * 
+	 * @param core
+	 *            Reference to core.
+	 */
+	public void setCore(final ExpCraft core) {
+		this.core = core;
+		if (info != null) {
+			config = new ConfigProvider(core, info);
+		}
 	}
+
+	/**
+	 * Set the module description.
+	 * 
+	 * @param info
+	 *            The module description.
+	 */
+	public void setInfo(final ModuleInfo info) {
+		this.info = info;
+		if (core != null) {
+			config = new ConfigProvider(core, info);
+		}
+	}
+
 }

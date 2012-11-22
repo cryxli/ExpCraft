@@ -1,17 +1,19 @@
 package li.cryx.expcraft.persist;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import li.cryx.expcraft.ExpCraftCore;
+import li.cryx.expcraft.ExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
+import li.cryx.expcraft.util.TypedProperties;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements a storage using flat files, YALM actually. Each module
@@ -22,7 +24,7 @@ import org.bukkit.entity.Player;
  */
 public class PersistenceFlatFile extends AbstractPersistenceManager {
 
-	private static final Logger LOG = Logger.getLogger("ExpCraftCore");
+	private static final Logger LOG = LoggerFactory.getLogger("ExpCraftCore");
 
 	/** How often to save files [ms]. Defaults to every 10s. */
 	private static final long SAVE_INTERVAL = 10 * 1000;
@@ -33,7 +35,7 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	 * Keep the files in memory for faster access. But write them regularly to
 	 * disk.
 	 */
-	private final Map<ExpCraftModule, YamlConfiguration> cache = new HashMap<ExpCraftModule, YamlConfiguration>();
+	private final Map<ExpCraftModule, TypedProperties> cache = new HashMap<ExpCraftModule, TypedProperties>();
 	/** Keep track whether files have changed. */
 	private final Map<ExpCraftModule, Boolean> dirty = new HashMap<ExpCraftModule, Boolean>();
 
@@ -48,17 +50,28 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 
 	@Override
 	public double getExp(final ExpCraftModule module, final Player player) {
-		YamlConfiguration data = getModuleData(module);
+		TypedProperties data = getModuleData(module);
 		String playerName = player.getName().toLowerCase();
 		return data.getDouble(playerName, 0);
 	}
 
-	private synchronized YamlConfiguration getModuleData(
+	private synchronized TypedProperties getModuleData(
 			final ExpCraftModule module) {
-		YamlConfiguration data = cache.get(module);
+		TypedProperties data = cache.get(module);
 		if (data == null) {
-			data = YamlConfiguration.loadConfiguration(new File(dataFolder,
-					module.getModuleName() + ".yml"));
+			data = new TypedProperties();
+			File file = new File(dataFolder, module.getInfo().getName()
+					+ ".properties");
+			if (file.exists()) {
+				try {
+					FileInputStream fis = new FileInputStream(file);
+					data.load(fis);
+					fis.close();
+				} catch (IOException e) {
+					LOG.error("Unable to load module data for "
+							+ module.getInfo().getName(), e);
+				}
+			}
 			dirty.put(module, false);
 			cache.put(module, data);
 		}
@@ -67,24 +80,27 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 
 	private synchronized void saveFiles() {
 		for (ExpCraftModule module : cache.keySet()) {
-			YamlConfiguration data = getModuleData(module);
+			TypedProperties data = getModuleData(module);
 			if (dirty.get(module)) {
 				try {
-					data.save(new File(dataFolder, module.getModuleName()
-							+ ".yml"));
+					FileOutputStream fos = new FileOutputStream(new File(
+							dataFolder, module.getInfo().getName()
+									+ ".properties"));
+					data.store(fos, null);
+					fos.close();
 					dirty.put(module, false);
 				} catch (IOException e) {
-					LOG.log(Level.SEVERE, "[EC] Unable to persist level info",
-							e);
+					LOG.error("Unable to persist level info", e);
 				}
 			}
 		}
 	}
 
 	@Override
-	public synchronized void setCore(final ExpCraftCore core) {
+	public synchronized void setCore(final ExpCraft core) {
 		super.setCore(core);
-		dataFolder = new File(core.getCommonDataFolder(), "data");
+		dataFolder = new File(core.getDataFolder(), "data");
+		dataFolder.mkdirs();
 
 		// start storing interval
 		Thread intervalStorage = new Thread() {
@@ -107,10 +123,10 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	@Override
 	public void setExp(final ExpCraftModule module, final Player player,
 			final double exp) {
-		YamlConfiguration data = getModuleData(module);
+		TypedProperties data = getModuleData(module);
 		String playerName = player.getName().toLowerCase();
 		dirty.put(module, true);
-		data.set(playerName, exp);
+		data.setDouble(playerName, exp);
 	}
 
 }

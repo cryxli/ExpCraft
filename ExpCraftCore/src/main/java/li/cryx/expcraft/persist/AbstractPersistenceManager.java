@@ -1,6 +1,6 @@
 package li.cryx.expcraft.persist;
 
-import li.cryx.expcraft.ExpCraftCore;
+import li.cryx.expcraft.ExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -14,6 +14,11 @@ import org.bukkit.entity.Player;
  * Note that experience starts with <code>0</code>, but level starts with
  * <code>1</code>.
  * </p>
+ * 
+ * <pre>
+ *                /----------------,
+ * Level = 1 + -\/  Exp / Constant
+ * </pre>
  * 
  * @author cryxli
  */
@@ -29,7 +34,7 @@ public abstract class AbstractPersistenceManager {
 	protected int maxLevel;
 
 	/** Reference to the core */
-	protected ExpCraftCore core;
+	protected ExpCraft core;
 
 	/** The chat utility to send messages to players */
 	private Chat chat;
@@ -106,7 +111,8 @@ public abstract class AbstractPersistenceManager {
 		return Math.min(maxExp, Math.max(0, exp));
 	}
 
-	abstract public void flush();
+	// TODO documentation
+	public abstract void flush();
 
 	/**
 	 * Return the current experience for the given player and module.
@@ -138,6 +144,7 @@ public abstract class AbstractPersistenceManager {
 		return Math.min(constant * Math.pow(levelInBound, 2), maxExp);
 	}
 
+	// TODO documentation
 	private int getLevel(final double exp) {
 		return 1 + (int) Math.floor(Math.sqrt(exp / constant));
 	}
@@ -156,12 +163,19 @@ public abstract class AbstractPersistenceManager {
 		return getLevel(getExp(module, player));
 	}
 
+	// TODO documentation
 	public void setConstant(final int value) {
 		constant = value;
 		calculate();
 	}
 
-	public void setCore(final ExpCraftCore core) {
+	/**
+	 * Link the manager to the ExpCraft core.
+	 * 
+	 * @param core
+	 *            Reference to the core
+	 */
+	public void setCore(final ExpCraft core) {
 		this.core = core;
 		chat = new Chat(core);
 	}
@@ -198,6 +212,12 @@ public abstract class AbstractPersistenceManager {
 		return exp;
 	}
 
+	/**
+	 * Inform the manager about the max level reachable per module.
+	 * 
+	 * @param level
+	 *            The level cap.
+	 */
 	public void setMaxLevel(final int level) {
 		maxLevel = level;
 		calculate();

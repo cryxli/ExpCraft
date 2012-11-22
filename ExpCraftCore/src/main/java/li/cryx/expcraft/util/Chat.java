@@ -2,7 +2,7 @@ package li.cryx.expcraft.util;
 
 import java.text.MessageFormat;
 
-import li.cryx.expcraft.ExpCraftCore;
+import li.cryx.expcraft.ExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 
@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 /**
  * This class offers all ExpCraft modules a unified way to send messages to
@@ -90,11 +89,11 @@ public class Chat {
 		}
 	}
 
-	public static void setNotifyAll(boolean enabled) {
+	public static void setNotifyAll(final boolean enabled) {
 		notifyAll = enabled;
 	}
 
-	public static void setPlaySound(boolean enabled) {
+	public static void setPlaySound(final boolean enabled) {
 		playSound = enabled;
 	}
 
@@ -107,7 +106,7 @@ public class Chat {
 	}
 
 	/** Reference to the core plugin. */
-	private final ExpCraftCore core;
+	private final ExpCraft core;
 
 	/**
 	 * Create a new instance of the chat util. It must be bound to a plugin and
@@ -118,13 +117,8 @@ public class Chat {
 	 * @throws IllegalStateException
 	 *             when the ExpCraftCore is not present.
 	 */
-	public Chat(final Plugin plugin) {
-		if (plugin instanceof ExpCraftCore) {
-			core = (ExpCraftCore) plugin;
-		} else {
-			core = (ExpCraftCore) plugin.getServer().getPluginManager()
-					.getPlugin("ExpCraftCore");
-		}
+	public Chat(final ExpCraft core) {
+		this.core = core;
 		if (core == null) {
 			throw new IllegalStateException("ExpCraftCore not found");
 		}
@@ -169,12 +163,12 @@ public class Chat {
 	public void notifyLevelGain(final ExpCraftModule module,
 			final Player player, final int newLevel) {
 		good(player, MessageFormat.format(
-				"LEVEL UP. You are now level {0} in {1}", newLevel,
-				module.getModuleName()));
+				"LEVEL UP. You are now level {0} in {1}", newLevel, module
+						.getInfo().getName()));
 
 		good(player, MessageFormat.format(
-				"See /level {0} - To see what you have unlocked.",
-				module.getAbbr()));
+				"See /level {0} - To see what you have unlocked.", module
+						.getInfo().getAbbr()));
 
 		if (playSound) {
 			player.playSound(player.getLocation(), Sound.LEVEL_UP, 0.5f, 1);
@@ -182,7 +176,7 @@ public class Chat {
 
 		if (notifyAll) {
 			broadcast(MessageFormat.format("{0} is now level {1} in {2}.",
-					player.getName(), newLevel, module.getModuleName()));
+					player.getName(), newLevel, module.getInfo().getName()));
 		}
 	}
 

@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
  * This class is an implementation of an {@link AbstractPermissionManager} that
  * covers the case when Bukkit is running without any permissions plugin. By
  * default all player can use all loaded {@link ExpCraftModule}s and only
- * Operaters can execute admin commands.
+ * Operators can execute admin commands.
  * 
  * @author cryxli
  */

@@ -33,7 +33,7 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 			final Player player) {
 		Query<Experience> query = core.getDatabase().createQuery(
 				Experience.class);
-		query.where().eq("module", module.getAbbr())
+		query.where().eq("module", module.getInfo().getAbbr())
 				.eq("player", player.getName()).setMaxRows(1);
 		List<Experience> exp = query.findList();
 		if (exp == null || exp.size() == 0) {
