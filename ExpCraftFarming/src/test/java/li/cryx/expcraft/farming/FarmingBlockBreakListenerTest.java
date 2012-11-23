@@ -33,9 +33,9 @@ public class FarmingBlockBreakListenerTest extends AbstractPluginTest<Farming> {
 		BlockBreakEvent event = new BlockBreakEvent(block, player);
 
 		// no effect
-		config.set(level, 5);
+		config.setInteger(level, 5);
 		listener.onBlockBreak(event);
-		config.set(level, 0);
+		config.setInteger(level, 0);
 		Assert.assertFalse(event.isCancelled());
 		Assert.assertEquals(0, pers.getExp(plugin, player), 0);
 
@@ -186,14 +186,7 @@ public class FarmingBlockBreakListenerTest extends AbstractPluginTest<Farming> {
 
 	@Before
 	public void prepreTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		listener = new FarmingBlockBreakListener(plugin);
 	}
-
-	// TODO
 
 }

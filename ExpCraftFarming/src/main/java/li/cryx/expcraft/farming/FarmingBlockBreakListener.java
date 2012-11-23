@@ -49,16 +49,22 @@ public class FarmingBlockBreakListener implements Listener {
 	private void bonusDropForCrops(final Player player, final int level,
 			final Block block) {
 		int rnd = randomGenerator.nextInt(100);
-		if (rnd >= 0 && rnd < 2
-				&& level >= plugin.getConfInt("DropLevel.MelonSeed")) {
+		if (rnd >= 0
+				&& rnd < 2
+				&& level >= plugin.getConfig()
+						.getInteger("DropLevel.MelonSeed")) {
 			// drop melon seeds
 			drop(block, Material.MELON_SEEDS);
-		} else if (rnd >= 2 && rnd < 5
-				&& level >= plugin.getConfInt("DropLevel.PumpkinSeed")) {
+		} else if (rnd >= 2
+				&& rnd < 5
+				&& level >= plugin.getConfig().getInteger(
+						"DropLevel.PumpkinSeed")) {
 			// drop pumpkin seeds
 			drop(block, Material.PUMPKIN_SEEDS);
-		} else if (rnd >= 5 && rnd < 10
-				&& level >= plugin.getConfInt("DropLevel.CocoaBean")) {
+		} else if (rnd >= 5
+				&& rnd < 10
+				&& level >= plugin.getConfig()
+						.getInteger("DropLevel.CocoaBean")) {
 			// drop cocoa bean:
 			// drop(block, Material.COCOA_BEAN);
 			drop(block, Material.INK_SACK, (short) 3); // 351(3)
@@ -80,12 +86,16 @@ public class FarmingBlockBreakListener implements Listener {
 	private void bonusDropForNetherWart(final Player player, final int level,
 			final Block block) {
 		int rnd = randomGenerator.nextInt(100);
-		if (rnd >= 0 && rnd < 2
-				&& level >= plugin.getConfInt("DropLevel.GhastTear")) {
+		if (rnd >= 0
+				&& rnd < 2
+				&& level >= plugin.getConfig()
+						.getInteger("DropLevel.GhastTear")) {
 			drop(block, Material.GHAST_TEAR);
 
-		} else if (rnd >= 2 && rnd < 4
-				&& level >= plugin.getConfInt("DropLevel.BlazePowder")) {
+		} else if (rnd >= 2
+				&& rnd < 4
+				&& level >= plugin.getConfig().getInteger(
+						"DropLevel.BlazePowder")) {
 			drop(block, Material.BLAZE_POWDER);
 		}
 	}
@@ -162,68 +172,71 @@ public class FarmingBlockBreakListener implements Listener {
 		if (m == Material.LEAVES) {
 			// player has broken a leaf
 			int rnd = randomGenerator.nextInt(200);
-			if (rnd == 0 && level >= plugin.getConfInt("UseLevel.GoldenApple")) {
+			if (rnd == 0
+					&& level >= plugin.getConfig().getInteger(
+							"UseLevel.GoldenApple")) {
 				// 5%o
 				plugin.getPersistence().addExp(plugin, player,
-						plugin.getConfDouble("ExpGain.GoldenApple"));
+						plugin.getConfig().getDouble("ExpGain.GoldenApple"));
 				drop(block, Material.GOLDEN_APPLE);
 
 			} else if (rnd > 0 && rnd < 10
-					&& level >= plugin.getConfInt("UseLevel.Apple")) {
+					&& level >= plugin.getConfig().getInteger("UseLevel.Apple")) {
 				// 50%o
 				plugin.getPersistence().addExp(plugin, player,
-						plugin.getConfDouble("ExpGain.Apple"));
+						plugin.getConfig().getDouble("ExpGain.Apple"));
 				drop(block, Material.APPLE);
 			}
 		}
 
 		double gained = 0;
 		if (m == Material.SUGAR_CANE_BLOCK
-				&& level >= plugin.getConfInt("UseLevel.SugarCane")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.SugarCane")) {
 			// harvesting sugar cane
-			gained = plugin.getConfDouble("ExpGain.SugarCane");
+			gained = plugin.getConfig().getDouble("ExpGain.SugarCane");
 
 		} else if (test.isRipeCrops(block)
-				&& level >= plugin.getConfInt("UseLevel.Harvest")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.Harvest")) {
 			// harvesting crops
-			gained = plugin.getConfDouble("ExpGain.Harvest");
+			gained = plugin.getConfig().getDouble("ExpGain.Harvest");
 			bonusDropForCrops(player, level, block);
 
 		} else if (test.isRipeNetherWart(block)
-				&& level >= plugin.getConfInt("UseLevel.NetherWart")) {
+				&& level >= plugin.getConfig()
+						.getInteger("UseLevel.NetherWart")) {
 			// harvesting nether wart
-			gained = plugin.getConfDouble("ExpGain.NetherWart");
+			gained = plugin.getConfig().getDouble("ExpGain.NetherWart");
 			bonusDropForNetherWart(player, level, block);
 
 		} else if (m == Material.CACTUS
-				&& level >= plugin.getConfInt("UseLevel.Cacti")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.Cacti")) {
 			// harvesting cacti
-			gained = plugin.getConfDouble("ExpGain.Cacti");
+			gained = plugin.getConfig().getDouble("ExpGain.Cacti");
 
 		} else if (test.isMelon(block)
-				&& level >= plugin.getConfInt("UseLevel.Melon")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.Melon")) {
 			// harvest melon
-			gained = plugin.getConfDouble("ExpGain.Melon");
+			gained = plugin.getConfig().getDouble("ExpGain.Melon");
 
 		} else if (test.isPumpkin(block)
-				&& level >= plugin.getConfInt("UseLevel.Pumpkin")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.Pumpkin")) {
 			// harvest pumpkins
-			gained = plugin.getConfDouble("ExpGain.Pumpkin");
+			gained = plugin.getConfig().getDouble("ExpGain.Pumpkin");
 
 		} else if (test.isRipeCocoaBean(block)
-				&& level >= plugin.getConfInt("UseLevel.CocoaBean")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.CocoaBean")) {
 			// harvest cocoa bean
-			gained = plugin.getConfDouble("ExpGain.CocoaBean");
+			gained = plugin.getConfig().getDouble("ExpGain.CocoaBean");
 
 		} else if (test.isRipePotato(block)
-				&& level >= plugin.getConfInt("UseLevel.Potato")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.Potato")) {
 			// harvest potato
-			gained = plugin.getConfDouble("ExpGain.Potato");
+			gained = plugin.getConfig().getDouble("ExpGain.Potato");
 
 		} else if (test.isRipeCarrot(block)
-				&& level >= plugin.getConfInt("UseLevel.Carrot")) {
+				&& level >= plugin.getConfig().getInteger("UseLevel.Carrot")) {
 			// harvest carrot
-			gained = plugin.getConfDouble("ExpGain.Carrot");
+			gained = plugin.getConfig().getDouble("ExpGain.Carrot");
 
 		}
 		plugin.getPersistence().addExp(plugin, player, gained);

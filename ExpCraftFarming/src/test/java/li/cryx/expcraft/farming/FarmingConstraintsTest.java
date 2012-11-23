@@ -259,11 +259,6 @@ public class FarmingConstraintsTest extends AbstractPluginTest<Farming> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		test = new FarmingConstraints(plugin);
 	}
 

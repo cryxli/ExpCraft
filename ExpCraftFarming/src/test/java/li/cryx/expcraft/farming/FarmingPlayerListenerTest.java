@@ -20,15 +20,6 @@ public class FarmingPlayerListenerTest extends AbstractPluginTest<Farming> {
 	@Before
 	public void beforeTest() {
 		hasModule = false;
-
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-		// Mockito.when(
-		// plugin.checkTool(Mockito.any(Player.class),
-		// Mockito.any(Material.class), Mockito.anyInt()))
-		// .thenCallRealMethod();
 		Mockito.when(plugin.isHoe(Mockito.any(Material.class)))
 				.thenCallRealMethod();
 
@@ -125,9 +116,9 @@ public class FarmingPlayerListenerTest extends AbstractPluginTest<Farming> {
 				Action.RIGHT_CLICK_BLOCK, null, block, null);
 		hasModule = true;
 
-		config.set("UseLevel.Till", 2);
+		config.setInteger("UseLevel.Till", 2);
 		listener.onPlayerInteract(event);
-		config.set("UseLevel.Till", 0);
+		config.setInteger("UseLevel.Till", 0);
 
 		Assert.assertTrue(event.isCancelled());
 		Assert.assertEquals(0, pers.getExp(plugin, player), 0);

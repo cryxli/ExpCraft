@@ -59,16 +59,16 @@ public class FarmingPlayerListener implements Listener {
 
 		if (plugin.isHoe(itemInHand)) {
 			// ensure player can till
-			if (level < plugin.getConfInt("UseLevel.Till")) {
+			if (level < plugin.getConfig().getInteger("UseLevel.Till")) {
 				plugin.warnCutBlockLevel(player,
-						plugin.getConfInt("UseLevel.Till"));
+						plugin.getConfig().getInteger("UseLevel.Till"));
 				event.setCancelled(true);
 				return;
 			}
 
 			// till grass or dirt
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Till"));
+					plugin.getConfig().getDouble("ExpGain.Till"));
 		}
 	}
 }

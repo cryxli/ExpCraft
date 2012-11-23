@@ -30,9 +30,9 @@ public class FarmingBlockPlaceListenerTest extends AbstractPluginTest<Farming> {
 				player, true);
 
 		// no effect
-		config.set(useLevel, 50);
+		config.setInteger(useLevel, 50);
 		listener.onBlockPlace(event);
-		config.set(useLevel, 0);
+		config.setInteger(useLevel, 0);
 
 		Assert.assertFalse(event.isCancelled());
 		Assert.assertEquals(0, pers.getExp(plugin, player), 0);
@@ -134,11 +134,6 @@ public class FarmingBlockPlaceListenerTest extends AbstractPluginTest<Farming> {
 
 	@Before
 	public void prepreTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		listener = new FarmingBlockPlaceListener(plugin);
 	}
 }

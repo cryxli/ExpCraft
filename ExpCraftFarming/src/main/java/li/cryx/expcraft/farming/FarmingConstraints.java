@@ -68,25 +68,30 @@ public class FarmingConstraints {
 	 */
 	public boolean checkTool(final Player player, final Material itemInHand,
 			final int level) {
-		if (level < plugin.getConfInt("HoeLevel.Wooden")
+		if (level < plugin.getConfig().getInteger("HoeLevel.Wooden")
 				&& itemInHand == Material.WOOD_HOE) {
-			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Wooden"));
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("HoeLevel.Wooden"));
 
-		} else if (level < plugin.getConfInt("HoeLevel.Stone")
+		} else if (level < plugin.getConfig().getInteger("HoeLevel.Stone")
 				&& itemInHand == Material.STONE_HOE) {
-			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Stone"));
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("HoeLevel.Stone"));
 
-		} else if (level < plugin.getConfInt("HoeLevel.Iron")
+		} else if (level < plugin.getConfig().getInteger("HoeLevel.Iron")
 				&& itemInHand == Material.IRON_HOE) {
-			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Iron"));
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("HoeLevel.Iron"));
 
-		} else if (level < plugin.getConfInt("HoeLevel.Gold")
+		} else if (level < plugin.getConfig().getInteger("HoeLevel.Gold")
 				&& itemInHand == Material.GOLD_HOE) {
-			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Gold"));
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("HoeLevel.Gold"));
 
-		} else if (level < plugin.getConfInt("HoeLevel.Diamond")
+		} else if (level < plugin.getConfig().getInteger("HoeLevel.Diamond")
 				&& itemInHand == Material.DIAMOND_HOE) {
-			plugin.warnToolLevel(player, plugin.getConfInt("HoeLevel.Diamond"));
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("HoeLevel.Diamond"));
 
 		} else {
 			// all tool checks passed

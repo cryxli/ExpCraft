@@ -42,24 +42,24 @@ public class FarmingBlockPlaceListener implements Listener {
 
 		switch (m) {
 		case SAPLING: // planting a tree
-			if (level >= plugin.getConfInt("UseLevel.Sapling")) {
-				gained = plugin.getConfDouble("ExpGain.Sapling");
+			if (level >= plugin.getConfig().getInteger("UseLevel.Sapling")) {
+				gained = plugin.getConfig().getDouble("ExpGain.Sapling");
 			}
 			break;
 		case RED_ROSE: // planting a rose
-			if (level >= plugin.getConfInt("UseLevel.RedRose")) {
-				gained = plugin.getConfDouble("ExpGain.RedRose");
+			if (level >= plugin.getConfig().getInteger("UseLevel.RedRose")) {
+				gained = plugin.getConfig().getDouble("ExpGain.RedRose");
 			}
 			break;
 		case YELLOW_FLOWER: // planting a dandelion
-			if (level >= plugin.getConfInt("UseLevel.YellowFlower")) {
-				gained = plugin.getConfDouble("ExpGain.YellowFlower");
+			if (level >= plugin.getConfig().getInteger("UseLevel.YellowFlower")) {
+				gained = plugin.getConfig().getDouble("ExpGain.YellowFlower");
 			}
 			break;
 		case BROWN_MUSHROOM:
 		case RED_MUSHROOM: // planting a mushroom
-			if (level >= plugin.getConfInt("UseLevel.Mushroom")) {
-				gained = plugin.getConfDouble("ExpGain.Mushroom");
+			if (level >= plugin.getConfig().getInteger("UseLevel.Mushroom")) {
+				gained = plugin.getConfig().getDouble("ExpGain.Mushroom");
 			}
 			break;
 		default:

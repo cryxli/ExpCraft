@@ -8,7 +8,6 @@ import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 
 /**
  * This class is the main entry point of the "Farming" module for ExpCraft. This
@@ -40,7 +39,7 @@ public class Farming extends ExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		// block listener
 		blockBreakListener = new FarmingBlockBreakListener(this);
@@ -51,9 +50,9 @@ public class Farming extends ExpCraftModule {
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		chat.info(sender, "Tools:");
@@ -70,40 +69,6 @@ public class Farming extends ExpCraftModule {
 				"Current level: {0}, XP: {1} points", level, exp));
 		chat.info(sender, MessageFormat.format(
 				"Experience to next level: {0} points", nextLvl - exp));
-	}
-
-	@Override
-	public String getAbbr() {
-		return "Fm";
-	}
-
-	/**
-	 * Get the <code>int</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	double getConfDouble(final String key) {
-		// delegate to config
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * Get the <code>double</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	int getConfInt(final String key) {
-		// delegate to config
-		return getConfig().getInt(key);
-	}
-
-	@Override
-	public String getModuleName() {
-		return "Farming";
 	}
 
 	/**
@@ -135,21 +100,21 @@ public class Farming extends ExpCraftModule {
 
 	// server wants the plugin to stop working
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}
 
 	// server want the plugin to start working
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -157,15 +122,14 @@ public class Farming extends ExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(blockBreakListener, this);
-		pm.registerEvents(blockPlaceListener, this);
-		pm.registerEvents(playerListener, this);
+		registerEvents(blockBreakListener);
+		registerEvents(blockPlaceListener);
+		registerEvents(playerListener);
 	}
 
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
-		int toolLevel = getConfInt("HoeLevel." + material);
+		int toolLevel = getConfig().getInteger("HoeLevel." + material);
 		String msg = MessageFormat.format("{0} Hoe: {1}", material, toolLevel);
 		if (level >= toolLevel) {
 			chat.good(sender, msg);
