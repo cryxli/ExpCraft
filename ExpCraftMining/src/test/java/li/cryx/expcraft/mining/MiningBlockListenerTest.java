@@ -111,11 +111,6 @@ public class MiningBlockListenerTest extends AbstractPluginTest<Mining> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		// for an eventual CommandManager calls
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
 		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
@@ -136,16 +131,16 @@ public class MiningBlockListenerTest extends AbstractPluginTest<Mining> {
 		Mockito.when(block.getType()).thenReturn(material);
 		BlockBreakEvent event = new BlockBreakEvent(block, player);
 
-		int level = config.getInt(useLevel);
-		config.set(useLevel, 50);
+		int level = config.getInteger(useLevel);
+		config.setInteger(useLevel, 50);
 		listener.onBlockBreak(event);
 		Assert.assertTrue(event.isCancelled());
 		Mockito.verify(plugin).warnBlockMine(player, 50);
 
-		config.set(useLevel, 0);
+		config.setInteger(useLevel, 0);
 		event.setCancelled(false);
 		listener.onBlockBreak(event);
-		config.set(useLevel, level);
+		config.setInteger(useLevel, level);
 
 		Assert.assertFalse(event.isCancelled());
 		Assert.assertEquals(exp, pers.getExp(plugin, player), 0);

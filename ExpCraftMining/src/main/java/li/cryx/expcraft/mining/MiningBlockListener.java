@@ -48,44 +48,44 @@ public class MiningBlockListener implements Listener {
 			expGain = 0;
 			break;
 		case STONE:
-			expGain = plugin.getConfDouble("ExpGain.Stone");
+			expGain = plugin.getConfig().getDouble("ExpGain.Stone");
 			break;
 		case COBBLESTONE:
-			expGain = plugin.getConfDouble("ExpGain.Cobble");
+			expGain = plugin.getConfig().getDouble("ExpGain.Cobble");
 			break;
 		case REDSTONE_ORE:
 		case GLOWING_REDSTONE_ORE:
-			expGain = plugin.getConfDouble("ExpGain.Redstone");
+			expGain = plugin.getConfig().getDouble("ExpGain.Redstone");
 			break;
 		case GOLD_ORE:
-			expGain = plugin.getConfDouble("ExpGain.GoldOre");
+			expGain = plugin.getConfig().getDouble("ExpGain.GoldOre");
 			break;
 		case IRON_ORE:
-			expGain = plugin.getConfDouble("ExpGain.IronOre");
+			expGain = plugin.getConfig().getDouble("ExpGain.IronOre");
 			break;
 		case COAL_ORE:
-			expGain = plugin.getConfDouble("ExpGain.CoalOre");
+			expGain = plugin.getConfig().getDouble("ExpGain.CoalOre");
 			break;
 		case LAPIS_ORE:
-			expGain = plugin.getConfDouble("ExpGain.LapisOre");
+			expGain = plugin.getConfig().getDouble("ExpGain.LapisOre");
 			break;
 		case MOSSY_COBBLESTONE:
-			expGain = plugin.getConfDouble("ExpGain.MossStone");
+			expGain = plugin.getConfig().getDouble("ExpGain.MossStone");
 			break;
 		case OBSIDIAN:
-			expGain = plugin.getConfDouble("ExpGain.Obsidian");
+			expGain = plugin.getConfig().getDouble("ExpGain.Obsidian");
 			break;
 		case DIAMOND_ORE:
-			expGain = plugin.getConfDouble("ExpGain.DiamondOre");
+			expGain = plugin.getConfig().getDouble("ExpGain.DiamondOre");
 			break;
 		case NETHERRACK:
-			expGain = plugin.getConfDouble("ExpGain.Netherrack");
+			expGain = plugin.getConfig().getDouble("ExpGain.Netherrack");
 			break;
 		case SANDSTONE:
-			expGain = plugin.getConfDouble("ExpGain.SandStone");
+			expGain = plugin.getConfig().getDouble("ExpGain.SandStone");
 			break;
 		case SMOOTH_BRICK:
-			expGain = plugin.getConfDouble("ExpGain.StoneBrick");
+			expGain = plugin.getConfig().getDouble("ExpGain.StoneBrick");
 			break;
 		}
 		plugin.getPersistence().addExp(plugin, player, expGain);

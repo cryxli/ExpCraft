@@ -21,8 +21,8 @@ public class MiningConstraints {
 
 	private boolean checkAndWarnBlock(final Player player, final int level,
 			final String confKey) {
-		if (level < plugin.getConfInt(confKey)) {
-			plugin.warnBlockMine(player, plugin.getConfInt(confKey));
+		if (level < plugin.getConfig().getInteger(confKey)) {
+			plugin.warnBlockMine(player, plugin.getConfig().getInteger(confKey));
 			return false;
 		} else {
 			return true;
@@ -31,8 +31,8 @@ public class MiningConstraints {
 
 	private boolean checkAndWarnTool(final Player player, final int level,
 			final String confKey) {
-		if (level < plugin.getConfInt(confKey)) {
-			plugin.warnToolUse(player, plugin.getConfInt(confKey));
+		if (level < plugin.getConfig().getInteger(confKey)) {
+			plugin.warnToolUse(player, plugin.getConfig().getInteger(confKey));
 			return false;
 		} else {
 			return true;
@@ -82,7 +82,7 @@ public class MiningConstraints {
 	 */
 	public boolean firePickaxe(final Player player, final int level,
 			final BlockBreakEvent event) {
-		if (level < plugin.getConfInt("Settings.FirePickaxeLevel")
+		if (level < plugin.getConfig().getInteger("Settings.FirePickaxeLevel")
 				|| player.getItemInHand().getType() != Material.GOLD_PICKAXE) {
 			// requirements not met
 			return false;
