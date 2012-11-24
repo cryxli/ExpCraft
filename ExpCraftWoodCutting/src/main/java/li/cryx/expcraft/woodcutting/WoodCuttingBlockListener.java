@@ -79,7 +79,7 @@ public class WoodCuttingBlockListener implements Listener {
 			}
 			break;
 		case FENCE:
-			gained = plugin.getConfDouble("ExpGain.Fence");
+			gained = plugin.getConfig().getDouble("ExpGain.Fence");
 			break;
 		default:
 			break;

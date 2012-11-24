@@ -31,14 +31,6 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 			TreeSpecies.GENERIC, TreeSpecies.BIRCH, TreeSpecies.REDWOOD,
 			TreeSpecies.JUNGLE };
 
-	@Before
-	public void beforeTest() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-	}
-
 	@Test
 	public void checkLeafBreaking() {
 		Player player = Mockito.mock(Player.class);

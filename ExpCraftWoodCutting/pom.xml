@@ -34,6 +34,12 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<module.name>WoodCutting</module.name>
+		<module.abbr>W</module.abbr>
+		<main.class>li.cryx.expcraft.woodcutting.WoodCutting</main.class>
+	</properties>
+
 	<build>
 		<finalName>${project.name}</finalName>
 		<resources>

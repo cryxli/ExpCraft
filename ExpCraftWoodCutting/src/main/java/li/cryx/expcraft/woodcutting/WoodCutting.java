@@ -10,7 +10,6 @@ import li.cryx.expcraft.util.ToolQuality;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
 
 /**
  * This class is the main entry point for the Wood Cutting module for ExpCraft.
@@ -59,16 +58,16 @@ public class WoodCutting extends DropExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		// block listener
 		blockListener = new WoodCuttingBlockListener(this);
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		chat.info(sender, "Tools:");
@@ -87,38 +86,6 @@ public class WoodCutting extends DropExpCraftModule {
 				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
-	@Override
-	public String getAbbr() {
-		return "W";
-	}
-
-	/**
-	 * Get the <code>int</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	double getConfDouble(final String key) {
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * Get the <code>double</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	int getConfInt(final String key) {
-		return getConfig().getInt(key);
-	}
-
-	@Override
-	public String getModuleName() {
-		return "WoodCutting";
-	}
-
 	/**
 	 * Load config from disk merge missing default values and store them to
 	 * disk.
@@ -132,21 +99,21 @@ public class WoodCutting extends DropExpCraftModule {
 
 	// server want the plugin to stop working
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}
 
 	// server want the plugin to start working
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -154,8 +121,7 @@ public class WoodCutting extends DropExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(blockListener, this);
+		registerEvents(blockListener);
 	}
 
 	/**
@@ -172,7 +138,7 @@ public class WoodCutting extends DropExpCraftModule {
 	 */
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
-		int toolLevel = getConfInt("AxeLevel." + material);
+		int toolLevel = getConfig().getInteger("AxeLevel." + material);
 		String msg = MessageFormat.format("{0} Axe: {1}", material, toolLevel);
 		if (level >= toolLevel) {
 			// pleyer meets requirements

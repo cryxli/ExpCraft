@@ -74,8 +74,9 @@ public class WoodCuttingConstraints {
 			}
 
 		} else if (material == Material.FENCE
-				&& level < plugin.getConfInt("UseLevel.Fence")) {
-			plugin.warnCutBlock(player, plugin.getConfInt("UseLevel.Fence"));
+				&& level < plugin.getConfig().getInteger("UseLevel.Fence")) {
+			plugin.warnCutBlock(player,
+					plugin.getConfig().getInteger("UseLevel.Fence"));
 			return false;
 
 		} else {
@@ -97,20 +98,25 @@ public class WoodCuttingConstraints {
 	protected boolean checkTool(final Player player, final Material material,
 			final int level) {
 		if (material == Material.WOOD_AXE
-				&& level < plugin.getConfInt("AxeLevel.Wooden")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("AxeLevel.Wooden"));
+				&& level < plugin.getConfig().getInteger("AxeLevel.Wooden")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("AxeLevel.Wooden"));
 		} else if (material == Material.STONE_AXE
-				&& level < plugin.getConfInt("AxeLevel.Stone")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("AxeLevel.Stone"));
+				&& level < plugin.getConfig().getInteger("AxeLevel.Stone")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("AxeLevel.Stone"));
 		} else if (material == Material.IRON_AXE
-				&& level < plugin.getConfInt("AxeLevel.Iron")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("AxeLevel.Iron"));
+				&& level < plugin.getConfig().getInteger("AxeLevel.Iron")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("AxeLevel.Iron"));
 		} else if (material == Material.GOLD_AXE
-				&& level < plugin.getConfInt("AxeLevel.Gold")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("AxeLevel.Gold"));
+				&& level < plugin.getConfig().getInteger("AxeLevel.Gold")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("AxeLevel.Gold"));
 		} else if (material == Material.DIAMOND_AXE
-				&& level < plugin.getConfInt("AxeLevel.Diamond")) {
-			plugin.warnToolLevel(player, plugin.getConfInt("AxeLevel.Diamond"));
+				&& level < plugin.getConfig().getInteger("AxeLevel.Diamond")) {
+			plugin.warnToolLevel(player,
+					plugin.getConfig().getInteger("AxeLevel.Diamond"));
 		} else {
 			return true;
 		}
@@ -127,8 +133,8 @@ public class WoodCuttingConstraints {
 	 * @return Experience gained when harvesting the given type.
 	 */
 	public double getExp(final String prefix, final TreeSpecies treeType) {
-		return plugin.getConfDouble("ExpGain." + prefix
-				+ getTreeTypeString(treeType));
+		return plugin.getConfig().getDouble(
+				"ExpGain." + prefix + getTreeTypeString(treeType));
 	}
 
 	/**
@@ -141,8 +147,8 @@ public class WoodCuttingConstraints {
 	 * @return Level required to harvest the given type.
 	 */
 	protected int getLevel(final String prefix, final TreeSpecies treeType) {
-		return plugin.getConfInt("UseLevel." + prefix
-				+ getTreeTypeString(treeType));
+		return plugin.getConfig().getInteger(
+				"UseLevel." + prefix + getTreeTypeString(treeType));
 	}
 
 	/**
