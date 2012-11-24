@@ -1,7 +1,6 @@
 package li.cryx.expcraft.woodcutting;
 
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
@@ -10,6 +9,8 @@ import li.cryx.expcraft.util.ToolQuality;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is the main entry point for the Wood Cutting module for ExpCraft.
@@ -19,7 +20,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class WoodCutting extends DropExpCraftModule {
 	/** Global logger */
-	private static final Logger LOG = Logger.getLogger("EC-WoodCutting");
+	private static final Logger LOG = LoggerFactory
+			.getLogger(WoodCutting.class);
 
 	/** The block listener to do all the work. */
 	private WoodCuttingBlockListener blockListener;
