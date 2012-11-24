@@ -7,7 +7,7 @@
 	<version>0.6.0-SNAPSHOT</version>
 
 	<!-- change this -->
-	<name>define your own</name>
+	<name>EC-${module.name}</name>
 
 	<dependencies>
 		<!-- reference the version of the core you want -->
@@ -43,5 +43,10 @@
 	<properties>
 		<jdk>1.6</jdk>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- define your module -->
+		<module.name>WoodCutting</module.name>
+		<module.abbr>W</module.abbr>
+		<main.class>li.cryx.expcraft.template.Template</main.class>
 	</properties>
 </project>

@@ -7,7 +7,6 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 
 public class Template extends ExpCraftModule {
 	public final Logger LOG = Logger.getLogger("EC-Template");
@@ -23,30 +22,18 @@ public class Template extends ExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		// TODO create your listeners like
 		// blockListener = new ScavengerBlockListener(this);
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		// TODO Send information about the plugin to the player.
-	}
-
-	@Override
-	public String getAbbr() {
-		// TODO define your 1-2 char abbreviation for the module
-		return "T";
-	}
-
-	@Override
-	public String getModuleName() {
-		// TODO define the name of the module
-		return "Template";
 	}
 
 	/**
@@ -61,23 +48,23 @@ public class Template extends ExpCraftModule {
 	}
 
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 
 		// TODO if you instantiated other things, that are not under control of
 		// bukkit, disable them here too
 	}
 
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -85,8 +72,7 @@ public class Template extends ExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
 		// TODO add your listeners, like
-		// pm.registerEvents(blockListener, this);
+		// registerEvents(blockListener);
 	}
 }
