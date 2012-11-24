@@ -12,19 +12,33 @@
 
 	<!-- pack the dependencies stated in the POM -->
 	<dependencySets>
+		<!-- pack all modules -->
 		<dependencySet>
-			<!-- do not include the dummy JAR create for the assembly project -->
+			<!-- do not include the dummy JAR created for the assembly project -->
 			<useProjectArtifact>false</useProjectArtifact>
 			<!-- put everything into the root of the ZIP -->
-			<outputDirectory>.</outputDirectory>
+			<outputDirectory>ExpCraft</outputDirectory>
 			<!-- do not unpack dependency JARs -->
 			<unpack>false</unpack>
 			<!-- use the final name of the dependencies -->
 			<outputFileNameMapping>${artifact.build.finalName}.${artifact.packaging}</outputFileNameMapping>
+			
+			<excludes>
+				<exclude>org.slf4j:*</exclude>
+				<exclude>li.cryx.expcraft:expcraft-core</exclude>
+			</excludes>
 		</dependencySet>
 	</dependencySets>
 
 	<files>
+		<file>
+			<!-- put everything into the root of the ZIP -->
+			<outputDirectory>.</outputDirectory>
+			<!-- add the ZIP from the web gui -->
+			<source>${basedir}/../ExpCraftCore/target/ExpCraft-jar-with-dependencies.jar</source>
+			<!-- rename it -->
+			<destName>ExpCraft.jar</destName>
+		</file>
 		<file>
 			<!-- put everything into the root of the ZIP -->
 			<outputDirectory>.</outputDirectory>
