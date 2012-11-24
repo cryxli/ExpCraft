@@ -81,11 +81,6 @@ public class ScavengerBlockListenerTest extends AbstractPluginTest<Scavenger> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		listener = new ScavengerBlockListener(plugin);
 	}
 

@@ -47,25 +47,29 @@ public class ScavengerConstraints {
 	 */
 	public void dropNether(final Player player, final int level,
 			final Block block, final int rnd) {
-		if (rnd <= 3 && level >= plugin.getConfInt("DropLevel.GhastTear")) {
+		if (rnd <= 3
+				&& level >= plugin.getConfig()
+						.getInteger("DropLevel.GhastTear")) {
 			// 4 %o - 4%
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.GhastTear"));
+					plugin.getConfig().getDouble("ExpGain.GhastTear"));
 			dropItem(block, Material.GHAST_TEAR);
 			plugin.sendHint(player, "A Ghast must have been sad, here.");
 
 		} else if (rnd > 3 && rnd <= 6
-				&& level >= plugin.getConfInt("DropLevel.Nugget")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Nugget")) {
 			// 3 %o - 3%
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Nugget"));
+					plugin.getConfig().getDouble("ExpGain.Nugget"));
 			dropItem(block, Material.GOLD_NUGGET);
 
-		} else if (rnd > 6 && rnd <= 8
-				&& level >= plugin.getConfInt("DropLevel.BlazePowder")) {
+		} else if (rnd > 6
+				&& rnd <= 8
+				&& level >= plugin.getConfig().getInteger(
+						"DropLevel.BlazePowder")) {
 			// 2 %o - 2%
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.BlazePowder"));
+					plugin.getConfig().getDouble("ExpGain.BlazePowder"));
 			dropItem(block, Material.BLAZE_POWDER);
 
 		}
@@ -85,60 +89,63 @@ public class ScavengerConstraints {
 	 */
 	public void dropNormal(final Player player, final int level,
 			final Block block, final int rnd) {
-		if (rnd == 0 && level >= plugin.getConfInt("DropLevel.Chestplate")) {
+		if (rnd == 0
+				&& level >= plugin.getConfig().getInteger(
+						"DropLevel.Chestplate")) {
 			// 1 %o - 1% (old: 0)
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Chestplate"));
+					plugin.getConfig().getDouble("ExpGain.Chestplate"));
 			dropItem(block, Material.LEATHER_CHESTPLATE);
 
 		} else if (rnd > 0 && rnd <= 5
-				&& level >= plugin.getConfInt("DropLevel.Saddle")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Saddle")) {
 			// 5 %o - 5%
 			dropItem(block, Material.SADDLE);
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Saddle"));
+					plugin.getConfig().getDouble("ExpGain.Saddle"));
 
-		} else if (rnd == 6 && level >= plugin.getConfInt("DropLevel.Ingot")) {
+		} else if (rnd == 6
+				&& level >= plugin.getConfig().getInteger("DropLevel.Ingot")) {
 			// 1 %o - 1%
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Ingot"));
+					plugin.getConfig().getDouble("ExpGain.Ingot"));
 			dropItem(block, Material.GOLD_INGOT);
 			plugin.sendHint(player,
 					"Hey, do you see that shiny thing in the sand?.");
 
 		} else if (rnd > 6 && rnd <= 8
-				&& level >= plugin.getConfInt("DropLevel.Bowl")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Bowl")) {
 			// 3 %O -3%
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Bowl"));
+					plugin.getConfig().getDouble("ExpGain.Bowl"));
 			dropItem(block, Material.BOWL);
 
 		} else if (rnd > 8 && rnd <= 10
-				&& level >= plugin.getConfInt("DropLevel.Boots")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Boots")) {
 			// 2 %o - 2% (ori: 3 %o - 3%)
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Boots"));
+					plugin.getConfig().getDouble("ExpGain.Boots"));
 			dropItem(block, Material.LEATHER_BOOTS);
 
 		} else if (rnd > 10 && rnd <= 12
-				&& level >= plugin.getConfInt("DropLevel.Helmet")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Helmet")) {
 			// 2 %o - 2% (ori: 0)
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Helmet"));
+					plugin.getConfig().getDouble("ExpGain.Helmet"));
 			dropItem(block, Material.LEATHER_HELMET);
 
 		} else if (rnd > 12 && rnd <= 15
-				&& level >= plugin.getConfInt("DropLevel.Bucket")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Bucket")) {
 			// 3 %o - 3% (ori: 4 %o - 4%)
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Bucket"));
+					plugin.getConfig().getDouble("ExpGain.Bucket"));
 			dropItem(block, Material.BUCKET);
 
 		} else if (rnd > 15 && rnd <= 17
-				&& level >= plugin.getConfInt("DropLevel.Leggins")) {
+				&& level >= plugin.getConfig().getInteger("DropLevel.Leggins")) {
 			// 2 %o - 2% (ori: 0)
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Leggins"));
+					plugin.getConfig().getDouble("ExpGain.Leggins"));
 			dropItem(block, Material.LEATHER_LEGGINGS);
 
 		}

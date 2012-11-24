@@ -1,16 +1,16 @@
 package li.cryx.expcraft.scavenger;
 
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Scavenger extends ExpCraftModule {
-	public final Logger LOG = Logger.getLogger("EC-Scavenger");
+	public final Logger LOG = LoggerFactory.getLogger(Scavenger.class);
 
 	private ScavengerBlockListener blockListener;
 
@@ -22,16 +22,16 @@ public class Scavenger extends ExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		// block listener
 		blockListener = new ScavengerBlockListener(this);
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		chat.info(sender,
 				"Digging through dirt, etc. you can find other items.");
@@ -47,38 +47,6 @@ public class Scavenger extends ExpCraftModule {
 				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
-	@Override
-	public String getAbbr() {
-		return "Sc";
-	}
-
-	/**
-	 * Get the <code>int</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	double getConfDouble(final String key) {
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * Get the <code>double</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	int getConfInt(final String key) {
-		return getConfig().getInt(key);
-	}
-
-	@Override
-	public String getModuleName() {
-		return "Scavenger";
-	}
-
 	/**
 	 * Load config from disk merge missing default values and store them to
 	 * disk.
@@ -92,21 +60,21 @@ public class Scavenger extends ExpCraftModule {
 
 	// server want the plugin to stop working
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}
 
 	// server want the plugin to start working
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -114,8 +82,7 @@ public class Scavenger extends ExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(blockListener, this);
+		registerEvents(blockListener);
 	}
 
 	void sendHint(final Player player, final String msg) {

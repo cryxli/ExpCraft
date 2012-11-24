@@ -34,6 +34,12 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<module.name>Scavenger</module.name>
+		<module.abbr>Sc</module.abbr>
+		<main.class>li.cryx.expcraft.scavenger.Scavenger</main.class>
+	</properties>
+
 	<build>
 		<finalName>${project.name}</finalName>
 		<resources>

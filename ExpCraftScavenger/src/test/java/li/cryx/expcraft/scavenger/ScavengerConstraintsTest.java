@@ -117,11 +117,6 @@ public class ScavengerConstraintsTest extends AbstractPluginTest<Scavenger> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
 		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
 				new PluginDescriptionFile("ExpCraft", "0", ""));
