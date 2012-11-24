@@ -1,6 +1,8 @@
 package li.cryx.expcraft;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -89,14 +91,28 @@ public class ExpCraft extends JavaPlugin {
 	}
 
 	private void loadModules() {
-		List<ModuleInfo> jars = new JarScanner().scanFolder(getFile()
-				.getParentFile());
+		List<ModuleInfo> jars = new LinkedList<ModuleInfo>();
+
+		// scan plugins folder
+		if (config.getConfig().getBoolean("Modules.ScanPlugins")) {
+			jars.addAll(new JarScanner().scanFolder(getFile().getParentFile()));
+		}
+
+		// scan stated folder
+		File folder = new File(getFile().getParentFile(), config.getConfig()
+				.getProperty("Modules.Folder"));
+		if (folder.exists() && folder.isDirectory()) {
+			jars.addAll(new JarScanner().scanFolder(folder));
+		}
+
+		// no modules present
 		if (jars.size() == 0) {
 			LOG.info("No modules present. Disabling ExpCraft.");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
 
+		// load modules
 		modules.clear();
 		for (ModuleInfo info : jars) {
 			ExpCraftModule module = new ModuleLoader(getClassLoader())
@@ -132,7 +148,12 @@ public class ExpCraft extends JavaPlugin {
 		// shutdown modules
 		if (modules.size() > 0) {
 			for (ExpCraftModule module : modules.values()) {
-				module.disable();
+				try {
+					module.disable();
+				} catch (Exception e) {
+					// give other module a chance to shutdown
+					// when one fails.
+				}
 			}
 			modules.clear();
 		}
@@ -141,8 +162,8 @@ public class ExpCraft extends JavaPlugin {
 		permission = null;
 		if (persistence != null) {
 			persistence.flush();
+			persistence = null;
 		}
-		persistence = null;
 		config = null;
 	}
 

@@ -1,6 +1,6 @@
 === ExpCraft ===
 A reimplementation of the great LevelCraft plugin for Bukkit to add some
-experiance gathering to the game. There are implementations for Minecraft
+experience gathering to the game. There are implementations for Minecraft
 versions since 1.8.1 for all basic plugins of the original LevelCraft but
 the fighting plugins.
 
@@ -25,9 +25,9 @@ Tools
  3) all the other projects
 The expcraft-testing project provides a mock of the core and therefore has 
 to be compiled after the core but before any of the module projects.
+If you use the launcher "all clean install", the order is correct.
 
 Tips
 - Use the preconfigured Launchers to build the projects
 - Launchers may not work in certain eclipse/maven plugin constellations
-- Source works for r1.3.2-R1.0
-
+- Source works for r1.4.5-R0.1 beta
