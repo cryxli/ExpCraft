@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2011 Urs P. Stettler, https://github.com/cryxli
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package li.cryx.expcraft.util;
 
 import java.io.File;
@@ -13,17 +35,23 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * TODO documentation
+ * This extension to the basic <code>Properties</code> class offers typed
+ * getters to retrieve values other than Strings from a properties file.
  * 
  * @author cryxli
  */
 public class TypedProperties extends Properties {
 
-	private static final long serialVersionUID = 6534481428903134476L;
+	private static final long serialVersionUID = -1616785919463045294L;
 
+	/** Encoding for properties files as defined by the spec. */
+	private static final String ENCODING = "ISO-8859-1";
+
+	/** Create an empty properties file. */
 	public TypedProperties() {
 	}
 
+	/** Create a properties file containing the same values as the given one. */
 	public TypedProperties(final Properties defaults) {
 		super(defaults);
 	}
@@ -146,20 +174,53 @@ public class TypedProperties extends Properties {
 		setProperty(key, value);
 	}
 
+	/**
+	 * Store values of this properties file in <em>natural order</em> of their
+	 * keys.
+	 * 
+	 * @param writer
+	 *            Properties will be stored in this file.
+	 * @param comments
+	 *            Optional comments to be written at the beginning of the file.
+	 *            Can be <code>null</code>.
+	 */
 	public void store(final File file, final String comments)
 			throws IOException {
-		PrintWriter writer = new PrintWriter(file, "ISO-8859-1");
+		PrintWriter writer = new PrintWriter(file, ENCODING);
 		store(writer, comments);
 		writer.close();
 	}
 
+	/**
+	 * Store values of this properties file in <em>natural order</em> of their
+	 * keys.
+	 * 
+	 * @param writer
+	 *            Properties will be stored using this stream. The stream
+	 *            remains open when this method completes!
+	 * @param comments
+	 *            Optional comments to be written at the beginning of the file.
+	 *            Can be <code>null</code>.
+	 */
 	@Override
 	public void store(final OutputStream out, final String comments)
 			throws IOException {
-		store(new OutputStreamWriter(out, Charset.forName("ISO-8859-1")),
-				comments);
+		store(new OutputStreamWriter(out, Charset.forName(ENCODING)), comments);
 	}
 
+	/**
+	 * Store values of this properties file in <em>natural order</em> of their
+	 * keys.
+	 * 
+	 * @param writer
+	 *            Properties will be stored using this writer. You have to
+	 *            ensure that the writer uses <code>ISO-8859-1</code> encoding,
+	 *            or the file cannot be read! The writer is not closed when this
+	 *            method terminates!
+	 * @param comments
+	 *            Optional comments to be written at the beginning of the file.
+	 *            Can be <code>null</code>.
+	 */
 	public void store(final PrintWriter writer, final String comments) {
 		if (comments != null) {
 			for (String line : comments.split("\n")) {
@@ -180,6 +241,19 @@ public class TypedProperties extends Properties {
 		writer.flush();
 	}
 
+	/**
+	 * Store values of this properties file in <em>natural order</em> of their
+	 * keys.
+	 * 
+	 * @param writer
+	 *            Properties will be stored using this writer. You have to
+	 *            ensure that the writer uses <code>ISO-8859-1</code> encoding,
+	 *            or the file cannot be read! The writer is not closed when this
+	 *            method terminates!
+	 * @param comments
+	 *            Optional comments to be written at the beginning of the file.
+	 *            Can be <code>null</code>.
+	 */
 	@Override
 	public void store(final Writer writer, final String comments)
 			throws IOException {

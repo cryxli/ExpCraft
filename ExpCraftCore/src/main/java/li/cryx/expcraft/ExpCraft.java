@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2011 Urs P. Stettler, https://github.com/cryxli
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package li.cryx.expcraft;
 
 import java.io.File;
@@ -32,7 +54,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO documentation
+ * This class is the main class of ExCraft. It is also the main entry point for
+ * the bukkit plugin.
+ * 
+ * <p>
+ * The ExpCraft pluing resides within the plugins folder of a CraftBukkit
+ * server. The aspects of ExpCraft are implemented in {@link ExpCraftModule}
+ * which form separate JARs that do not need to be present in the plugins
+ * folder, but in the folder specified in the
+ * <code>ExpCraft/config/Core.properties</code> config file.
+ * </p>
  * 
  * @author cryxli
  */
@@ -40,24 +71,42 @@ public class ExpCraft extends JavaPlugin {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExpCraft.class);
 
+	/** Look-up structure for modules. */
 	private final Map<String, ExpCraftModule> modules = new TreeMap<String, ExpCraftModule>();
 
+	/** Implementation of a permission manager. */
 	private AbstractPermissionManager permission;
 
+	/** Implementation of a persistence manager. */
 	private AbstractPersistenceManager persistence;
 
+	/** The configuration of the ExpCraft core. */
 	private ConfigProvider config;
 
+	/** The in-game command manager. */
 	private final CommandManager cmd;
 
+	/** Create a new plugin instance. Called by bukkit. */
 	public ExpCraft() {
 		cmd = new CommandManager(this);
 	}
 
+	/**
+	 * Get the level cap of ExpCraft.
+	 * 
+	 * @return Maximal reachable level for each module.
+	 */
 	public int getLevelCap() {
 		return config.getConfig().getInteger(CoreConfig.LEVEL_CAP);
 	}
 
+	/**
+	 * Return the ExpCraft module matching the given abbreviation.
+	 * 
+	 * @param modAbbr
+	 *            Module abbreviation.
+	 * @return The matching {@link ExpCraftModule}, or, <code>null</code>.
+	 */
 	public ExpCraftModule getModuleByAbbr(final String modAbbr) {
 		if (modAbbr == null) {
 			return null;
@@ -66,18 +115,41 @@ public class ExpCraft extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Get a list containing all active ExpCraft modules.
+	 * 
+	 * @return Collection of loaded modules.
+	 */
 	public Collection<ExpCraftModule> getModules() {
 		return modules.values();
 	}
 
+	/**
+	 * Get the permission manager implementation.
+	 * 
+	 * @return If the bukkit plugin "PermissionsBukkit" is loaded, an
+	 *         appropriate manager is return, or, a manager that simply
+	 *         distinguishes between ops and no-ops.
+	 */
 	public AbstractPermissionManager getPermissions() {
 		return permission;
 	}
 
+	/**
+	 * Get the persistence manager implementation.
+	 * 
+	 * @return Depending on the config, a database or flat-file manager is
+	 *         returned.
+	 */
 	public AbstractPersistenceManager getPersistence() {
 		return persistence;
 	}
 
+	/**
+	 * Load the configuration of the core and merge it with the default
+	 * configuration before writing it back to disk. Once loaded the config
+	 * stays in memory until the {@link #onDisable()} event is fired.
+	 */
 	private void loadConfig() {
 		// use the same mechanism for config as modules do
 		// therefore, create a fake ModuleInfo for the core
@@ -90,17 +162,24 @@ public class ExpCraft extends JavaPlugin {
 		config.saveConfig();
 	}
 
+	/**
+	 * Scan the specified locations (plugins folder and the folder specified in
+	 * the core config) for ExpCraft modules. After this method either the
+	 * {@link #modules} list is populated with ExpCraft modules, or, the
+	 * {@link #onDisable()} event on the bukkit plugin is fired to shut down
+	 * ExpCraft.
+	 */
 	private void loadModules() {
 		List<ModuleInfo> jars = new LinkedList<ModuleInfo>();
 
 		// scan plugins folder
-		if (config.getConfig().getBoolean("Modules.ScanPlugins")) {
+		if (config.getConfig().getBoolean(CoreConfig.MODS_IN_PLUGIN_FOLDER)) {
 			jars.addAll(new JarScanner().scanFolder(getFile().getParentFile()));
 		}
 
 		// scan stated folder
 		File folder = new File(getFile().getParentFile(), config.getConfig()
-				.getProperty("Modules.Folder"));
+				.getProperty(CoreConfig.MOD_FOLDER));
 		if (folder.exists() && folder.isDirectory()) {
 			jars.addAll(new JarScanner().scanFolder(folder));
 		}
@@ -123,6 +202,10 @@ public class ExpCraft extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Handle in-game and console commands. Delegate them to the modules, if
+	 * necessary.
+	 */
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd,
 			final String commandLabel, final String[] args) {
@@ -143,6 +226,7 @@ public class ExpCraft extends JavaPlugin {
 		}
 	}
 
+	/** Bukkit wants ExpCraft to shut down. */
 	@Override
 	public void onDisable() {
 		// shutdown modules
@@ -167,6 +251,7 @@ public class ExpCraft extends JavaPlugin {
 		config = null;
 	}
 
+	/** Bukkit wants ExpCraft to initialize. */
 	@Override
 	public void onEnable() {
 		loadConfig();
@@ -200,6 +285,10 @@ public class ExpCraft extends JavaPlugin {
 		LOG.info("Modules: " + buf.toString());
 	}
 
+	/**
+	 * Set and initialise the {@link ExpCraft#permission} implementation
+	 * according to the state of the bukkit server.
+	 */
 	private void setPermission() {
 		Plugin permBukkit = getServer().getPluginManager().getPlugin(
 				"PermissionsBukkit");
@@ -224,6 +313,10 @@ public class ExpCraft extends JavaPlugin {
 		permission.setWorlds(worldStr);
 	}
 
+	/**
+	 * Set an initialise the {@link #persistence} implementation according to
+	 * the ExpCraft core config.
+	 */
 	private void setPersistence() {
 		// crate persistence manager
 		String storageType = config.getConfig().getString("Database");
