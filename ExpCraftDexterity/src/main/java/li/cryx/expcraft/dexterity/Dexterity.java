@@ -1,17 +1,17 @@
 package li.cryx.expcraft.dexterity;
 
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Dexterity extends ExpCraftModule {
 
-	private static final Logger LOG = Logger.getLogger("EC-Dexterity");
+	private static final Logger LOG = LoggerFactory.getLogger(Dexterity.class);
 
 	private Chat chat;
 
@@ -25,7 +25,7 @@ public class Dexterity extends ExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		// player listener
 		playerListener = new DexterityPlayerListener(this);
@@ -35,9 +35,9 @@ public class Dexterity extends ExpCraftModule {
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		chat.info(sender, "Boots:");
@@ -58,38 +58,6 @@ public class Dexterity extends ExpCraftModule {
 		// TODO cryxli: show info
 	}
 
-	@Override
-	public String getAbbr() {
-		return "Dx";
-	}
-
-	/**
-	 * Get the <code>int</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	double getConfDouble(final String key) {
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * Get the <code>double</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	int getConfInt(final String key) {
-		return getConfig().getInt(key);
-	}
-
-	@Override
-	public String getModuleName() {
-		return "Dexterity";
-	}
-
 	/**
 	 * Load config from disk merge missing default values and store them to
 	 * disk.
@@ -103,20 +71,20 @@ public class Dexterity extends ExpCraftModule {
 
 	// server want the plugin to stop working
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}// server want the plugin to start working
 
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -124,9 +92,8 @@ public class Dexterity extends ExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(entityListener, this);
-		pm.registerEvents(playerListener, this);
+		registerEvents(entityListener);
+		registerEvents(playerListener);
 	}
 
 	/**
@@ -143,7 +110,7 @@ public class Dexterity extends ExpCraftModule {
 	 */
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
-		int toolLevel = getConfInt("BootsLevel." + material);
+		int toolLevel = getConfig().getInteger("BootsLevel." + material);
 		String msg = MessageFormat
 				.format("{0} Boots: {1}", material, toolLevel);
 		if (level >= toolLevel) {

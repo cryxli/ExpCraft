@@ -34,6 +34,12 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<module.name>Dexterity</module.name>
+		<module.abbr>Dx</module.abbr>
+		<main.class>li.cryx.expcraft.dexterity.Dexterity</main.class>
+	</properties>
+
 	<build>
 		<finalName>${project.name}</finalName>
 		<resources>

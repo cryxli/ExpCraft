@@ -34,7 +34,7 @@ public class DexterityPlayerListener implements Listener {
 
 			// player is jumping, add exp
 			plugin.getPersistence().addExp(plugin, player,
-					plugin.getConfDouble("ExpGain.Jump"));
+					plugin.getConfig().getDouble("ExpGain.Jump"));
 		}
 	}
 

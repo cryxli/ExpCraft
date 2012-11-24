@@ -91,11 +91,6 @@ public class DexterityPlayerListenerTest extends AbstractPluginTest<Dexterity> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		listener = new DexterityPlayerListener(plugin);
 	}
 

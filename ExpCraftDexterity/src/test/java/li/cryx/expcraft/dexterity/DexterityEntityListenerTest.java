@@ -78,13 +78,7 @@ public class DexterityEntityListenerTest extends AbstractPluginTest<Dexterity> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		Mockito.when(plugin.getLevelCap()).thenReturn(100);
-
 		listener = new DexterityEntityListener(plugin);
 	}
 

@@ -64,7 +64,7 @@ public class DexterityConstraints {
 	 */
 	private boolean checkBoots(final Player player, final int level,
 			final String config) {
-		int reqLevel = plugin.getConfInt("BootsLevel." + config);
+		int reqLevel = plugin.getConfig().getInteger("BootsLevel." + config);
 		if (level < reqLevel) {
 			plugin.warnBoots(player, config, reqLevel);
 			return false;

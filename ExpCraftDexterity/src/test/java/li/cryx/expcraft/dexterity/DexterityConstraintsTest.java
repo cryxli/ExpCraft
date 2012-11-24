@@ -17,14 +17,15 @@ public class DexterityConstraintsTest extends AbstractPluginTest<Dexterity> {
 
 	@Test
 	public void checkBoots() {
-		checkBoots(Material.LEATHER_BOOTS, "Leather");
-		checkBoots(Material.CHAINMAIL_BOOTS, "Chainmail");
-		checkBoots(Material.GOLD_BOOTS, "Gold");
-		checkBoots(Material.IRON_BOOTS, "Iron");
-		checkBoots(Material.DIAMOND_BOOTS, "Diamond");
+		checkBoots(Material.LEATHER_BOOTS, "Leather", 0);
+		checkBoots(Material.CHAINMAIL_BOOTS, "Chainmail", 5);
+		checkBoots(Material.GOLD_BOOTS, "Gold", 20);
+		checkBoots(Material.IRON_BOOTS, "Iron", 10);
+		checkBoots(Material.DIAMOND_BOOTS, "Diamond", 30);
 	}
 
-	private void checkBoots(final Material material, final String config) {
+	private void checkBoots(final Material material, final String config,
+			final int level) {
 		PlayerInventory inv = Mockito.mock(PlayerInventory.class);
 		Mockito.when(inv.getBoots()).thenReturn(new ItemStack(material));
 		Player player = Mockito.mock(Player.class);
@@ -32,8 +33,7 @@ public class DexterityConstraintsTest extends AbstractPluginTest<Dexterity> {
 		Mockito.when(player.getInventory()).thenReturn(inv);
 
 		Assert.assertFalse(test.checkBoots(player, -1));
-		Mockito.verify(plugin).warnBoots(player, config,
-				plugin.getConfInt("BootsLevel." + config));
+		Mockito.verify(plugin).warnBoots(player, config, level);
 
 		Assert.assertTrue(test.checkBoots(player, 50));
 	}
@@ -56,11 +56,6 @@ public class DexterityConstraintsTest extends AbstractPluginTest<Dexterity> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
-
 		test = new DexterityConstraints(plugin);
 	}
 

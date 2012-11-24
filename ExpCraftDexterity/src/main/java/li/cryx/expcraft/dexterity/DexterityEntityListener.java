@@ -51,7 +51,7 @@ public class DexterityEntityListener implements Listener {
 		// calculate dmg reduction
 		int damageReduction = (int) Math.floor(level //
 				* 10.0 / plugin.getLevelCap() //
-				* plugin.getConfDouble("Settings.FallDmgMultiplier"));
+				* plugin.getConfig().getDouble("Settings.FallDmgMultiplier"));
 		// apply reduction
 		int dmg = Math.max(0, event.getDamage() - damageReduction);
 		event.setDamage(dmg);
