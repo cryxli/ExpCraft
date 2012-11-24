@@ -33,6 +33,12 @@
 			<artifactId>mockito-core</artifactId>
 		</dependency>
 	</dependencies>
+	
+	<properties>
+		<module.name>Defence</module.name>
+		<module.abbr>De</module.abbr>
+		<main.class>li.cryx.expcraft.defence.Defence</main.class>
+	</properties>
 
 	<build>
 		<finalName>${project.name}</finalName>

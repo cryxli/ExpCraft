@@ -134,7 +134,8 @@ public class DefenceConstraints {
 	 */
 	public void checkBoots(final Player player, final int level,
 			final String config) {
-		if (level < plugin.getConfInt("ArmorLevel." + config + "Boots")) {
+		if (level < plugin.getConfig().getInteger(
+				"ArmorLevel." + config + "Boots")) {
 			ItemStack item = player.getInventory().getBoots();
 			ItemStack drop = new ItemStack(item.getType(), 1,
 					item.getDurability());
@@ -162,7 +163,8 @@ public class DefenceConstraints {
 	 */
 	public void checkChestplate(final Player player, final int level,
 			final String config) {
-		if (level < plugin.getConfInt("ArmorLevel." + config + "Chestplate")) {
+		if (level < plugin.getConfig().getInteger(
+				"ArmorLevel." + config + "Chestplate")) {
 			ItemStack item = player.getInventory().getChestplate();
 			ItemStack drop = new ItemStack(item.getType(), 1,
 					item.getDurability());
@@ -190,7 +192,8 @@ public class DefenceConstraints {
 	 */
 	public void checkHelmet(final Player player, final int level,
 			final String config) {
-		if (level < plugin.getConfInt("ArmorLevel." + config + "Helmet")) {
+		if (level < plugin.getConfig().getInteger(
+				"ArmorLevel." + config + "Helmet")) {
 			ItemStack item = player.getInventory().getHelmet();
 			ItemStack drop = new ItemStack(item.getType(), 1,
 					item.getDurability());
@@ -218,7 +221,8 @@ public class DefenceConstraints {
 	 */
 	public void checkLeggings(final Player player, final int level,
 			final String config) {
-		if (level < plugin.getConfInt("ArmorLevel." + config + "Leggings")) {
+		if (level < plugin.getConfig().getInteger(
+				"ArmorLevel." + config + "Leggings")) {
 			ItemStack item = player.getInventory().getLeggings();
 			ItemStack drop = new ItemStack(item.getType(), 1,
 					item.getDurability());

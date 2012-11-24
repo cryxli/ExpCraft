@@ -1,13 +1,13 @@
 package li.cryx.expcraft.defence;
 
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is the main entry point for the Defence module for ExpCraft.
@@ -16,7 +16,7 @@ import org.bukkit.plugin.PluginManager;
  */
 public class Defence extends ExpCraftModule {
 	/** A logger */
-	public final Logger LOG = Logger.getLogger("EC-Defence");
+	public final Logger LOG = LoggerFactory.getLogger(Defence.class);
 
 	/** Chat utility. */
 	private Chat chat;
@@ -30,15 +30,15 @@ public class Defence extends ExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 
 		entityListener = new DefenceEntityListener(this);
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		chat.info(sender, "Armor Sets:");
@@ -57,39 +57,6 @@ public class Defence extends ExpCraftModule {
 				"Experience to next level: {0} points", nextLvl - exp));
 
 		// TODO Send information about the plugin to the player.
-	}
-
-	@Override
-	public String getAbbr() {
-		return "De";
-	}
-
-	/**
-	 * Get the <code>int</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	double getConfDouble(final String key) {
-		return getConfig().getDouble(key);
-	}
-
-	/**
-	 * Get the <code>double</code> value of the given config key.
-	 * 
-	 * @param key
-	 *            Key in the config YAML.
-	 * @return Value associated with the given key.
-	 */
-	int getConfInt(final String key) {
-		// delegate to config
-		return getConfig().getInt(key);
-	}
-
-	@Override
-	public String getModuleName() {
-		return "Defence";
 	}
 
 	/**
@@ -121,20 +88,20 @@ public class Defence extends ExpCraftModule {
 	}
 
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// disabled plugins don't get events; no need to unregister
 		// listeners
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}
 
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
 	}
 
 	/** Register the listeners */
@@ -142,8 +109,7 @@ public class Defence extends ExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(entityListener, this);
+		registerEvents(entityListener);
 	}
 
 	/**
@@ -158,10 +124,13 @@ public class Defence extends ExpCraftModule {
 	 */
 	private void sendArmorInfo(final Player sender, final String material,
 			final int level) {
-		int boots = getConfInt("ArmorLevel." + material + "Boots");
-		int chest = getConfInt("ArmorLevel." + material + "Chestplate");
-		int helmet = getConfInt("ArmorLevel." + material + "Helmet");
-		int leggings = getConfInt("ArmorLevel." + material + "Leggings");
+		int boots = getConfig().getInteger("ArmorLevel." + material + "Boots");
+		int chest = getConfig().getInteger(
+				"ArmorLevel." + material + "Chestplate");
+		int helmet = getConfig()
+				.getInteger("ArmorLevel." + material + "Helmet");
+		int leggings = getConfig().getInteger(
+				"ArmorLevel." + material + "Leggings");
 
 		if (boots == chest && chest == helmet && helmet == leggings) {
 			if (level < boots) {

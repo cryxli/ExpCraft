@@ -54,7 +54,7 @@ public class DefenceEntityListener implements Listener {
 			// applied)
 			int dmg = event.getDamage();
 			plugin.getPersistence().addExp(plugin, player,
-					dmg * plugin.getConfDouble("ExperienceMultiplier"));
+					dmg * plugin.getConfig().getDouble("ExperienceMultiplier"));
 
 			// TODO add material to the equation
 			// reduce dmg depending on exp to levelCap ratio

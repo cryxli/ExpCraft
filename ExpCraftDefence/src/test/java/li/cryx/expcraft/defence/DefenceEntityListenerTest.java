@@ -62,10 +62,6 @@ public class DefenceEntityListenerTest extends AbstractPluginTest<Defence> {
 
 	@Before
 	public void prepareTestSpecific() {
-		Mockito.when(plugin.getConfInt(Mockito.anyString()))
-				.thenCallRealMethod();
-		Mockito.when(plugin.getConfDouble(Mockito.anyString()))
-				.thenCallRealMethod();
 		Mockito.when(plugin.getLevelCap()).thenReturn(100);
 
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
