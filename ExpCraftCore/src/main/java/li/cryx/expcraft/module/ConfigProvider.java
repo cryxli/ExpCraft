@@ -37,7 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO documentation
+ * This class abstract access to module configuration files. It ensures that
+ * they are loaded from and save to the correct location on disk.
  * 
  * @author cryxli
  */

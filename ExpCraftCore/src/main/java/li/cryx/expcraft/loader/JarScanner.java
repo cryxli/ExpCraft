@@ -33,11 +33,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import li.cryx.expcraft.module.ExpCraftModule;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO documentation
+ * This class is used to scan folders on disk for containing JAR files of
+ * ExpCraft modules. Doing so {@link ModuleInfo}s are extracted that can then be
+ * used by {@link ModuleLoader} to instantiate the modules.
  * 
  * @author cryxli
  */
@@ -89,14 +93,21 @@ public class JarScanner {
 		return new ModuleInfo(jar, prop);
 	}
 
-	// TODO documentation
+	/**
+	 * Inspect all JARs of the given list and return {@link ModuleInfo}s for the
+	 * ones that contain {@link ExpCraftModule}s.
+	 * 
+	 * @param jars
+	 *            Array of Files pointing to JARs
+	 * @return List of {@link ModuleInfo}s for the JARs that contain modules.
+	 */
 	private List<ModuleInfo> inspectJars(final File[] jars) {
 		List<ModuleInfo> matches = new LinkedList<ModuleInfo>();
 		for (File jar : jars) {
 			ModuleInfo info = inspectJar(jar);
 			if (info != null && info.isValid()) {
 				matches.add(info);
-				LOG.info(info.toString());
+				LOG.debug(info.toString());
 			}
 		}
 		return matches;

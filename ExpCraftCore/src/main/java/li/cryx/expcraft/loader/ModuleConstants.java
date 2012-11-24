@@ -23,7 +23,7 @@
 package li.cryx.expcraft.loader;
 
 /**
- * TODO documentation
+ * This interface contains keys to information about ExpCraft modules.
  * 
  * @author cryxli
  */
@@ -37,7 +37,7 @@ public interface ModuleConstants {
 		public static final String MODULE_ABBR = "ec.module.abbr";
 		/** Fully qualified name of the main class of the module. */
 		public static final String MAIN_CLASS = "ec.main.class";
-		// TODO documentation
+		/** Version of the module. */
 		public static final String MODULE_VERSION = "ec.module.version";
 	}
 

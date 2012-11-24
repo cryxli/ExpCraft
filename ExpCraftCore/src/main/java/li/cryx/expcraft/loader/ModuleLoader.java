@@ -34,7 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * TODO documentation
+ * This class takes valid {@link ModuleInfo}s and creates a new instances of the
+ * according {@link ExpCraftModule}.
  * 
  * @author cryxli
  */
@@ -65,12 +66,15 @@ public class ModuleLoader {
 	 */
 	public ExpCraftModule attachModule(final ModuleInfo info) {
 		if (!info.isValid()) {
+			// module description does not contain the necessary information
+			// to instantiate the module
 			info.setLoader(null);
 			info.setModule(null);
 			return null;
 		}
 
 		if (info.getLoader() == null) {
+			// create a new ClassLoader to access the module's JAR file
 			URL jar;
 			try {
 				jar = info.getJar().getAbsoluteFile().toURI().toURL();
@@ -85,13 +89,18 @@ public class ModuleLoader {
 			return info.getModule();
 		}
 		try {
+			// load class file from JAR
 			Class<?> mainClass = Class.forName(info.getMain(), true,
 					info.getLoader());
+			// get the ExpCraftModule super-class from the main class
 			Class<? extends ExpCraftModule> moduleClass = mainClass
 					.asSubclass(ExpCraftModule.class);
+			// get the default constructor
 			Constructor<? extends ExpCraftModule> constructor = moduleClass
 					.getConstructor();
+			// create a new instance of the module
 			ExpCraftModule module = constructor.newInstance();
+			// link the module to its module descriptor
 			info.setModule(module);
 			module.setInfo(info);
 			return module;

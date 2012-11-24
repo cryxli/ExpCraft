@@ -133,7 +133,10 @@ public abstract class AbstractPersistenceManager {
 		return Math.min(maxExp, Math.max(0, exp));
 	}
 
-	// TODO documentation
+	/**
+	 * This method is called by {@link ExpCraft} to inform the persistence
+	 * manager that the bukkit plugin is about to terminate.
+	 */
 	public abstract void flush();
 
 	/**
@@ -166,7 +169,7 @@ public abstract class AbstractPersistenceManager {
 		return Math.min(constant * Math.pow(levelInBound, 2), maxExp);
 	}
 
-	// TODO documentation
+	/** Calculate the level from the given amount of experience. */
 	private int getLevel(final double exp) {
 		return 1 + (int) Math.floor(Math.sqrt(exp / constant));
 	}
@@ -185,7 +188,7 @@ public abstract class AbstractPersistenceManager {
 		return getLevel(getExp(module, player));
 	}
 
-	// TODO documentation
+	/** Set the value describing how difficult ExpCraft should be. */
 	public void setConstant(final int value) {
 		constant = value;
 		calculate();
