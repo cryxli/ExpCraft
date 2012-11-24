@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recipe xmlns="http://github.com/cryxli/ExpCraft/recipe"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://github.com/cryxli/ExpCraft/recipe recipe.xsd">
+
+	<shapeless>
+		<!-- turn sand into cobblestone -->
+		<output item="COBBLESTONE" amount="2" />
+		<inputs>
+			<item item="SAND" />
+			<item item="SAND" />
+		</inputs>
+	</shapeless>
+	<shapeless>
+		<!-- turn cobblestone into sand -->
+		<output item="SAND" amount="2" />
+		<inputs>
+			<item item="COBBLESTONE" />
+			<item item="COBBLESTONE" />
+		</inputs>
+	</shapeless>
+	<shapeless>
+		<!-- turn cobblestone and dirt into sand -->
+		<output item="SAND" amount="2" />
+		<inputs>
+			<item item="COBBLESTONE" />
+			<item item="DIRT" />
+		</inputs>
+	</shapeless>
+	<shapeless>
+		<!-- turn sand and dirt into cobblestone -->
+		<output item="COBBLESTONE" amount="2" />
+		<inputs>
+			<item item="SAND" />
+			<item item="DIRT" />
+		</inputs>
+	</shapeless>
+	<shapeless>
+		<!-- turn sand and cobblestone into dirt -->
+		<output item="DIRT" amount="2" />
+		<inputs>
+			<item item="SAND" />
+			<item item="COBBLESTONE" />
+		</inputs>
+	</shapeless>
+
+	<!-- turn two half-slabs into their respective block -->
+	<shaped height="2" width="1">
+		<output item="COBBLESTONE" />
+		<inputs>
+			<item item="STEP" data="3" />
+			<item item="STEP" data="3" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="45" />
+		<inputs>
+			<item item="STEP" data="4" />
+			<item item="STEP" data="4" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="98" />
+		<inputs>
+			<item item="STEP" data="5" />
+			<item item="STEP" data="5" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="STONE" />
+		<inputs>
+			<item item="STEP" data="0" />
+			<item item="STEP" data="0" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="WOOD" data="0" />
+		<inputs>
+			<item item="WOOD_STEP" data="0" />
+			<item item="WOOD_STEP" data="0" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="WOOD" data="1" />
+		<inputs>
+			<item item="WOOD_STEP" data="1" />
+			<item item="WOOD_STEP" data="1" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="WOOD" data="2" />
+		<inputs>
+			<item item="WOOD_STEP" data="2" />
+			<item item="WOOD_STEP" data="2" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="1">
+		<output item="WOOD" data="3" />
+		<inputs>
+			<item item="WOOD_STEP" data="3" />
+			<item item="WOOD_STEP" data="3" />
+		</inputs>
+	</shaped>
+
+	<shapeless>
+		<!-- turn sandstone into sand -->
+		<output item="SAND" amount="4" />
+		<inputs>
+			<item item="SANDSTONE" />
+		</inputs>
+	</shapeless>
+
+	<furnace>
+		<!-- smelt buckets into iron ingots -->
+		<output item="IRON_INGOT" amount="3" />
+		<input item="BUCKET" />
+	</furnace>
+
+	<shaped height="3" width="3" level="5">
+		<!-- alter gold and rotten flesh into blaze rod -->
+		<output item="BLAZE_ROD" />
+		<inputs>
+			<item item="ROTTEN_FLESH" />
+			<item item="ROTTEN_FLESH" />
+			<item item="ROTTEN_FLESH" />
+			<item item="ROTTEN_FLESH" />
+			<item item="GOLD_INGOT" />
+			<item item="ROTTEN_FLESH" />
+			<item item="ROTTEN_FLESH" />
+			<item item="ROTTEN_FLESH" />
+			<item item="ROTTEN_FLESH" />
+		</inputs>
+	</shaped>
+
+	<!-- craft chainmail armour from stone -->
+	<shaped height="2" width="3" exp="5" level="10">
+		<output item="CHAINMAIL_HELMET" />
+		<inputs>
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="AIR" />
+			<item item="STONE" />
+		</inputs>
+	</shaped>
+	<shaped height="3" width="3" exp="8.0" level="10">
+		<output item="CHAINMAIL_CHESTPLATE" />
+		<inputs>
+			<item item="STONE" />
+			<item item="AIR" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+		</inputs>
+	</shaped>
+	<shaped height="3" width="3" exp="7.0" level="10">
+		<output item="CHAINMAIL_LEGGINGS" />
+		<inputs>
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="AIR" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="AIR" />
+			<item item="STONE" />
+		</inputs>
+	</shaped>
+	<shaped height="2" width="3" exp="4.0" level="10">
+		<output item="CHAINMAIL_BOOTS" />
+		<inputs>
+			<item item="STONE" />
+			<item item="AIR" />
+			<item item="STONE" />
+			<item item="STONE" />
+			<item item="AIR" />
+			<item item="STONE" />
+		</inputs>
+	</shaped>
+
+	<shapeless>
+		<!-- turn saddles into leather -->
+		<output item="LEATHER" />
+		<inputs>
+			<item item="SADDLE" />
+		</inputs>
+	</shapeless>
+
+</recipe>

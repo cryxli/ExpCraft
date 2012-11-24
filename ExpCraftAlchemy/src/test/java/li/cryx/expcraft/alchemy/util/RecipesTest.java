@@ -4,7 +4,6 @@ import junit.framework.Assert;
 import li.cryx.expcraft.alchemy.recipe.CustomFurnaceRecipe;
 import li.cryx.expcraft.alchemy.recipe.CustomShapedRecipe;
 import li.cryx.expcraft.alchemy.recipe.CustomShapelessRecipe;
-import li.cryx.expcraft.util.Recipes;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

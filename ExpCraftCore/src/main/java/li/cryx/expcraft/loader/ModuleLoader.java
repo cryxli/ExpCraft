@@ -11,17 +11,36 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * TODO documentation
+ * 
+ * @author cryxli
+ */
 public class ModuleLoader {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ModuleLoader.class);
 
+	/** Parent ClassLoader. */
 	private final ClassLoader classLoader;
 
+	/**
+	 * Set the parent ClassLoader. This is the one of the core.
+	 * 
+	 * @param classLoader
+	 *            Parent ClassLoader.
+	 */
 	public ModuleLoader(final ClassLoader classLoader) {
 		this.classLoader = classLoader;
 	}
 
+	/**
+	 * Attach module JAR and load module's main class.
+	 * 
+	 * @param info
+	 *            Description of the module.
+	 * @return An instance of the module's main class.
+	 */
 	public ExpCraftModule attachModule(final ModuleInfo info) {
 		if (!info.isValid()) {
 			info.setLoader(null);
@@ -61,17 +80,13 @@ public class ModuleLoader {
 		} catch (NoSuchMethodException e) {
 			LOG.error("Default constructor does not exist", e);
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Arguments of default constructor do not match", e);
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Error while init module", e);
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Default constructor is hidden", e);
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Cannot call default constructor", e);
 		}
 		return null;
 	}

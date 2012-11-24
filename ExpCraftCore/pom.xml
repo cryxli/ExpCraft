@@ -38,6 +38,10 @@
 			<artifactId>mockito-core</artifactId>
 		</dependency>
 	</dependencies>
+	
+	<properties>
+		<main.class>li.cryx.expcraft.ExpCraft</main.class>
+	</properties>
 
 	<build>
 		<finalName>${project.name}</finalName>

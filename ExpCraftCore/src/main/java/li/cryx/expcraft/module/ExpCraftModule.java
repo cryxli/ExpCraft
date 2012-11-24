@@ -1,5 +1,7 @@
 package li.cryx.expcraft.module;
 
+import java.io.File;
+
 import li.cryx.expcraft.ExpCraft;
 import li.cryx.expcraft.loader.ModuleInfo;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
@@ -55,6 +57,15 @@ public abstract class ExpCraftModule {
 	 */
 	public TypedProperties getConfig() {
 		return config.getConfig();
+	}
+
+	/**
+	 * Get the File object pointing to the persisted configuration.
+	 * 
+	 * @return A file pointing to the config.
+	 */
+	public File getConfigFile() {
+		return config.getConfigFile();
 	}
 
 	/**

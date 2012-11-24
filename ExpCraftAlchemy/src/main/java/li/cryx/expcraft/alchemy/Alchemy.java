@@ -1,28 +1,34 @@
 package li.cryx.expcraft.alchemy;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Map;
-import java.util.logging.Logger;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import li.cryx.expcraft.alchemy.recipe.TypedRecipe;
+import li.cryx.expcraft.alchemy.util.RecipeParser;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
-import li.cryx.expcraft.util.RecipeFactory;
+import li.cryx.expcraft.util.FileUtil;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.plugin.PluginManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  * Main entry point for the ExpCraft module Alchemy (A). Adds custom recipes
- * depending on crafting experiance.
+ * depending on crafting experience.
  * 
  * @author cryxli
  */
 public class Alchemy extends ExpCraftModule {
 
-	private static final Logger LOG = Logger.getLogger("EC-Alchemy");
+	private static final Logger LOG = LoggerFactory.getLogger(Alchemy.class);
 
 	private CraftingListener craftListener;
 
@@ -36,15 +42,15 @@ public class Alchemy extends ExpCraftModule {
 	 */
 	private void createListeners() {
 		// use one chat tool
-		chat = new Chat(this);
+		chat = new Chat(getCore());
 		// add crafting listener
 		craftListener = new CraftingListener(this);
 	}
 
 	@Override
-	public void displayInfo(final Player sender, final int page) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***",
-				getModuleName(), getAbbr()));
+	public void displayInfo(final Player sender) {
+		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
+				.getName(), getInfo().getAbbr()));
 
 		int level = getPersistence().getLevel(this, sender);
 		double exp = getPersistence().getExp(this, sender);
@@ -56,16 +62,6 @@ public class Alchemy extends ExpCraftModule {
 				"Experience to next level: {0} points", nextLvl - exp));
 	}
 
-	@Override
-	public String getAbbr() {
-		return "A";
-	}
-
-	@Override
-	public String getModuleName() {
-		return "Alchemy";
-	}
-
 	TypedRecipe getRecipe(final Recipe recipe) {
 		return store.getRecipe(recipe);
 	}
@@ -74,37 +70,22 @@ public class Alchemy extends ExpCraftModule {
 	 * Load config from disk merge missing default values and store them to
 	 * disk.
 	 */
-	@SuppressWarnings("unchecked")
 	private void loadConfig() {
 		// force loading config from default once
-		FileConfiguration conf = getConfig();
+		getConfig();
 		// ...to store at first run
 		saveConfig();
 
 		// load recipes
-		store = new RecipeStore(conf.getDouble("ExpGain.Default"));
-		if (!conf.isList("Recipe")) {
-			// error in recipe list
-			LOG.severe("Error in recipe list, no recipe loaded!");
-			return;
-		} else {
-			for (Object obj : conf.getList("Recipe")) {
-				if (obj instanceof Map) {
-					// System.out.println(obj);
-					TypedRecipe recipe = RecipeFactory
-							.createFromMap((Map<String, Object>) obj);
-					// System.out.println(recipe);
-					store.add(recipe);
-				}
-			}
-		}
+		store = new RecipeStore(getConfig().getDouble("ExpGain.Default"));
+		parseRecipes();
 
 		// install recipes
 		store.installRecipes(getServer());
 	}
 
 	@Override
-	public void onModuleDisable() {
+	public void onDisable() {
 		// uninstall recipes
 		store.uninstallRecipes(getServer());
 		store = null;
@@ -114,17 +95,53 @@ public class Alchemy extends ExpCraftModule {
 		chat = null;
 
 		// done
-		LOG.info("[EC] " + getDescription().getFullName() + " disabled");
+		LOG.info(getInfo().getFullName() + " disabled");
 	}
 
 	@Override
-	public void onModuleEnable() {
+	public void onEnable() {
 		// pre-load config
 		loadConfig();
 		// register listeners
 		registerEvents();
 		// ready
-		LOG.info("[EC] " + getDescription().getFullName() + " enabled");
+		LOG.info(getInfo().getFullName() + " enabled");
+	}
+
+	private void parseRecipes() {
+		File recipe = new File(getConfigFile().getParentFile(), getConfig()
+				.getProperty("Recipe.Definition"));
+		if (!recipe.exists()
+				&& "recipe.xml".equals(getConfig().getProperty(
+						"Recipe.Definition"))) {
+			// copy example recipes to disk
+			try {
+				FileUtil.INSTANCE.copyFile(getClass().getClassLoader()
+						.getResourceAsStream("config/recipe.xml"), recipe);
+			} catch (IOException e) {
+				LOG.warn("Failed to copy example recipes to disk.", e);
+			}
+		}
+		if (!recipe.exists()) {
+			// stated recipe XML does not exist
+			return;
+		}
+
+		// load recipes
+		try {
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			SAXParser saxParser = factory.newSAXParser();
+			RecipeParser handler = new RecipeParser();
+			saxParser.parse(recipe, handler);
+			store.addAll(handler.getRecipes());
+		} catch (IOException e) {
+			LOG.error("Error reading recipes.", e);
+		} catch (ParserConfigurationException e) {
+			LOG.error("Error starting SAX parser.", e);
+		} catch (SAXException e) {
+			LOG.error("Error parsing recipes.", e);
+		}
 	}
 
 	/** Register the listeners */
@@ -132,8 +149,7 @@ public class Alchemy extends ExpCraftModule {
 		// ensure the listeners are ready
 		createListeners();
 		// register listeners
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(craftListener, this);
+		registerEvents(craftListener);
 	}
 
 	public void warnLevel(final Player player, final int level) {

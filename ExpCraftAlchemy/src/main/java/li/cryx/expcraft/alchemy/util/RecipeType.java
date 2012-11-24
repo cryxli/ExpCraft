@@ -1,4 +1,4 @@
-package li.cryx.expcraft.util;
+package li.cryx.expcraft.alchemy.util;
 
 import li.cryx.expcraft.alchemy.recipe.TypedRecipe;
 

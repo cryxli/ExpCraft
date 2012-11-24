@@ -34,6 +34,12 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<module.name>Farming</module.name>
+		<module.abbr>Fm</module.abbr>
+		<main.class>li.cryx.expcraft.farming.Farming</main.class>
+	</properties>
+	
 	<build>
 		<finalName>${project.name}</finalName>
 		<resources>

@@ -1,6 +1,6 @@
 package li.cryx.expcraft.alchemy.recipe;
 
-import li.cryx.expcraft.util.RecipeType;
+import li.cryx.expcraft.alchemy.util.RecipeType;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

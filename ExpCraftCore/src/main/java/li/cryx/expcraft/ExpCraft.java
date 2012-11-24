@@ -139,7 +139,9 @@ public class ExpCraft extends JavaPlugin {
 
 		// shutdown core components
 		permission = null;
-		persistence.flush();
+		if (persistence != null) {
+			persistence.flush();
+		}
 		persistence = null;
 		config = null;
 	}

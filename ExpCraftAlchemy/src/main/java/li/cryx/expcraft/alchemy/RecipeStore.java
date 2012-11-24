@@ -1,5 +1,6 @@
 package li.cryx.expcraft.alchemy;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 import li.cryx.expcraft.alchemy.recipe.CustomFurnaceRecipe;
 import li.cryx.expcraft.alchemy.recipe.TypedRecipe;
-import li.cryx.expcraft.util.Recipes;
+import li.cryx.expcraft.alchemy.util.Recipes;
 
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -47,6 +48,18 @@ public class RecipeStore {
 		}
 		List<TypedRecipe> list = getList(recipe.getResult());
 		list.add(recipe);
+	}
+
+	/**
+	 * Add multiple recipes at once.
+	 * 
+	 * @param recipes
+	 *            A collection of {@link TypedRecipe} to add.
+	 */
+	public void addAll(final Collection<TypedRecipe> recipes) {
+		for (TypedRecipe recipe : recipes) {
+			add(recipe);
+		}
 	}
 
 	/**

@@ -34,6 +34,12 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<module.name>Mining</module.name>
+		<module.abbr>M</module.abbr>
+		<main.class>li.cryx.expcraft.mining.Mining</main.class>
+	</properties>
+	
 	<build>
 		<finalName>${project.name}</finalName>
 		<resources>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://github.com/cryxli/ExpCraft/recipe"
+	elementFormDefault="qualified" xmlns:ec="http://github.com/cryxli/ExpCraft/recipe">
+
+    <element name="recipe" type="ec:recipeType" />
+    <complexType name="recipeType">
+    	<sequence minOccurs="0" maxOccurs="unbounded">
+    		<choice minOccurs="1" maxOccurs="1">
+    			<element ref="ec:shapeless" />
+    			<element ref="ec:shaped" />
+    			<element ref="ec:furnace" />
+    		</choice>
+    	</sequence>
+    </complexType>
+
+    <element name="shapeless" type="ec:shapelessType" />
+    <complexType name="shapelessType">
+    	<sequence minOccurs="1" maxOccurs="1">
+    		<element name="output" type="ec:item-stack" maxOccurs="1"
+    			minOccurs="1" />
+    		<!-- TODO -->
+    		<element name="inputs" type="ec:inputs" maxOccurs="1"
+    			minOccurs="1" />
+    	</sequence>
+    	<attribute name="exp" type="double" default="1.0">
+    		<annotation>
+    			<documentation>
+    				Experience gained. Can be omitted when equals to one
+    				experience point.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="level" type="int" default="0">
+    		<annotation>
+    			<documentation>Required level to create this recipe.</documentation></annotation></attribute>
+    </complexType>
+
+    <element name="shaped" type="ec:shapedType" />
+    <complexType name="shapedType">
+    	<sequence minOccurs="1" maxOccurs="1">
+    		<element name="output" type="ec:item-stack" />
+    		<!-- TODO -->
+    		<element name="inputs" type="ec:inputs"></element>
+    	</sequence>
+    	<attribute name="width" type="int" use="required"></attribute>
+    	<attribute name="height" type="int" use="required"></attribute>
+    	<attribute name="exp" type="double" default="1.0">
+    		<annotation>
+    			<documentation>
+    				Experience gained. Can be omitted when equals to one
+    				experience point.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="level" type="int" default="0">
+    		<annotation>
+    			<documentation>Required level to create this recipe.</documentation></annotation></attribute>
+    </complexType>
+
+    <complexType name="inputs">
+        <annotation>
+        	<documentation>An item that is part of a shaped or shapeless recipe.</documentation>
+        </annotation>
+        <sequence>
+    		<element name="item" type="ec:item-stack" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="furnace" type="ec:furnaceType" />
+    <complexType name="furnaceType">
+    	<sequence minOccurs="1" maxOccurs="1">
+    		<element name="output" type="ec:item-stack">
+    			<annotation>
+    				<documentation>Resulting item</documentation>
+    			</annotation>
+    		</element>
+    		<element name="input" type="ec:item-stack">
+    			<annotation>
+    				<documentation>
+    					Item that can be cooked.
+    				</documentation>
+    			</annotation>
+    		</element>
+    	</sequence>
+    	<attribute name="exp" type="double" use="prohibited">
+    		<annotation>
+    			<documentation>
+    				Experience gained. Disabled at the moment.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="level" type="int" default="0" use="prohibited">
+    		<annotation>
+    			<documentation>Required level to create this recipe. Disabled at the moment.</documentation>
+    		</annotation></attribute>
+    </complexType>
+
+    <complexType name="item-stack">
+    	<attribute name="item" type="string" use="required">
+    		<annotation>
+    			<documentation>The base item. You can use the item names as defined by bukkit's Material class or the item IDs.</documentation>
+    		</annotation></attribute>
+    	<attribute name="data" type="int">
+    		<annotation>
+    			<documentation>
+    				Optional data value of the item.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+        <attribute name="amount" use="optional" default="1">
+    		<annotation>
+    			<documentation>
+    				How many items are produced/requires. An amount of
+    				one does not need to be specified.
+    			</documentation>
+    		</annotation>
+    		<simpleType>
+    			<restriction base="int">
+    				<minInclusive value="1"></minInclusive>
+    				<maxInclusive value="64"></maxInclusive>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+
+</schema>

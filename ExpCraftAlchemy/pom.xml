@@ -24,6 +24,12 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<module.name>Alchemy</module.name>
+		<module.abbr>A</module.abbr>
+		<main.class>li.cryx.expcraft.alchemy.Alchemy</main.class>
+	</properties>
+
 	<build>
 		<finalName>${project.name}</finalName>
 		<resources>
