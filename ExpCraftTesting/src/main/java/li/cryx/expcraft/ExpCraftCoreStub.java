@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2011 Urs P. Stettler, https://github.com/cryxli
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package li.cryx.expcraft;
 
 import java.io.File;
@@ -16,8 +38,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * <code>NullPointerException</code>, create a stub like this:
  * 
  * <pre>
- * // create a server mock
- * Server server = Mockito.mock(Server.class);
  * // this method is called by {@link CommandManager} to broadcast messages
  * Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
  * // instantiate the core stub
@@ -30,6 +50,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * @author cryxli
  */
 public class ExpCraftCoreStub extends ExpCraft {
+	/** Create a stub. Link the plugin to the mocked server. */
 	public ExpCraftCoreStub(final Server server, final PluginDescriptionFile pdf) {
 		super();
 		File folder = new File("target/plugins");

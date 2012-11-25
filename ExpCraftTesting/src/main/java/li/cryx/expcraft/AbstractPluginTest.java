@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2011 Urs P. Stettler, https://github.com/cryxli
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package li.cryx.expcraft;
 
 import java.io.IOException;
@@ -30,9 +52,9 @@ import org.mockito.stubbing.Answer;
  * 
  * <p>
  * This class will mock a subclass of {@link ExpCraftModule} and load the
- * "test-config.yml" defined in the {@link #configFile} field. The config is
- * loaded once (like <code>@BeforeClass</code>), while a new plugin is created
- * for every test (<code>@Before</code>).
+ * "test-config.properties" defined in the {@link #configFile} field. The config
+ * is loaded once (like <code>@BeforeClass</code>), while a new plugin is
+ * created for every test (<code>@Before</code>).
  * </p>
  * 
  * <p>
@@ -62,18 +84,38 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 	/** Which config file to load. */
 	protected String configFile = "test-config.properties";
 
+	/** A mocked permission manager. */
 	protected AbstractPermissionManager perm;
 
+	/** Indicator whether player is affected by the module. */
 	protected boolean hasModule;
 
+	/** The in-memory persistence manager. */
 	protected AbstractPersistenceManager pers;
 
+	/** A mocked bukkit server */
 	protected Server server;
 
+	/**
+	 * Create a mocked <code>Block</code>.
+	 * 
+	 * @param material
+	 *            Material of the block
+	 * @return The created block
+	 */
 	protected Block getBlock(final Material material) {
 		return getBlock(material, 0);
 	}
 
+	/**
+	 * Create a mocked <code>Block</code>.
+	 * 
+	 * @param material
+	 *            Material of the block
+	 * @param data
+	 *            Data value (color, material,damage, durability) of the block
+	 * @return The created block
+	 */
 	protected Block getBlock(final Material material, final int data) {
 		Block block = Mockito.mock(Block.class);
 		Mockito.when(block.getType()).thenReturn(material);
@@ -82,6 +124,15 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 		return block;
 	}
 
+	/**
+	 * Create a tree related mocked <code>Block</code>.
+	 * 
+	 * @param material
+	 *            Material of the block (sapling, wood, log, stairs)
+	 * @param type
+	 *            The wood type.
+	 * @return The created block
+	 */
 	protected Block getBlock(final Material material, final TreeSpecies type) {
 		BlockState state = Mockito.mock(BlockState.class);
 		Mockito.when(state.getData()).thenReturn(new Tree(type));
@@ -107,6 +158,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 		config.load(in);
 	}
 
+	/** Prepare test by loading config and reseting mocked plugin */
 	@Before
 	public void prepareTest() throws IOException {
 		if (!done) {
