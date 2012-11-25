@@ -11,11 +11,3 @@ project can be used to display their progress.
   <project>/target/*.zip
 - copy the ZIP to you web server alias and extract it
 - rename the config.php.default to config.php and set the database connection
-
-==== Migration from LevelCraft ====
-
-If you have been using LevelCraft, you can run the migrate-from-levelcraft.sql
-database script to create a ExpCraft table with the values from LevelCraft.
-
-Execute
-mysql -u [minecraft user] -p [password] [minecraft database] < migrate-from-levelcraft.sql
