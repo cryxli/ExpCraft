@@ -33,7 +33,7 @@ import org.junit.Test;
  * 
  * @author cryxli
  */
-public class ToolHelperTest {
+public class ToolQualityTest {
 
 	@Test
 	public void getMaterial() {
