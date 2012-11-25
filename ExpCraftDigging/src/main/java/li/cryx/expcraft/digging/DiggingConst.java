@@ -45,12 +45,12 @@ public class DiggingConst {
 	public static final class LEVEL {
 		public static final String DIRT = "UseLevel.Dirt";
 		public static final String GRASS = "UseLevel.Grass";
-		public static final String SAND = "ExpGain.Sand";
-		public static final String CLAY = "ExpGain.Clay";
-		public static final String SOULSAND = "ExpGain.SoulSand";
-		public static final String GRAVEL = "ExpGain.Gravel";
-		public static final String SNOW = "ExpGain.Snow";
-		public static final String MYCELIUM = "ExpGain.Mycelium";
+		public static final String SAND = "UseLevel.Sand";
+		public static final String CLAY = "UseLevel.Clay";
+		public static final String SOULSAND = "UseLevel.SoulSand";
+		public static final String GRAVEL = "UseLevel.Gravel";
+		public static final String SNOW = "UseLevel.Snow";
+		public static final String MYCELIUM = "UseLevel.Mycelium";
 	}
 
 	/** Which level in digging is required to use the indicated shovel. */
