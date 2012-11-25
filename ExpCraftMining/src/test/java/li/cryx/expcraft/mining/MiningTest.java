@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2011 Urs P. Stettler, https://github.com/cryxli
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package li.cryx.expcraft.mining;
 
 import junit.framework.Assert;
@@ -9,10 +31,16 @@ import org.bukkit.inventory.ItemStack;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+/**
+ * Verify double drops capabilities of {@link Mining}.
+ * 
+ * @author cryxli
+ */
 public class MiningTest {
 
 	private static final Mining module = new Mining();
 
+	/** Test double drops. */
 	@Test
 	public void calculateDrop() {
 		Assert.assertNull(testCalcDrops(Material.WOOD_PICKAXE, Material.STONE));
@@ -91,6 +119,7 @@ public class MiningTest {
 				Material.COAL, 3);
 	}
 
+	/** prepare and test */
 	private ItemStack testCalcDrops(final Material itemInHand,
 			final Material block) {
 		Player player = Mockito.mock(Player.class);
@@ -103,6 +132,7 @@ public class MiningTest {
 		return module.calculateDrop(b, player);
 	}
 
+	/** test and verify */
 	private void testCalcDrops(final Material itemInHand, final Material block,
 			final Material drop, final int amount) {
 		ItemStack stack = testCalcDrops(itemInHand, block);
