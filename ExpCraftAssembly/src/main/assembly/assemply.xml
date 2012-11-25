@@ -22,7 +22,7 @@
 			<unpack>false</unpack>
 			<!-- use the final name of the dependencies -->
 			<outputFileNameMapping>${artifact.build.finalName}.${artifact.packaging}</outputFileNameMapping>
-			
+			<!-- exclude unnecessary dependencies -->
 			<excludes>
 				<exclude>org.slf4j:*</exclude>
 				<exclude>li.cryx.expcraft:expcraft-core</exclude>
@@ -34,7 +34,7 @@
 		<file>
 			<!-- put everything into the root of the ZIP -->
 			<outputDirectory>.</outputDirectory>
-			<!-- add the ZIP from the web gui -->
+			<!-- merged core JAR -->
 			<source>${basedir}/../ExpCraftCore/target/ExpCraft-jar-with-dependencies.jar</source>
 			<!-- rename it -->
 			<destName>ExpCraft.jar</destName>
@@ -52,6 +52,12 @@
 			<source>${basedir}/src/main/static/README</source>
 			<!-- filter the resource -->
 			<filtered>true</filtered>
+		</file>
+		<file>
+			<!-- put everything into the root of the ZIP -->
+			<outputDirectory>.</outputDirectory>
+			<!-- add copy left notice -->
+			<source>${basedir}/../MIT-LICENSE.txt</source>
 		</file>
 	</files>
 
