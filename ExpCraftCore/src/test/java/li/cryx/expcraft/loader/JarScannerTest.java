@@ -23,6 +23,7 @@
 package li.cryx.expcraft.loader;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -43,12 +44,25 @@ import org.junit.Test;
  */
 public class JarScannerTest {
 
+	/** filter to find JAR files. */
+	private static final FileFilter JAR_FILTER = new FileFilter() {
+		@Override
+		public boolean accept(final File pathname) {
+			return pathname.getName().toLowerCase().endsWith(".jar");
+		}
+	};
+
+	/** folder containing JAR files */
 	private static File folder;
 
 	@BeforeClass
 	public static void createTestJars() throws IOException {
+		// clean folder
 		folder = new File("./target/scan");
 		folder.mkdirs();
+		for (File file : folder.listFiles(JAR_FILTER)) {
+			file.delete();
+		}
 
 		// JAR without info.properties
 		Properties prop = new Properties();

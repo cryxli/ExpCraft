@@ -23,22 +23,72 @@
 package li.cryx.expcraft.loader;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URLClassLoader;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import junit.framework.Assert;
 import li.cryx.expcraft.module.ExpCraftModule;
+import li.cryx.expcraft.util.FileUtil;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
  * This unittest verifies parts of the
- * {@link ModuleLoader#attachModule(ModuleInfo)} method. The final part, the
- * actual initialisation of the {@link ExpCraftModule} cannot be tested.
+ * {@link ModuleLoader#attachModule(ModuleInfo)} method.
  * 
  * @author cryxli
  */
 public class ModuleLoaderTest {
+
+	/** Filter to find JAR files. */
+	private static final FileFilter JAR_FILTER = new FileFilter() {
+		@Override
+		public boolean accept(final File pathname) {
+			return pathname.getName().toLowerCase().endsWith(".jar");
+		}
+	};
+
+	/** folder containing JARs */
+	private static File folder;
+
+	/** test jar for newModule() test. */
+	private static File jar;
+
+	@BeforeClass
+	public static void createModJar() throws IOException {
+		// clean folder
+		folder = new File("./target/scan");
+		folder.mkdirs();
+		for (File file : folder.listFiles(JAR_FILTER)) {
+			file.delete();
+		}
+
+		// build test jar for newModule() test
+		jar = new File(folder, "ModuleLoaderTest.jar");
+		ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(jar));
+		// Properties prop = new Properties();
+		// prop.setProperty(ModuleConstants.PROP.MAIN_CLASS,
+		// "li.cryx.expcraft.loader.DummyExpCraftModule");
+		// prop.setProperty(ModuleConstants.PROP.MODULE_NAME, "Mod");
+		// prop.setProperty(ModuleConstants.PROP.MODULE_ABBR, "M");
+		// prop.setProperty(ModuleConstants.PROP.MODULE_VERSION, "1.0");
+		// zos.putNextEntry(new ZipEntry("config/info.properties"));
+		// prop.store(zos, null);
+		zos.putNextEntry(new ZipEntry(
+				"li/cryx/expcraft/loader/DummyExpCraftModule.class"));
+		FileUtil.INSTANCE
+				.copyFile(
+						new File(
+								"target/test-classes/li/cryx/expcraft/loader/DummyExpCraftModule.class"),
+						zos);
+		zos.close();
+	}
 
 	// create ClassLoader, if missing
 	@Test
@@ -64,18 +114,18 @@ public class ModuleLoaderTest {
 	@Test
 	public void newModule() {
 		// prepare
-		ModuleInfo info = new ModuleInfo(new File("pom.xml"), "Mod", "M",
-				"class");
-		info.setLoader(getClass().getClassLoader());
+		ModuleInfo info = new ModuleInfo(jar, "Mod", "M",
+				"li.cryx.expcraft.loader.DummyExpCraftModule");
 
 		// test - aborts with a ClassNotFoundException
-		ExpCraftModule module = new ModuleLoader(info.getLoader())
+		ExpCraftModule module = new ModuleLoader(getClass().getClassLoader())
 				.attachModule(info);
 
 		// verify
-		Assert.assertNull(module);
-		Assert.assertNull(info.getModule());
-		Assert.assertEquals(getClass().getClassLoader(), info.getLoader());
+		Assert.assertNotNull(module);
+		Assert.assertTrue(module instanceof DummyExpCraftModule);
+		Assert.assertNotNull(info.getLoader());
+		Assert.assertTrue(info.getLoader() instanceof URLClassLoader);
 	}
 
 	// only load, if ModuleInfo is valid
