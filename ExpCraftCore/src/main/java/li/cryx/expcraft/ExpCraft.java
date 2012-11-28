@@ -91,6 +91,13 @@ public class ExpCraft extends JavaPlugin {
 		cmd = new CommandManager(this);
 	}
 
+	@Override
+	public List<Class<?>> getDatabaseClasses() {
+		List<Class<?>> list = new LinkedList<Class<?>>();
+		list.add(Experience.class);
+		return list;
+	}
+
 	/**
 	 * Get the level cap of ExpCraft.
 	 * 
@@ -342,5 +349,4 @@ public class ExpCraft extends JavaPlugin {
 		persistence.setMaxLevel(config.getConfig()
 				.getInteger("Levels.LevelCap"));
 	}
-
 }
