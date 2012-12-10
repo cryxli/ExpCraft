@@ -22,6 +22,7 @@
  */
 package li.cryx.expcraft.persist;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -45,14 +46,16 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 		try {
 			return getExperience(module, player).getExperience();
 		} catch (PersistenceException e) {
-			core.getLogger().log(Level.SEVERE,
-					"Unable to retrieve experience.", e);
+			String msg = MessageFormat.format(
+					"Unable to retrieve experience [module={0}, player={1}].",
+					module.getInfo().getAbbr(), player.getName());
+			core.getLogger().log(Level.SEVERE, msg, e);
 			return 0;
 		}
 	}
 
 	private Experience getExperience(final ExpCraftModule module,
-			final Player player) {
+			final Player player) throws PersistenceException {
 		Query<Experience> query = core.getDatabase().createQuery(
 				Experience.class);
 		query.where().eq("module", module.getInfo().getAbbr())
@@ -78,8 +81,10 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 			xp.setExperience(exp);
 			core.getDatabase().save(xp);
 		} catch (PersistenceException e) {
-			core.getLogger().log(Level.SEVERE, "Unable to persist experience.",
-					e);
+			String msg = MessageFormat
+					.format("Unable to persist experience [module={0}, player={1}, exp={2}].",
+							module.getInfo().getAbbr(), player.getName(), exp);
+			core.getLogger().log(Level.SEVERE, msg, e);
 		}
 	}
 
