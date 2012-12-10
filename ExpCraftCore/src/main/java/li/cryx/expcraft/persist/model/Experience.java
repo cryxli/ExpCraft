@@ -38,10 +38,10 @@ public class Experience {
 	@Id
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(name = "player", nullable = false)
 	private String player;
 
-	@Column(length = 10, nullable = false)
+	@Column(name = "module", length = 10, nullable = false)
 	private String module;
 
 	@Column(name = "exp", nullable = false)

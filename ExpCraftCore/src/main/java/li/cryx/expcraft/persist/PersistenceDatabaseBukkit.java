@@ -22,11 +22,14 @@
  */
 package li.cryx.expcraft.persist;
 
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.logging.Level;
 
+import javax.persistence.Column;
 import javax.persistence.PersistenceException;
+import javax.persistence.Table;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.persist.model.Experience;
@@ -34,8 +37,44 @@ import li.cryx.expcraft.persist.model.Experience;
 import org.bukkit.entity.Player;
 
 import com.avaje.ebean.Query;
+import com.avaje.ebean.SqlUpdate;
 
 public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
+
+	private static final String UPDATE;
+
+	static {
+		StringBuffer buf = new StringBuffer();
+		buf.append("UPDATE ").append(getTable());
+		buf.append("   SET ").append(getFieldName("experience"))
+				.append(" = :exp");
+		buf.append(" WHERE ").append(getFieldName("module"))
+				.append(" = :module");
+		buf.append("   AND ").append(getFieldName("player"))
+				.append(" = :player");
+		UPDATE = buf.toString();
+	}
+
+	private static Class<Experience> getEntity() {
+		return Experience.class;
+	}
+
+	private static String getFieldName(final String name) {
+		for (Field f : getEntity().getDeclaredFields()) {
+			if (f.getName().equals(name)) {
+				Column column = f.getAnnotation(Column.class);
+				if (column != null) {
+					return column.name();
+				}
+				break;
+			}
+		}
+		return name;
+	}
+
+	private static String getTable() {
+		return getEntity().getAnnotation(Table.class).name();
+	}
 
 	@Override
 	public void flush() {
@@ -77,9 +116,14 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 	public void setExp(final ExpCraftModule module, final Player player,
 			final double exp) {
 		try {
-			Experience xp = getExperience(module, player);
-			xp.setExperience(exp);
-			core.getDatabase().save(xp);
+			// Experience xp = getExperience(module, player);
+			// xp.setExperience(exp);
+			// core.getDatabase().save(xp);
+			SqlUpdate update = core.getDatabase().createSqlUpdate(UPDATE);
+			update.setParameter("exp", exp);
+			update.setParameter("module", module.getInfo().getAbbr());
+			update.setParameter("player", player.getName());
+			update.execute();
 		} catch (PersistenceException e) {
 			String msg = MessageFormat
 					.format("Unable to persist experience [module={0}, player={1}, exp={2}].",
