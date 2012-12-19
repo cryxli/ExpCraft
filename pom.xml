@@ -13,6 +13,15 @@
 		<url>https://github.com/cryxli/ExpCraft/tree/master/</url>
 	</scm>
 
+	<inceptionYear>2011</inceptionYear>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
 	<repositories>
 		<!-- the bukkit repo -->
 		<repository>
