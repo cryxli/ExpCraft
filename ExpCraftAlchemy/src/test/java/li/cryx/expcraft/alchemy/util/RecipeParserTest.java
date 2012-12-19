@@ -49,7 +49,7 @@ import org.xml.sax.SAXException;
  * 
  * @author cryxli
  */
-public class RecipeParserTest {
+public class RecipeParserTest extends AbstractItemStackTest {
 
 	private void checkItemStack(final ItemStack stack, final Material material,
 			final int data, final int amount) {

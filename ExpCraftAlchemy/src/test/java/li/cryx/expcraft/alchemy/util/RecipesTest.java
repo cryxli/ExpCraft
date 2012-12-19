@@ -38,7 +38,7 @@ import org.junit.Test;
  * 
  * @author cryxli
  */
-public class RecipesTest {
+public class RecipesTest extends AbstractItemStackTest {
 
 	private static CustomShapelessRecipe shapeless;
 	private static CustomShapelessRecipe shapelessClone;
