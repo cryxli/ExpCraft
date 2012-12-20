@@ -4,7 +4,7 @@
 
 	<groupId>li.cryx</groupId>
 	<artifactId>expcraft-template</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
+	<version>0.6.0</version>
 
 	<!-- change this -->
 	<name>EC-${module.name}</name>
@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>li.cryx.expcraft</groupId>
 			<artifactId>expcraft-core</artifactId>
-			<version>0.6.0-SNAPSHOT</version>
+			<version>0.6.0</version>
 		</dependency>
 	</dependencies>
 
