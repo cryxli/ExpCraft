@@ -78,7 +78,7 @@ public class RecipeParserTest extends AbstractItemStackTest {
 		Assert.assertEquals(1.0, r.getExp(), 0);
 		Assert.assertEquals(0, r.getLevel());
 		checkItemStack(r.getResult(), Material.IRON_INGOT, 0, 3);
-		checkItemStack(r.getInput(), Material.BUCKET, 0, 1);
+		checkItemStack(r.getInput(), Material.BUCKET, -1, 1);
 	}
 
 	@Test
@@ -172,17 +172,17 @@ public class RecipeParserTest extends AbstractItemStackTest {
 		Assert.assertEquals(3, shape[1].length()); // width
 		Map<Character, ItemStack> map = r.getIngredientMap();
 		char ch = shape[0].charAt(0);
-		checkItemStack(map.get(ch), Material.STONE, 0, 1);
+		checkItemStack(map.get(ch), Material.STONE, -1, 1);
 		ch = shape[0].charAt(1);
 		Assert.assertNull(map.get(ch));
 		ch = shape[0].charAt(2);
-		checkItemStack(map.get(ch), Material.STONE, 0, 1);
+		checkItemStack(map.get(ch), Material.STONE, -1, 1);
 		ch = shape[1].charAt(0);
-		checkItemStack(map.get(ch), Material.STONE, 0, 1);
+		checkItemStack(map.get(ch), Material.STONE, -1, 1);
 		ch = shape[1].charAt(1);
 		Assert.assertNull(map.get(ch));
 		ch = shape[1].charAt(2);
-		checkItemStack(map.get(ch), Material.STONE, 0, 1);
+		checkItemStack(map.get(ch), Material.STONE, -1, 1);
 	}
 
 	@Test
@@ -279,8 +279,9 @@ public class RecipeParserTest extends AbstractItemStackTest {
 		Assert.assertEquals(0, r.getLevel());
 		checkItemStack(r.getResult(), Material.SAND, 0, 2);
 		Assert.assertEquals(2, r.getIngredientList().size());
-		checkItemStack(r.getIngredientList().get(0), Material.COBBLESTONE, 0, 1);
-		checkItemStack(r.getIngredientList().get(1), Material.DIRT, 0, 1);
+		checkItemStack(r.getIngredientList().get(0), Material.COBBLESTONE, -1,
+				1);
+		checkItemStack(r.getIngredientList().get(1), Material.DIRT, -1, 1);
 	}
 
 	@Test

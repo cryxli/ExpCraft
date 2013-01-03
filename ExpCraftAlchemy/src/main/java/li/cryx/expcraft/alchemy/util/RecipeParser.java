@@ -106,7 +106,7 @@ public class RecipeParser extends DefaultHandler {
 		}
 
 		s = attr.getValue("data");
-		short data = 0;
+		short data = -1;
 		if (s != null) {
 			try {
 				data = Short.parseShort(s);
@@ -129,6 +129,9 @@ public class RecipeParser extends DefaultHandler {
 		if (stack == null) {
 			recipe = null;
 		} else {
+			if (stack.getDurability() == -1) {
+				stack.setDurability((short) 0);
+			}
 			recipe.setResult(stack);
 		}
 	}
