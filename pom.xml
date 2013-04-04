@@ -21,16 +21,27 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<repositories>
 		<!-- the bukkit repo -->
 		<repository>
 			<id>bukkit</id>
 			<name>bukkit</name>
 			<url>http://repo.bukkit.org/content/repositories/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>bukkit-snapshots</id>
+			<name>bukkit</name>
+			<url>http://repo.bukkit.org/content/repositories/snapshots/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
-		
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -73,12 +84,13 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<properties>
 		<jdk>1.6</jdk>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<bukkit.version>1.4.7-R1.0</bukkit.version>
+		<!-- <bukkit.version>1.5.1-R0.2-SNAPSHOT</bukkit.version> -->
+		<bukkit.version>1.5.1-R0.1</bukkit.version>
 		<sqlite.version>3.7.2</sqlite.version>
 		<junit.version>4.10</junit.version>
 		<mockito.version>1.9.0</mockito.version>

@@ -192,4 +192,19 @@
 		</inputs>
 	</shapeless>
 
+	<!-- Nether bricks from none nether materials -->
+	<shaped height="3" width="3" exp="1.0" level="10">
+		<output item="NETHER_BRICK" />
+		<inputs>
+			<item item="ROTTEN_FLESH" />
+			<item item="WOOD" />
+			<item item="ROTTEN_FLESH" />
+			<item item="WOOD" />
+			<item item="GRAVEL" />
+			<item item="WOOD" />
+			<item item="GRAVEL" />
+			<item item="WOOD" />
+			<item item="GRAVEL" />
+		</inputs>
+	</shaped>
 </recipe>
