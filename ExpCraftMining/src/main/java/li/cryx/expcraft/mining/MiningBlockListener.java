@@ -84,6 +84,9 @@ public class MiningBlockListener implements Listener {
 		case GLOWING_REDSTONE_ORE:
 			expGain = plugin.getConfig().getDouble("ExpGain.Redstone");
 			break;
+		case REDSTONE_BLOCK:
+			expGain = plugin.getConfig().getDouble("ExpGain.RedstoneBlock");
+			break;
 		case GOLD_ORE:
 			expGain = plugin.getConfig().getDouble("ExpGain.GoldOre");
 			break;
@@ -113,6 +116,12 @@ public class MiningBlockListener implements Listener {
 			break;
 		case SMOOTH_BRICK:
 			expGain = plugin.getConfig().getDouble("ExpGain.StoneBrick");
+			break;
+		case QUARTZ_BLOCK:
+			expGain = plugin.getConfig().getDouble("ExpGain.Quartz");
+			break;
+		case QUARTZ_ORE:
+			expGain = plugin.getConfig().getDouble("ExpGain.QuartzOre");
 			break;
 		}
 		plugin.getPersistence().addExp(plugin, player, expGain);

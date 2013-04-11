@@ -60,12 +60,14 @@ public class Mining extends DropExpCraftModule {
 		doubleDrops.put(Material.STONE, new int[] { 1, 1, 2, 2 });
 		doubleDrops.put(Material.COBBLESTONE, new int[] { 1, 1, 2, 2 });
 		doubleDrops.put(Material.IRON_ORE, new int[] { 1, 1, 2, 2 });
+		doubleDrops.put(Material.QUARTZ_ORE, new int[] { 1, 1, 2, 2 });
 		doubleDrops.put(Material.MOSSY_COBBLESTONE, //
 				new int[] { 1, 1, 2, 2 });
 		doubleDrops.put(Material.NETHERRACK, new int[] { 1, 1, 2, 2 });
 		doubleDrops.put(Material.NETHER_BRICK, new int[] { 1, 1, 2, 2 });
 		doubleDrops.put(Material.GOLD_ORE, new int[] { 0, 0, 1, 2 });
 		doubleDrops.put(Material.SANDSTONE, new int[] { 1, 2, 2, 3 });
+		doubleDrops.put(Material.QUARTZ_BLOCK, new int[] { 1, 2, 2, 3 });
 		doubleDrops.put(Material.REDSTONE_ORE, new int[] { 0, 5, 5, 8 });
 		doubleDrops.put(Material.GLOWING_REDSTONE_ORE, //
 				new int[] { 0, 5, 5, 8 });
@@ -95,6 +97,8 @@ public class Mining extends DropExpCraftModule {
 		switch (material) {
 		case STONE:
 			return new ItemStack(Material.COBBLESTONE, amount);
+		case QUARTZ_ORE:
+			return new ItemStack(Material.QUARTZ, amount);
 		case COBBLESTONE:
 		case IRON_ORE:
 		case MOSSY_COBBLESTONE:
@@ -104,8 +108,9 @@ public class Mining extends DropExpCraftModule {
 			return new ItemStack(material, amount);
 		case OBSIDIAN:
 			return new ItemStack(material, 1);
+		case QUARTZ_BLOCK:
 		case SANDSTONE:
-			return new ItemStack(Material.SANDSTONE, amount, block.getData());
+			return new ItemStack(material, amount, block.getData());
 		case REDSTONE_ORE:
 		case GLOWING_REDSTONE_ORE:
 			return new ItemStack(Material.REDSTONE, amount);
@@ -116,7 +121,9 @@ public class Mining extends DropExpCraftModule {
 		case GLOWSTONE:
 			return new ItemStack(Material.GLOWSTONE_DUST, amount);
 
+		case REDSTONE_BLOCK:
 		default:
+			// drop nothing
 			return null;
 		}
 	}

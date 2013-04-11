@@ -96,16 +96,14 @@ public class MiningTest {
 		testCalcDrops(Material.DIAMOND_PICKAXE, Material.GLOWSTONE,
 				Material.GLOWSTONE_DUST, 6);
 
-		Assert.assertNull(testCalcDrops(Material.WOOD_PICKAXE,
-				Material.SANDSTONE));
-		testCalcDrops(Material.STONE_PICKAXE, Material.SANDSTONE,
-				Material.SANDSTONE, 1);
-		testCalcDrops(Material.GOLD_PICKAXE, Material.SANDSTONE,
-				Material.SANDSTONE, 2);
-		testCalcDrops(Material.IRON_PICKAXE, Material.SANDSTONE,
-				Material.SANDSTONE, 2);
-		testCalcDrops(Material.DIAMOND_PICKAXE, Material.SANDSTONE,
-				Material.SANDSTONE, 3);
+		for (Material material : new Material[] { Material.SANDSTONE,
+				Material.QUARTZ_BLOCK }) {
+			Assert.assertNull(testCalcDrops(Material.WOOD_PICKAXE, material));
+			testCalcDrops(Material.STONE_PICKAXE, material, material, 1);
+			testCalcDrops(Material.GOLD_PICKAXE, material, material, 2);
+			testCalcDrops(Material.IRON_PICKAXE, material, material, 2);
+			testCalcDrops(Material.DIAMOND_PICKAXE, material, material, 3);
+		}
 
 		Assert.assertNull(testCalcDrops(Material.WOOD_PICKAXE,
 				Material.COAL_ORE));
@@ -117,6 +115,24 @@ public class MiningTest {
 				2);
 		testCalcDrops(Material.DIAMOND_PICKAXE, Material.COAL_ORE,
 				Material.COAL, 3);
+
+		// MC 1.5
+		Assert.assertNull(testCalcDrops(Material.WOOD_PICKAXE,
+				Material.QUARTZ_ORE));
+		testCalcDrops(Material.STONE_PICKAXE, Material.QUARTZ_ORE,
+				Material.QUARTZ, 1);
+		testCalcDrops(Material.GOLD_PICKAXE, Material.QUARTZ_ORE,
+				Material.QUARTZ, 1);
+		testCalcDrops(Material.IRON_PICKAXE, Material.QUARTZ_ORE,
+				Material.QUARTZ, 2);
+		testCalcDrops(Material.DIAMOND_PICKAXE, Material.QUARTZ_ORE,
+				Material.QUARTZ, 2);
+
+		for (Material itemInHand : new Material[] { Material.WOOD_PICKAXE,
+				Material.STONE_PICKAXE, Material.GOLD_PICKAXE,
+				Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE }) {
+			Assert.assertNull(testCalcDrops(itemInHand, Material.REDSTONE_BLOCK));
+		}
 	}
 
 	/** prepare and test */

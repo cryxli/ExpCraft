@@ -165,6 +165,8 @@ public class MiningConstraints {
 		case REDSTONE_ORE:
 		case GLOWING_REDSTONE_ORE:
 			return checkAndWarnBlock(player, level, "UseLevel.Redstone");
+		case REDSTONE_BLOCK:
+			return checkAndWarnBlock(player, level, "UseLevel.RedstoneBlock");
 		case DIAMOND_ORE:
 			return checkAndWarnBlock(player, level, "UseLevel.DiamondOre");
 		case OBSIDIAN:
@@ -173,6 +175,10 @@ public class MiningConstraints {
 			return checkAndWarnBlock(player, level, "UseLevel.Netherrack");
 		case SMOOTH_BRICK:
 			return checkAndWarnBlock(player, level, "UseLevel.StoneBrick");
+		case QUARTZ_BLOCK:
+			return checkAndWarnBlock(player, level, "UseLevel.Quartz");
+		case QUARTZ_ORE:
+			return checkAndWarnBlock(player, level, "UseLevel.QuartzOre");
 		default:
 			return true;
 		}
