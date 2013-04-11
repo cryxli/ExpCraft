@@ -44,7 +44,7 @@ public class Digging extends DropExpCraftModule {
 	private Chat chat;
 
 	@Override
-	protected ItemStack calculateDrop(final Block block, final Player player) {
+	public ItemStack calculateDrop(final Block block, final Player player) {
 		Material material = block.getType();
 		ToolQuality quality = ToolQuality.NONE;
 		if (player != null) {
@@ -62,6 +62,11 @@ public class Digging extends DropExpCraftModule {
 			return new ItemStack(Material.CLAY_BALL, ToolQuality.isAtLeast(
 					ToolQuality.IRON, quality) ? 8 : 4);
 		case SNOW:
+			// MC 1.5
+			// data value + 1 = amount of layers
+			return new ItemStack(Material.SNOW_BALL, (block.getData() + 1) % 4);
+
+		case SNOW_BLOCK:
 			return new ItemStack(Material.SNOW_BALL, ToolQuality.isAtLeast(
 					ToolQuality.IRON, quality) ? 8 : 4);
 

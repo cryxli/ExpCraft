@@ -52,8 +52,9 @@ public class DiggingContraints {
 	 * @param level
 	 *            Player's level in digging
 	 */
-	public void addExperience(final Player player, final Material material,
+	public void addExperience(final Player player, final Block block,
 			final int level) {
+		final Material material = block.getType();
 		double exp = 0;
 		switch (material) {
 		case DIRT:
@@ -109,13 +110,17 @@ public class DiggingContraints {
 				exp = plugin.getConfig().getDouble(DiggingConst.EXP.GRAVEL);
 			}
 			break;
-		case SNOW:
+		case SNOW_BLOCK:
 			if (level < plugin.getConfig().getInteger(DiggingConst.LEVEL.SNOW)) {
 				plugin.warnCutBlockLevel(player,
 						plugin.getConfig().getInteger(DiggingConst.LEVEL.SNOW));
 			} else {
 				exp = plugin.getConfig().getDouble(DiggingConst.EXP.SNOW);
 			}
+			break;
+		case SNOW:
+			// TODO MC 1.5
+			System.out.println(block.getData());
 			break;
 		case MYCEL:
 			if (level < plugin.getConfig().getInteger(

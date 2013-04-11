@@ -50,14 +50,16 @@ public class DiggingContraintsTest extends AbstractPluginTest<Digging> {
 	public void addExperience() {
 		Player player = Mockito.mock(Player.class);
 		Mockito.when(player.getName()).thenReturn("Player");
-		test.addExperience(player, Material.STONE, 1);
+		Block block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(Material.STONE);
+		test.addExperience(player, block, 1);
 		Mockito.verify(plugin, Mockito.never()).warnCutBlockLevel(
 				Mockito.eq(player), Mockito.anyInt());
 		Assert.assertEquals(0, pers.getExp(plugin, player), 0);
 
 		testBlocks(Material.DIRT, "UseLevel.Dirt", 1);
 		testBlocks(Material.GRASS, "UseLevel.Grass", 1);
-		testBlocks(Material.SNOW, "UseLevel.Snow", 5);
+		testBlocks(Material.SNOW_BLOCK, "UseLevel.Snow", 5);
 		testBlocks(Material.SOUL_SAND, "UseLevel.SoulSand", 8);
 		testBlocks(Material.GRAVEL, "UseLevel.Gravel", 1);
 		testBlocks(Material.CLAY, "UseLevel.Clay", 10);
@@ -117,17 +119,19 @@ public class DiggingContraintsTest extends AbstractPluginTest<Digging> {
 
 	private void testBlocks(final Material material, final String useLevel,
 			final double exp) {
+		Block block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(material);
 		Player player = Mockito.mock(Player.class);
 		Mockito.when(player.getName()).thenReturn("Player");
 		pers.setExp(plugin, player, 0);
 
 		int level = config.getInteger(useLevel);
 		config.setInteger(useLevel, 50);
-		test.addExperience(player, material, 1);
+		test.addExperience(player, block, 1);
 		Mockito.verify(plugin).warnCutBlockLevel(player, 50);
 
 		config.setInteger(useLevel, 0);
-		test.addExperience(player, material, 1);
+		test.addExperience(player, block, 1);
 		config.setInteger(useLevel, level);
 		Assert.assertEquals(exp, pers.getExp(plugin, player));
 	}

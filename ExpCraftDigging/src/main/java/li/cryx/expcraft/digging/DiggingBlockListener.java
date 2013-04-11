@@ -63,8 +63,7 @@ public class DiggingBlockListener implements Listener {
 			return;
 		}
 
-		Material m = event.getBlock().getType();
-		test.addExperience(player, m, level);
+		test.addExperience(player, event.getBlock(), level);
 
 		// since fire shovel may drop different items, only do double drops, if
 		// nothing special happened
