@@ -89,8 +89,7 @@
 		<jdk>1.6</jdk>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<!-- <bukkit.version>1.5.1-R0.2-SNAPSHOT</bukkit.version> -->
-		<bukkit.version>1.5.1-R0.1</bukkit.version>
+		<bukkit.version>1.5.2-R1.0</bukkit.version>
 		<sqlite.version>3.7.2</sqlite.version>
 		<junit.version>4.10</junit.version>
 		<mockito.version>1.9.0</mockito.version>
