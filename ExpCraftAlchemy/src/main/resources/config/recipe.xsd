@@ -89,7 +89,7 @@
     			</documentation>
     		</annotation>
     	</attribute>
-    	<attribute name="level" type="int" default="0" use="prohibited">
+    	<attribute name="level" type="int" default="0" use="optional">
     		<annotation>
     			<documentation>Required level to create this recipe. Disabled at the moment.</documentation>
     		</annotation></attribute>
