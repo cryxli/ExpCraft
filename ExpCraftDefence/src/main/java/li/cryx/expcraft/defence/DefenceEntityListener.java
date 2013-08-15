@@ -74,15 +74,16 @@ public class DefenceEntityListener implements Listener {
 		if (test.checkArmor(player)) {
 			// get exp proportional to dealt damage (before armor bonus is
 			// applied)
-			int dmg = event.getDamage();
+			double dmg = event.getDamage();
 			plugin.getPersistence().addExp(plugin, player,
 					dmg * plugin.getConfig().getDouble("ExperienceMultiplier"));
 
 			// TODO add material to the equation
 			// reduce dmg depending on exp to levelCap ratio
 			int level = plugin.getPersistence().getLevel(plugin, player);
-			int reducedDmg = 1 + dmg * (plugin.getLevelCap() - level)
+			double progress = 1.0 * (plugin.getLevelCap() - level)
 					/ plugin.getLevelCap();
+			double reducedDmg = 1 + Math.floor(dmg * progress);
 			event.setDamage(reducedDmg);
 		}
 	}

@@ -67,9 +67,9 @@ public class DexterityEntityListenerTest extends AbstractPluginTest<Dexterity> {
 		plugin.getPersistence().setLevel(plugin, player, level);
 		Mockito.when(player.getInventory()).thenReturn(inv);
 		EntityDamageEvent event = new EntityDamageEvent(player,
-				DamageCause.FALL, 20);
+				DamageCause.FALL, 20.0);
 		listener.onEntityDamage(event);
-		Assert.assertEquals(20 - reduction, event.getDamage());
+		Assert.assertEquals(20.0 - reduction, event.getDamage(), 0);
 	}
 
 	/** Test 1 */
@@ -77,15 +77,15 @@ public class DexterityEntityListenerTest extends AbstractPluginTest<Dexterity> {
 	public void playerDoesNotHaveModule() {
 		Player player = Mockito.mock(Player.class);
 		EntityDamageEvent event = new EntityDamageEvent(player,
-				DamageCause.FIRE, 20);
+				DamageCause.FIRE, 20.0);
 		listener.onEntityDamage(event);
 		Assert.assertEquals(0, plugin.getPersistence().getExp(plugin, player),
 				0);
-		Assert.assertEquals(20, event.getDamage());
+		Assert.assertEquals(20.0, event.getDamage(), 0);
 
-		event = new EntityDamageEvent(player, DamageCause.FALL, 20);
+		event = new EntityDamageEvent(player, DamageCause.FALL, 20.0);
 		listener.onEntityDamage(event);
-		Assert.assertEquals(20, event.getDamage());
+		Assert.assertEquals(20.0, event.getDamage(), 0);
 
 		// if one of the cases fails, a NullPointerException is thrown
 	}
@@ -98,9 +98,9 @@ public class DexterityEntityListenerTest extends AbstractPluginTest<Dexterity> {
 		Player player = Mockito.mock(Player.class);
 		Mockito.when(player.getInventory()).thenReturn(inv);
 		EntityDamageEvent event = new EntityDamageEvent(player,
-				DamageCause.FALL, 20);
+				DamageCause.FALL, 20.0);
 		listener.onEntityDamage(event);
-		Assert.assertEquals(20, event.getDamage());
+		Assert.assertEquals(20.0, event.getDamage(), 0);
 	}
 
 	@Before

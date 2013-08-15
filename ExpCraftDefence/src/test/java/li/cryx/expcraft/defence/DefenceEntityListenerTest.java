@@ -51,7 +51,7 @@ public class DefenceEntityListenerTest extends AbstractPluginTest<Defence> {
 		return Defence.class;
 	}
 
-	private void hit(final int dmg, final int level, final int expDmg) {
+	private void hit(final double dmg, final int level, final int expDmg) {
 		hasModule = true;
 		PlayerInventory inv = Mockito.mock(PlayerInventory.class);
 		Mockito.when(inv.getBoots()).thenReturn(
@@ -68,7 +68,7 @@ public class DefenceEntityListenerTest extends AbstractPluginTest<Defence> {
 
 		Assert.assertEquals(2 * dmg,
 				plugin.getPersistence().getExp(plugin, player) - oldExp, 0);
-		Assert.assertEquals(expDmg, event.getDamage());
+		Assert.assertEquals(expDmg, event.getDamage(), 0);
 		Assert.assertFalse(event.isCancelled());
 	}
 

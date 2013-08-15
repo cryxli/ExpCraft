@@ -75,7 +75,7 @@ public class DexterityEntityListener implements Listener {
 				* 10.0 / plugin.getLevelCap() //
 				* plugin.getConfig().getDouble("Settings.FallDmgMultiplier"));
 		// apply reduction
-		int dmg = Math.max(0, event.getDamage() - damageReduction);
+		double dmg = Math.max(0, event.getDamage() - damageReduction);
 		event.setDamage(dmg);
 	}
 
