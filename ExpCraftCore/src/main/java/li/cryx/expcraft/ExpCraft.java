@@ -40,6 +40,7 @@ import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.perm.NoPermissionManager;
 import li.cryx.expcraft.perm.PermissionsBukkitManager;
+import li.cryx.expcraft.perm.PermissionsExManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 import li.cryx.expcraft.persist.PersistenceDatabaseBukkit;
 import li.cryx.expcraft.persist.PersistenceFlatFile;
@@ -299,9 +300,14 @@ public class ExpCraft extends JavaPlugin {
 	private void setPermission() {
 		Plugin permBukkit = getServer().getPluginManager().getPlugin(
 				"PermissionsBukkit");
+		Plugin permEx = getServer().getPluginManager().getPlugin(
+				"PermissionsEx");
 		if (permBukkit != null) {
 			permission = new PermissionsBukkitManager();
 			LOG.info("Using PermissionsBukkit.");
+		} else if (permEx != null) {
+			permission = new PermissionsExManager();
+			LOG.info("Using PermissionsEx.");
 		} else {
 			LOG.info("No Permissions found enabling all levels.");
 			permission = new NoPermissionManager();
