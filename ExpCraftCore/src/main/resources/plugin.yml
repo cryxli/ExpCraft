@@ -3,6 +3,7 @@ main: ${main.class}
 version: ${project.version}
 description: >
              ${project.name} is an experience-based plugin for Minecraft.
+softdepend: [PermissionsEx]
 
 database: true
 

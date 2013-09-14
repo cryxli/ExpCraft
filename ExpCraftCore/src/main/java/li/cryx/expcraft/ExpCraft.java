@@ -298,9 +298,9 @@ public class ExpCraft extends JavaPlugin {
 	 * according to the state of the bukkit server.
 	 */
 	private void setPermission() {
-		Plugin permBukkit = getServer().getPluginManager().getPlugin(
+		final Plugin permBukkit = getServer().getPluginManager().getPlugin(
 				"PermissionsBukkit");
-		Plugin permEx = getServer().getPluginManager().getPlugin(
+		final Plugin permEx = getServer().getPluginManager().getPlugin(
 				"PermissionsEx");
 		if (permBukkit != null) {
 			permission = new PermissionsBukkitManager();
