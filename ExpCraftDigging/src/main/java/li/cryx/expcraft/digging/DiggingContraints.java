@@ -119,8 +119,7 @@ public class DiggingContraints {
 			}
 			break;
 		case SNOW:
-			// TODO MC 1.5
-			System.out.println(block.getData());
+			// do not give exp for snow layer
 			break;
 		case MYCEL:
 			if (level < plugin.getConfig().getInteger(

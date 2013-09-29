@@ -25,7 +25,6 @@ public class DiggingTest extends Digging {
 
 		// MC 1.5
 		for (int data = 1; data <= 8; data++) {
-			System.out.println(data - 1);
 			testDrops(Material.SNOW, (byte) (data - 1), Material.SNOW_BALL,
 					null, data % 4, data % 4, data % 4, data % 4);
 		}
