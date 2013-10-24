@@ -49,6 +49,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 	private static final Material[] TREE_LIKE = new Material[] { Material.LOG,
 			Material.WOOD, Material.LEAVES, Material.SAPLING };
 
+	// because order matters within this test class
 	private static final TreeSpecies[] TREE_SPECIES = new TreeSpecies[] {
 			TreeSpecies.GENERIC, TreeSpecies.BIRCH, TreeSpecies.REDWOOD,
 			TreeSpecies.JUNGLE };
@@ -115,6 +116,12 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 
 		// not an axe
 		Assert.assertTrue(test.checkTool(player, Material.WOOD_SWORD, 10));
+	}
+
+	@Test
+	public void checkTreeSpecies() {
+		// this test will fail whenever new TreeSpecies are added to the game
+		Assert.assertEquals(4, TreeSpecies.values().length);
 	}
 
 	@Override

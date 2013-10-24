@@ -28,9 +28,11 @@ import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 import li.cryx.expcraft.util.ToolQuality;
 
+import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,12 @@ public class WoodCutting extends DropExpCraftModule {
 	/** The chat utility to send messages to players. */
 	private Chat chat;
 
+	private final WoodCuttingConstraints test;
+
+	public WoodCutting() {
+		test = new WoodCuttingConstraints(this);
+	}
+
 	@Override
 	protected ItemStack calculateDrop(final Block block, final Player player) {
 		ToolQuality quality = ToolQuality.NONE;
@@ -69,7 +77,10 @@ public class WoodCutting extends DropExpCraftModule {
 			if (ToolQuality.isAtLeast(ToolQuality.IRON, quality)) {
 				amount = 2;
 			}
-			return new ItemStack(block.getType(), amount, block.getData());
+			final TreeSpecies species = test.getTreeType(block);
+			final ItemStack stack = new ItemStack(block.getType(), amount);
+			stack.setData(new Tree(species));
+			return stack;
 
 		default:
 			return null;

@@ -23,9 +23,12 @@
 package li.cryx.expcraft.woodcutting;
 
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Tree;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -46,16 +49,45 @@ public class WoodCuttingTest {
 		Assert.assertNull(testCalcDrop(Material.STONE, Material.LOG));
 
 		Assert.assertNull(testCalcDrop(Material.WOOD_AXE, Material.LOG));
-		testCalcDrop(Material.STONE_AXE, Material.LOG, 1);
-		testCalcDrop(Material.GOLD_AXE, Material.LOG, 1);
-		testCalcDrop(Material.IRON_AXE, Material.LOG, 2);
-		testCalcDrop(Material.DIAMOND_AXE, Material.LOG, 2);
 
 		Assert.assertNull(testCalcDrop(Material.WOOD_AXE, Material.WOOD));
-		testCalcDrop(Material.STONE_AXE, Material.WOOD, 1);
-		testCalcDrop(Material.GOLD_AXE, Material.WOOD, 1);
-		testCalcDrop(Material.IRON_AXE, Material.WOOD, 2);
-		testCalcDrop(Material.DIAMOND_AXE, Material.WOOD, 2);
+	}
+
+	@Test
+	public void calculateDropTreeSpecies() {
+		testTreeCalcDrop(Material.STONE_AXE, Material.WOOD, 1,
+				TreeSpecies.GENERIC);
+		testTreeCalcDrop(Material.GOLD_AXE, Material.WOOD, 1,
+				TreeSpecies.GENERIC);
+		testTreeCalcDrop(Material.IRON_AXE, Material.WOOD, 2,
+				TreeSpecies.GENERIC);
+		testTreeCalcDrop(Material.DIAMOND_AXE, Material.WOOD, 2,
+				TreeSpecies.GENERIC);
+
+		testTreeCalcDrop(Material.STONE_AXE, Material.WOOD, 1,
+				TreeSpecies.BIRCH);
+		testTreeCalcDrop(Material.GOLD_AXE, Material.WOOD, 1, TreeSpecies.BIRCH);
+		testTreeCalcDrop(Material.IRON_AXE, Material.WOOD, 2, TreeSpecies.BIRCH);
+		testTreeCalcDrop(Material.DIAMOND_AXE, Material.WOOD, 2,
+				TreeSpecies.BIRCH);
+
+		testTreeCalcDrop(Material.STONE_AXE, Material.WOOD, 1,
+				TreeSpecies.REDWOOD);
+		testTreeCalcDrop(Material.GOLD_AXE, Material.WOOD, 1,
+				TreeSpecies.REDWOOD);
+		testTreeCalcDrop(Material.IRON_AXE, Material.WOOD, 2,
+				TreeSpecies.REDWOOD);
+		testTreeCalcDrop(Material.DIAMOND_AXE, Material.WOOD, 2,
+				TreeSpecies.REDWOOD);
+
+		testTreeCalcDrop(Material.STONE_AXE, Material.WOOD, 1,
+				TreeSpecies.JUNGLE);
+		testTreeCalcDrop(Material.GOLD_AXE, Material.WOOD, 1,
+				TreeSpecies.JUNGLE);
+		testTreeCalcDrop(Material.IRON_AXE, Material.WOOD, 2,
+				TreeSpecies.JUNGLE);
+		testTreeCalcDrop(Material.DIAMOND_AXE, Material.WOOD, 2,
+				TreeSpecies.JUNGLE);
 	}
 
 	// prepare and test
@@ -72,11 +104,31 @@ public class WoodCuttingTest {
 	}
 
 	// test and verification
-	private void testCalcDrop(final Material itemInHand, final Material block,
-			final int amount) {
-		ItemStack stack = testCalcDrop(itemInHand, block);
+	private void testTreeCalcDrop(final Material itemInHand,
+			final Material block, final int amount, final TreeSpecies species) {
+		ItemStack stack = testTreeCalcDrop(itemInHand, block, species);
 		Assert.assertEquals(block, stack.getType());
 		Assert.assertEquals(amount, stack.getAmount());
+		Assert.assertEquals(species, ((Tree) stack.getData()).getSpecies());
+	}
+
+	// prepare and test
+	private ItemStack testTreeCalcDrop(final Material itemInHand,
+			final Material block, final TreeSpecies species) {
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getItemInHand()).thenReturn(
+				new ItemStack(itemInHand));
+
+		Tree tree = new Tree(species);
+
+		BlockState state = Mockito.mock(BlockState.class);
+		Mockito.when(state.getData()).thenReturn(tree);
+
+		Block b = Mockito.mock(Block.class);
+		Mockito.when(b.getType()).thenReturn(block);
+		Mockito.when(b.getState()).thenReturn(state);
+
+		return module.calculateDrop(b, player);
 	}
 
 }
