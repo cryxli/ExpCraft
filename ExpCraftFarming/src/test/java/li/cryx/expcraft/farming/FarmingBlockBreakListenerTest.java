@@ -27,6 +27,7 @@ import li.cryx.expcraft.AbstractPluginTest;
 
 import org.bukkit.CropState;
 import org.bukkit.Material;
+import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -35,6 +36,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.CocoaPlant;
 import org.bukkit.material.CocoaPlant.CocoaPlantSize;
 import org.bukkit.material.Crops;
+import org.bukkit.material.NetherWarts;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -160,9 +162,14 @@ public class FarmingBlockBreakListenerTest extends AbstractPluginTest<Farming> {
 	/** Test 5 */
 	@Test
 	public void playerHarvestsNetherWarts() {
+		NetherWarts plant = new NetherWarts(NetherWartsState.RIPE);
+
+		BlockState state = Mockito.mock(BlockState.class);
+		Mockito.when(state.getData()).thenReturn(plant);
+
 		Block wart = Mockito.mock(Block.class);
 		Mockito.when(wart.getType()).thenReturn(Material.NETHER_WARTS);
-		Mockito.when(wart.getData()).thenReturn(NetherWartState.RIPE.getData());
+		Mockito.when(wart.getState()).thenReturn(state);
 
 		harvest(wart, "UseLevel.NetherWart", 5);
 	}

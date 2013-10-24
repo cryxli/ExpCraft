@@ -24,12 +24,14 @@ package li.cryx.expcraft.farming;
 
 import org.bukkit.CropState;
 import org.bukkit.Material;
+import org.bukkit.NetherWartsState;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.material.CocoaPlant;
 import org.bukkit.material.CocoaPlant.CocoaPlantSize;
 import org.bukkit.material.Crops;
+import org.bukkit.material.NetherWarts;
 
 /**
  * This class contains the test used by {@link FarmingBlockBreakListener} to
@@ -211,9 +213,8 @@ public class FarmingConstraints {
 	 *         state ripe.
 	 */
 	public boolean isRipeNetherWart(final Block block) {
-		// TODO cryxli: implement the proper way, once bukkit is ready
 		if (block.getType() == Material.NETHER_WARTS) {
-			return block.getData() == NetherWartState.RIPE.getData();
+			return ((NetherWarts) block.getState().getData()).getState() == NetherWartsState.RIPE;
 		} else {
 			return false;
 		}

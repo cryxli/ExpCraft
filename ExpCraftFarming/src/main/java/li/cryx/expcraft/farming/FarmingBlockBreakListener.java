@@ -159,8 +159,7 @@ public class FarmingBlockBreakListener implements Listener {
 			final short damage) {
 		Location locy = new Location(block.getWorld(), block.getX(),
 				block.getY(), block.getZ(), 0, 0);
-		block.getWorld().dropItem(locy,
-				new ItemStack(material.getId(), 1, damage));
+		block.getWorld().dropItem(locy, new ItemStack(material, 1, damage));
 	}
 
 	// A block has been destroyed
@@ -191,7 +190,8 @@ public class FarmingBlockBreakListener implements Listener {
 			return;
 		}
 
-		if (m == Material.LEAVES) {
+		if (m == Material.LEAVES
+				&& plugin.getConfig().getBoolean("Enable.AppleDrops", true)) {
 			// player has broken a leaf
 			int rnd = randomGenerator.nextInt(200);
 			if (rnd == 0
