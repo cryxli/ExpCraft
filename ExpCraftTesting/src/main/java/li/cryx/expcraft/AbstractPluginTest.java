@@ -40,6 +40,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 import org.bukkit.material.Tree;
 import org.junit.Before;
 import org.mockito.Mockito;
@@ -119,7 +120,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 	protected Block getBlock(final Material material, final int data) {
 		Block block = Mockito.mock(Block.class);
 		Mockito.when(block.getType()).thenReturn(material);
-		Mockito.when(block.getTypeId()).thenReturn(material.getId());
+		// Mockito.when(block.getTypeId()).thenReturn(material.getId());
 		Mockito.when(block.getData()).thenReturn((byte) data);
 		return block;
 	}
@@ -134,10 +135,17 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 	 * @return The created block
 	 */
 	protected Block getBlock(final Material material, final TreeSpecies type) {
+		// TODO correct this once new trees are implemented correctly
 		BlockState state = Mockito.mock(BlockState.class);
-		Mockito.when(state.getData()).thenReturn(new Tree(type));
+		if (material == Material.LOG_2) {
+			Mockito.when(state.getData()).thenReturn(
+					new MaterialData(material, (byte) (type.getData() - 4)));
+		} else {
+			Mockito.when(state.getData()).thenReturn(new Tree(type));
+		}
 
-		Block block = getBlock(material, type.getData());
+		Block block = Mockito.mock(Block.class);
+		Mockito.when(block.getType()).thenReturn(material);
 		Mockito.when(block.getState()).thenReturn(state);
 		Mockito.when(block.getWorld()).thenReturn(null);
 

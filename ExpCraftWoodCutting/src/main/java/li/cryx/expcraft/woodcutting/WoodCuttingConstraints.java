@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 import org.bukkit.material.Tree;
 
 /**
@@ -90,7 +91,7 @@ public class WoodCuttingConstraints {
 				return true;
 			}
 
-		} else if (material == Material.LOG) {
+		} else if (material == Material.LOG || material == Material.LOG_2) {
 			TreeSpecies species = getTreeType(block);
 			int levelReq = getLevel("Log", species);
 			if (level < levelReq) {
@@ -187,13 +188,19 @@ public class WoodCuttingConstraints {
 	 *         <code>null</code>, if it is not a tree like block.
 	 */
 	protected TreeSpecies getTreeType(final Block block) {
+		// TODO correct this once new trees are implemented correctly
 		switch (block.getType()) {
-		case LOG:
 		case WOOD:
 		case SAPLING:
 		case LEAVES:
+			MaterialData data = block.getState().getData();
+			return TreeSpecies.getByData(data.getData());
+		case LOG:
 			Tree tree = (Tree) block.getState().getData();
 			return tree.getSpecies();
+		case LOG_2:
+			data = block.getState().getData();
+			return TreeSpecies.getByData((byte) (4 + (data.getData() & 3)));
 		default:
 			return null;
 		}
@@ -218,6 +225,10 @@ public class WoodCuttingConstraints {
 			return "Redwood";
 		case JUNGLE:
 			return "Jungle";
+		case ACACIA:
+			return "Acacia";
+		case DARK_OAK:
+			return "DarkOak";
 		}
 	}
 

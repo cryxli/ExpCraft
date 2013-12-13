@@ -84,6 +84,7 @@ public class WoodCuttingBlockListener implements Listener {
 		double gained = 0;
 		switch (block.getType()) {
 		case LOG:
+		case LOG_2:
 			gained = test.getExp("Log", test.getTreeType(block));
 			break;
 		case WOOD: // wooden plank

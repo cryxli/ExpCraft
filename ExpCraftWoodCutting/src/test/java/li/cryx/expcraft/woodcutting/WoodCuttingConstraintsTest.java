@@ -32,6 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.material.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -52,7 +53,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 	// because order matters within this test class
 	private static final TreeSpecies[] TREE_SPECIES = new TreeSpecies[] {
 			TreeSpecies.GENERIC, TreeSpecies.BIRCH, TreeSpecies.REDWOOD,
-			TreeSpecies.JUNGLE };
+			TreeSpecies.JUNGLE, TreeSpecies.ACACIA, TreeSpecies.DARK_OAK };
 
 	@Test
 	public void checkLeafBreaking() {
@@ -73,11 +74,23 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 		// logs and planks
 		int i = 1;
 		for (Material material : new Material[] { Material.LOG, Material.WOOD }) {
-			for (TreeSpecies type : TREE_SPECIES) {
+			for (TreeSpecies type : new TreeSpecies[] { TreeSpecies.GENERIC,
+					TreeSpecies.BIRCH, TreeSpecies.REDWOOD, TreeSpecies.JUNGLE }) {
 				Block block = getBlock(material, type);
+				System.out.println(material + "/" + type + "/" + i);
 				Assert.assertFalse(test.checkTargetBlock(player, block, 0));
 				Mockito.verify(plugin).warnCutBlock(player, i++);
-				Assert.assertTrue(test.checkTargetBlock(player, block, 10));
+				Assert.assertTrue(test.checkTargetBlock(player, block, 15));
+			}
+			for (TreeSpecies type : new TreeSpecies[] { TreeSpecies.ACACIA,
+					TreeSpecies.DARK_OAK }) {
+				Block block = getBlock(
+						material == Material.LOG ? Material.LOG_2 : material,
+						type);
+				System.out.println(material + "/" + type + "/" + i);
+				Assert.assertFalse(test.checkTargetBlock(player, block, 0));
+				Mockito.verify(plugin).warnCutBlock(player, i++);
+				Assert.assertTrue(test.checkTargetBlock(player, block, 15));
 			}
 		}
 
@@ -85,7 +98,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 		Block block = getBlock(Material.FENCE);
 		Assert.assertFalse(test.checkTargetBlock(player, block, 0));
 		Mockito.verify(plugin).warnCutBlock(player, 9);
-		Assert.assertTrue(test.checkTargetBlock(player, block, 10));
+		Assert.assertTrue(test.checkTargetBlock(player, block, 30));
 
 		// other block
 		block = getBlock(Material.STONE);
@@ -121,7 +134,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 	@Test
 	public void checkTreeSpecies() {
 		// this test will fail whenever new TreeSpecies are added to the game
-		Assert.assertEquals(4, TreeSpecies.values().length);
+		Assert.assertEquals(6, TreeSpecies.values().length);
 	}
 
 	@Override
@@ -159,11 +172,15 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 		for (int i = 0; i < TreeSpecies.values().length; i++) {
 			int level = test.getLevel("Log", TREE_SPECIES[i]);
 			Assert.assertEquals(i + 1, level);
+			level = test.getLevel("Plank", TREE_SPECIES[i]);
+			Assert.assertEquals(i + 1 + TreeSpecies.values().length, level);
+			level = test.getLevel("Leaves", TREE_SPECIES[i]);
+			Assert.assertEquals(i + 21, level);
 		}
 
 		// error case
 		try {
-			test.getExp("Log", null);
+			test.getLevel("Log", null);
 			Assert.fail();
 		} catch (NullPointerException e) {
 			// expected
@@ -176,8 +193,15 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 		// for all tree like blocks
 		for (Material material : TREE_LIKE) {
 			// test all tree types
+			System.out.println(material);
 			for (TreeSpecies type : TreeSpecies.values()) {
-				Block block = getBlock(material, type);
+				Block block;
+				if (material == Material.LOG
+						&& (type == TreeSpecies.ACACIA || type == TreeSpecies.DARK_OAK)) {
+					block = getBlock(Material.LOG_2, type);
+				} else {
+					block = getBlock(material, type);
+				}
 				TreeSpecies species = test.getTreeType(block);
 				Assert.assertEquals(type, species);
 			}
@@ -203,6 +227,8 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 		treeString.put(TreeSpecies.BIRCH, "Birch");
 		treeString.put(TreeSpecies.REDWOOD, "Redwood");
 		treeString.put(TreeSpecies.JUNGLE, "Jungle");
+		treeString.put(TreeSpecies.ACACIA, "Acacia");
+		treeString.put(TreeSpecies.DARK_OAK, "DarkOak");
 
 		// test all tree types
 		for (TreeSpecies type : TreeSpecies.values()) {
@@ -222,6 +248,13 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 	@Before
 	public void prepare() {
 		test = new WoodCuttingConstraints(plugin);
+	}
+
+	@Test
+	public void verifyTreeSpecies() {
+		for (TreeSpecies tree : TREE_SPECIES) {
+			Assert.assertEquals(tree, new Tree(tree).getSpecies());
+		}
 	}
 
 }
