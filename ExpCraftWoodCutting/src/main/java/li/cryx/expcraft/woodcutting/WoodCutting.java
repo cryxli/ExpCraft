@@ -32,7 +32,6 @@ import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Tree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +69,7 @@ public class WoodCutting extends DropExpCraftModule {
 			return null;
 		}
 
+		// TODO correct this once new trees are implemented correctly
 		switch (block.getType()) {
 		case LOG:
 		case WOOD:
@@ -77,10 +77,19 @@ public class WoodCutting extends DropExpCraftModule {
 			if (ToolQuality.isAtLeast(ToolQuality.IRON, quality)) {
 				amount = 2;
 			}
-			final TreeSpecies species = test.getTreeType(block);
-			final ItemStack stack = new ItemStack(block.getType(), amount);
-			stack.setData(new Tree(species));
-			return stack;
+			TreeSpecies species = test.getTreeType(block);
+			System.out.println("W-Double drop: " + species);
+			return new ItemStack(block.getType(), amount, species.getData());
+
+		case LOG_2:
+			amount = 1;
+			if (ToolQuality.isAtLeast(ToolQuality.IRON, quality)) {
+				amount = 2;
+			}
+			species = test.getTreeType(block);
+			System.out.println("w-Double drop: " + species);
+			return new ItemStack(block.getType(), amount,
+					(byte) (species.getData() - 4));
 
 		default:
 			return null;
