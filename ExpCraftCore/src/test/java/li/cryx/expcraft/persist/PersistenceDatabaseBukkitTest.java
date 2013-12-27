@@ -1,5 +1,6 @@
 package li.cryx.expcraft.persist;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.avaje.ebean.BeanState;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Query;
@@ -122,8 +124,26 @@ public class PersistenceDatabaseBukkitTest {
 	}
 
 	/** perform a setExp() test */
-	private void setExp(final double exp) {
+	@SuppressWarnings("unchecked")
+	private void setExp(final double exp, final boolean isNew) {
 		// prepare
+		ExpressionList<Experience> eList = Mockito.mock(ExpressionList.class);
+		Mockito.when(eList.eq(Mockito.anyString(), Mockito.anyString()))
+				.thenReturn(eList);
+		Query<Experience> query = Mockito.mock(Query.class);
+		Mockito.when(query.where()).thenReturn(eList);
+		Mockito.when(query.findList()).thenReturn(new ArrayList<Experience>());
+
+		Mockito.when(eBeanServer.createQuery(Experience.class)).thenReturn(
+				query);
+		Mockito.when(eBeanServer.createEntityBean(Experience.class))
+				.thenReturn(new Experience());
+
+		BeanState state = Mockito.mock(BeanState.class);
+		Mockito.when(state.isNew()).thenReturn(isNew);
+		Mockito.when(eBeanServer.getBeanState(Mockito.any(Experience.class)))
+				.thenReturn(state);
+
 		SqlUpdate updateQuery = Mockito.mock(SqlUpdate.class);
 		Mockito.when(eBeanServer.createSqlUpdate(Mockito.anyString()))
 				.thenReturn(updateQuery);
@@ -132,28 +152,38 @@ public class PersistenceDatabaseBukkitTest {
 		pers.setExp(module, player, exp);
 
 		// verify
-		Mockito.verify(eBeanServer).createSqlUpdate(UPDATE);
-		Mockito.verify(updateQuery).setParameter("exp", exp);
-		Mockito.verify(updateQuery).setParameter("module", MODULE);
-		Mockito.verify(updateQuery).setParameter("player", PLAYER);
-		Mockito.verify(updateQuery).execute();
+		if (isNew) {
+			Mockito.verify(eBeanServer).save(Mockito.any(Experience.class));
+		} else {
+			Mockito.verify(eBeanServer).createSqlUpdate(UPDATE);
+			Mockito.verify(updateQuery).setParameter("exp", exp);
+			Mockito.verify(updateQuery).setParameter("module", MODULE);
+			Mockito.verify(updateQuery).setParameter("player", PLAYER);
+			Mockito.verify(updateQuery).execute();
+		}
 	}
 
 	/** set exp to low value */
 	@Test
 	public void setExp1() {
-		setExp(0.5);
+		setExp(0.5, false);
 	}
 
 	/** set exp to higher value */
 	@Test
 	public void setExp2() {
-		setExp(2545.8);
+		setExp(2545.8, false);
 	}
 
 	/** set exp to "natural number" */
 	@Test
 	public void setExp3() {
-		setExp(15.0);
+		setExp(15.0, false);
+	}
+
+	/** set exp the first time */
+	@Test
+	public void setExp4() {
+		setExp(2.0, true);
 	}
 }

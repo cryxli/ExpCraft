@@ -116,14 +116,17 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 	public void setExp(final ExpCraftModule module, final Player player,
 			final double exp) {
 		try {
-			// Experience xp = getExperience(module, player);
-			// xp.setExperience(exp);
-			// core.getDatabase().save(xp);
-			SqlUpdate update = core.getDatabase().createSqlUpdate(UPDATE);
-			update.setParameter("exp", exp);
-			update.setParameter("module", module.getInfo().getAbbr());
-			update.setParameter("player", player.getName());
-			update.execute();
+			Experience xp = getExperience(module, player);
+			if (core.getDatabase().getBeanState(xp).isNew()) {
+				xp.setExperience(exp);
+				core.getDatabase().save(xp);
+			} else {
+				SqlUpdate update = core.getDatabase().createSqlUpdate(UPDATE);
+				update.setParameter("exp", exp);
+				update.setParameter("module", module.getInfo().getAbbr());
+				update.setParameter("player", player.getName());
+				update.execute();
+			}
 		} catch (PersistenceException e) {
 			String msg = MessageFormat
 					.format("Unable to persist experience [module={0}, player={1}, exp={2}].",
