@@ -110,6 +110,7 @@ public class MiningBlockListenerTest extends AbstractPluginTest<Mining> {
 		testMining(Material.OBSIDIAN, "UseLevel.Obsidian", 200);
 		testMining(Material.DIAMOND_ORE, "UseLevel.DiamondOre", 100);
 		testMining(Material.NETHERRACK, "UseLevel.Netherrack", 3);
+		testMining(Material.NETHER_BRICK, "UseLevel.NetherBrick", 5);
 		testMining(Material.SANDSTONE, "UseLevel.SandStone", 3);
 		testMining(Material.SMOOTH_BRICK, "UseLevel.StoneBrick", 3);
 		// MC 1.5

@@ -113,6 +113,7 @@ public class MiningConstraintsTest extends AbstractPluginTest<Mining> {
 		testBlock(Material.DIAMOND_ORE, 26, 1);
 		testBlock(Material.OBSIDIAN, 36, 1);
 		testBlock(Material.NETHERRACK, 1, -1);
+		testBlock(Material.NETHER_BRICK, 1, -1);
 		testBlock(Material.SMOOTH_BRICK, 6, 1);
 		// MC 1.5
 		testBlock(Material.QUARTZ_ORE, 15, 14);

@@ -173,6 +173,8 @@ public class MiningConstraints {
 			return checkAndWarnBlock(player, level, "UseLevel.Obsidian");
 		case NETHERRACK:
 			return checkAndWarnBlock(player, level, "UseLevel.Netherrack");
+		case NETHER_BRICK:
+			return checkAndWarnBlock(player, level, "UseLevel.NetherBrick");
 		case SMOOTH_BRICK:
 			return checkAndWarnBlock(player, level, "UseLevel.StoneBrick");
 		case QUARTZ_BLOCK:

@@ -111,6 +111,9 @@ public class MiningBlockListener implements Listener {
 		case NETHERRACK:
 			expGain = plugin.getConfig().getDouble("ExpGain.Netherrack");
 			break;
+		case NETHER_BRICK:
+			expGain = plugin.getConfig().getDouble("ExpGain.NetherBrick");
+			break;
 		case SANDSTONE:
 			expGain = plugin.getConfig().getDouble("ExpGain.SandStone");
 			break;
