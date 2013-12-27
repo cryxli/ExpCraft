@@ -162,6 +162,8 @@ public class MiningConstraints {
 			return checkAndWarnBlock(player, level, "UseLevel.GoldOre");
 		case LAPIS_ORE:
 			return checkAndWarnBlock(player, level, "UseLevel.LapisOre");
+		case GLOWSTONE:
+			return checkAndWarnBlock(player, level, "UseLevel.Glowstone");
 		case REDSTONE_ORE:
 		case GLOWING_REDSTONE_ORE:
 			return checkAndWarnBlock(player, level, "UseLevel.Redstone");

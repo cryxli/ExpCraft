@@ -74,6 +74,9 @@ public class MiningBlockListener implements Listener {
 		default:
 			expGain = 0;
 			break;
+		case GLOWSTONE:
+			expGain = plugin.getConfig().getDouble("ExpGain.Glowstone");
+			break;
 		case STONE:
 			expGain = plugin.getConfig().getDouble("ExpGain.Stone");
 			break;

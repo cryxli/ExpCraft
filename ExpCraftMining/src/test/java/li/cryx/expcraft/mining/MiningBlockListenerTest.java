@@ -100,6 +100,7 @@ public class MiningBlockListenerTest extends AbstractPluginTest<Mining> {
 	public void playerMinesBlocks() {
 		testMining(Material.STONE, "UseLevel.Stone", 5);
 		testMining(Material.COBBLESTONE, "UseLevel.Cobble", 5);
+		testMining(Material.GLOWSTONE, "UseLevel.Glowstone", 20);
 		testMining(Material.REDSTONE_ORE, "UseLevel.Redstone", 20);
 		testMining(Material.GLOWING_REDSTONE_ORE, "UseLevel.Redstone", 20);
 		testMining(Material.GOLD_ORE, "UseLevel.GoldOre", 30);
