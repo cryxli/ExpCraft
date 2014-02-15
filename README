@@ -1,3 +1,11 @@
+With bukkit 1.7.2-R0.3 unit testing is impossible #51. Therefore I desided to
+stop developing this plugin suite.
+
+I may change my mind once bukkit becomes test friendly again, or another
+Minecraft server implementation offers the tools needed to develop against.
+
+Till then, cu - cryxli
+
 === ExpCraft ===
 A reimplementation of the great LevelCraft plugin for Bukkit to add some
 experience gathering to the game. There are implementations for Minecraft
