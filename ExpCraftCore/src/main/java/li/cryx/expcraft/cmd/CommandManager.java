@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.IExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -42,13 +42,13 @@ import org.bukkit.entity.Player;
 public class CommandManager {
 
 	/** Reference to the core. */
-	private final ExpCraft core;
+	private final IExpCraft core;
 
 	/** The chat utility to send answers to the requesting player. */
 	private final Chat chat;
 
 	/** Create a new manager for the given core. */
-	public CommandManager(final ExpCraft core) {
+	public CommandManager(final IExpCraft core) {
 		this.core = core;
 		chat = new Chat(core);
 	}

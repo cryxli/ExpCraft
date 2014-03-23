@@ -31,7 +31,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -141,9 +140,7 @@ public class MiningBlockListenerTest extends AbstractPluginTest<Mining> {
 	public void prepareTestSpecific() {
 		// for an eventual CommandManager calls
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
-		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
-				new PluginDescriptionFile("ExpCraft", "0", ""));
-		pers.setCore(core);
+		new ExpCraftCoreStub(server, perm, pers);
 
 		listener = new MiningBlockListener(plugin);
 	}

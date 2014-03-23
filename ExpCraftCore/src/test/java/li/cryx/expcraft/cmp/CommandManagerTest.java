@@ -33,7 +33,6 @@ import li.cryx.expcraft.loader.ModuleInfo;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,11 +62,8 @@ public class CommandManagerTest {
 		testModule = new DummyModule();
 		testModule.setInfo(new ModuleInfo("Test", "T", null));
 
-		PluginDescriptionFile pdf = new PluginDescriptionFile("ExpCraft", "0",
-				"this");
-		core = new DummyExpCraft(server, pdf);
+		core = new DummyExpCraft(server);
 		core.setTestModule(testModule);
-		core.onEnable();
 
 		cmd = new CommandManager(core);
 	}

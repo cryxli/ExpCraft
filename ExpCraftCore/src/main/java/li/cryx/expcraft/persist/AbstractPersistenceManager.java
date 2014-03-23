@@ -23,6 +23,7 @@
 package li.cryx.expcraft.persist;
 
 import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.IExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -56,7 +57,7 @@ public abstract class AbstractPersistenceManager {
 	protected int maxLevel;
 
 	/** Reference to the core */
-	protected ExpCraft core;
+	protected IExpCraft core;
 
 	/** The chat utility to send messages to players */
 	private Chat chat;
@@ -200,7 +201,7 @@ public abstract class AbstractPersistenceManager {
 	 * @param core
 	 *            Reference to the core
 	 */
-	public void setCore(final ExpCraft core) {
+	public void setCore(final IExpCraft core) {
 		this.core = core;
 		chat = new Chat(core);
 	}

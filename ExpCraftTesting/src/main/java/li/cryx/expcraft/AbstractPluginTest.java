@@ -204,7 +204,7 @@ public abstract class AbstractPluginTest<T extends ExpCraftModule> {
 		Mockito.when(plugin.getPermission()).thenReturn(perm);
 
 		pers = new InMemoryPersistentManager();
-		pers.setCore(Mockito.mock(ExpCraft.class));
+		pers.setCore(Mockito.mock(IExpCraft.class));
 		Mockito.when(plugin.getPersistence()).thenReturn(pers);
 	}
 }

@@ -24,7 +24,7 @@ package li.cryx.expcraft.util;
 
 import java.text.MessageFormat;
 
-import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.IExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 
@@ -128,7 +128,7 @@ public class Chat {
 	}
 
 	/** Reference to the core plugin. */
-	private final ExpCraft core;
+	private final IExpCraft core;
 
 	/**
 	 * Create a new instance of the chat util. It must be bound to a plugin and
@@ -139,7 +139,7 @@ public class Chat {
 	 * @throws IllegalStateException
 	 *             when the ExpCraftCore is not present.
 	 */
-	public Chat(final ExpCraft core) {
+	public Chat(final IExpCraft core) {
 		this.core = core;
 		if (core == null) {
 			throw new IllegalStateException("ExpCraftCore not found");

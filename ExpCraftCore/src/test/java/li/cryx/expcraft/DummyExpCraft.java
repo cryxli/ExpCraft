@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
@@ -34,9 +35,10 @@ import li.cryx.expcraft.persist.AbstractPersistenceManager;
 import li.cryx.expcraft.persist.InMemoryPersistentManager;
 
 import org.bukkit.Server;
-import org.bukkit.plugin.PluginDescriptionFile;
 
-public class DummyExpCraft extends ExpCraft {
+import com.avaje.ebean.EbeanServer;
+
+public class DummyExpCraft implements IExpCraft {
 
 	private ExpCraftModule testModule;
 
@@ -44,15 +46,30 @@ public class DummyExpCraft extends ExpCraft {
 
 	private final AbstractPermissionManager perm = new NoPermissionManager();
 
-	public DummyExpCraft(final Server server, final PluginDescriptionFile pdf) {
-		super();
-		File folder = new File("target/plugins");
-		initialize(null, //
-				server, //
-				pdf, //
-				new File(folder, "TestPlugin"), //
-				new File(folder, "some.jar"), //
-				getClass().getClassLoader());
+	private final Server server;
+
+	public DummyExpCraft(final Server server) {
+		this.server = server;
+
+		// no longer used:
+		// new PluginDescriptionFile("ExpCraft", "0", "")
+	}
+
+	@Override
+	public EbeanServer getDatabase() {
+		// not (yet) used in unittests
+		return null;
+	}
+
+	@Override
+	public File getDataFolder() {
+		// not (yet) used in unittests
+		return null;
+	}
+
+	@Override
+	public Logger getLogger() {
+		return Logger.getAnonymousLogger();
 	}
 
 	@Override
@@ -81,7 +98,13 @@ public class DummyExpCraft extends ExpCraft {
 		return pers;
 	}
 
+	@Override
+	public Server getServer() {
+		return server;
+	}
+
 	public void setTestModule(final ExpCraftModule testModule) {
 		this.testModule = testModule;
 	}
+
 }

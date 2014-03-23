@@ -23,12 +23,17 @@
 package li.cryx.expcraft;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.logging.Logger;
 
 import li.cryx.expcraft.cmd.CommandManager;
+import li.cryx.expcraft.module.ExpCraftModule;
+import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
 
 import org.bukkit.Server;
-import org.bukkit.plugin.PluginDescriptionFile;
+
+import com.avaje.ebean.EbeanServer;
 
 /**
  * Usually you will not need an instance of {@link ExpCraftCore} while running
@@ -49,16 +54,77 @@ import org.bukkit.plugin.PluginDescriptionFile;
  * 
  * @author cryxli
  */
-public class ExpCraftCoreStub extends ExpCraft {
+public class ExpCraftCoreStub implements IExpCraft {
+
+	private final Server server;
+
+	private AbstractPermissionManager perm;
+
+	private AbstractPersistenceManager pers;
+
 	/** Create a stub. Link the plugin to the mocked server. */
-	public ExpCraftCoreStub(final Server server, final PluginDescriptionFile pdf) {
-		super();
-		File folder = new File("target/plugins");
-		initialize(null, //
-				server, //
-				pdf, //
-				new File(folder, "test"), //
-				new File(folder, "some.jar"), //
-				getClass().getClassLoader());
+	public ExpCraftCoreStub(final Server server) {
+		this.server = server;
 	}
+
+	public ExpCraftCoreStub(final Server server,
+			final AbstractPermissionManager perm,
+			final AbstractPersistenceManager pers) {
+		this(server);
+		setPermissions(perm);
+		setPersistence(pers);
+	}
+
+	@Override
+	public EbeanServer getDatabase() {
+		// not (yet) used in unittests
+		return null;
+	}
+
+	@Override
+	public File getDataFolder() {
+		return new File("target/plugins");
+	}
+
+	@Override
+	public Logger getLogger() {
+		return Logger.getAnonymousLogger();
+	}
+
+	@Override
+	public ExpCraftModule getModuleByAbbr(final String modAbbr) {
+		// not (yet) used in unittests
+		return null;
+	}
+
+	@Override
+	public Collection<ExpCraftModule> getModules() {
+		// not (yet) used in unittests
+		return null;
+	}
+
+	@Override
+	public AbstractPermissionManager getPermissions() {
+		return perm;
+	}
+
+	@Override
+	public AbstractPersistenceManager getPersistence() {
+		return pers;
+	}
+
+	@Override
+	public Server getServer() {
+		return server;
+	}
+
+	public void setPermissions(final AbstractPermissionManager perm) {
+		this.perm = perm;
+	}
+
+	public void setPersistence(final AbstractPersistenceManager pers) {
+		this.pers = pers;
+		pers.setCore(this);
+	}
+
 }

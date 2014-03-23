@@ -68,7 +68,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author cryxli
  */
-public class ExpCraft extends JavaPlugin {
+public class ExpCraft extends JavaPlugin implements IExpCraft {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExpCraft.class);
 

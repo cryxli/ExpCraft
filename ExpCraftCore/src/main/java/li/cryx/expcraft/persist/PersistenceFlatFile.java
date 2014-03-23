@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.IExpCraft;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.TypedProperties;
 
@@ -119,7 +119,7 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	}
 
 	@Override
-	public synchronized void setCore(final ExpCraft core) {
+	public synchronized void setCore(final IExpCraft core) {
 		super.setCore(core);
 		dataFolder = new File(core.getDataFolder(), "data");
 		dataFolder.mkdirs();

@@ -31,7 +31,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -140,9 +139,7 @@ public class ScavengerConstraintsTest extends AbstractPluginTest<Scavenger> {
 	@Before
 	public void prepareTestSpecific() {
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
-		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
-				new PluginDescriptionFile("ExpCraft", "0", ""));
-		pers.setCore(core);
+		new ExpCraftCoreStub(server, perm, pers);
 
 		test = new ScavengerConstraints(plugin);
 	}

@@ -32,7 +32,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -92,9 +91,7 @@ public class DefenceEntityListenerTest extends AbstractPluginTest<Defence> {
 		Mockito.when(plugin.getLevelCap()).thenReturn(100);
 
 		Mockito.when(server.getOnlinePlayers()).thenReturn(new Player[] {});
-		ExpCraftCoreStub core = new ExpCraftCoreStub(server,
-				new PluginDescriptionFile("ExpCraft", "0", ""));
-		pers.setCore(core);
+		new ExpCraftCoreStub(server, perm, pers);
 
 		test = new DefenceEntityListener(plugin);
 	}
