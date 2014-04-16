@@ -50,8 +50,8 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 				.append(" = :exp");
 		buf.append(" WHERE ").append(getFieldName("module"))
 				.append(" = :module");
-		buf.append("   AND ").append(getFieldName("player"))
-				.append(" = :player");
+		buf.append("   AND ").append(getFieldName("playerUuid"))
+				.append(" = :playerUuid");
 		UPDATE = buf.toString();
 	}
 
@@ -97,8 +97,10 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 			final Player player) throws PersistenceException {
 		Query<Experience> query = core.getDatabase().createQuery(
 				Experience.class);
-		query.where().eq("module", module.getInfo().getAbbr())
-				.eq("player", player.getName()).setMaxRows(1);
+		query.where().eq("module", module.getInfo().getAbbr()) //
+				// .eq("player", player.getName()) //
+				.eq("playerUuid", player.getUniqueId().toString()) //
+				.setMaxRows(1);
 		List<Experience> exp = query.findList();
 		if (exp == null || exp.size() == 0) {
 			Experience xp = core.getDatabase().createEntityBean(
@@ -124,7 +126,8 @@ public class PersistenceDatabaseBukkit extends AbstractPersistenceManager {
 				SqlUpdate update = core.getDatabase().createSqlUpdate(UPDATE);
 				update.setParameter("exp", exp);
 				update.setParameter("module", module.getInfo().getAbbr());
-				update.setParameter("player", player.getName());
+				update.setParameter("playerUuid", player.getUniqueId()
+						.toString());
 				update.execute();
 			}
 		} catch (PersistenceException e) {

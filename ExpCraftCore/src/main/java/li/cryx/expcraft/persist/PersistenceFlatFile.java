@@ -73,8 +73,9 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	@Override
 	public double getExp(final ExpCraftModule module, final Player player) {
 		TypedProperties data = getModuleData(module);
-		String playerName = player.getName().toLowerCase();
-		return data.getDouble(playerName, 0);
+		// String playerName = player.getName().toLowerCase();
+		String playerUuid = player.getUniqueId().toString();
+		return data.getDouble(playerUuid, 0);
 	}
 
 	private synchronized TypedProperties getModuleData(
@@ -146,9 +147,10 @@ public class PersistenceFlatFile extends AbstractPersistenceManager {
 	public void setExp(final ExpCraftModule module, final Player player,
 			final double exp) {
 		TypedProperties data = getModuleData(module);
-		String playerName = player.getName().toLowerCase();
+		// String playerName = player.getName().toLowerCase();
+		String playerUuid = player.getUniqueId().toString();
 		dirty.put(module, true);
-		data.setDouble(playerName, exp);
+		data.setDouble(playerUuid, exp);
 	}
 
 }

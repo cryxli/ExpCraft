@@ -3,6 +3,7 @@ package li.cryx.expcraft.persist;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import junit.framework.Assert;
 import li.cryx.expcraft.ExpCraft;
@@ -29,7 +30,7 @@ import com.avaje.ebean.SqlUpdate;
 public class PersistenceDatabaseBukkitTest {
 
 	/** Expected update query */
-	private static final String UPDATE = "UPDATE ExpCraftTable   SET exp = :exp WHERE module = :module   AND player = :player";
+	private static final String UPDATE = "UPDATE ExpCraftTable   SET exp = :exp WHERE module = :module   AND playerUuid = :playerUuid";
 
 	/** Player's name for this tests. */
 	private static final String PLAYER = "cryxli";
@@ -50,6 +51,8 @@ public class PersistenceDatabaseBukkitTest {
 	private EbeanServer eBeanServer;
 
 	private Player player;
+
+	private UUID uuid;
 
 	/** normal case */
 	@Test
@@ -89,7 +92,7 @@ public class PersistenceDatabaseBukkitTest {
 		// verify
 		Assert.assertEquals(expextedExp, exp, 0);
 		Mockito.verify(eList).eq("module", MODULE);
-		Mockito.verify(eList).eq("player", PLAYER);
+		Mockito.verify(eList).eq("playerUuid", uuid.toString());
 	}
 
 	/** no data found */
@@ -121,6 +124,8 @@ public class PersistenceDatabaseBukkitTest {
 
 		player = Mockito.mock(Player.class);
 		Mockito.when(player.getName()).thenReturn(PLAYER);
+		uuid = new UUID(0, PLAYER.hashCode());
+		Mockito.when(player.getUniqueId()).thenReturn(uuid);
 	}
 
 	/** perform a setExp() test */
@@ -158,7 +163,8 @@ public class PersistenceDatabaseBukkitTest {
 			Mockito.verify(eBeanServer).createSqlUpdate(UPDATE);
 			Mockito.verify(updateQuery).setParameter("exp", exp);
 			Mockito.verify(updateQuery).setParameter("module", MODULE);
-			Mockito.verify(updateQuery).setParameter("player", PLAYER);
+			Mockito.verify(updateQuery).setParameter("playerUuid",
+					uuid.toString());
 			Mockito.verify(updateQuery).execute();
 		}
 	}

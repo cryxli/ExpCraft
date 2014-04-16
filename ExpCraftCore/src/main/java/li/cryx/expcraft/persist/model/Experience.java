@@ -41,6 +41,9 @@ public class Experience {
 	@Column(name = "player", nullable = false)
 	private String player;
 
+	@Column(name = "playerUuid", nullable = false)
+	private String playerUuid;
+
 	@Column(name = "module", length = 10, nullable = false)
 	private String module;
 
@@ -61,6 +64,10 @@ public class Experience {
 
 	public String getPlayer() {
 		return player;
+	}
+
+	public String getPlayerUuid() {
+		return playerUuid;
 	}
 
 	public void setExperience(final double experience) {
@@ -85,5 +92,10 @@ public class Experience {
 
 	public void setPlayerEntity(final Player player) {
 		setPlayer(player.getName());
+		setPlayerUuid(player.getUniqueId().toString());
+	}
+
+	public void setPlayerUuid(final String playerUuid) {
+		this.playerUuid = playerUuid;
 	}
 }

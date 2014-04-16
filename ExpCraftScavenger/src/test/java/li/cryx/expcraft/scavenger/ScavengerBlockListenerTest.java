@@ -22,6 +22,8 @@
  */
 package li.cryx.expcraft.scavenger;
 
+import java.util.UUID;
+
 import li.cryx.expcraft.AbstractPluginTest;
 
 import org.bukkit.Material;
@@ -48,12 +50,20 @@ public class ScavengerBlockListenerTest extends AbstractPluginTest<Scavenger> {
 		return Scavenger.class;
 	}
 
+	private Player getMockedPlayer() {
+		Player player = Mockito.mock(Player.class);
+		Mockito.when(player.getName()).thenReturn("Player");
+		Mockito.when(player.getUniqueId()).thenReturn(
+				new UUID(0, "Player".hashCode()));
+		Mockito.when(player.getName()).thenReturn("Player");
+		return player;
+	}
+
 	private void playerDigs(final Material material, final Environment worldType) {
 		hasModule = true;
 		World world = Mockito.mock(World.class);
 		Mockito.when(world.getEnvironment()).thenReturn(worldType);
-		Player player = Mockito.mock(Player.class);
-		Mockito.when(player.getName()).thenReturn("Player");
+		Player player = getMockedPlayer();
 		Mockito.when(player.getWorld()).thenReturn(world);
 		Block block = Mockito.mock(Block.class);
 		Mockito.when(block.getWorld()).thenReturn(world);
@@ -82,7 +92,7 @@ public class ScavengerBlockListenerTest extends AbstractPluginTest<Scavenger> {
 	@Test
 	public void playerDigsStone() {
 		hasModule = true;
-		Player player = Mockito.mock(Player.class);
+		Player player = getMockedPlayer();
 		Block block = Mockito.mock(Block.class);
 		Mockito.when(block.getType()).thenReturn(Material.STONE);
 		BlockBreakEvent event = new BlockBreakEvent(block, player);
