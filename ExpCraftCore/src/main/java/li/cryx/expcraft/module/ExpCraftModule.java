@@ -23,8 +23,10 @@
 package li.cryx.expcraft.module;
 
 import java.io.File;
+import java.util.Locale;
 
 import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.i18n.AbstractModuleTranslator;
 import li.cryx.expcraft.loader.ModuleInfo;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
@@ -49,6 +51,9 @@ public abstract class ExpCraftModule {
 
 	/** Abstraction to handle config files. */
 	private ConfigProvider config;
+
+	// TODO doc
+	protected AbstractModuleTranslator translator;
 
 	/**
 	 * Event fired by the core to disable the module. Do not override this
@@ -140,6 +145,10 @@ public abstract class ExpCraftModule {
 		return core.getServer();
 	}
 
+	public String getTranslatedName(final Locale locale) {
+		return translator.translateModuleName(locale);
+	}
+
 	/**
 	 * Get notified that the module should start monitoring player events.
 	 */
@@ -189,6 +198,11 @@ public abstract class ExpCraftModule {
 		if (core != null) {
 			config = new ConfigProvider(core, info);
 		}
+	}
+
+	// TODO doc
+	public void setTranslator(final AbstractModuleTranslator translator) {
+		this.translator = translator;
 	}
 
 }

@@ -32,6 +32,10 @@ import java.util.TreeMap;
 import javax.persistence.PersistenceException;
 
 import li.cryx.expcraft.cmd.CommandManager;
+import li.cryx.expcraft.i18n.AbstractModuleTranslator;
+import li.cryx.expcraft.i18n.AbstractTranslator;
+import li.cryx.expcraft.i18n.AclTranslation;
+import li.cryx.expcraft.i18n.FallbackTranslation;
 import li.cryx.expcraft.loader.JarScanner;
 import li.cryx.expcraft.loader.ModuleInfo;
 import li.cryx.expcraft.loader.ModuleLoader;
@@ -85,12 +89,9 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	private ConfigProvider config;
 
 	/** The in-game command manager. */
-	private final CommandManager cmd;
+	private CommandManager cmd;
 
-	/** Create a new plugin instance. Called by bukkit. */
-	public ExpCraft() {
-		cmd = new CommandManager(this);
-	}
+	private AbstractTranslator translator;
 
 	@Override
 	public List<Class<?>> getDatabaseClasses() {
@@ -115,6 +116,7 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	 *            Module abbreviation.
 	 * @return The matching {@link ExpCraftModule}, or, <code>null</code>.
 	 */
+	@Override
 	public ExpCraftModule getModuleByAbbr(final String modAbbr) {
 		if (modAbbr == null) {
 			return null;
@@ -128,6 +130,7 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	 * 
 	 * @return Collection of loaded modules.
 	 */
+	@Override
 	public Collection<ExpCraftModule> getModules() {
 		return modules.values();
 	}
@@ -139,6 +142,7 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	 *         appropriate manager is return, or, a manager that simply
 	 *         distinguishes between ops and no-ops.
 	 */
+	@Override
 	public AbstractPermissionManager getPermissions() {
 		return permission;
 	}
@@ -149,8 +153,14 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	 * @return Depending on the config, a database or flat-file manager is
 	 *         returned.
 	 */
+	@Override
 	public AbstractPersistenceManager getPersistence() {
 		return persistence;
+	}
+
+	@Override
+	public AbstractTranslator getTranslator() {
+		return translator;
 	}
 
 	/**
@@ -257,6 +267,8 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 			persistence = null;
 		}
 		config = null;
+		translator = null;
+		cmd = null;
 	}
 
 	/** Bukkit wants ExpCraft to initialize. */
@@ -271,6 +283,10 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 			return;
 		}
 
+		// init translations
+		setTranslator();
+		cmd = new CommandManager(this);
+
 		// init permissions
 		setPermission();
 
@@ -282,6 +298,8 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 		for (ExpCraftModule module : modules.values()) {
 			try {
 				module.setCore(this);
+				module.setTranslator(AbstractModuleTranslator.create(
+						getTranslator(), module));
 				module.enable();
 				buf.append(module.getInfo().getName());
 				buf.append(",");
@@ -298,11 +316,13 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	 * according to the state of the bukkit server.
 	 */
 	private void setPermission() {
+		final Plugin permAcl = getServer().getPluginManager().getPlugin(
+				"MinecraftACL");
 		final Plugin permBukkit = getServer().getPluginManager().getPlugin(
 				"PermissionsBukkit");
 		final Plugin permEx = getServer().getPluginManager().getPlugin(
 				"PermissionsEx");
-		if (permBukkit != null) {
+		if (permAcl != null || permBukkit != null) {
 			permission = new PermissionsBukkitManager();
 			LOG.info("Using PermissionsBukkit.");
 		} else if (permEx != null) {
@@ -354,5 +374,15 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 				.getInteger("Levels.Constant"));
 		persistence.setMaxLevel(config.getConfig()
 				.getInteger("Levels.LevelCap"));
+	}
+
+	private void setTranslator() {
+		final Plugin lang = getServer().getPluginManager()
+				.getPlugin("Language");
+		if (lang != null) {
+			translator = new AclTranslation(this);
+		} else {
+			translator = new FallbackTranslation();
+		}
 	}
 }

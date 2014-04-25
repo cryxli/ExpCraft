@@ -22,12 +22,14 @@
  */
 package li.cryx.expcraft.cmp;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import junit.framework.Assert;
 import li.cryx.expcraft.DummyExpCraft;
 import li.cryx.expcraft.DummyModule;
 import li.cryx.expcraft.cmd.CommandManager;
+import li.cryx.expcraft.i18n.FallbackModuleTranslation;
 import li.cryx.expcraft.loader.ModuleInfo;
 
 import org.bukkit.Server;
@@ -35,10 +37,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class CommandManagerTest {
+
+	@BeforeClass
+	public static void setSystemLanguage() {
+		Locale.setDefault(Locale.ENGLISH);
+	}
 
 	private Server server;
 
@@ -59,10 +67,13 @@ public class CommandManagerTest {
 		Mockito.when(server.getLogger())
 				.thenReturn(Logger.getAnonymousLogger());
 
+		core = new DummyExpCraft(server);
+
 		testModule = new DummyModule();
 		testModule.setInfo(new ModuleInfo("Test", "T", null));
+		testModule.setTranslator(new FallbackModuleTranslation(core
+				.getTranslator(), testModule));
 
-		core = new DummyExpCraft(server);
 		core.setTestModule(testModule);
 
 		cmd = new CommandManager(core);
@@ -78,8 +89,8 @@ public class CommandManagerTest {
 	}
 
 	private void playerInfoCheck(final Player player) {
-		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
-		Mockito.verify(player).sendMessage("§6[EC] §eAvailable commands:");
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin ---");
+		Mockito.verify(player).sendMessage("§6[EC] §eAvailable commands");
 		Mockito.verify(player).sendMessage("§6[EC] §e /lvl all");
 		Mockito.verify(player).sendMessage(
 				"§6[EC] §e /lvl info <Module> [Page]");
@@ -107,7 +118,7 @@ public class CommandManagerTest {
 
 		core.getPersistence().setExp(testModule, player, 0);
 		cmd.onCommand(player, "all");
-		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin ---");
 		Mockito.verify(player).sendMessage("§6[EC] §eTest (T): 1");
 		Mockito.verify(player, Mockito.times(2)).sendMessage(
 				Mockito.anyString());
@@ -177,7 +188,7 @@ public class CommandManagerTest {
 		Mockito.verify(player).sendMessage(
 				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 		Mockito.verify(player).sendMessage(
-				"§6[EC] §e  <Value> has to be a natural number");
+				"§6[EC] §e<Value> has to be a natural number");
 
 		cmd.onCommand(player, "setlvl", "t", "5", "cryxli");
 		Mockito.verify(player).sendMessage(
@@ -201,7 +212,7 @@ public class CommandManagerTest {
 		core.getPersistence().setExp(testModule, player, 0);
 
 		cmd.onCommand(player, "all");
-		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin ---");
 		Mockito.verify(player).sendMessage("§6[EC] §eTest (T): 1");
 
 		cmd.onCommand(player, "all", "cryxli");
@@ -210,7 +221,7 @@ public class CommandManagerTest {
 		Mockito.when(server.getPlayer(player.getName())).thenReturn(player);
 		cmd.onCommand(player, "all", "cryxli");
 		Mockito.verify(player, Mockito.times(2)).sendMessage(
-				"§6[EC] --- ExpCraftPlugin --- ");
+				"§6[EC] --- ExpCraftPlugin ---");
 		Mockito.verify(player, Mockito.times(2)).sendMessage(
 				"§6[EC] §eTest (T): 1");
 	}
@@ -251,8 +262,8 @@ public class CommandManagerTest {
 	}
 
 	private void playerOpInfoCheck(final Player player) {
-		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
-		Mockito.verify(player).sendMessage("§6[EC] §eAvailable commands:");
+		Mockito.verify(player).sendMessage("§6[EC] --- ExpCraftPlugin ---");
+		Mockito.verify(player).sendMessage("§6[EC] §eAvailable commands");
 		Mockito.verify(player).sendMessage("§6[EC] §e /lvl all");
 		Mockito.verify(player).sendMessage(
 				"§6[EC] §e /lvl info <Module> [Page]");
@@ -308,7 +319,7 @@ public class CommandManagerTest {
 		Mockito.verify(player).sendMessage(
 				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 		Mockito.verify(player).sendMessage(
-				"§6[EC] §e  <Value> has to be a natural number");
+				"§6[EC] §e<Value> has to be a natural number");
 		Mockito.verify(player, Mockito.times(2)).sendMessage(
 				Mockito.anyString());
 
@@ -344,7 +355,7 @@ public class CommandManagerTest {
 		sender = Mockito.mock(CommandSender.class);
 		core.getPersistence().setExp(testModule, player, 0);
 		cmd.onCommand(sender, "all", "cryxli");
-		Mockito.verify(sender).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
+		Mockito.verify(sender).sendMessage("§6[EC] --- ExpCraftPlugin ---");
 		Mockito.verify(sender).sendMessage("§6[EC] §eTest (T): 1");
 		Mockito.verify(sender, Mockito.times(2)).sendMessage(
 				Mockito.anyString());
@@ -385,8 +396,8 @@ public class CommandManagerTest {
 	}
 
 	private void senderInfoCheck(final CommandSender sender) {
-		Mockito.verify(sender).sendMessage("§6[EC] --- ExpCraftPlugin --- ");
-		Mockito.verify(sender).sendMessage("§6[EC] §eAvailable commands:");
+		Mockito.verify(sender).sendMessage("§6[EC] --- ExpCraftPlugin ---");
+		Mockito.verify(sender).sendMessage("§6[EC] §eAvailable commands");
 		Mockito.verify(sender).sendMessage("§6[EC] §e /lvl all");
 		Mockito.verify(sender).sendMessage(
 				"§6[EC] §e /lvl getExp <Module> [Player]");
@@ -443,7 +454,7 @@ public class CommandManagerTest {
 		Mockito.verify(sender).sendMessage(
 				"§6[EC] §eSyntax: /level setLevel <Module> <Value> [Player]");
 		Mockito.verify(sender).sendMessage(
-				"§6[EC] §e  <Value> has to be a natural number");
+				"§6[EC] §e<Value> has to be a natural number");
 		Mockito.verify(sender, Mockito.times(2)).sendMessage(
 				Mockito.anyString());
 

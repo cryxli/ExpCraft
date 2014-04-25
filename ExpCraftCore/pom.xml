@@ -21,6 +21,12 @@
 			<groupId>ru.tehkode</groupId>
 			<artifactId>PermissionsEx</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>li.cryx.mc.acl</groupId>
+			<artifactId>mcacl-lang</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- Logging -->
 		<dependency>
@@ -53,6 +59,16 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+				<includes>
+					<include>*.yml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>*.yml</exclude>
+				</excludes>
 			</resource>
 		</resources>
 		<plugins>

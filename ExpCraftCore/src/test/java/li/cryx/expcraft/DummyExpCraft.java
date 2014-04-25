@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import li.cryx.expcraft.i18n.AbstractTranslator;
+import li.cryx.expcraft.i18n.FallbackTranslation;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.perm.NoPermissionManager;
@@ -45,6 +47,8 @@ public class DummyExpCraft implements IExpCraft {
 	private final AbstractPersistenceManager pers = new InMemoryPersistentManager();
 
 	private final AbstractPermissionManager perm = new NoPermissionManager();
+
+	private final AbstractTranslator translator = new FallbackTranslation();
 
 	private final Server server;
 
@@ -101,6 +105,11 @@ public class DummyExpCraft implements IExpCraft {
 	@Override
 	public Server getServer() {
 		return server;
+	}
+
+	@Override
+	public AbstractTranslator getTranslator() {
+		return translator;
 	}
 
 	public void setTestModule(final ExpCraftModule testModule) {

@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import junit.framework.Assert;
 import li.cryx.expcraft.ExpCraft;
+import li.cryx.expcraft.i18n.AbstractTranslator;
+import li.cryx.expcraft.i18n.FallbackTranslation;
 import li.cryx.expcraft.loader.ModuleInfo;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.persist.model.Experience;
@@ -53,6 +55,8 @@ public class PersistenceDatabaseBukkitTest {
 	private Player player;
 
 	private UUID uuid;
+
+	private AbstractTranslator translator;
 
 	/** normal case */
 	@Test
@@ -112,8 +116,11 @@ public class PersistenceDatabaseBukkitTest {
 	public void preparePersistence() {
 		eBeanServer = Mockito.mock(EbeanServer.class);
 
+		translator = new FallbackTranslation();
+
 		core = Mockito.mock(ExpCraft.class);
 		Mockito.when(core.getDatabase()).thenReturn(eBeanServer);
+		Mockito.when(core.getTranslator()).thenReturn(translator);
 
 		pers = new PersistenceDatabaseBukkit();
 		pers.setCore(core);

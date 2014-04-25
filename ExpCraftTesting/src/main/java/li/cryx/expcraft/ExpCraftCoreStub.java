@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import li.cryx.expcraft.cmd.CommandManager;
+import li.cryx.expcraft.i18n.AbstractTranslator;
+import li.cryx.expcraft.i18n.FallbackTranslation;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
@@ -61,6 +63,8 @@ public class ExpCraftCoreStub implements IExpCraft {
 	private AbstractPermissionManager perm;
 
 	private AbstractPersistenceManager pers;
+
+	private AbstractTranslator translator = new FallbackTranslation();
 
 	/** Create a stub. Link the plugin to the mocked server. */
 	public ExpCraftCoreStub(final Server server) {
@@ -118,6 +122,11 @@ public class ExpCraftCoreStub implements IExpCraft {
 		return server;
 	}
 
+	@Override
+	public AbstractTranslator getTranslator() {
+		return translator;
+	}
+
 	public void setPermissions(final AbstractPermissionManager perm) {
 		this.perm = perm;
 	}
@@ -125,6 +134,10 @@ public class ExpCraftCoreStub implements IExpCraft {
 	public void setPersistence(final AbstractPersistenceManager pers) {
 		this.pers = pers;
 		pers.setCore(this);
+	}
+
+	public void setTranslator(final AbstractTranslator translator) {
+		this.translator = translator;
 	}
 
 }

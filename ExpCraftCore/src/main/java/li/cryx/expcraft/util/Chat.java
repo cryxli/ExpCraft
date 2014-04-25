@@ -22,9 +22,13 @@
  */
 package li.cryx.expcraft.util;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import li.cryx.expcraft.IExpCraft;
+import li.cryx.expcraft.i18n.AbstractTranslator;
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 
@@ -130,6 +134,8 @@ public class Chat {
 	/** Reference to the core plugin. */
 	private final IExpCraft core;
 
+	private final AbstractTranslator i18n;
+
 	/**
 	 * Create a new instance of the chat util. It must be bound to a plugin and
 	 * will also lookup the ExpCraft core plugin.
@@ -144,17 +150,40 @@ public class Chat {
 		if (core == null) {
 			throw new IllegalStateException("ExpCraftCore not found");
 		}
+		i18n = core.getTranslator();
+		if (i18n == null) {
+			throw new IllegalStateException("AbstractTranslator not found");
+		}
 	}
 
-	public void bad(final CommandSender sender, final String msg) {
+	public void bad(final CommandSender sender, final String msg,
+			final Object... arguments) {
+		final String trans = i18n.translate(sender, msg, arguments);
+		badPlain(sender, trans);
+	}
+
+	public void badPlain(final CommandSender sender, final String msg) {
 		sender.sendMessage(colorHighlight + "[EC] " + colorBad + msg);
 	}
 
-	public void broadcast(final String msg) {
+	public void broadcast(final String msg, final ExpCraftModule module,
+			final Object... arguments) {
 		for (Player player : core.getServer().getOnlinePlayers()) {
 			if (getPermission().worldCheck(player.getWorld())) {
+				String trans = i18n.translate(player, module);
+				trans = i18n.translate(player, msg, vargs(trans, arguments));
 				player.sendMessage(colorHighlight + "[EC] " + colorSpecial
-						+ msg);
+						+ trans);
+			}
+		}
+	}
+
+	public void broadcast(final String msg, final Object... arguments) {
+		for (Player player : core.getServer().getOnlinePlayers()) {
+			if (getPermission().worldCheck(player.getWorld())) {
+				final String trans = i18n.translate(player, msg, arguments);
+				player.sendMessage(colorHighlight + "[EC] " + colorSpecial
+						+ trans);
 			}
 		}
 	}
@@ -164,12 +193,38 @@ public class Chat {
 		return core.getPermissions();
 	}
 
-	public void good(final CommandSender sender, final String msg) {
+	public void good(final CommandSender sender, final String msg,
+			final ExpCraftModule module, final Object... arguments) {
+		String trans = i18n.translate(sender, module);
+		trans = i18n.translate(sender, msg, vargs(trans, arguments));
+		goodPlain(sender, trans);
+	}
+
+	public void good(final CommandSender sender, final String msg,
+			final Object... arguments) {
+		final String trans = i18n.translate(sender, msg, arguments);
+		goodPlain(sender, trans);
+	}
+
+	public void goodPlain(final CommandSender sender, final String msg) {
 		sender.sendMessage(colorHighlight + "[EC] " + colorGood + msg);
 	}
 
-	public void info(final CommandSender sender, final String msg) {
-		sender.sendMessage(colorHighlight + "[EC] " + colorSpecial + msg);
+	public void info(final CommandSender sender, final String msg,
+			final ExpCraftModule module, final Object... arguments) {
+		String trans = i18n.translate(sender, module);
+		trans = i18n.translate(sender, msg, vargs(trans, arguments));
+		infoPlain(sender, trans);
+	}
+
+	public void info(final CommandSender sender, final String msg,
+			final Object... arguments) {
+		final String trans = i18n.translate(sender, msg, arguments);
+		infoPlain(sender, trans);
+	}
+
+	public void infoPlain(final CommandSender sender, final String line) {
+		sender.sendMessage(colorHighlight + "[EC] " + colorSpecial + line);
 	}
 
 	/**
@@ -184,29 +239,41 @@ public class Chat {
 	 */
 	public void notifyLevelGain(final ExpCraftModule module,
 			final Player player, final int newLevel) {
-		good(player, MessageFormat.format(
-				"LEVEL UP. You are now level {0} in {1}", newLevel, module
-						.getInfo().getName()));
-
-		good(player, MessageFormat.format(
-				"See /level {0} - To see what you have unlocked.", module
-						.getInfo().getAbbr()));
+		good(player, LangKeys.LEVEL_UP_SELF, //
+				module, //
+				newLevel);
+		good(player, LangKeys.LEVEL_UP_INFO, module.getInfo().getAbbr());
 
 		if (playSound) {
 			player.playSound(player.getLocation(), Sound.LEVEL_UP, 0.5f, 1);
 		}
 
 		if (notifyAll) {
-			broadcast(MessageFormat.format("{0} is now level {1} in {2}.",
-					player.getName(), newLevel, module.getInfo().getName()));
+			broadcast(LangKeys.LEVEL_UP_BROADCAST, module, player.getName(),
+					newLevel);
 		}
 	}
 
 	public void topBar(final CommandSender sender) {
-		sender.sendMessage(colorHighlight + "[EC] --- ExpCraftPlugin --- ");
+		final String trans = i18n.translate(sender, LangKeys.PLUGIN_TITLE);
+		sender.sendMessage(colorHighlight + "[EC] " + trans);
 	}
 
-	public void warn(final CommandSender sender, final String msg) {
-		sender.sendMessage(colorHighlight + "[EC] " + colorBad + msg);
+	public String translate(final CommandSender sender,
+			final ExpCraftModule module) {
+		return i18n.translate(sender, module);
+	}
+
+	private Object[] vargs(final Object obj, final Object[] objs) {
+		List<Object> list = new ArrayList<Object>();
+		list.add(obj);
+		list.addAll(Arrays.asList(objs));
+		return list.toArray();
+	}
+
+	public void warn(final CommandSender sender, final String msg,
+			final Object... arguments) {
+		final String trans = i18n.translate(sender, msg, arguments);
+		sender.sendMessage(colorHighlight + "[EC] " + colorBad + trans);
 	}
 }

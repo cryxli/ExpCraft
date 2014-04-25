@@ -82,7 +82,17 @@ public class ModuleLoader {
 				LOG.error("Cannot attach JAR", e);
 				return null;
 			}
-			info.setLoader(new URLClassLoader(new URL[] { jar }, classLoader));
+			info.setLoader(new URLClassLoader(new URL[] { jar }, classLoader) {
+				@Override
+				public URL getResource(final String name) {
+					// invert classloader hierarchy
+					URL url = findResource(name);
+					if (url == null) {
+						url = super.getResource(name);
+					}
+					return url;
+				}
+			});
 		}
 
 		if (info.getModule() != null) {

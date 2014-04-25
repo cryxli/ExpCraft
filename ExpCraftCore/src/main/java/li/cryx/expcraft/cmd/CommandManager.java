@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 import li.cryx.expcraft.IExpCraft;
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -64,19 +65,19 @@ public class CommandManager {
 		for (ExpCraftModule module : core.getModules()) {
 			if (core.getPermissions().hasLevel(module, player)) {
 				levels.add(MessageFormat.format("{0} ({1}): {2}", //
-						module.getInfo().getName(), //
+						chat.translate(sender, module), //
 						module.getInfo().getAbbr(), //
 						core.getPersistence().getLevel(module, player)));
 			}
 		}
 
 		if (levels.isEmpty()) {
-			chat.warn(sender, "No level found.");
+			chat.warn(sender, LangKeys.LEVEL_NOT_FOUND);
 		} else {
 			chat.topBar(sender);
 			Collections.sort(levels);
 			for (String line : levels) {
-				chat.info(sender, line);
+				chat.infoPlain(sender, line);
 			}
 		}
 	}
@@ -97,22 +98,23 @@ public class CommandManager {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
-			chat.info(sender, "No module found");
+			chat.info(sender, LangKeys.MODULE_NOT_FOUND);
 
 		} else if (sender != player
 				|| core.getPermissions().hasLevel(module, player)) {
 
 			// display
-			chat.info(sender,
-					MessageFormat.format("{0} ({1}): lv{2} at {3} points", //
-							module.getInfo().getName(), //
-							module.getInfo().getAbbr(), //
-							core.getPersistence().getLevel(module, player), //
-							core.getPersistence().getExp(module, player)));
+			chat.info(sender, //
+					LangKeys.PLUGIN_GET_EXP, //
+					module, //
+					module.getInfo().getAbbr(), //
+					core.getPersistence().getLevel(module, player), //
+					core.getPersistence().getExp(module, player) //
+			);
 
 		} else {
 			// no permission
-			chat.bad(sender, "You cannot use this module");
+			chat.bad(sender, LangKeys.NOT_ALLOWED);
 		}
 	}
 
@@ -126,40 +128,41 @@ public class CommandManager {
 	private void executeCmdInfoCore(final CommandSender sender,
 			final Player player) {
 		chat.topBar(sender);
-		chat.info(sender, "Available commands:");
-		chat.info(sender, " /lvl all");
+		chat.info(sender, LangKeys.PLUGIN_COMMANDS);
+		chat.infoPlain(sender, " /lvl all");
 		if (player != null) {
-			chat.info(sender, " /lvl info <Module> [Page]");
+			chat.infoPlain(sender, " /lvl info <Module> [Page]");
 		}
 		if (player == null
 				|| core.getPermissions().hasAdminCommand(player, "get")) {
-			chat.info(sender, " /lvl getExp <Module> [Player]");
-			chat.info(sender, " /lvl getLvl <Module> [Player]");
+			chat.infoPlain(sender, " /lvl getExp <Module> [Player]");
+			chat.infoPlain(sender, " /lvl getLvl <Module> [Player]");
 		} else {
-			chat.info(sender, " /lvl getExp <Module>");
-			chat.info(sender, " /lvl getLvl <Module>");
+			chat.infoPlain(sender, " /lvl getExp <Module>");
+			chat.infoPlain(sender, " /lvl getLvl <Module>");
 		}
 		if (player == null
 				|| core.getPermissions().hasAdminCommand(player, "set")) {
-			chat.info(sender, " /lvl setExp <Module> <Value> [Player]");
-			chat.info(sender, " /lvl setLvl <Module> <Value> [Player]");
+			chat.infoPlain(sender, " /lvl setExp <Module> <Value> [Player]");
+			chat.infoPlain(sender, " /lvl setLvl <Module> <Value> [Player]");
 		}
 	}
 
 	/**
-	 * Display information about the given plugin.
+	 * Display information about the given module.
 	 * 
 	 * @param sender
 	 *            ConsoleSender requesting the information
 	 * @param modAbbr
 	 *            Short identifier for a module
 	 */
+	// TODO i18n
 	private void executeCmdInfoModule(final CommandSender sender,
 			final Player player, final String modAbbr) {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
-			chat.info(sender, "No module found");
+			chat.info(sender, LangKeys.MODULE_NOT_FOUND);
 		} else {
 			// have the module display its info
 			module.displayInfo(player);
@@ -183,16 +186,17 @@ public class CommandManager {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
-			chat.info(player, "No module found");
+			chat.info(player, LangKeys.MODULE_NOT_FOUND);
 		} else if (sender != player
 				|| core.getPermissions().hasLevel(module, player)) {
 			// execute
 			core.getPersistence().setExp(module, player, exp);
 			// display
-			chat.info(sender, MessageFormat.format("{0} ({1}): {2} points", //
-					module.getInfo().getName(), //
+			chat.info(sender, LangKeys.EXP_INFO, //
+					module, //
 					module.getInfo().getAbbr(), //
-					exp));
+					exp //
+			);
 		} else {
 			// no permission
 			msgNoPermission(sender);
@@ -216,16 +220,18 @@ public class CommandManager {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);
 		if (module == null) {
 			// module not found
-			chat.info(sender, "No module found");
+			chat.info(sender, LangKeys.MODULE_NOT_FOUND);
 		} else if (sender != player
 				|| core.getPermissions().hasAdminCommand(player, "set")) {
 			// execute
 			core.getPersistence().setLevel(module, player, level);
 			// display
-			chat.info(sender, MessageFormat.format("{0} ({1}): lv{2}", //
-					module.getInfo().getName(), //
+			chat.info(sender, //
+					LangKeys.LEVEL_INFO, //
+					module, //
 					module.getInfo().getAbbr(), //
-					level));
+					level //
+			);
 		} else {
 			// no permission
 			msgNoPermission(sender);
@@ -233,7 +239,7 @@ public class CommandManager {
 	}
 
 	private void msgNoPermission(final CommandSender sender) {
-		chat.bad(sender, "You cannot execute that command.");
+		chat.bad(sender, LangKeys.CMD_NOT_ALLOWED);
 	}
 
 	/**
@@ -283,13 +289,12 @@ public class CommandManager {
 				player = core.getServer().getPlayer(args[1]);
 				if (player == null) {
 					// no player found
-					chat.info(sender, MessageFormat.format(
-							"Player {0} is offline", args[1]));
+					chat.info(sender, LangKeys.PLAYER_OFFLINE, args[1]);
 				} else {
 					executeCmdAll(sender, player);
 				}
 			} else {
-				chat.info(sender, "Syntax: /level all <Player>");
+				chat.infoPlain(sender, "Syntax: /level all <Player>");
 			}
 
 		} else if (args.length == 1) {
@@ -302,8 +307,7 @@ public class CommandManager {
 			player = core.getServer().getPlayer(args[1]);
 			if (player == null) {
 				// no player found
-				chat.info(sender,
-						MessageFormat.format("Player {0} is offline", args[1]));
+				chat.info(sender, LangKeys.PLAYER_OFFLINE, args[1]);
 			} else {
 				executeCmdAll(sender, player);
 			}
@@ -360,9 +364,9 @@ public class CommandManager {
 				executeCmdSetExp(cmdArgs.sender, cmdArgs.player,
 						cmdArgs.args[0], exp);
 			} catch (NumberFormatException e) {
-				chat.info(sender,
+				chat.infoPlain(sender,
 						"Syntax: /level setExp <Module> <Value> [Player]");
-				chat.info(sender, "  <Value> has to be a floating point number");
+				chat.info(sender, LangKeys.VALUE_FLOAT);
 			}
 		}
 	}
@@ -378,9 +382,9 @@ public class CommandManager {
 				executeCmdSetLevel(cmdArgs.sender, cmdArgs.player,
 						cmdArgs.args[0], level);
 			} catch (NumberFormatException e) {
-				chat.info(sender,
+				chat.infoPlain(sender,
 						"Syntax: /level setLevel <Module> <Value> [Player]");
-				chat.info(sender, "  <Value> has to be a natural number");
+				chat.info(sender, LangKeys.VALUE_INTEGER);
 			}
 		}
 	}
@@ -395,17 +399,17 @@ public class CommandManager {
 				player = core.getServer().getPlayer(args[3]);
 				if (player == null) {
 					// no player found
-					chat.info(sender, MessageFormat.format(
-							"Player {0} is offline", args[3]));
+					chat.info(sender, LangKeys.PLAYER_OFFLINE, args[3]);
 				} else {
 					return new CmdArgs(sender, player, args[1], args[2]);
 				}
 			} else {
-				chat.info(sender, "Syntax: /level " + cmdInfo + " <Player>");
+				chat.infoPlain(sender, "Syntax: /level " + cmdInfo
+						+ " <Player>");
 			}
 		} else if (args.length < 3) {
 			// wrong number of arguments
-			chat.info(sender, "Syntax: /level " + cmdInfo + " [Player]");
+			chat.infoPlain(sender, "Syntax: /level " + cmdInfo + " [Player]");
 		} else if (args.length == 3) {
 			// for player, by player
 			return new CmdArgs(sender, player, args[1], args[2]);
@@ -415,8 +419,7 @@ public class CommandManager {
 			player = core.getServer().getPlayer(args[3]);
 			if (player == null) {
 				// no player found
-				chat.info(sender,
-						MessageFormat.format("Player {0} is offline", args[3]));
+				chat.info(sender, LangKeys.PLAYER_OFFLINE, args[3]);
 			} else {
 				return new CmdArgs(sender, player, args[1], args[2]);
 			}
@@ -438,18 +441,18 @@ public class CommandManager {
 				player = core.getServer().getPlayer(args[2]);
 				if (player == null) {
 					// no player found
-					chat.info(sender, MessageFormat.format(
-							"Player {0} is offline", args[2]));
+					chat.info(sender, LangKeys.PLAYER_OFFLINE, args[2]);
 				} else {
 					return new CmdArgs(sender, player, args[1]);
 				}
 			} else {
-				chat.info(sender, "Syntax: /level " + cmdInfo + " <Player>");
+				chat.infoPlain(sender, "Syntax: /level " + cmdInfo
+						+ " <Player>");
 			}
 
 		} else if (args.length < 2) {
 			// wrong number of arguments
-			chat.info(sender, "Syntax: /level " + cmdInfo + " [Player]");
+			chat.infoPlain(sender, "Syntax: /level " + cmdInfo + " [Player]");
 
 		} else if (args.length == 2) {
 			// for player, by player
@@ -461,8 +464,7 @@ public class CommandManager {
 			player = core.getServer().getPlayer(args[2]);
 			if (player == null) {
 				// no player found
-				chat.info(sender,
-						MessageFormat.format("Player {0} is offline", args[2]));
+				chat.info(sender, LangKeys.PLAYER_OFFLINE, args[2]);
 			} else {
 				return new CmdArgs(sender, player, args[1]);
 			}

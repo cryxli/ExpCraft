@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import li.cryx.expcraft.i18n.AbstractTranslator;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.perm.AbstractPermissionManager;
 import li.cryx.expcraft.persist.AbstractPersistenceManager;
@@ -29,5 +30,7 @@ public interface IExpCraft {
 	AbstractPersistenceManager getPersistence();
 
 	Server getServer();
+
+	AbstractTranslator getTranslator();
 
 }
