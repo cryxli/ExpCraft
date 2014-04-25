@@ -151,13 +151,13 @@ public class DefenceConstraints {
 	 *            Current player
 	 * @param level
 	 *            Player's level
-	 * @param config
+	 * @param material
 	 *            String identifying a material (wood, iron, etc.)
 	 */
 	public void checkBoots(final Player player, final int level,
-			final String config) {
+			final String material) {
 		if (level < plugin.getConfig().getInteger(
-				"ArmorLevel." + config + "Boots")) {
+				"ArmorLevel." + material + "Boots")) {
 			ItemStack item = player.getInventory().getBoots();
 			ItemStack drop = new ItemStack(item.getType(), 1,
 					item.getDurability());
@@ -168,7 +168,7 @@ public class DefenceConstraints {
 				player.getInventory().setItem(
 						player.getInventory().firstEmpty(), drop);
 			}
-			plugin.notifyRequirements(player, config, "Boots");
+			plugin.notifyRequirements(player, material, "Boots");
 		}
 	}
 

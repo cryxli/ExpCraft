@@ -22,11 +22,11 @@
  */
 package li.cryx.expcraft.defence;
 
-import java.text.MessageFormat;
-
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,25 +58,22 @@ public class Defence extends ExpCraftModule {
 	}
 
 	@Override
-	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+	public void displayInfo(final Player player) {
+		chat.info(player, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
-		int level = getPersistence().getLevel(this, sender);
-		chat.info(sender, "Armor Sets:");
-		sendArmorInfo(sender, "Leather", level);
-		sendArmorInfo(sender, "Chainmail", level);
-		sendArmorInfo(sender, "Iron", level);
-		sendArmorInfo(sender, "Gold", level);
-		sendArmorInfo(sender, "Diamond", level);
+		int level = getPersistence().getLevel(this, player);
+		chat.infoPlain(player, translator.translate(player, "info.armor"));
+		sendArmorInfo(player, "Leather", level);
+		sendArmorInfo(player, "Chainmail", level);
+		sendArmorInfo(player, "Iron", level);
+		sendArmorInfo(player, "Gold", level);
+		sendArmorInfo(player, "Diamond", level);
 
-		double exp = getPersistence().getExp(this, sender);
-		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
-		chat.info(sender, "Stats:");
-		chat.info(sender, MessageFormat.format(
-				"Current level: {0}, XP: {1} points", level, exp));
-		chat.info(sender, MessageFormat.format(
-				"Experience to next level: {0} points", nextLvl - exp));
+		double exp = getPersistence().getExp(this, player);
+		double nextLvl = getPersistence().getExpForNextLevel(this, player);
+		chat.info(player, LangKeys.MODULE_INFO_STATS);
+		chat.info(player, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(player, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	/**
@@ -103,8 +100,8 @@ public class Defence extends ExpCraftModule {
 	 */
 	void notifyRequirements(final Player player, final String material,
 			final String armor) {
-		chat.bad(player, MessageFormat.format("You cannot wear {0} {1}.",
-				material, armor));
+		chat.warnPlain(player,
+				translator.translate(player, "warn." + material + "." + armor));
 	}
 
 	@Override
@@ -135,56 +132,54 @@ public class Defence extends ExpCraftModule {
 	/**
 	 * Send info about a material type of armor to the player.
 	 * 
-	 * @param sender
+	 * @param player
 	 *            Current player
 	 * @param material
 	 *            String identifying armor material
 	 * @param level
 	 *            Player's level in Defence.
 	 */
-	private void sendArmorInfo(final Player sender, final String material,
+	private void sendArmorInfo(final Player player, final String material,
 			final int level) {
-		int boots = getConfig().getInteger("ArmorLevel." + material + "Boots");
-		int chest = getConfig().getInteger(
+		final int boots = getConfig().getInteger(
+				"ArmorLevel." + material + "Boots");
+		final int chest = getConfig().getInteger(
 				"ArmorLevel." + material + "Chestplate");
-		int helmet = getConfig()
-				.getInteger("ArmorLevel." + material + "Helmet");
-		int leggings = getConfig().getInteger(
+		final int helmet = getConfig().getInteger(
+				"ArmorLevel." + material + "Helmet");
+		final int leggings = getConfig().getInteger(
 				"ArmorLevel." + material + "Leggings");
 
 		if (boots == chest && chest == helmet && helmet == leggings) {
+			final String text = translator.translate(player, "info.set."
+					+ material, boots);
 			if (level < boots) {
-				chat.bad(sender,
-						MessageFormat.format("{0} Armor: {1}", material, boots));
+				chat.badPlain(player, text);
 			} else {
-				chat.good(sender,
-						MessageFormat.format("{0} Armor: {1}", material, boots));
+				chat.goodPlain(player, text);
 			}
 		} else {
-			StringBuffer buf = new StringBuffer();
-			buf.append(material).append(" Armor, ");
-
-			buf.append(level < boots ? Chat.getBadColor() : Chat.getGoodColor());
-			buf.append("B: ").append(boots);
-			buf.append(Chat.getSpecialColor());
-			buf.append(", ");
-
-			buf.append(level < helmet ? Chat.getBadColor() : Chat
-					.getGoodColor());
-			buf.append("H: ").append(helmet);
-			buf.append(Chat.getSpecialColor());
-			buf.append(", ");
-
-			buf.append(level < leggings ? Chat.getBadColor() : Chat
-					.getGoodColor());
-			buf.append("L: ").append(leggings);
-			buf.append(Chat.getSpecialColor());
-			buf.append(", ");
-
-			buf.append(level < chest ? Chat.getBadColor() : Chat.getGoodColor());
-			buf.append("C: ").append(chest);
-
-			chat.info(sender, buf.toString());
+			final ChatColor bootColor = level < boots ? Chat.getBadColor()
+					: Chat.getGoodColor();
+			final ChatColor helmetColor = level < helmet ? Chat.getBadColor()
+					: Chat.getGoodColor();
+			final ChatColor legColor = level < leggings ? Chat.getBadColor()
+					: Chat.getGoodColor();
+			final ChatColor chestColor = level < chest ? Chat.getBadColor()
+					: Chat.getGoodColor();
+			final String text = translator.translate( //
+					player, //
+					"info.each." + material, //
+					Chat.getSpecialColor(), //
+					bootColor, //
+					boots, //
+					helmetColor, //
+					helmet,//
+					legColor, //
+					leggings, //
+					chestColor, //
+					chest);
+			chat.infoPlain(player, text);
 		}
 	}
 }
