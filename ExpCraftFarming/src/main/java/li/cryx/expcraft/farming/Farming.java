@@ -22,9 +22,9 @@
  */
 package li.cryx.expcraft.farming;
 
-import java.text.MessageFormat;
 import java.util.logging.Logger;
 
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -73,11 +73,10 @@ public class Farming extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+		chat.info(sender, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
 		int level = getPersistence().getLevel(this, sender);
-		chat.info(sender, "Tools:");
+		chat.infoPlain(sender, translator.translate(sender, "info.tools"));
 		sendToolInfo(sender, "Wooden", level);
 		sendToolInfo(sender, "Stone", level);
 		sendToolInfo(sender, "Iron", level);
@@ -86,11 +85,9 @@ public class Farming extends ExpCraftModule {
 
 		double exp = getPersistence().getExp(this, sender);
 		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
-		chat.info(sender, "Stats:");
-		chat.info(sender, MessageFormat.format(
-				"Current level: {0}, XP: {1} points", level, exp));
-		chat.info(sender, MessageFormat.format(
-				"Experience to next level: {0} points", nextLvl - exp));
+		chat.info(sender, LangKeys.MODULE_INFO_STATS);
+		chat.info(sender, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(sender, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	/**
@@ -152,11 +149,12 @@ public class Farming extends ExpCraftModule {
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
 		int toolLevel = getConfig().getInteger("HoeLevel." + material);
-		String msg = MessageFormat.format("{0} Hoe: {1}", material, toolLevel);
+		String msg = translator
+				.translate(sender, "info." + material, toolLevel);
 		if (level >= toolLevel) {
-			chat.good(sender, msg);
+			chat.goodPlain(sender, msg);
 		} else {
-			chat.bad(sender, msg);
+			chat.badPlain(sender, msg);
 		}
 	}
 
@@ -170,8 +168,8 @@ public class Farming extends ExpCraftModule {
 	 *            The required level to cut
 	 */
 	void warnCutBlockLevel(final Player player, final int reqLevel) {
-		chat.warn(player, MessageFormat.format( //
-				"Cannot cut this block. Required Level: {0}", reqLevel));
+		chat.warnPlain(player,
+				translator.translate(player, "warn.block", reqLevel));
 	}
 
 	/**
@@ -184,7 +182,6 @@ public class Farming extends ExpCraftModule {
 	 *            The required level to use this tool
 	 */
 	void warnToolLevel(final Player player, final int level) {
-		chat.warn(player, MessageFormat.format( //
-				"Cannot use this tool. Required Level: {0}", level));
+		chat.warnPlain(player, translator.translate(player, "warn.tool", level));
 	}
 }
