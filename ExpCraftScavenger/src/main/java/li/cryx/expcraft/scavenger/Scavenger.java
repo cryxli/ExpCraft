@@ -22,8 +22,7 @@
  */
 package li.cryx.expcraft.scavenger;
 
-import java.text.MessageFormat;
-
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -57,21 +56,17 @@ public class Scavenger extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+		chat.info(sender, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
-		chat.info(sender,
-				"Digging through dirt, etc. you can find other items.");
-		chat.info(sender, "The more you search, the more you'll find.");
+		chat.infoPlain(sender, translator.translate(sender, "info.line1"));
+		chat.infoPlain(sender, translator.translate(sender, "info.line2"));
 
 		int level = getPersistence().getLevel(this, sender);
 		double exp = getPersistence().getExp(this, sender);
 		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
-		chat.info(sender, "Stats:");
-		chat.info(sender, MessageFormat.format(
-				"Current level: {0}, XP: {1} points", level, exp));
-		chat.info(sender, MessageFormat.format(
-				"Experience to next level: {0} points", nextLvl - exp));
+		chat.info(sender, LangKeys.MODULE_INFO_STATS);
+		chat.info(sender, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(sender, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	/**
@@ -113,6 +108,6 @@ public class Scavenger extends ExpCraftModule {
 	}
 
 	void sendHint(final Player player, final String msg) {
-		chat.info(player, msg);
+		chat.infoPlain(player, translator.translate(player, msg));
 	}
 }

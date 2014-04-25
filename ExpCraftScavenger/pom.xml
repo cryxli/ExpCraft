@@ -7,7 +7,7 @@
 		<version>0.10.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	
+
 	<artifactId>expcraft-scavenger</artifactId>
 	<name>EC-Scavenger</name>
 
@@ -17,7 +17,7 @@
 			<artifactId>expcraft-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>li.cryx.expcraft</groupId>
 			<artifactId>expcraft-testing</artifactId>
@@ -46,6 +46,16 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+				<includes>
+					<include>config/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>config/*</exclude>
+				</excludes>
 			</resource>
 		</resources>
 	</build>

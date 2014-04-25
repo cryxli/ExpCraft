@@ -35,6 +35,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ScavengerConstraints {
 
+	public static final String HINT_GOLD = "hint.gold";
+
+	public static final String HINT_GHAST = "hint.ghast";
+
 	private final Scavenger plugin;
 
 	public ScavengerConstraints(final Scavenger plugin) {
@@ -76,7 +80,7 @@ public class ScavengerConstraints {
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfig().getDouble("ExpGain.GhastTear"));
 			dropItem(block, Material.GHAST_TEAR);
-			plugin.sendHint(player, "A Ghast must have been sad, here.");
+			plugin.sendHint(player, HINT_GHAST);
 
 		} else if (rnd > 3 && rnd <= 6
 				&& level >= plugin.getConfig().getInteger("DropLevel.Nugget")) {
@@ -132,8 +136,7 @@ public class ScavengerConstraints {
 			plugin.getPersistence().addExp(plugin, player,
 					plugin.getConfig().getDouble("ExpGain.Ingot"));
 			dropItem(block, Material.GOLD_INGOT);
-			plugin.sendHint(player,
-					"Hey, do you see that shiny thing in the sand?.");
+			plugin.sendHint(player, HINT_GOLD);
 
 		} else if (rnd > 6 && rnd <= 8
 				&& level >= plugin.getConfig().getInteger("DropLevel.Bowl")) {
