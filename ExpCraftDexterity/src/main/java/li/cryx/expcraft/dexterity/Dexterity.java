@@ -22,8 +22,7 @@
  */
 package li.cryx.expcraft.dexterity;
 
-import java.text.MessageFormat;
-
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -63,11 +62,10 @@ public class Dexterity extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+		chat.info(sender, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
 		int level = getPersistence().getLevel(this, sender);
-		chat.info(sender, "Boots:");
+		chat.infoPlain(sender, translator.translate(sender, "info.boots"));
 		sendToolInfo(sender, "Leather", level);
 		sendToolInfo(sender, "Chainmail", level);
 		sendToolInfo(sender, "Iron", level);
@@ -76,11 +74,9 @@ public class Dexterity extends ExpCraftModule {
 
 		double exp = getPersistence().getExp(this, sender);
 		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
-		chat.info(sender, "Stats:");
-		chat.info(sender, MessageFormat.format(
-				"Current level: {0}, XP: {1} points", level, exp));
-		chat.info(sender, MessageFormat.format(
-				"Experience to next level: {0} points", nextLvl - exp));
+		chat.info(sender, LangKeys.MODULE_INFO_STATS);
+		chat.info(sender, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(sender, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	/**
@@ -136,12 +132,12 @@ public class Dexterity extends ExpCraftModule {
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
 		int toolLevel = getConfig().getInteger("BootsLevel." + material);
-		String msg = MessageFormat
-				.format("{0} Boots: {1}", material, toolLevel);
+		String msg = translator
+				.translate(sender, "info." + material, toolLevel);
 		if (level >= toolLevel) {
-			chat.good(sender, msg);
+			chat.goodPlain(sender, msg);
 		} else {
-			chat.bad(sender, msg);
+			chat.badPlain(sender, msg);
 		}
 	}
 
@@ -157,8 +153,8 @@ public class Dexterity extends ExpCraftModule {
 	 *            Required level to get bonus for current boots.
 	 */
 	void warnBoots(final Player player, final String material, final int level) {
-		chat.bad(player, MessageFormat.format(
-				"To wear {0} Boots you have to be lv{1}", material, level));
+		chat.badPlain(player,
+				translator.translate(player, "warn.level." + material, level));
 	}
 
 }
