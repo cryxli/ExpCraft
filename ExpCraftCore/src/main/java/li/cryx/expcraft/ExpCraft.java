@@ -91,6 +91,7 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 	/** The in-game command manager. */
 	private CommandManager cmd;
 
+	/** The translation factory for the core. */
 	private AbstractTranslator translator;
 
 	@Override
@@ -376,12 +377,19 @@ public class ExpCraft extends JavaPlugin implements IExpCraft {
 				.getInteger("Levels.LevelCap"));
 	}
 
+	/**
+	 * Create a translation factory according to the bukkit server's
+	 * configuration.
+	 */
 	private void setTranslator() {
+		// look for the i18n plugin
 		final Plugin lang = getServer().getPluginManager()
 				.getPlugin("Language");
 		if (lang != null) {
+			// plugin is present, use it
 			translator = new AclTranslation(this);
 		} else {
+			// plugin is missing, create a fallback
 			translator = new FallbackTranslation();
 		}
 	}

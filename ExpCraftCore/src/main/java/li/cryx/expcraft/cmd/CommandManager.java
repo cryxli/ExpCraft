@@ -156,7 +156,6 @@ public class CommandManager {
 	 * @param modAbbr
 	 *            Short identifier for a module
 	 */
-	// TODO i18n
 	private void executeCmdInfoModule(final CommandSender sender,
 			final Player player, final String modAbbr) {
 		ExpCraftModule module = core.getModuleByAbbr(modAbbr);

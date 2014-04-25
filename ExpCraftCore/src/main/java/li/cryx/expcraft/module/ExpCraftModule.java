@@ -52,7 +52,7 @@ public abstract class ExpCraftModule {
 	/** Abstraction to handle config files. */
 	private ConfigProvider config;
 
-	// TODO doc
+	/** Translation factory for this module. */
 	protected AbstractModuleTranslator translator;
 
 	/**
@@ -200,7 +200,9 @@ public abstract class ExpCraftModule {
 		}
 	}
 
-	// TODO doc
+	/**
+	 * Set the translation factory that operates on the JAR of this module.
+	 */
 	public void setTranslator(final AbstractModuleTranslator translator) {
 		this.translator = translator;
 	}

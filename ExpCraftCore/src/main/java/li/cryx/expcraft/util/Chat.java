@@ -274,6 +274,11 @@ public class Chat {
 	public void warn(final CommandSender sender, final String msg,
 			final Object... arguments) {
 		final String trans = i18n.translate(sender, msg, arguments);
-		sender.sendMessage(colorHighlight + "[EC] " + colorBad + trans);
+		warnPlain(sender, trans);
 	}
+
+	public void warnPlain(final CommandSender sender, final String msg) {
+		sender.sendMessage(colorHighlight + "[EC] " + colorBad + msg);
+	}
+
 }
