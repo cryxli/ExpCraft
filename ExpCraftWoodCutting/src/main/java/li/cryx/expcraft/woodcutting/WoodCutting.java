@@ -22,8 +22,7 @@
  */
 package li.cryx.expcraft.woodcutting;
 
-import java.text.MessageFormat;
-
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.DropExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 import li.cryx.expcraft.util.ToolQuality;
@@ -110,11 +109,10 @@ public class WoodCutting extends DropExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+		chat.info(sender, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
 		int level = getPersistence().getLevel(this, sender);
-		chat.info(sender, "Tools:");
+		chat.infoPlain(sender, translator.translate(sender, "info.tools"));
 		sendToolInfo(sender, "Wooden", level);
 		sendToolInfo(sender, "Stone", level);
 		sendToolInfo(sender, "Iron", level);
@@ -123,11 +121,9 @@ public class WoodCutting extends DropExpCraftModule {
 
 		double exp = getPersistence().getExp(this, sender);
 		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
-		chat.info(sender, "Stats:");
-		chat.info(sender, MessageFormat.format(
-				"Current level: {0}, XP: {1} points", level, exp));
-		chat.info(sender, MessageFormat.format(
-				"Experience to next level: {0} points", nextLvl - exp));
+		chat.info(sender, LangKeys.MODULE_INFO_STATS);
+		chat.info(sender, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(sender, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	/**
@@ -183,13 +179,14 @@ public class WoodCutting extends DropExpCraftModule {
 	private void sendToolInfo(final Player sender, final String material,
 			final int level) {
 		int toolLevel = getConfig().getInteger("AxeLevel." + material);
-		String msg = MessageFormat.format("{0} Axe: {1}", material, toolLevel);
+		String msg = translator
+				.translate(sender, "info." + material, toolLevel);
 		if (level >= toolLevel) {
 			// pleyer meets requirements
-			chat.good(sender, msg);
+			chat.goodPlain(sender, msg);
 		} else {
 			// player cannot use the tool
-			chat.bad(sender, msg);
+			chat.badPlain(sender, msg);
 		}
 	}
 
@@ -202,8 +199,8 @@ public class WoodCutting extends DropExpCraftModule {
 	 *            Required level to cut the block.
 	 */
 	void warnCutBlock(final Player player, final int level) {
-		chat.bad(player, MessageFormat.format(
-				"Cannot cut this block. Required Level: {0}", level));
+		chat.warnPlain(player,
+				translator.translate(player, "warn.block", level));
 	}
 
 	/**
@@ -215,7 +212,6 @@ public class WoodCutting extends DropExpCraftModule {
 	 *            Required level to use the tool.
 	 */
 	void warnToolLevel(final Player player, final int level) {
-		chat.bad(player, MessageFormat.format(
-				"Cannot use this tool. Required Level: {0}", level));
+		chat.warnPlain(player, translator.translate(player, "warn.tool", level));
 	}
 }
