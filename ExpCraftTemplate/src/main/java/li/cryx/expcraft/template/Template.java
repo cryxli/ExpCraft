@@ -1,8 +1,8 @@
 package li.cryx.expcraft.template;
 
-import java.text.MessageFormat;
 import java.util.logging.Logger;
 
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 
@@ -29,11 +29,21 @@ public class Template extends ExpCraftModule {
 	}
 
 	@Override
-	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+	public void displayInfo(final Player player) {
+		chat.info(player, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
 		// TODO Send information about the plugin to the player.
+
+		// e.g. a text only present in the module
+		chat.infoPlain(player, translator.translate(player, "custom.info"));
+
+		// e.g. texts defined by the core
+		int level = getPersistence().getLevel(this, player);
+		double exp = getPersistence().getExp(this, player);
+		double nextLvl = getPersistence().getExpForNextLevel(this, player);
+		chat.info(player, LangKeys.MODULE_INFO_STATS);
+		chat.info(player, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(player, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	/**

@@ -22,8 +22,20 @@
 		<finalName>${project.name}</finalName>
 		<resources>
 			<resource>
+				<!-- have the config files filtered -->
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+				<includes>
+					<include>config/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<!-- but nothing else -->
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>config/*</exclude>
+				</excludes>
 			</resource>
 		</resources>
 		<plugins>
@@ -43,10 +55,10 @@
 	<properties>
 		<jdk>1.6</jdk>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+
 		<!-- define your module -->
-		<module.name>WoodCutting</module.name>
-		<module.abbr>W</module.abbr>
+		<module.name>Tempalte</module.name>
+		<module.abbr>T</module.abbr>
 		<main.class>li.cryx.expcraft.template.Template</main.class>
 	</properties>
 </project>
