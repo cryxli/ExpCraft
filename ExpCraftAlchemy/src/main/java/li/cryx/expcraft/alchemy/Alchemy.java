@@ -24,7 +24,6 @@ package li.cryx.expcraft.alchemy;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -32,6 +31,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import li.cryx.expcraft.alchemy.recipe.TypedRecipe;
 import li.cryx.expcraft.alchemy.util.RecipeParser;
+import li.cryx.expcraft.i18n.LangKeys;
 import li.cryx.expcraft.module.ExpCraftModule;
 import li.cryx.expcraft.util.Chat;
 import li.cryx.expcraft.util.FileUtil;
@@ -71,17 +71,14 @@ public class Alchemy extends ExpCraftModule {
 
 	@Override
 	public void displayInfo(final Player sender) {
-		chat.info(sender, MessageFormat.format("*** {0} ({1}) ***", getInfo()
-				.getName(), getInfo().getAbbr()));
+		chat.info(sender, LangKeys.MODULE_INFO_TITLE, this, getInfo().getAbbr());
 
 		int level = getPersistence().getLevel(this, sender);
 		double exp = getPersistence().getExp(this, sender);
 		double nextLvl = getPersistence().getExpForNextLevel(this, sender);
-		chat.info(sender, "Stats:");
-		chat.info(sender, MessageFormat.format(
-				"Current level: {0}, XP: {1} points", level, exp));
-		chat.info(sender, MessageFormat.format(
-				"Experience to next level: {0} points", nextLvl - exp));
+		chat.info(sender, LangKeys.MODULE_INFO_STATS);
+		chat.info(sender, LangKeys.MODULE_INFO_LV_EXP, level, exp);
+		chat.info(sender, LangKeys.MODULE_INFO_NEXT_LV, nextLvl - exp);
 	}
 
 	TypedRecipe getRecipe(final Recipe recipe) {
@@ -175,12 +172,11 @@ public class Alchemy extends ExpCraftModule {
 	}
 
 	public void warnLevel(final Player player, final int level) {
-		chat.warn(player, MessageFormat.format(
-				"You cannot yet use this recipe. Requires Level: {0}", level));
+		chat.warnPlain(player,
+				translator.translate(player, "warn.recipe", level));
 	}
 
 	public void warnPlugin(final Player player) {
-		chat.warn(player,
-				"You cannot use this recipe, it is not enabled for you.");
+		chat.warnPlain(player, translator.translate(player, "warn.enabled"));
 	}
 }
