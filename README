@@ -39,3 +39,4 @@ Tips
 - Use the preconfigured Launchers to build the projects
 - Launchers may not work in certain eclipse/maven plugin constellations
 - Source works for 1.7.9-R0.1 beta
+- See github wiki for change notes and precompiled releases
