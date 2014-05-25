@@ -77,7 +77,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 			for (TreeSpecies type : new TreeSpecies[] { TreeSpecies.GENERIC,
 					TreeSpecies.BIRCH, TreeSpecies.REDWOOD, TreeSpecies.JUNGLE }) {
 				Block block = getBlock(material, type);
-				System.out.println(material + "/" + type + "/" + i);
+				// System.out.println(material + "/" + type + "/" + i);
 				Assert.assertFalse(test.checkTargetBlock(player, block, 0));
 				Mockito.verify(plugin).warnCutBlock(player, i++);
 				Assert.assertTrue(test.checkTargetBlock(player, block, 15));
@@ -87,7 +87,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 				Block block = getBlock(
 						material == Material.LOG ? Material.LOG_2 : material,
 						type);
-				System.out.println(material + "/" + type + "/" + i);
+				// System.out.println(material + "/" + type + "/" + i);
 				Assert.assertFalse(test.checkTargetBlock(player, block, 0));
 				Mockito.verify(plugin).warnCutBlock(player, i++);
 				Assert.assertTrue(test.checkTargetBlock(player, block, 15));
@@ -193,7 +193,7 @@ public class WoodCuttingConstraintsTest extends AbstractPluginTest<WoodCutting> 
 		// for all tree like blocks
 		for (Material material : TREE_LIKE) {
 			// test all tree types
-			System.out.println(material);
+			// System.out.println(material);
 			for (TreeSpecies type : TreeSpecies.values()) {
 				Block block;
 				if (material == Material.LOG
