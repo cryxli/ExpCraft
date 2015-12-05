@@ -4,7 +4,11 @@ stop developing this plugin suite.
 I may change my mind once bukkit becomes test friendly again, or another
 Minecraft server implementation offers the tools needed to develop against.
 
-Till then, cu - cryxli
+Edit: Bukkit is dead, obviously. But there are mods for Minecraft Forge that
+offer a similar progression as ExpCraft did. Have a look at Tinkers'
+Construct and its extension Iguana Tweaks.
+
+cu - cryxli
 
 === ExpCraft ===
 A reimplementation of the great LevelCraft plugin for Bukkit to add some
